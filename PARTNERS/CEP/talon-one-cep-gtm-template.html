@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Talon.One × [CEP] — Go-To-Market Integration Template</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --t1-blue:    #0062ff;
+      --t1-dark:    #0B1F3A;
+      --t1-mid:     #1A3A5C;
+      --t1-accent:  #00A3FF;
+      --cep-purple: #7C3AED;
+      --cep-light:  #F5F0FF;
+      --ok-green:   #1E8449;
+      --ok-bg:      #EAF7EE;
+      --warn-red:   #C0392B;
+      --warn-bg:    #FDF3F2;
+      --gold:       #D4820A;
+      --gold-bg:    #FEF9EE;
+      --neutral-bg: #F7F8FA;
+      --border:     #DDE3EC;
+      --text:       #1A1A2E;
+      --text-muted: #5A6272;
+      --font: 'Segoe UI', Helvetica, Arial, sans-serif;
+    }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { font-family: var(--font); color: var(--text); background: #fff; line-height: 1.65; }
+    h1 { font-size: 2.5rem; font-weight: 800; line-height: 1.15; }
+    h2 { font-size: 1.6rem; font-weight: 700; line-height: 1.2; }
+    h3 { font-size: 1.15rem; font-weight: 700; }
+    h4 { font-size: .9rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+    p  { margin-top: .8rem; }
+    ul, ol { margin-top: .5rem; padding-left: 1.4rem; }
+    li { margin-bottom: .35rem; }
+    strong { font-weight: 700; }
+    code { font-family: 'SFMono-Regular', Consolas, monospace; font-size: .83em; background: #EEF2FF; color: #3730A3; padding: .1em .35em; border-radius: 3px; }
+
+    .container { max-width: 1060px; margin: 0 auto; padding: 0 2rem; }
+
+    /* ── COVER ── */
+    .cover {
+      background: linear-gradient(135deg, var(--t1-dark) 0%, var(--t1-mid) 55%, #1e1b4b 100%);
+      color: #fff; padding: 5rem 2rem 4rem; position: relative; overflow: hidden;
+    }
+    .cover::before {
+      content: ''; position: absolute; bottom: -120px; right: -80px;
+      width: 420px; height: 420px; border-radius: 50%;
+      background: rgba(124,58,237,.18); pointer-events: none;
+    }
+    .cover::after {
+      content: ''; position: absolute; top: -60px; left: 30%;
+      width: 260px; height: 260px; border-radius: 50%;
+      background: rgba(0,98,255,.13); pointer-events: none;
+    }
+    .cover-inner { max-width: 820px; position: relative; z-index: 1; }
+    .cover-chip {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18);
+      color: #fff; font-size: .75rem; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; padding: .35rem .9rem; border-radius: 99px; margin-bottom: 1.6rem;
+    }
+    .cover h1 { margin-bottom: 1.1rem; }
+    .cover-sub { font-size: 1.1rem; opacity: .82; max-width: 680px; line-height: 1.65; margin-bottom: 2.2rem; }
+    .cover-pills { display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .pill { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); color: #fff; font-size: .78rem; font-weight: 600; padding: .25rem .75rem; border-radius: 99px; }
+    .cover-meta { display: flex; gap: 2.5rem; flex-wrap: wrap; font-size: .82rem; opacity: .65; margin-top: 1rem; }
+    .cover-meta span strong { display: block; font-size: .65rem; text-transform: uppercase; letter-spacing: .08em; opacity: .85; margin-bottom: .1rem; }
+
+    /* "This is a template" banner */
+    .template-notice {
+      background: var(--gold-bg); border-left: 4px solid var(--gold);
+      padding: 1rem 1.4rem; font-size: .9rem; display: flex; align-items: flex-start; gap: .8rem;
+    }
+    .template-notice .icon { font-size: 1.2rem; flex-shrink: 0; margin-top: .05rem; }
+    .template-notice strong { display: block; color: var(--gold); margin-bottom: .2rem; }
+
+    /* ── SECTION GROUP HEADER ── */
+    .section-group { background: var(--t1-dark); color: #fff; padding: 2.8rem 2rem; }
+    .section-group-inner { max-width: 1060px; margin: 0 auto; display: flex; align-items: center; gap: 1.2rem; }
+    .sg-num { font-size: 3.5rem; font-weight: 800; color: rgba(255,255,255,.12); line-height: 1; flex-shrink: 0; }
+    .sg-text h2 { font-size: 1.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; color: var(--t1-blue); }
+    .sg-text p  { margin: .3rem 0 0; font-size: .95rem; opacity: .7; }
+
+    /* ── SECTION ── */
+    .section { padding: 3.2rem 0; }
+    .section + .section { border-top: 1px solid var(--border); }
+    .section-header { margin-bottom: 2rem; }
+    .section-label { font-size: .68rem; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: var(--t1-blue); display: block; margin-bottom: .4rem; }
+    .section-header h2 { color: var(--t1-dark); }
+    .section-header p { color: var(--text-muted); font-size: .96rem; max-width: 760px; margin-top: .45rem; }
+
+    /* ── BRAIN / VOICE SPLIT ── */
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin: 1.5rem 0; }
+    .split-box { border-radius: 8px; padding: 1.4rem 1.5rem; }
+    .split-box.brain { background: var(--t1-dark); color: #fff; border-top: 4px solid var(--t1-blue); }
+    .split-box.voice { background: var(--cep-light); border-top: 4px solid var(--cep-purple); }
+    .split-box h4 { margin-bottom: .8rem; font-size: .8rem; }
+    .split-box.brain h4 { color: var(--t1-accent); }
+    .split-box.voice h4 { color: var(--cep-purple); }
+    .split-box ul { list-style: none; padding: 0; }
+    .split-box ul li { padding: .3rem 0; border-bottom: 1px solid rgba(255,255,255,.08); font-size: .88rem; display: flex; gap: .5rem; }
+    .split-box.voice ul li { border-color: rgba(124,58,237,.12); }
+    .split-box ul li:last-child { border-bottom: none; }
+    .split-box ul li::before { content: '→'; opacity: .5; flex-shrink: 0; }
+
+    /* ── USE CASE CARDS ── */
+    .use-case { background: var(--neutral-bg); border: 1px solid var(--border); border-radius: 10px; padding: 0; margin-bottom: 1.5rem; overflow: hidden; }
+    .uc-header { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem; padding: 1.1rem 1.4rem; background: #fff; border-bottom: 1px solid var(--border); cursor: pointer; }
+    .uc-num { width: 36px; height: 36px; border-radius: 50%; background: var(--t1-dark); color: #fff; display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 800; flex-shrink: 0; }
+    .uc-title h3 { font-size: 1rem; color: var(--t1-dark); }
+    .uc-title .uc-sub { font-size: .8rem; color: var(--text-muted); margin-top: .15rem; }
+    .impact-badge { font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: .3rem .75rem; border-radius: 99px; white-space: nowrap; }
+    .impact-high { background: #DCFCE7; color: #166534; }
+    .impact-med  { background: #FEF9EE; color: #7A5200; }
+
+    .uc-body { padding: 1.4rem; }
+    .uc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 1rem; }
+    .uc-block { background: #fff; border: 1px solid var(--border); border-radius: 7px; padding: 1rem 1.1rem; }
+    .uc-block.t1-block { border-top: 3px solid var(--t1-blue); }
+    .uc-block.cep-block { border-top: 3px solid var(--cep-purple); }
+    .uc-block h4 { font-size: .7rem; margin-bottom: .6rem; }
+    .uc-block.t1-block  h4 { color: var(--t1-blue); }
+    .uc-block.cep-block h4 { color: var(--cep-purple); }
+    .uc-block p, .uc-block li { font-size: .84rem; }
+    .uc-why { background: #EEF4FF; border-radius: 6px; padding: .85rem 1rem; margin-bottom: 1rem; font-size: .88rem; }
+    .uc-why strong { color: var(--t1-mid); display: block; font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .3rem; }
+    .uc-bridge { background: var(--t1-dark); color: #fff; border-radius: 6px; padding: .85rem 1rem; font-size: .83rem; margin-top: 1rem; }
+    .uc-bridge h4 { color: var(--t1-accent); font-size: .7rem; margin-bottom: .5rem; }
+    .uc-bridge code { background: rgba(255,255,255,.12); color: #93C5FD; }
+    .uc-bridge ul { padding-left: 1.2rem; }
+    .uc-bridge li { border-bottom: none; font-size: .82rem; opacity: .9; }
+    .uc-template-note { background: var(--gold-bg); border: 1px dashed var(--gold); border-radius: 6px; padding: .75rem 1rem; margin-top: 1rem; font-size: .82rem; color: var(--gold); }
+    .uc-template-note strong { display: block; margin-bottom: .2rem; }
+
+    /* ── CALLOUT ── */
+    .callout { border-left: 4px solid; border-radius: 0 6px 6px 0; padding: .9rem 1.1rem; margin: 1.5rem 0; font-size: .92rem; }
+    .callout.blue  { border-color: var(--t1-blue);   background: #EEF4FF; }
+    .callout.purple{ border-color: var(--cep-purple); background: var(--cep-light); }
+    .callout.green { border-color: var(--ok-green);  background: var(--ok-bg); }
+    .callout.gold  { border-color: var(--gold);      background: var(--gold-bg); }
+    .callout.red   { border-color: var(--warn-red);  background: var(--warn-bg); }
+    .callout strong { display: block; margin-bottom: .3rem; }
+
+    /* ── STEP CHART (3-step) ── */
+    .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; margin: 1.5rem 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .step { padding: 1.6rem 1.4rem; background: #fff; position: relative; }
+    .step + .step { border-left: 1px solid var(--border); }
+    .step-num { font-size: 2.2rem; font-weight: 800; color: var(--t1-blue); opacity: .18; line-height: 1; margin-bottom: .5rem; }
+    .step h3 { font-size: .95rem; color: var(--t1-dark); margin-bottom: .5rem; }
+    .step p, .step li { font-size: .85rem; color: var(--text-muted); }
+    .step ul { list-style: none; padding: 0; }
+    .step ul li { padding: .2rem 0; display: flex; gap: .4rem; }
+    .step ul li::before { content: '✓'; color: var(--ok-green); font-weight: 700; flex-shrink: 0; }
+    .step-label { display: inline-block; font-size: .65rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; padding: .2rem .55rem; border-radius: 3px; margin-bottom: .6rem; }
+    .step-label.connect   { background: #DBEAFE; color: #1D4ED8; }
+    .step-label.configure { background: var(--cep-light); color: var(--cep-purple); }
+    .step-label.campaign  { background: var(--ok-bg); color: var(--ok-green); }
+
+    /* ── TECHNICAL MAPPING TABLE ── */
+    .map-table { width: 100%; border-collapse: collapse; font-size: .84rem; margin-top: 1.5rem; table-layout: fixed; }
+    .map-table th { padding: .6rem .9rem; font-size: .68rem; text-transform: uppercase; letter-spacing: .07em; font-weight: 800; border-bottom: 2px solid var(--border); text-align: left; }
+    .map-table th:nth-child(1) { width: 14%; background: var(--t1-dark); color: #cdd8e8; }
+    .map-table th:nth-child(2) { width: 26%; background: var(--t1-blue); color: #fff; }
+    .map-table th:nth-child(3) { width: 26%; background: var(--cep-purple); color: #fff; }
+    .map-table th:nth-child(4) { width: 34%; background: #1e1b4b; color: #c4b5fd; }
+    .map-table td { padding: .6rem .9rem; vertical-align: top; border-bottom: 1px solid var(--border); line-height: 1.5; font-size: .83rem; }
+    .map-table tr:nth-child(even) td { background: var(--neutral-bg); }
+    .map-table tr:nth-child(even) td:nth-child(1) { background: #0d2545; }
+    .map-table tr:last-child td { border-bottom: none; }
+    .map-table td:nth-child(1) { font-weight: 700; font-size: .78rem; color: #cdd8e8; background: var(--t1-dark); }
+    .map-table code { font-size: .75em; }
+
+    /* ── INTEGRATION CHECKLIST ── */
+    .checklist { background: var(--neutral-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.4rem 1.6rem; margin: 1.5rem 0; }
+    .checklist h4 { color: var(--t1-mid); margin-bottom: 1rem; }
+    .cl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .2rem 2rem; }
+    .cl-item { display: flex; align-items: flex-start; gap: .55rem; padding: .3rem 0; font-size: .84rem; }
+    .cl-item .box { width: 16px; height: 16px; border: 2px solid var(--border); border-radius: 3px; flex-shrink: 0; margin-top: .1rem; }
+
+    /* ── CONCLUSION ── */
+    .conclusion { background: linear-gradient(135deg, var(--t1-dark), #1e1b4b); color: #fff; padding: 4rem 2rem; }
+    .conclusion h2 { color: var(--t1-blue); font-size: 1.9rem; margin-bottom: 1rem; }
+    .conclusion p { opacity: .82; max-width: 720px; }
+    .con-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem; }
+    .con-card { background: rgba(255,255,255,.07); border-radius: 8px; padding: 1.1rem; }
+    .con-card h4 { color: var(--t1-accent); margin-bottom: .4rem; font-size: .8rem; }
+    .con-card p { font-size: .83rem; opacity: .78; margin: 0; }
+
+    /* ── TOC ── */
+    .toc { background: var(--neutral-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.4rem 1.8rem; margin: 2.5rem 0; }
+    .toc h4 { color: var(--t1-mid); margin-bottom: .8rem; }
+    .toc ol { font-size: .88rem; }
+    .toc li { margin-bottom: .3rem; }
+    .toc a { color: var(--t1-accent); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 720px) {
+      h1 { font-size: 1.9rem; }
+      .split, .uc-grid, .steps, .cl-grid { grid-template-columns: 1fr; }
+      .step + .step { border-left: none; border-top: 1px solid var(--border); }
+      .map-table, .map-table thead, .map-table tbody, .map-table th, .map-table td, .map-table tr { display: block; }
+      .map-table th { display: none; }
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      .cover, .section-group, .split-box.brain, .uc-bridge, .map-table th, .conclusion { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .section { page-break-inside: avoid; }
+      h2 { page-break-after: avoid; }
+      body { font-size: 10pt; }
+      a { color: inherit; text-decoration: none; }
+    }
+    @page { margin: 1.4cm 1.6cm; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════ COVER ═══════════════════ -->
+<div class="cover">
+  <div class="container">
+    <div class="cover-inner">
+      <div class="cover-chip">🔗 Pre-Sales Template · Talon.One + CEP</div>
+      <h1>Talon.One × [CEP Name]<br>Go-To-Market Integration<br>Blueprint</h1>
+      <p class="cover-sub">
+        A repeatable playbook for pre-sales teams demonstrating why Talon.One and a Customer Engagement Platform are <strong>"Better Together"</strong> — showing how the Promotion Brain and the Communication Voice combine to deliver hyper-personalised incentives at scale, without margin risk.
+      </p>
+      <div class="cover-pills">
+        <span class="pill">Compatible: Braze · Bloomreach · MoEngage</span>
+        <span class="pill">Audience: Pre-Sales &amp; Solutions Engineering</span>
+        <span class="pill">Version 1.0 — March 2026</span>
+      </div>
+      <div class="cover-meta">
+        <span><strong>Document type</strong>GTM Template</span>
+        <span><strong>Classification</strong>Internal — Pre-Sales</span>
+        <span><strong>Maintained by</strong>Solutions Engineering</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ TEMPLATE NOTICE ═══════════════════ -->
+<div class="template-notice">
+  <div class="icon">📋</div>
+  <div>
+    <strong>How to use this template</strong>
+    Replace every <strong>[CEP Name]</strong> placeholder with your partner platform (e.g. Braze, Bloomreach, MoEngage). The architecture, data bridge, and use case logic are identical across all three. Add the CEP partner logo and brand colour in the CSS variable <code>--cep-purple</code> at the top of the <code>&lt;style&gt;</code> block. Each use case section is independently modular — include only the categories relevant to your prospect.
+  </div>
+</div>
+
+<!-- ═══════════════════ TOC ═══════════════════ -->
+<div class="container">
+  <div class="toc">
+    <h4>Contents</h4>
+    <ol>
+      <li><a href="#s1">The Value Narrative — Brain + Voice</a></li>
+      <li><a href="#s2">Why the Integration Prevents Margin Erosion</a></li>
+      <li>Use Case Matrix
+        <ol style="margin-top:.3rem;">
+          <li><a href="#cat1">Customer Acquisition</a></li>
+          <li><a href="#cat2">Conversion &amp; Revenue</a></li>
+          <li><a href="#cat3">Retention &amp; Loyalty</a></li>
+          <li><a href="#cat4">Win-Back &amp; Re-Engagement</a></li>
+          <li><a href="#cat5">VIP &amp; Tier Progression</a></li>
+        </ol>
+      </li>
+      <li><a href="#s3">Ease of Setup — 3-Step Workflow</a></li>
+      <li><a href="#s4">Technical Mapping Table</a></li>
+      <li><a href="#s5">Integration Checklist</a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- ═══════════════════ S1 ─ VALUE NARRATIVE ═══════════════════ -->
+<div class="section-group" id="s1">
+  <div class="section-group-inner">
+    <div class="sg-num">01</div>
+    <div class="sg-text">
+      <h2>The Value Narrative</h2>
+      <p>Why Talon.One + [CEP Name] is greater than the sum of its parts</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Technical Synergy</span>
+      <h2>The Promotion Brain &amp; The Communication Voice</h2>
+      <p>Most CEPs include a basic voucher or discount field. What they cannot natively do is <em>validate, govern, personalise, and track</em> those incentives with the rigour required to protect margin. Talon.One fills this gap precisely — and the CEP handles what it does best: orchestration and delivery.</p>
+    </div>
+
+    <div class="split">
+      <div class="split-box brain">
+        <h4>🧠 Talon.One — The Promotion Brain</h4>
+        <ul>
+          <li>Complex rule logic (ANY / ALL / NOT conditions across any attribute)</li>
+          <li>Coupon validation: one-time, per-customer, per-segment, channel-scoped</li>
+          <li>Fraud prevention: domain checks, velocity limits, device fingerprinting</li>
+          <li>Loyalty ledger: earn, burn, tier evaluation, expiry</li>
+          <li>Referral tracking: cross-session attribution, reward triggers</li>
+          <li>Gamification: streaks, missions, stamp cards, challenges</li>
+          <li>Full audit trail: every decision logged per customer per session</li>
+          <li>Budget caps: spend limits, redemption ceilings, campaign-level guards</li>
+        </ul>
+      </div>
+      <div class="split-box voice">
+        <h4 style="color:var(--cep-purple);">📣 [CEP Name] — The Communication Voice</h4>
+        <ul>
+          <li>Cross-channel orchestration: push, email, SMS, in-app, web</li>
+          <li>Customer segmentation: behavioural, predictive, RFM-based</li>
+          <li>Journey automation: event-triggered flows, branching logic</li>
+          <li>Content personalisation: Liquid / dynamic content blocks</li>
+          <li>A/B and multivariate testing at message level</li>
+          <li>Frequency capping and send-time optimisation</li>
+          <li>Conversion tracking: open/click/purchase attribution</li>
+          <li>CDP data relay: profile enrichment from behavioural events</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout blue">
+      <strong>The Core Philosophy</strong>
+      The CEP decides <em>who gets a message, when, and on which channel</em>. Talon.One decides <em>what incentive they are entitled to and whether they are allowed to use it</em>. Neither tool can fully replace the other — together they close the loop between personalised communication and validated, economically-controlled incentive execution.
+    </div>
+
+    <div class="callout purple">
+      <strong>The Logic Gap in Standard CEPs</strong>
+      Most CEPs allow a marketer to insert a coupon code into a message template. They do <em>not</em> natively validate: whether the customer already used that code, whether the code is valid for the customer's segment, whether budget caps have been hit, or whether the code is being shared/misused. Every redemption without Talon.One validation is a promotion event the CEP cannot govern — leading to silent margin leakage.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ S2 ─ MARGIN EROSION ═══════════════════ -->
+<div class="section" id="s2">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Value Proposition</span>
+      <h2>How the Integration Prevents Margin Erosion &amp; Increases ROI</h2>
+      <p>The combination addresses the two fundamental risks in promotional marketing: giving away discounts to customers who would have converted anyway, and allowing discount codes to be redeemed outside their intended scope.</p>
+    </div>
+
+    <div class="split">
+      <div class="split-box brain">
+        <h4>🛡 Margin Protection (Stop Leakage)</h4>
+        <ul>
+          <li>Single-use codes: technically enforced, not policy-only</li>
+          <li>Per-customer redemption caps prevent bulk exploitation</li>
+          <li>Email domain validation prevents duplicate account arbitrage</li>
+          <li>Budget caps: a campaign stops issuing at £X spend, not £X+leak</li>
+          <li>Velocity rules: flag and block anomalous redemption rates</li>
+          <li>Channel scoping: in-store codes rejected online (and vice versa)</li>
+        </ul>
+      </div>
+      <div class="split-box voice">
+        <h4>📈 ROI Amplification (Earn More)</h4>
+        <ul>
+          <li>Right person: CEP segments deliver to highest-propensity customers</li>
+          <li>Right offer: T1 calculates personalised discount depth per profile</li>
+          <li>Right time: CEP send-time optimisation maximises open rates</li>
+          <li>Right channel: CEP routes based on prior engagement pattern</li>
+          <li>Right message: Liquid-driven content adapts to loyalty tier, history</li>
+          <li>Incrementality: combined data enables "would have bought anyway" modelling</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout green">
+      <strong>Discovery Question for Prospects</strong>
+      "How many discount codes that you send via [CEP Name] today are redeemed per customer? How many have been shared outside your intended audience? Do you have a campaign-level spend cap that is technically enforced — or just a policy?" — The answer to any of these usually reveals immediate, quantifiable margin leakage that the integration directly solves.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION GROUP: USE CASES ═══════════════════ -->
+<div class="section-group">
+  <div class="section-group-inner">
+    <div class="sg-num">02</div>
+    <div class="sg-text">
+      <h2>Use Case Matrix</h2>
+      <p>Category-by-category breakdown of what to build, how, and what data bridges the two platforms</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CATEGORY 1: ACQUISITION ── -->
+<div class="section" id="cat1">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Category 01</span>
+      <h2>Customer Acquisition</h2>
+      <p>Incentivise the first purchase and the first referral — with controls that prevent incentive abuse at the widest point of the funnel.</p>
+    </div>
+
+    <!-- UC 1.1 -->
+    <div class="use-case">
+      <div class="uc-header">
+        <div class="uc-num">1.1</div>
+        <div class="uc-title">
+          <h3>Personalised Referral Programme</h3>
+          <div class="uc-sub">Unique referrer codes, cross-session referee attribution, fraud-proof reward triggers</div>
+        </div>
+        <span class="impact-badge impact-high">High Impact</span>
+      </div>
+      <div class="uc-body">
+        <div class="uc-why">
+          <strong>Why Combined?</strong>
+          The CEP handles the referral invite message (whichever channel the customer prefers) but cannot attribute the referee's purchase to the referrer across sessions — nor validate that the referee is genuinely new. Talon.One assigns the unique referral code, tracks cross-session attribution, validates that the referee email domain is new, and triggers the referrer reward only on confirmed first purchase.
+        </div>
+        <div class="uc-grid">
+          <div class="uc-block t1-block">
+            <h4>🧠 Setup in Talon.One</h4>
+            <ul>
+              <li>Create a <strong>Referral Campaign</strong> with auto-generated unique codes per advocate (format: <code>REF-{customerId}</code>)</li>
+              <li>Set validation: referee email not in existing customer DB, referee first purchase ≥ £X minimum</li>
+              <li>Set referrer reward: issue £Y coupon or N loyalty points on referee order close</li>
+              <li>Set referee reward: auto-apply Z% discount on first order</li>
+              <li>Add velocity guard: max 5 referral rewards per advocate per 30 days</li>
+            </ul>
+          </div>
+          <div class="uc-block cep-block">
+            <h4>📣 Setup in [CEP Name]</h4>
+            <ul>
+              <li>Add "Share your referral code" CTA in post-purchase journey step</li>
+              <li>Pull unique referral code from Talon.One custom attribute stored on customer profile</li>
+              <li>Render code via Liquid: <code>&#123;&#123;customer.attributes.referral_code&#125;&#125;</code></li>
+              <li>On referee "Order Completed" event: trigger a "Thanks for joining" email to referee + "Your reward is ready" email to advocate</li>
+              <li>Segment: only send to customers with loyalty_status = active and orders ≥ 1</li>
+            </ul>
+          </div>
+        </div>
+        <div class="uc-bridge">
+          <h4>🔗 Data Bridge</h4>
+          <ul>
+            <li><strong>T1 → CEP:</strong> Webhook <code>couponCreated</code> pushes referral code to CEP custom attribute on advocate profile</li>
+            <li><strong>CEP → T1:</strong> <code>POST /v2/customer/sessions</code> on referee checkout with referral code in session attributes</li>
+            <li><strong>T1 → CEP:</strong> Webhook <code>referralRewardGranted</code> triggers advocate reward notification journey</li>
+            <li><strong>T1 → CEP:</strong> Custom attribute <code>referral_count</code> updated — CEP uses it to unlock milestone messaging ("You've referred 5 friends!")</li>
+          </ul>
+        </div>
+        <div class="uc-template-note">
+          <strong>📋 Presales Customisation Note</strong>
+          Replace "£Y coupon" and "Z% discount" with the prospect's standard referral reward value. For B2B prospects, consider account-level referral attribution (company email domain matching) instead of individual email validation.
+        </div>
+      </div>
+    </div>
+
+    <!-- UC 1.2 -->
+    <div class="use-case">
+      <div class="uc-header">
+        <div class="uc-num">1.2</div>
+        <div class="uc-title">
+          <h3>First-Purchase Welcome Offer with Fraud Guard</h3>
+          <div class="uc-sub">Generous new-customer discount that cannot be reused, shared, or arbitraged</div>
+        </div>
+        <span class="impact-badge impact-high">High Impact</span>
+      </div>
+      <div class="uc-body">
+        <div class="uc-why">
+          <strong>Why Combined?</strong>
+          CEPs can send a welcome email with a discount code included as plain text. They cannot prevent the same customer from creating a second account to reuse it, prevent the code from being posted on coupon aggregator sites, or cap total spend against the campaign. Talon.One adds all three controls technically.
+        </div>
+        <div class="uc-grid">
+          <div class="uc-block t1-block">
+            <h4>🧠 Setup in Talon.One</h4>
+            <ul>
+              <li>Create a <strong>Coupon Campaign</strong>: generate one unique code per new customer</li>
+              <li>Validation rules: <code>Is First Purchase = true</code>, code usage limit = 1, per-customer cap = 1</li>
+              <li>Add email domain check: block known disposable-email domains (Mailinator, Guerrilla Mail, etc.)</li>
+              <li>Set campaign budget cap: max total discount spend = £X before campaign pauses</li>
+              <li>Set referral exclusion: do not apply if referral code is also in session</li>
+            </ul>
+          </div>
+          <div class="uc-block cep-block">
+            <h4>📣 Setup in [CEP Name]</h4>
+            <ul>
+              <li>Trigger: <code>Account Created</code> or <code>Email Verified</code> event</li>
+              <li>Wait 1 hour (let T1 generate and sync the unique code)</li>
+              <li>Send Welcome email with personalised code from attribute <code>&#123;&#123;customer.attributes.welcome_code&#125;&#125;</code></li>
+              <li>Day 3 reminder if no purchase: re-send with urgency copy ("Your code expires in 4 days")</li>
+              <li>Suppress: cancel reminder if <code>first_purchase_completed = true</code></li>
+            </ul>
+          </div>
+        </div>
+        <div class="uc-bridge">
+          <h4>🔗 Data Bridge</h4>
+          <ul>
+            <li><strong>CEP → T1:</strong> <code>POST /v1/customers</code> creates customer profile on Account Created event</li>
+            <li><strong>T1 → CEP:</strong> Webhook <code>couponCreated</code> pushes <code>welcome_code</code> attribute to CEP profile</li>
+            <li><strong>T1 → CEP:</strong> Webhook <code>sessionClosed</code> with effect <code>redemption</code> sets <code>first_purchase_completed = true</code> to suppress the reminder</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- UC 1.3 -->
+    <div class="use-case">
+      <div class="uc-header">
+        <div class="uc-num">1.3</div>
+        <div class="uc-title">
+          <h3>Partner / Affiliate Co-Marketing Codes</h3>
+          <div class="uc-sub">Trackable, channel-scoped codes generated per partner with shared attribution reporting</div>
+        </div>
+        <span class="impact-badge impact-med">Medium Impact</span>
+      </div>
+      <div class="uc-body">
+        <div class="uc-why">
+          <strong>Why Combined?</strong>
+          Partners want to see their unique code performance. CEPs can personalise messages using a partner-attributed code, but cannot enforce which partner's code is redeemable in which channel or report on partner-level redemption velocity. Talon.One adds per-partner attribution metadata and can lock codes to a specific channel (web only, app only).
+        </div>
+        <div class="uc-grid">
+          <div class="uc-block t1-block">
+            <h4>🧠 Setup in Talon.One</h4>
+            <ul>
+              <li>Create one <strong>Coupon Campaign per partner</strong> with a shared code or batch of unique codes</li>
+              <li>Add custom attribute <code>partner_id</code> on each code for attribution tracking</li>
+              <li>Set channel scope: valid only if <code>session.channel = partner_referral</code></li>
+              <li>Set expiry: code batch expires on agreed partner deal end date</li>
+              <li>Export redemption report by <code>partner_id</code> for partner billing/settlement</li>
+            </ul>
+          </div>
+          <div class="uc-block cep-block">
+            <h4>📣 Setup in [CEP Name]</h4>
+            <ul>
+              <li>Receive new lead from partner landing page — create profile with segment tag <code>source_partner_X</code></li>
+              <li>Send onboarding email including partner-specific code pulled from T1 coupon batch</li>
+              <li>Track email click and land on partner co-branded experience</li>
+              <li>On purchase: fire "Order Completed" to T1 with <code>session.channel = partner_referral</code></li>
+            </ul>
+          </div>
+        </div>
+        <div class="uc-bridge">
+          <h4>🔗 Data Bridge</h4>
+          <ul>
+            <li><strong>T1 → CEP:</strong> Batch coupon export via <code>GET /v1/campaigns/{id}/coupons</code> — import as CEP content block variable per partner segment</li>
+            <li><strong>CEP → T1:</strong> Session payload includes <code>channelType: partner_referral</code> and <code>partnerId</code> custom attribute on customer update</li>
+            <li><strong>T1 → CEP:</strong> Webhook <code>couponRedeemed</code> updates partner attribution counter on lead profile</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CATEGORY 2: CONVERSION ── -->
+<div class="section" id="cat2">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Category 02</span>
+      <h2>Conversion &amp; Revenue</h2>
+      <p>Recover abandoned carts and uplift basket size with offers that are personalised by customer value — not broadcast identically across the full database.</p>
+    </div>
+
+    <!-- UC 2.1 -->
+    <div class="use-case">
+      <div class="uc-header">
+        <div class="uc-num">2.1</div>
+        <div class="uc-title">
+          <h3>Real-Time Cart Abandonment with Dynamic Discount</h3>
+          <div class="uc-sub">Discount depth automatically calibrated to customer tier — not a blanket 10% for everyone</div>
+        </div>
+        <span class="impact-badge impact-high">High Impact</span>
+      </div>
+      <div class="uc-body">
+        <div class="uc-why">
+          <strong>Why Combined?</strong>
+          CEP cart abandonment flows today typically send the same discount to all abandoners — giving away margin to customers who were already going to convert, while under-incentivising high-value customers who need a stronger nudge. Talon.One calculates the correct discount depth per customer based on their LTV, tier, and cart value — the CEP delivers it on the right channel at the right time.
+        </div>
+        <div class="uc-grid">
+          <div class="uc-block t1-block">
+            <h4>🧠 Setup in Talon.One</h4>
+            <ul>
+              <li>Rule: <code>IF customer.tier = Gold AND cart.value ≥ £80 → 15% off</code></li>
+              <li>Rule: <code>IF customer.tier = Silver AND cart.value ≥ £50 → 10% off</code></li>
+              <li>Rule: <code>IF customer.isFirstPurchase = true AND cart.value ≥ £30 → £5 off</code></li>
+              <li>Rule: <code>IF customer.predictedChurnScore ≥ 0.7 → 20% off (reclaim)</code></li>
+              <li>Set: code valid for 24 hours, single use, can only be used by the specific customer (linked to <code>customerId</code>)</li>
+              <li>Set: campaign budget cap to prevent over-redemption during peak traffic</li>
+            </ul>
+          </div>
+          <div class="uc-block cep-block">
+            <h4>📣 Setup in [CEP Name]</h4>
+            <ul>
+              <li>Trigger: <code>Cart Abandoned</code> event (after 30-min inactivity)</li>
+              <li>Call T1 API or listen for T1 webhook to receive the personalised code</li>
+              <li>Step 1 (30 min): Push notification — cart still waiting, no code (test willingness to convert without incentive)</li>
+              <li>Step 2 (2 hours): Email with personalised code: "Here's <code>&#123;&#123;offer_value&#125;&#125;</code> off your basket"</li>
+              <li>Step 3 (24 hours): Final SMS — code expires tonight</li>
+              <li>Suppress all steps on <code>Purchase Completed</code> event</li>
+            </ul>
+          </div>
+        </div>
+        <div class="uc-bridge">
+          <h4>🔗 Data Bridge</h4>
+          <ul>
+            <li><strong>CEP → T1:</strong> <code>PUT /v1/customer/sessions/{sessionId}</code> — send cart state (items, values) to T1 on "Cart Abandoned" trigger</li>
+            <li><strong>T1 → CEP:</strong> Webhook <code>couponCreated</code> with <code>discount_value</code> and <code>code</code> attributes — CEP uses these in the message Liquid template</li>
+            <li><strong>T1 → CEP:</strong> Webhook <code>sessionClosed</code> → CEP suppresses remaining steps</li>
+            <li><strong>T1 attribute on customer:</strong> <code>last_abandonment_discount_sent</code> — prevents sending another discount within 7 days</li>
+          </ul>
+        </div>
+        <div class="uc-template-note">
+          <strong>📋 Presales Customisation Note</strong>
+          Replace the tier names and cart value thresholds with the prospect's existing loyalty tiers and AOV data. If the prospect does not have a loyalty programme yet, use RFM decile from the CEP as the segmentation variable passed to T1 as a custom attribute.
+        </div>
+      </div>
+    </div>
+
+    <!-- UC 2.2 -->
+    <div class="use-case">
+      <div class="uc-header">
+        <div class="uc-num">2.2</div>
+        <div class="uc-title">
+          <h3>Real-Time "Spend More, Save More" Basket Nudge</h3>
+          <div class="uc-sub">In-session progress bar communicating personalised spend thresholds</div>
+        </div>
+        <span class="impact-badge impact-high">High Impact</span>
+      </div>
+      <div class="uc-body">
+        <div class="uc-why">
+          <strong>Why Combined?</strong>
+          CEPs cannot evaluate live basket state. "Spend £10 more to unlock free delivery" requires the promotion engine to know the current cart value and calculate the gap to the next threshold in real time — Talon.One does this per session, per rule tier, and sends the gap value to the CEP to include in in-app or web messages.
+        </div>
+        <div class="uc-grid">
+          <div class="uc-block t1-block">
+            <h4>🧠 Setup in Talon.One</h4>
+            <ul>
+              <li>Create tiered rules: £50 threshold → free delivery / £75 → 10% off / £100 → free gift</li>
+              <li>Return custom effect: <code>nextTierGap</code> = (threshold − cart.total) in session response</li>
+              <li>Return: <code>nextTierReward</code> = "free delivery" / "10% off" / "free gift"</li>
+              <li>Rule fires on every <code>UpdateSession</code> call as items are added — no polling required</li>
+            </ul>
+          </div>
+          <div class="uc-block cep-block">
+            <h4>📣 Setup in [CEP Name]</h4>
+            <ul>
+              <li>Read <code>nextTierGap</code> and <code>nextTierReward</code> from the T1 API response on each cart update</li>
+              <li>Render in-session in-app message: "Add <code>&#123;&#123;nextTierGap&#125;&#125;</code> more to get <code>&#123;&#123;nextTierReward&#125;&#125;</code>"</li>
+              <li>On threshold unlock: fire a celebratory banner — "You unlocked free delivery!"</li>
+              <li>Post-session: if customer left without reaching next tier, send an email with the gap and a time-limited reminder</li>
+            </ul>
+          </div>
+        </div>
+        <div class="uc-bridge">
+          <h4>🔗 Data Bridge</h4>
+          <ul>
+            <li><strong>Storefront → T1:</strong> <code>PUT /v1/customer/sessions/{id}</code> on every cart item add/remove</li>
+            <li><strong>T1 → Storefront:</strong> Session response includes <code>effects</code> array with custom <code>nextTierGap</code> effect</li>
+            <li><strong>Storefront → CEP:</strong> Pass <code>nextTierGap</code> and <code>nextTierReward</code> as content event for CEP in-app message render</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- UC 2.3 -->
+    <div class="use-case">
+      <div class="uc-header">
+        <div class="uc-num">2.3</div>
+        <div class="uc-title">
+          <h3>Post-Browse Personalised Retargeting Offer</h3>
+          <div class="uc-sub">Category-specific discount triggered by browsing intent signal from CEP, validated by T1</div>
+        </div>
+        <span class="impact-badge impact-med">Medium Impact</span>
+      </div>
+      <div class="uc-body">
+        <div class="uc-why">
+          <strong>Why Combined?</strong>
+          The CEP captures the browse signal and knows which category the customer was exploring. Talon.One generates a targeted offer specific to that category — not a generic sitewide code — ensuring the offer is only redeemable on the category the customer was viewing, preventing the discount from being applied to higher-margin items.
+        </div>
+        <div class="uc-grid">
+          <div class="uc-block t1-block">
+            <h4>🧠 Setup in Talon.One</h4>
+            <ul>
+              <li>Create campaign: <code>IF session.attributes.browsed_category = X AND coupon.code is valid → apply Y% off category X items only</code></li>
+              <li>Generate unique code per browse event (linked to customer + category)</li>
+              <li>Rule: code only valid on items tagged with <code>category = browsed_category</code></li>
+              <li>Expiry: 48 hours from code generation</li>
+            </ul>
+          </div>
+          <div class="uc-block cep-block">
+            <h4>📣 Setup in [CEP Name]</h4>
+            <ul>
+              <li>Trigger: <code>Product Category Viewed ≥ 3 times</code> without purchase in session</li>
+              <li>Call T1 to generate category-scoped coupon (pass <code>browsed_category</code> as session attribute)</li>
+              <li>Send email / push 2 hours after browse: "Still thinking about [Category]? Here's a code."</li>
+              <li>Suppress if purchase in that category occurred within the 2-hour window</li>
+            </ul>
+          </div>
+        </div>
+        <div class="uc-bridge">
+          <h4>🔗 Data Bridge</h4>
+          <ul>
+            <li><strong>CEP → T1:</strong> <code>POST /v1/customer/sessions</code> with <code>attributes.browsed_category</code> to trigger coupon creation</li>
+            <li><strong>T1 → CEP:</strong> Webhook <code>couponCreated</code> pushes category-scoped code to CEP for inclusion in message</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CATEGORY 3: RETENTION ── -->
+<div class="section" id="cat3">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Category 03</span>
+      <h2>Retention &amp; Loyalty</h2>
+      <p>Drive habit-forming engagement by making loyalty progress visible, rewarding milestones meaningfully, and automating tier transitions into memorable moments.</p>
+    </div>
+
+    <!-- UC 3.1 -->
+    <div class="use-case">
+      <div class="uc-header">
+        <div class="uc-num">3.1</div>
+        <div class="uc-title">
+          <h3>Loyalty Milestone Reward</h3>
+          <div class="uc-sub">Automated reward + celebration message triggered the moment a customer hits a points/spend threshold</div>
+        </div>
+        <span class="impact-badge impact-high">High Impact</span>
+      </div>
+      <div class="uc-body">
+        <div class="uc-why">
+          <strong>Why Combined?</strong>
+          Loyalty milestones without communication are invisible. CEPs can send scheduled "You're getting close to X" emails — but cannot know in real time when the threshold was crossed. Talon.One fires a webhook at the exact moment of milestone achievement; the CEP turns it into a celebratory multi-channel moment.
+        </div>
+        <div class="uc-grid">
+          <div class="uc-block t1-block">
+            <h4>🧠 Setup in Talon.One</h4>
+            <ul>
+              <li>Create Loyalty Campaign with milestone rules: 500 pts, 1000 pts, 2500 pts</li>
+              <li>On milestone hit: issue a reward coupon (e.g. £10 off next purchase)</li>
+              <li>Fire custom effect <code>milestoneReached</code> with <code>milestone_name</code>, <code>reward_code</code>, <code>reward_expiry</code></li>
+              <li>Update customer attribute <code>lifetime_points</code> for CEP segmentation</li>
+            </ul>
+          </div>
+          <div class="uc-block cep-block">
+            <h4>📣 Setup in [CEP Name]</h4>
+            <ul>
+              <li>Listen for T1 webhook <code>milestoneReached</code> as a custom event</li>
+              <li>Trigger: "Milestone Celebration" journey — push + email + in-app simultaneously</li>
+              <li>Content: "Congratulations! You've reached <code>&#123;&#123;milestone_name&#125;&#125;</code>. Here's your reward: <code>&#123;&#123;reward_code&#125;&#125;</code>"</li>
+              <li>Day 5 reminder if reward unused: "Your milestone reward expires on <code>&#123;&#123;reward_expiry&#125;&#125;</code>"</li>
+              <li>Suppress reminder on <code>reward_redeemed = true</code></li>
+            </ul>
+          </div>
+        </div>
+        <div class="uc-bridge">
+          <h4>🔗 Data Bridge</h4>
+          <ul>
+            <li><strong>T1 → CEP:</strong> Webhook <code>sessionClosed</code> with effect <code>milestoneReached</code> — CEP uses as journey trigger</li>
+            <li><strong>T1 → CEP:</strong> Customer attribute <code>current_points_balance</code> synced after each session — CEP uses for "X points to next tier" progress bar</li>
+            <li><strong>T1 → CEP:</strong> Webhook <code>couponRedeemed</code> sets <code>reward_redeemed = true</code> to suppress reminder</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- UC 3.2 -->
+    <div class="use-case">
+      <div class="uc-header">
+        <div class="uc-num">3.2</div>
+        <div class="uc-title">
+          <h3>Tier-Up Celebration &amp; Onboarding</h3>
+          <div class="uc-sub">Multi-step welcome journey into a new loyalty tier, with tier-exclusive offer unlocked immediately</div>
+        </div>
+        <span class="impact-badge impact-high">High Impact</span>
+      </div>
+      <div class="uc-body">
+        <div class="uc-why">
+          <strong>Why Combined?</strong>
+          Tier transitions are high-emotional-value moments. A transactional "you've been upgraded" system email wastes the moment. The CEP transforms the webhook into a multi-touch welcome journey; Talon.One simultaneously unlocks tier-exclusive offers and validates eligibility for new mechanics (e.g. early access, exclusive coupons) the customer couldn't access before.
+        </div>
+        <div class="uc-grid">
+          <div class="uc-block t1-block">
+            <h4>🧠 Setup in Talon.One</h4>
+            <ul>
+              <li>Define tier thresholds in Loyalty programme (e.g. Bronze → Silver at 1,000 pts lifetime)</li>
+              <li>On tier change: issue tier-welcome coupon (unique, valid 30 days, Gold-only)</li>
+              <li>Fire effect <code>tierChanged</code> with <code>old_tier</code>, <code>new_tier</code>, <code>welcome_offer_code</code></li>
+              <li>Update <code>customer.tier</code> attribute — all future rules now evaluate against new tier</li>
+              <li>Unlock access to tier-exclusive campaigns automatically via loyalty tier condition</li>
+            </ul>
+          </div>
+          <div class="uc-block cep-block">
+            <h4>📣 Setup in [CEP Name]</h4>
+            <ul>
+              <li>Trigger: T1 webhook <code>tierChanged</code> → "Tier Up Celebration" journey entry</li>
+              <li>Immediately: Push notification — "Welcome to Gold! 🎉"</li>
+              <li>Day 0: Email — new tier benefits explained + exclusive welcome offer code</li>
+              <li>Day 3: In-app message — "Try your first Gold benefit: early access sale starts Friday"</li>
+              <li>Day 14: Check points balance — if no purchase, send "Don't lose your status" nudge</li>
+            </ul>
+          </div>
+        </div>
+        <div class="uc-bridge">
+          <h4>🔗 Data Bridge</h4>
+          <ul>
+            <li><strong>T1 → CEP:</strong> Webhook <code>sessionClosed</code> with effect <code>tierChanged</code> — CEP journey trigger + attribute update <code>loyalty_tier = Gold</code></li>
+            <li><strong>T1 → CEP:</strong> <code>welcome_offer_code</code> in webhook payload — used in email Liquid template</li>
+            <li><strong>CEP segmentation:</strong> <code>loyalty_tier</code> attribute used to gate tier-exclusive campaigns, early-access invitations, and content blocks</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- UC 3.3 -->
+    <div class="use-case">
+      <div class="uc-header">
+        <div class="uc-num">3.3</div>
+        <div class="uc-title">
+          <h3>Gamification: Stamp Card &amp; Mission Progress Nudges</h3>
+          <div class="uc-sub">Real-time progress communication for stamp cards and multi-step missions</div>
+        </div>
+        <span class="impact-badge impact-med">Medium Impact</span>
+      </div>
+      <div class="uc-body">
+        <div class="uc-why">
+          <strong>Why Combined?</strong>
+          Progress visibility drives completion. Talon.One tracks stamp count and mission step completion in real time. The CEP makes that progress visible and motivating — sending nudges as customers approach completion and celebrating the final stamp.
+        </div>
+        <div class="uc-grid">
+          <div class="uc-block t1-block">
+            <h4>🧠 Setup in Talon.One</h4>
+            <ul>
+              <li>Create Achievement (Stamp Card): e.g. 6 purchases in category X → free item</li>
+              <li>Return <code>currentStampCount</code> and <code>stampsRequired</code> in session response effects</li>
+              <li>On final stamp: fire <code>achievementCompleted</code> webhook with reward</li>
+              <li>Auto-reset stamp card after completion for next cycle</li>
+            </ul>
+          </div>
+          <div class="uc-block cep-block">
+            <h4>📣 Setup in [CEP Name]</h4>
+            <ul>
+              <li>On each purchase: update <code>stamp_count</code> attribute from T1 session response</li>
+              <li>At stamp 4 of 6: send push "You're 2 stamps away from a FREE [item]!"</li>
+              <li>At stamp 5 of 6: send email with urgency "One more purchase to unlock your reward"</li>
+              <li>On <code>achievementCompleted</code>: send celebratory push + email with redemption instructions</li>
+            </ul>
+          </div>
+        </div>
+        <div class="uc-bridge">
+          <h4>🔗 Data Bridge</h4>
+          <ul>
+            <li><strong>T1 → CEP:</strong> Session <code>effects</code> array includes <code>updateStampCard</code> effect with <code>currentCount</code> — pass to CEP as custom event attribute after each session</li>
+            <li><strong>T1 → CEP:</strong> Webhook <code>achievementCompleted</code> — CEP journey trigger for completion celebration</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CATEGORY 4: WIN-BACK ── -->
+<div class="section" id="cat4">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Category 04</span>
+      <h2>Win-Back &amp; Re-Engagement</h2>
+      <p>Protect the loyalty programme's active base by identifying at-risk members and deploying the right incentive at the right intervention point — before churn is confirmed.</p>
+    </div>
+
+    <!-- UC 4.1 -->
+    <div class="use-case">
+      <div class="uc-header">
+        <div class="uc-num">4.1</div>
+        <div class="uc-title">
+          <h3>Churn Prediction + Personalised Win-Back Offer</h3>
+          <div class="uc-sub">CEP's churn score unlocks a T1-generated win-back offer calibrated to the customer's historical basket value</div>
+        </div>
+        <span class="impact-badge impact-high">High Impact</span>
+      </div>
+      <div class="uc-body">
+        <div class="uc-why">
+          <strong>Why Combined?</strong>
+          The CEP's ML churn model identifies at-risk customers. But sending the same 10% discount to all at-risk customers over-spends on those who would have returned naturally (low-churn-score customers) and under-incentivises those who need a stronger nudge (high-score). Talon.One uses the churn score passed as a custom attribute to calculate the optimal offer depth per customer.
+        </div>
+        <div class="uc-grid">
+          <div class="uc-block t1-block">
+            <h4>🧠 Setup in Talon.One</h4>
+            <ul>
+              <li>Rule: <code>IF customer.churn_score BETWEEN 0.5–0.69 → 10% off next purchase</code></li>
+              <li>Rule: <code>IF customer.churn_score BETWEEN 0.7–0.84 → 15% off + double points</code></li>
+              <li>Rule: <code>IF customer.churn_score ≥ 0.85 → 25% off + free delivery</code></li>
+              <li>Set: code valid 7 days, single use, linked to <code>customerId</code></li>
+              <li>Set: global cap — do not send win-back offer if one was sent in the last 60 days</li>
+            </ul>
+          </div>
+          <div class="uc-block cep-block">
+            <h4>📣 Setup in [CEP Name]</h4>
+            <ul>
+              <li>Segment: customers inactive for 45 days with churn score ≥ 0.5</li>
+              <li>Sync <code>churn_score</code> to T1 customer attribute via <code>PUT /v1/customers/{id}</code></li>
+              <li>Call T1 to generate win-back coupon; wait for <code>couponCreated</code> webhook</li>
+              <li>Step 1 (Day 0): Personalised email — "We miss you, <code>&#123;&#123;first_name&#125;&#125;</code>"</li>
+              <li>Step 2 (Day 3): Push with offer code if email unopened</li>
+              <li>Step 3 (Day 6): Final SMS with code expiry urgency</li>
+            </ul>
+          </div>
+        </div>
+        <div class="uc-bridge">
+          <h4>🔗 Data Bridge</h4>
+          <ul>
+            <li><strong>CEP → T1:</strong> <code>PUT /v1/customers/{id}</code> — sync <code>churn_score</code>, <code>days_since_last_purchase</code> as T1 custom attributes</li>
+            <li><strong>CEP → T1:</strong> Trigger coupon generation via <code>POST /v1/customer/sessions</code> with win-back campaign code</li>
+            <li><strong>T1 → CEP:</strong> Webhook <code>couponCreated</code> — code and offer value passed to CEP for message personalisation</li>
+            <li><strong>T1 → CEP:</strong> Webhook <code>sessionClosed</code> on purchase — suppresses remaining steps, sets <code>winback_converted = true</code></li>
+          </ul>
+        </div>
+        <div class="uc-template-note">
+          <strong>📋 Presales Customisation Note</strong>
+          Not all CEP partners have native churn scoring. For MoEngage: use RFM score. For Bloomreach: use Luigis Box prediction score. For Braze: use Predictive Churn built-in. Pass whichever score is available as a normalised 0–1 float to T1 as <code>churn_score</code> via a daily batch or real-time event update.
+        </div>
+      </div>
+    </div>
+
+    <!-- UC 4.2 -->
+    <div class="use-case">
+      <div class="uc-header">
+        <div class="uc-num">4.2</div>
+        <div class="uc-title">
+          <h3>Points Expiry Warning + Burn Nudge</h3>
+          <div class="uc-sub">Notify at-risk points about to expire, then guide redemption into a purchase</div>
+        </div>
+        <span class="impact-badge impact-med">Medium Impact</span>
+      </div>
+      <div class="uc-body">
+        <div class="uc-why">
+          <strong>Why Combined?</strong>
+          Points expiry is a high-irritation, low-trust moment if handled badly — and a high-conversion opportunity if timed well. Talon.One knows exactly when points expire per customer. The CEP turns the expiry event into a multi-step communication sequence that drives a redemption purchase before the expiry date.
+        </div>
+        <div class="uc-grid">
+          <div class="uc-block t1-block">
+            <h4>🧠 Setup in Talon.One</h4>
+            <ul>
+              <li>Set loyalty expiry rule: points expire N days after earn date (rolling or fixed)</li>
+              <li>T1 fires <code>pointsAboutToExpire</code> webhook 30 days before batch expiry</li>
+              <li>Include: <code>expiring_points_value</code>, <code>expiry_date</code>, <code>redeemable_as</code> in webhook payload</li>
+              <li>On burn redemption: award a bonus "reactivation" coupon if inactive for 60+ days</li>
+            </ul>
+          </div>
+          <div class="uc-block cep-block">
+            <h4>📣 Setup in [CEP Name]</h4>
+            <ul>
+              <li>Trigger: T1 webhook <code>pointsAboutToExpire</code> → journey entry</li>
+              <li>Step 1 (30 days out): Email — "You have <code>&#123;&#123;expiring_points_value&#125;&#125;</code> points expiring on <code>&#123;&#123;expiry_date&#125;&#125;</code>"</li>
+              <li>Step 2 (7 days out): Push — "Don't lose your rewards — redeem now"</li>
+              <li>Step 3 (2 days out): SMS — final reminder with deep link to redemption page</li>
+              <li>Step 4: If converted — "Reactivation bonus" message if eligible</li>
+            </ul>
+          </div>
+        </div>
+        <div class="uc-bridge">
+          <h4>🔗 Data Bridge</h4>
+          <ul>
+            <li><strong>T1 → CEP:</strong> Webhook <code>pointsAboutToExpire</code> — CEP journey trigger with <code>expiring_points_value</code> and <code>expiry_date</code></li>
+            <li><strong>CEP → T1:</strong> <code>PUT /v1/customer/sessions</code> on checkout — T1 calculates available points and applies burn effect</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CATEGORY 5: VIP ── -->
+<div class="section" id="cat5">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Category 05</span>
+      <h2>VIP &amp; Tier Progression</h2>
+      <p>Make top-tier customers feel genuinely recognised — using exclusive mechanics that are technically impossible to access outside their tier.</p>
+    </div>
+
+    <!-- UC 5.1 -->
+    <div class="use-case">
+      <div class="uc-header">
+        <div class="uc-num">5.1</div>
+        <div class="uc-title">
+          <h3>Tier-Based Early Access Campaign</h3>
+          <div class="uc-sub">Gold-only sale access, technically enforced — not just communicated</div>
+        </div>
+        <span class="impact-badge impact-high">High Impact</span>
+      </div>
+      <div class="uc-body">
+        <div class="uc-why">
+          <strong>Why Combined?</strong>
+          Communicating VIP early access via CEP without technical enforcement means any customer with the link can access the sale — eroding the exclusivity that makes the tier valuable. Talon.One enforces that only Gold customers can redeem the early-access campaign, even if the URL leaks.
+        </div>
+        <div class="uc-grid">
+          <div class="uc-block t1-block">
+            <h4>🧠 Setup in Talon.One</h4>
+            <ul>
+              <li>Campaign: <code>IF customer.tier = Gold AND session.date BETWEEN early_access_start AND public_launch → apply VIP discount or unlock sale price</code></li>
+              <li>Coupon type: per-customer unique, single use, expires at public launch time</li>
+              <li>Return <code>vip_access_granted = true</code> in session response so storefront shows VIP prices</li>
+              <li>Reject silently for non-Gold customers even if they have the URL</li>
+            </ul>
+          </div>
+          <div class="uc-block cep-block">
+            <h4>📣 Setup in [CEP Name]</h4>
+            <ul>
+              <li>Segment: <code>loyalty_tier = Gold</code> — 48 hours before public launch</li>
+              <li>Send VIP early-access email with unique deep link including <code>customerId</code> parameter</li>
+              <li>In-app announcement on app open for Gold members during early-access window</li>
+              <li>Post-sale: send "Thank you for shopping early" email with next VIP event teaser</li>
+            </ul>
+          </div>
+        </div>
+        <div class="uc-bridge">
+          <h4>🔗 Data Bridge</h4>
+          <ul>
+            <li><strong>CEP → T1:</strong> Session payload includes <code>customerId</code> — T1 looks up tier in real time</li>
+            <li><strong>T1 → CEP:</strong> Customer attribute <code>loyalty_tier</code> — CEP uses as segmentation condition for VIP communication</li>
+            <li><strong>T1 → Storefront:</strong> Session response <code>vip_access_granted</code> controls whether VIP-priced items are visible/purchasable</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- UC 5.2 -->
+    <div class="use-case">
+      <div class="uc-header">
+        <div class="uc-num">5.2</div>
+        <div class="uc-title">
+          <h3>Birthday &amp; Anniversary Personalised Reward</h3>
+          <div class="uc-sub">Date-triggered, tier-scaled reward with a genuine single-use enforcement</div>
+        </div>
+        <span class="impact-badge impact-med">Medium Impact</span>
+      </div>
+      <div class="uc-body">
+        <div class="uc-why">
+          <strong>Why Combined?</strong>
+          Birthday campaigns are a retention staple — but without per-customer code enforcement, the same birthday code gets posted online and redeemed by non-birthday customers year-round. Talon.One generates unique codes tied to the customer's birthday window; the CEP delivers the message at exactly the right emotional moment.
+        </div>
+        <div class="uc-grid">
+          <div class="uc-block t1-block">
+            <h4>🧠 Setup in Talon.One</h4>
+            <ul>
+              <li>Rule: valid only during <code>customer.birthday_month = current_month</code></li>
+              <li>Reward scaled by tier: Bronze = £5 / Silver = £10 / Gold = £20 + bonus points</li>
+              <li>Code: unique per customer, 1 use, valid for 30 days within the birthday month</li>
+              <li>Also generate anniversary code on <code>account_created_date</code> anniversary</li>
+            </ul>
+          </div>
+          <div class="uc-block cep-block">
+            <h4>📣 Setup in [CEP Name]</h4>
+            <ul>
+              <li>Trigger: <code>date = customer.birthday - 3 days</code> (pre-birthday build-up)</li>
+              <li>Send birthday email with personalised offer code from T1</li>
+              <li>In-app birthday banner on app open on the birthday date itself</li>
+              <li>Day 7 reminder if unused: "Your birthday gift expires in 3 weeks"</li>
+            </ul>
+          </div>
+        </div>
+        <div class="uc-bridge">
+          <h4>🔗 Data Bridge</h4>
+          <ul>
+            <li><strong>CEP → T1:</strong> Sync <code>customer.birthday_month</code> and <code>customer.account_anniversary</code> to T1 customer profile on registration or profile update</li>
+            <li><strong>T1 → CEP:</strong> Birthday campaign rule generates coupon 3 days before — webhook <code>couponCreated</code> pushes code to CEP attribute</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ S3 ─ EASE OF SETUP ═══════════════════ -->
+<div class="section-group" id="s3">
+  <div class="section-group-inner">
+    <div class="sg-num">03</div>
+    <div class="sg-text">
+      <h2>Ease of Setup</h2>
+      <p>A 3-step integration workflow — not a 6-month dev project</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Implementation Workflow</span>
+      <h2>Connect → Configure → Campaign</h2>
+      <p>The standard integration between Talon.One and any major CEP follows a predictable 3-step pattern that a joint implementation team can complete in 2–6 weeks, depending on use case complexity.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <span class="step-label connect">Connect</span>
+        <h3>Platform-to-Platform Link</h3>
+        <ul>
+          <li>Configure T1 API credentials in CEP webhook settings</li>
+          <li>Set up outbound T1 webhooks pointing to CEP event ingestion endpoint</li>
+          <li>Map T1 customer profile attributes to CEP custom attributes schema</li>
+          <li>Test bidirectional event flow with a sandbox customer profile</li>
+          <li>Validate that <code>customerId</code> is consistent across both systems (single key)</li>
+        </ul>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <span class="step-label configure">Configure</span>
+        <h3>Attribute &amp; Event Schema</h3>
+        <ul>
+          <li>Define custom attributes to sync: <code>loyalty_tier</code>, <code>points_balance</code>, <code>churn_score</code>, coupon codes</li>
+          <li>Create T1 webhook listeners for each journey trigger event type</li>
+          <li>Set up CEP Liquid variables for T1 attribute values in message templates</li>
+          <li>Define session attribute schema (cart value, channel, campaign tags)</li>
+          <li>Configure T1 campaign budget caps and rate limits</li>
+        </ul>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <span class="step-label campaign">Campaign</span>
+        <h3>Launch First Use Case</h3>
+        <ul>
+          <li>Build the first campaign in T1 (recommend: Welcome Offer or Cart Abandonment)</li>
+          <li>Build the corresponding journey in CEP using T1 webhook as trigger</li>
+          <li>QA end-to-end with test customer profiles across all branches</li>
+          <li>Go live with a 10% rollout, monitor redemption rates and latency</li>
+          <li>Expand to next use case from the matrix above</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout gold" style="margin-top:1.5rem;">
+      <strong>Key Message for Prospects: This Is Configuration, Not Code</strong>
+      Once the initial Connect step is complete (typically 3–5 days of backend work), every subsequent use case in the matrix above is built by a <strong>marketer in Talon.One's Campaign Manager</strong> and a <strong>marketer in the CEP's journey builder</strong>. No additional development sprint is required per use case. The CEP sends data; T1 responds with a decision. It's a platform pattern, not a custom integration.
+    </div>
+
+    <div class="callout blue" style="margin-top:1rem;">
+      <strong>Standard Integration Components Used Across All Use Cases</strong>
+      <ul style="margin-top:.4rem;">
+        <li><strong>T1 Webhooks (outbound):</strong> <code>sessionClosed</code>, <code>couponCreated</code>, <code>couponRedeemed</code>, <code>tierChanged</code>, <code>achievementCompleted</code>, <code>pointsAboutToExpire</code></li>
+        <li><strong>T1 API endpoints (inbound):</strong> <code>PUT /v1/customers/{id}</code>, <code>POST /v1/customer/sessions</code>, <code>PUT /v1/customer/sessions/{id}</code>, <code>GET /v1/campaigns/{id}/coupons</code></li>
+        <li><strong>CEP custom attributes synced from T1:</strong> <code>loyalty_tier</code>, <code>points_balance</code>, <code>active_coupon_code</code>, <code>offer_value</code>, <code>offer_expiry</code></li>
+        <li><strong>CEP events used as T1 API triggers:</strong> Cart Abandoned, Order Completed, Profile Created, Browse Event</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ S4 ─ TECHNICAL MAPPING TABLE ═══════════════════ -->
+<div class="section-group" id="s4">
+  <div class="section-group-inner">
+    <div class="sg-num">04</div>
+    <div class="sg-text">
+      <h2>Technical Mapping</h2>
+      <p>Role of each platform at every stage of the customer lifecycle</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Customer Journey Mapping</span>
+      <h2>Logic vs. Voice — Who Does What, When</h2>
+    </div>
+
+    <table class="map-table">
+      <thead>
+        <tr>
+          <th>Stage</th>
+          <th>🧠 Talon.One Role (Logic &amp; Validation)</th>
+          <th>📣 [CEP Name] Role (Communication &amp; Segmentation)</th>
+          <th>🔗 Integration Point</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Profile Creation</td>
+          <td>Create customer profile with unique ID. Initialise custom attributes (<code>tier</code>, <code>points</code>). Generate welcome coupon.</td>
+          <td>Trigger Welcome journey on <code>Account Created</code> event. Store T1 <code>customerId</code> as CEP external ID.</td>
+          <td>CEP fires <code>POST /v1/customers</code> on profile create. T1 webhook <code>couponCreated</code> → CEP attribute update.</td>
+        </tr>
+        <tr>
+          <td>Browsing / Intent</td>
+          <td>Evaluate pre-session intent signals passed as attributes. Pre-calculate eligible campaigns. Respond to segment tags from CEP.</td>
+          <td>Capture browse events (category, product, frequency). Compute intent score. Sync segment tags to T1 customer profile.</td>
+          <td><code>PUT /v1/customers/{id}</code> with <code>browsed_category</code>, <code>intent_score</code> CEP-computed attributes.</td>
+        </tr>
+        <tr>
+          <td>Active Cart / Checkout</td>
+          <td>Evaluate all active campaigns per session. Return: applied discounts, loyalty effects, coupon validity, next-tier gap, custom effects. Enforce fraud rules.</td>
+          <td>Display real-time progress bar ("Spend £X more to unlock Y") using T1 session response effects. No logic lives in the CEP.</td>
+          <td><code>PUT /v1/customer/sessions/{id}</code> on every cart item update. T1 returns <code>effects</code> array — CEP reads <code>nextTierGap</code> for in-session UI.</td>
+        </tr>
+        <tr>
+          <td>Order Confirmation</td>
+          <td>Close and commit session. Evaluate post-purchase effects: award points, issue bounceback coupon, update tier, trigger milestone. Fire all outbound webhooks.</td>
+          <td>Listen for T1 webhooks on order close. Trigger: order confirmation + points earned message. Branch: tier-up journey if <code>tierChanged</code>. Suppress pending abandonment journeys.</td>
+          <td>T1 webhooks: <code>sessionClosed</code>, <code>tierChanged</code>, <code>milestoneReached</code>, <code>couponCreated</code> (bounceback) → CEP journey triggers.</td>
+        </tr>
+        <tr>
+          <td>Post-Purchase (Day 2–7)</td>
+          <td>Validate bounceback coupon eligibility on next visit. Track loyalty balance. Update expiry countdown.</td>
+          <td>Send "Here's a reward for your purchase" (bounceback) message. Send review request (no T1 integration needed). Sync updated <code>points_balance</code> to CEP profile.</td>
+          <td>T1 attribute <code>points_balance</code> synced after session close → CEP uses in message content and for segmentation rules.</td>
+        </tr>
+        <tr>
+          <td>Re-Engagement (Day 45+)</td>
+          <td>Generate win-back coupon scaled to customer LTV / churn score attribute. Set strict redemption guard (60-day cooldown between offers).</td>
+          <td>Identify at-risk segment via churn model. Sync <code>churn_score</code> to T1. Trigger win-back journey. Orchestrate email → push → SMS sequence.</td>
+          <td><code>PUT /v1/customers/{id}</code> with <code>churn_score</code> → T1 generates scaled coupon → webhook <code>couponCreated</code> → CEP sends with personalised offer value.</td>
+        </tr>
+        <tr>
+          <td>Points Expiry Warning</td>
+          <td>Evaluate expiry schedule per customer. Fire <code>pointsAboutToExpire</code> webhook 30 days before expiry date with expiry metadata.</td>
+          <td>Listen for T1 expiry webhook. Trigger 3-step reminder journey: email (Day -30) → push (Day -7) → SMS (Day -2).</td>
+          <td>T1 webhook <code>pointsAboutToExpire</code> with <code>expiring_points_value</code> and <code>expiry_date</code> → CEP journey entry with those values as message variables.</td>
+        </tr>
+        <tr>
+          <td>Tier Upgrade</td>
+          <td>Evaluate tier threshold on session close. Issue tier-exclusive welcome coupon. Update <code>customer.tier</code> attribute. Unlock tier-exclusive campaigns.</td>
+          <td>Listen for <code>tierChanged</code> webhook. Trigger Tier-Up Celebration journey: push → email (Day 0) → education (Day 3) → status-maintenance nudge (Day 14).</td>
+          <td>T1 webhook <code>tierChanged</code> with <code>new_tier</code>, <code>welcome_offer_code</code> → CEP journey trigger + <code>loyalty_tier</code> attribute update for all future segmentation.</td>
+        </tr>
+        <tr>
+          <td>Referral Programme</td>
+          <td>Generate unique referral code per customer. Validate referee on redemption (new email, first purchase). Award both referrer and referee rewards. Track referral velocity.</td>
+          <td>Insert referral code in post-purchase email. Send referee welcome flow on account creation with referral tag. Notify referrer on successful friend's purchase.</td>
+          <td>T1 webhook <code>couponCreated</code> → CEP attribute <code>referral_code</code>. T1 webhook <code>referralRewardGranted</code> → CEP referrer notification journey.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════ S5 ─ INTEGRATION CHECKLIST ═══════════════════ -->
+<div class="section" id="s5">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Pre-Sales Qualification</span>
+      <h2>Integration Readiness Checklist</h2>
+      <p>Use this before a demo or proof-of-concept to qualify integration complexity and surface blockers early.</p>
+    </div>
+
+    <div class="checklist">
+      <h4>Technical Readiness</h4>
+      <div class="cl-grid">
+        <div class="cl-item"><div class="box"></div>Prospect has a consistent customer ID shared across CEP and ecommerce/POS systems</div>
+        <div class="cl-item"><div class="box"></div>CEP supports outbound webhooks or event API publishing (most do natively)</div>
+        <div class="cl-item"><div class="box"></div>CEP supports inbound custom attributes on customer profiles</div>
+        <div class="cl-item"><div class="box"></div>CEP supports custom event triggers for journeys (not only standard e-commerce events)</div>
+        <div class="cl-item"><div class="box"></div>Checkout / POS system can call T1 <code>UpdateSession</code> API at cart evaluation</div>
+        <div class="cl-item"><div class="box"></div>Backend can receive T1 webhook events and route to CEP or internal systems</div>
+        <div class="cl-item"><div class="box"></div>T1 sandbox environment provisioned for CEP integration testing</div>
+        <div class="cl-item"><div class="box"></div>CEP Liquid/template system supports dynamic variable rendering from custom attributes</div>
+      </div>
+    </div>
+
+    <div class="checklist" style="margin-top:1rem;">
+      <h4>Data / Business Readiness</h4>
+      <div class="cl-grid">
+        <div class="cl-item"><div class="box"></div>Customer loyalty tier data is available in CEP or can be synced from T1 attribute</div>
+        <div class="cl-item"><div class="box"></div>Prospect uses (or plans to use) segmentation as a campaign targeting input</div>
+        <div class="cl-item"><div class="box"></div>Marketing team has authority to set promotion budget caps per campaign</div>
+        <div class="cl-item"><div class="box"></div>Prospect can define maximum discount value / redemption count per campaign</div>
+        <div class="cl-item"><div class="box"></div>Birthday / anniversary data is collected and available for personalisation</div>
+        <div class="cl-item"><div class="box"></div>Cart abandonment events are already tracked (or can be added) in CEP</div>
+        <div class="cl-item"><div class="box"></div>Prospect has or is planning a referral programme use case</div>
+        <div class="cl-item"><div class="box"></div>Prospect has a loyalty programme (or is planning one) with tier mechanics</div>
+      </div>
+    </div>
+
+    <div class="callout gold" style="margin-top:1.5rem;">
+      <strong>Common Blockers to Surface Early</strong>
+      <ul>
+        <li><strong>No consistent customer ID:</strong> The integration depends on a single <code>customerId</code> that is the same in both T1 and the CEP. If the prospect is using different IDs in their ecommerce and CRM systems, data unification is a prerequisite — resolve via CDP or ID-stitching before this integration.</li>
+        <li><strong>Session API not implemented:</strong> Some prospects only use T1 for coupons today. If they haven't implemented the Session API, the real-time basket mechanics (cart abandonment, spend-threshold nudge) require additional backend work — but the webhook-only use cases (milestones, referrals, point expiry) don't.</li>
+        <li><strong>CEP event model too simple:</strong> Older CEP configurations may only support standard e-commerce events (Purchase, Email Open). Confirm the CEP can receive and react to T1 custom webhook events as journey triggers.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ CONCLUSION ═══════════════════ -->
+<div class="conclusion">
+  <div class="container">
+    <h2>Pitch It in One Sentence</h2>
+    <p>
+      "Talon.One is the only promotion engine that gives [CEP Name] the ability to send genuinely personalised, fraud-proof incentives — where the right offer is validated and controlled at the platform level, not just inserted as a static code into a message template."
+    </p>
+    <div class="con-grid">
+      <div class="con-card">
+        <h4>For the CMO</h4>
+        <p>Every offer is calibrated to the customer's value — no more blanket discounts eroding margin on customers who would have converted anyway.</p>
+      </div>
+      <div class="con-card">
+        <h4>For the CTO</h4>
+        <p>One integration surface: Talon.One APIs. All channels (email, push, SMS, in-app) consume the same promotion logic without separate integrations per channel.</p>
+      </div>
+      <div class="con-card">
+        <h4>For the CFO</h4>
+        <p>Campaign budget caps and budget-ceiling rules are technically enforced — not policy-only. Promotional spend cannot exceed authorised limits.</p>
+      </div>
+      <div class="con-card">
+        <h4>For the Marketer</h4>
+        <p>New use cases are built in the Campaign Manager and journey builder — not in a developer sprint. Time-to-market shrinks from weeks to hours.</p>
+      </div>
+      <div class="con-card">
+        <h4>For the Developer</h4>
+        <p>One SDK, one API, public docs, predictable session/webhook model. The integration pattern built for web checkout reuses across mobile and POS.</p>
+      </div>
+      <div class="con-card">
+        <h4>For the Head of Loyalty</h4>
+        <p>Tier mechanics, expiry events, milestones, and gamification all fire in real time — communicated by [CEP Name] at exactly the right emotional moment.</p>
+      </div>
+    </div>
+    <p style="margin-top:2.5rem; font-size:.78rem; opacity:.45;">
+      Template version 1.0 — March 2026 · Talon.One Solutions Engineering · Replace [CEP Name] with Braze, Bloomreach, or MoEngage · Classification: Internal Pre-Sales Use Only
+    </p>
+  </div>
+</div>
+
+</body>
+</html>
