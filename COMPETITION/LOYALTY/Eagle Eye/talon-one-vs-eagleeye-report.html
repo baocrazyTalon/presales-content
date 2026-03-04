@@ -12,8 +12,8 @@
       --t1-dark:    #0B1F3A;
       --t1-mid:     #1A3A5C;
       --t1-accent:  #00A3FF;
-      --ee-green:   #00A86B;
-      --ee-light:   #E6F7F0;
+      --ee-green:   #9e38f2;
+      --ee-light:   #F3EAFE;
       --warn-red:   #C0392B;
       --warn-bg:    #FDF3F2;
       --ok-green:   #1E8449;
@@ -46,7 +46,7 @@
     .cover::after {
       content: ''; position: absolute; top: -80px; right: -100px;
       width: 500px; height: 500px; border-radius: 50%;
-      background: rgba(0,168,107,.12);
+      background: rgba(158,56,242,.12);
     }
     .cover-inner { max-width: 800px; position: relative; z-index: 1; }
     .cover-label {
@@ -301,6 +301,12 @@
           <td class="ee-cell"><span class="cross">✘</span> The Wallet (loyalty) API and the POS Connect (promotions) API maintain separate state. Settling a transaction to commit loyalty points is a separate step from adjudicating the basket discount — they can be executed at different times (POS Connect supports end-of-day batch settlement).</td>
           <td class="t1-cell"><span class="tick">✔</span> One data model: the session is the single source of truth for all incentive state at the moment of checkout. Points, discounts, coupons, and effects are all evaluated and committed atomically in one request <span class="adv-badge">Advantage</span></td>
         </tr>
+        <tr>
+          <td class="what-cell">Discount / points logic collision</td>
+          <td class="why-cell">When a discount is applied first and the points engine then calculates on the reduced transaction value, customers receive fewer points than expected — a silent error that erodes trust and drives support contacts.<br><span class="econ">Unexplained points shortfalls are a leading driver of loyalty programme complaints; each contact costs $5–$15, and repeated occurrences damage long-term programme NPS</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Because Eagle Eye's promotion engine (POS Connect) and loyalty engine (Transaction API) are separate modules, a discount effect can <strong>reduce the basket value seen by the points calculation</strong> — awarding fewer points than the customer expected. Marketing teams must actively maintain explicit "priority rankings" between the two engines to prevent these collisions, creating <em>ongoing configuration overhead that grows with every new promotion added</em>.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Discounts and points rules are evaluated in the same atomic pass against the same session snapshot. Whether points are calculated on the pre-discount or post-discount total is an explicit, inspectable rule setting — no cross-engine priority rankings to manage, no silent interaction between separate modules <span class="adv-badge">Advantage</span></td>
+        </tr>
       </tbody>
     </table>
 
@@ -458,6 +464,12 @@
           <td class="ee-cell"><span class="warn">⚠</span> Because loyalty and promotion are separate systems, reversal requires calling both APIs independently. There is no single atomic rollback endpoint — partial failure (one reversal succeeds, one fails) leaves the ledger in an inconsistent state requiring manual intervention.</td>
           <td class="t1-cell"><span class="tick">✔</span> Single atomic rollback API call reverses all effects — discounts, points, coupon redemption — in one operation. If the rollback fails, nothing is reversed. Consistent state is guaranteed <span class="adv-badge">Advantage</span></td>
         </tr>
+        <tr>
+          <td class="what-cell">Latency under complex rule load</td>
+          <td class="why-cell">Real-time adjudication must evaluate all qualifying conditions — attribute filters, tier checks, coupon validity, time windows — within sub-250ms. When rule complexity outpaces infrastructure capacity, latency spikes appear at exactly the worst moment: peak trading periods.<br><span class="econ">A latency spike to 500ms+ during peak checkout is a direct conversion failure; this is when traffic is highest and margin protection matters most</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> To maintain sub-250ms responses, Eagle Eye's adjudication layer must limit the complexity of rules it can evaluate per call. Running 50+ nested conditions simultaneously — e.g. <em>"item X in basket AND customer is Tier 2 AND it's a Tuesday AND coupon Y is unused"</em> — causes response times to creep beyond the declared range. In practice this forces retailers to <strong>simplify offer logic or pre-compute audience segments</strong> in a separate batch step, partially defeating the purpose of a dynamic real-time engine.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Sub-100ms p99 SLA maintained regardless of rule complexity. The Talon.One engine is purpose-built for high-cardinality conditions across large product catalogues and customer profiles — deeply nested logic is the standard use case, not an edge case that degrades performance <span class="adv-badge">Advantage</span></td>
+        </tr>
       </tbody>
     </table>
 
@@ -559,6 +571,12 @@
           <td class="ee-cell"><span class="cross">✘</span> Eagle Eye <strong>struggles with 10+ items in the cart</strong> — confirmed by internal competitive analysis (Valtech). This is particularly surprising given their stated focus on grocery retail where large basket sizes are standard.</td>
           <td class="t1-cell"><span class="tick">✔</span> No practical cart size limitation. Optimised for large cart volumes — tested and validated in B2B and grocery environments with 100+ line items per session <span class="adv-badge">Advantage</span></td>
         </tr>
+        <tr>
+          <td class="what-cell">Front-end &amp; channel build burden</td>
+          <td class="why-cell">An API-first platform provides the decisioning brain; the retailer builds the full customer-facing body — app, web checkout, POS prompts, email rendering — for every channel. When the API surface is complex (two endpoints, HASH auth, no SDKs, thin documentation), each channel integration becomes a bespoke engineering project rather than a reusable pattern.<br><span class="econ">Companies consistently underestimate the cost of building and maintaining "glue code" to connect all channels to Eagle Eye — typically $200k–$500k over the first two years, scaling with each new channel</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye provides no frontend components, checkout widgets, or channel UI primitives. Every touchpoint must be built from scratch. With two separate API surfaces, HASH request authentication, no SDKs, and thin documentation, each channel is a distinct engineering project. The total integration surface area — and its maintenance cost — grows with every channel added.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Also headless and API-first — but the integration surface is dramatically simpler: one API, stateless auth, typed SDKs, and a predictable response model. Patterns built for web checkout transfer directly to mobile and POS. New channels are incremental additions, not greenfield builds <span class="adv-badge">Advantage</span></td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -614,6 +632,12 @@
           <td class="why-cell">When a customer returns one item from a bundle, the discount applied to that item must be calculated proportionally against the original bundle discount. Without pro-rata logic, retailers either over-refund (revenue loss) or under-refund (customer complaint).<br><span class="econ">Manual pro-rata calculation per return costs $5–$15 in agent time per contact; at scale this is a significant annual cost</span></td>
           <td class="ee-cell"><span class="cross">✘</span> Eagle Eye <strong>does not support pro-rata discounts</strong>. For bundle returns, the system would need to re-run the original promotion rules against a historical basket state — which may no longer exist if the rules have been deleted or modified since. This is a confirmed gap (internal analysis, 75% confidence).</td>
           <td class="t1-cell"><span class="tick">✔</span> Pro-rata discount calculation is native — the original session is retained and the proportional discount per returned item is calculated automatically. Rules in force at the time of purchase are preserved for return calculations <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">EagleAI: automated offer explainability</td>
+          <td class="why-cell">AI-generated offers that marketers cannot inspect or override create an operational governance gap — managers are accountable for campaign performance but cannot understand or correct the model's decisions. Low explainability leads to low adoption and erodes human oversight exactly where it matters most: margin decisions.<br><span class="econ">An AI that sets an unachievable spend target for a segment ("over-stretched challenge") quietly deflates programme engagement — invisible until redemption data confirms the problem, by which time the campaign window has closed</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> EagleAI automates offer selection — choosing product, discount depth, and challenge spend targets per customer. However, marketing managers report difficulty understanding <strong>why the AI selected 15% for one group and 25% for another</strong>. If the AI makes a mistake (e.g. setting unachievable spend goals for a segment), <em>it is difficult to manually override specific AI decisions without disabling the automated flow entirely</em>. This trust gap limits real-world adoption beyond light-use pilots.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Every rule is authored and fully inspectable by a marketer — there is no black-box layer between campaign configuration and outcome. AI or ML-driven personalisation integrates as transparent customer attributes used as rule inputs. Every decision that fires is auditable per session, per customer, with full condition trace <span class="adv-badge">Advantage</span></td>
         </tr>
       </tbody>
     </table>
