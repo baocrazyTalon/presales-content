@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talon.one + Omnivy vs. Yotpo — Solution Comparison</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #0062ff;
+  --ink2: #1a1f36;
+  --muted: #6b7280;
+  --light: #f4f4f6;
+  --border: #e2e4e9;
+  --border-strong: #c8cad2;
+  --talon: #0a6b4b;
+  --talon-light: #e8f5f0;
+  --talon-mid: #c3e8db;
+  --yotpo: #c0392b;
+  --yotpo-light: #fdf0ee;
+  --yotpo-mid: #f5c5bf;
+  --omnivy: #1a3a8f;
+  --omnivy-light: #eef2fb;
+  --warn: #92400e;
+  --warn-light: #fef3c7;
+  --white: #ffffff;
+  --accent: #0a6b4b;
+}
+
+body {
+  background: var(--white);
+  color: var(--ink);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── PAGE LAYOUT ── */
+.page { max-width: 1280px; margin: 0 auto; padding: 0 48px 80px; }
+
+/* ── HEADER ── */
+.doc-header {
+  border-bottom: 3px solid var(--ink);
+  padding: 52px 0 36px;
+  margin-bottom: 0;
+}
+
+.doc-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.doc-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.confidential-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1.5px solid var(--omnivy);
+  color: var(--omnivy);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 2px;
+}
+
+.doc-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 4vw, 54px);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+
+.doc-title .highlight { color: var(--talon); }
+
+.doc-subtitle {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 680px;
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.doc-subtitle strong { color: var(--ink); font-weight: 500; }
+
+/* ── STRATEGIC BRIEF ── */
+.brief-bar {
+  background: var(--ink);
+  color: white;
+  padding: 24px 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 32px;
+  margin: 0;
+  border-radius: 4px;
+}
+
+.brief-item .brief-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 4px;
+}
+
+.brief-item .brief-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: white;
+}
+
+.brief-item .brief-value.green { color: #4ade80; }
+
+/* ── SECTION HEADERS ── */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 40px 0 0;
+  margin-bottom: 2px;
+}
+
+.section-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.section-tag {
+  margin-left: auto;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--light);
+  color: var(--muted);
+  padding: 4px 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.section-rule {
+  height: 1px;
+  background: var(--border);
+  margin-bottom: 20px;
+}
+
+/* ── TABLE ── */
+.table-wrap {
+  overflow-x: auto;
+  margin: 0 0 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+thead th {
+  background: var(--ink);
+  color: white;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 13px 16px;
+  text-align: left;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  white-space: nowrap;
+}
+
+thead th:last-child { border-right: none; }
+
+thead th.col-talon { color: #6ee7b7; }
+thead th.col-yotpo { color: #fca5a5; }
+
+tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: #fafbfc; }
+
+tbody tr.section-row td {
+  background: var(--light);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--border-strong);
+}
+
+tbody td {
+  padding: 14px 16px;
+  vertical-align: top;
+  border-right: 1px solid var(--border);
+}
+
+tbody td:last-child { border-right: none; }
+
+/* COL WIDTHS */
+.col-feature { min-width: 200px; max-width: 240px; }
+.col-yotpo   { min-width: 160px; width: 180px; }
+.col-talon   { min-width: 220px; }
+.col-type    { min-width: 130px; width: 140px; }
+.col-time    { min-width: 180px; }
+
+/* FEATURE NAME */
+.fname {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ink);
+  display: block;
+  line-height: 1.3;
+}
+
+.fdesc {
+  display: block;
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 300;
+  margin-top: 3px;
+  line-height: 1.4;
+}
+
+.gap-badge {
+  display: inline-block;
+  margin-top: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--talon-light);
+  color: var(--talon);
+  border: 1px solid var(--talon-mid);
+  padding: 2px 7px;
+  border-radius: 2px;
+}
+
+/* STATUS CELLS */
+.status {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 7px;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.status-icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  margin-top: 1px;
+}
+
+.si-yes    { background: var(--talon); color: white; }
+.si-no     { background: var(--yotpo); color: white; }
+.si-partial{ background: var(--warn); color: white; }
+.si-native { background: var(--omnivy); color: white; }
+
+.status-text { color: var(--ink2); }
+.status-note {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 300;
+  margin-top: 2px;
+}
+
+/* TYPE PILLS */
+.pill {
+  display: inline-block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 2px;
+  font-weight: 500;
+}
+
+.pill-config   { background: var(--talon-light); color: var(--talon); border: 1px solid var(--talon-mid); }
+.pill-custom   { background: var(--warn-light); color: var(--warn); border: 1px solid #fcd34d; }
+.pill-hybrid   { background: var(--omnivy-light); color: var(--omnivy); border: 1px solid #bfcbf0; }
+.pill-na       { background: var(--light); color: var(--muted); border: 1px solid var(--border); }
+
+/* TIME CELL */
+.time-fast  { font-weight: 600; color: var(--talon); font-size: 12.5px; }
+.time-slow  { color: var(--muted); font-size: 12px; }
+.time-na    { color: var(--yotpo); font-size: 12px; font-weight: 500; }
+.time-note  { display: block; font-size: 11px; color: var(--muted); font-weight: 300; margin-top: 2px; }
+
+/* TALON ADVANTAGE ROW */
+tbody tr.adv td:first-child {
+  border-left: 3px solid var(--talon);
+}
+
+tbody tr.parity td:first-child {
+  border-left: 3px solid #94a3b8;
+}
+
+/* ── EXECUTIVE SUMMARY ── */
+.exec-section {
+  margin-top: 60px;
+  border: 2px solid var(--ink);
+  padding: 48px;
+  position: relative;
+}
+
+.exec-section::before {
+  content: '§';
+  position: absolute;
+  top: -20px; left: 40px;
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  color: var(--ink);
+  background: white;
+  padding: 0 10px;
+  line-height: 1;
+}
+
+.exec-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--ink);
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.exec-title .myth { color: var(--yotpo); }
+
+.exec-subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+.exec-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+}
+
+.exec-col h4 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.exec-col h4.red { color: var(--yotpo); }
+.exec-col h4.green { color: var(--talon); }
+
+.exec-col p, .exec-col li {
+  font-size: 13.5px;
+  color: var(--ink2);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.exec-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.exec-col li::before {
+  content: '→';
+  color: var(--talon);
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+.verdict {
+  margin-top: 36px;
+  padding: 24px 28px;
+  background: var(--ink);
+  color: white;
+}
+
+.verdict p {
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.verdict strong { color: #6ee7b7; font-weight: 600; }
+
+/* ── FOOTNOTE ── */
+.footnote {
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footnote span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+
+/* ── LEGEND ── */
+.legend-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  background: #f8f9fc;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  padding: 18px 24px;
+  margin: 32px 0 0;
+}
+.legend-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 220px;
+  flex: 1;
+}
+.legend-pill-demo {
+  flex-shrink: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 2px;
+  font-weight: 500;
+  white-space: nowrap;
+  margin-top: 1px;
+}
+.legend-text strong {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink2);
+  margin-bottom: 2px;
+}
+.legend-text span {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.5;
+}
+@media (max-width: 768px) {
+  .legend-bar { gap: 16px; }
+  .legend-item { min-width: 100%; }
+}
+
+/* ── PRINT ── */
+@media print {
+  .page { padding: 0 32px 60px; }
+  .brief-bar { margin: 0; }
+}
+
+/* ── TABLET (≤ 1024px) ── */
+@media (max-width: 1024px) {
+  .page { padding: 0 32px 60px; }
+  .brief-bar { padding: 20px 32px; }
+
+  .col-feature { min-width: 160px; max-width: 180px; }
+  .col-yotpo   { min-width: 140px; width: 150px; }
+  .col-talon   { min-width: 180px; }
+  .col-type    { min-width: 110px; width: 120px; }
+  .col-time    { min-width: 150px; }
+
+  table { font-size: 12px; }
+  thead th { font-size: 12px; padding: 11px 12px; }
+  tbody td  { padding: 12px 12px; }
+}
+
+/* ── MOBILE-LANDSCAPE / SMALL TABLET (≤ 768px) ── */
+@media (max-width: 768px) {
+  .page { padding: 0 16px 48px; }
+
+  .doc-header { padding: 32px 0 24px; }
+
+  .doc-meta { flex-direction: column; gap: 12px; margin-bottom: 20px; }
+
+  .doc-title { font-size: clamp(26px, 7vw, 38px); }
+
+  .doc-subtitle { font-size: 14px; }
+
+  .brief-bar {
+    grid-template-columns: 1fr;
+    padding: 20px 16px;
+    gap: 16px;
+  }
+
+  .section-header { flex-wrap: wrap; gap: 8px; padding: 28px 0 0; }
+  .section-tag { margin-left: 0; }
+
+  /* Tables: horizontal scroll on mobile */
+  .table-wrap { -webkit-overflow-scrolling: touch; }
+  table { min-width: 700px; }
+  thead th { font-size: 11px; padding: 10px 10px; white-space: nowrap; }
+  tbody td  { padding: 10px 10px; font-size: 12px; }
+
+  .col-feature { min-width: 140px; max-width: 160px; }
+  .col-yotpo   { min-width: 130px; }
+  .col-talon   { min-width: 160px; }
+  .col-type    { min-width: 100px; }
+  .col-time    { min-width: 140px; }
+
+  .fname { font-size: 12px; }
+  .fdesc { font-size: 11px; }
+  .status { font-size: 11.5px; }
+  .status-note { font-size: 10.5px; }
+
+  /* Executive section */
+  .exec-section { padding: 32px 20px; margin-top: 40px; }
+  .exec-section::before { font-size: 28px; top: -16px; left: 20px; }
+  .exec-title { font-size: 22px; }
+  .exec-body { grid-template-columns: 1fr; gap: 28px; }
+
+  /* Promotion chapter inline grids */
+  .promo-grid-3 { grid-template-columns: 1fr !important; }
+  .promo-grid-2 { grid-template-columns: 1fr !important; }
+
+  .verdict { padding: 18px 16px; }
+  .verdict p { font-size: 13px; }
+
+  .footnote { flex-direction: column; gap: 8px; }
+  .footnote span { font-size: 9.5px; }
+}
+
+/* ── MOBILE-PORTRAIT (≤ 480px) ── */
+@media (max-width: 480px) {
+  .page { padding: 0 12px 40px; }
+
+  .doc-header { padding: 24px 0 20px; }
+
+  .doc-title { font-size: clamp(22px, 8vw, 30px); line-height: 1.15; }
+
+  .brief-bar { margin: 0 -12px; padding: 16px 12px; }
+  .brief-item .brief-value { font-size: 12px; }
+
+  .section-title { font-size: 17px; }
+  .section-tag { display: none; }
+
+  table { min-width: 620px; font-size: 11.5px; }
+  thead th { font-size: 10.5px; padding: 9px 8px; }
+  tbody td  { padding: 9px 8px; }
+
+  .exec-section { padding: 24px 14px; }
+  .exec-title { font-size: 19px; }
+  .exec-col p, .exec-col li { font-size: 13px; }
+
+  .gap-badge { font-size: 8.5px; }
+  .pill { font-size: 9.5px; padding: 3px 7px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="doc-header">
+    <div class="doc-meta">
+      <div>
+        <div class="doc-label">Solution Architecture Brief · Composable Commerce</div>
+      </div>
+      <div class="confidential-badge">⬡ Omnivy Accelerator Program</div>
+    </div>
+    <h1 class="doc-title">Talon.one + Omnivy<br>vs. <span class="highlight">Yotpo</span></h1>
+    <p class="doc-subtitle">A functional capability assessment for <strong>Shopify + Klaviyo</strong>. Dismantling the Yotpo "Out-of-the-Box" myth and proving that a composable promotion engine can deploy at the same speed — with an infinitely higher ceiling.</p>
+  </header>
+
+<!-- BRIEF BAR -->
+</div>
+<div class="page">
+<div class="brief-bar">
+  <div class="brief-item">
+    <div class="brief-label">Stack Context</div>
+    <div class="brief-value" style="font-size:14px;font-weight:500;color:#ffffff;">Shopify (Headless) · Klaviyo · Omnivy Accelerator</div>
+  </div>
+  <div class="brief-item">
+    <div class="brief-label">Prospect Objection</div>
+    <div class="brief-value">"Yotpo is easier to deploy and covers what we need"</div>
+  </div>
+  <div class="brief-item">
+    <div class="brief-label">Our Counter-Argument</div>
+    <div class="brief-value green">Same speed. 3× the depth. No functional dead-end.</div>
+  </div>
+</div>
+
+</div>
+<div class="page">
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- SECTION 1 — LOYALTY FOUNDATIONS -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <span class="section-title">Loyalty Foundations</span>
+    <span class="section-tag">Points · Tiers · Referrals</span>
+  </div>
+  <div class="section-rule"></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-feature" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Functionality</th>
+          <th class="col-yotpo col-yotpo" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Yotpo</th>
+          <th class="col-talon col-talon" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Talon.one + Omnivy</th>
+          <th class="col-type" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Implementation Type</th>
+          <th class="col-time" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Time to Market</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="parity">
+          <td><span class="fname">Points Earning</span><span class="fdesc">Purchase, review, social actions, birthdays</span></td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">Native<span class="status-note">Pre-configured earning rules; limited customization on conditions</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Native<span class="status-note">Shopify order events → Talon.one earning rules, pre-wired. Any earning condition expressible via rule builder.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1 Week (Accelerator Native)</div>
+            <div class="time-slow">Yotpo: ~1 week</div>
+          </td>
+        </tr>
+        <tr class="parity">
+          <td><span class="fname">Points Redemption</span><span class="fdesc">Discount codes, free products, vouchers</span></td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">Native<span class="status-note">Fixed redemption types; limited redemption logic flexibility</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Native<span class="status-note">Shopify discount code injection or Shopify Functions. Redemption effects fully configurable.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1 Week (Accelerator Native)</div>
+            <div class="time-slow">Yotpo: ~1 week</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">Loyalty Tiers</span><span class="fdesc">Bronze → Silver → Gold with tier benefits</span><div class="gap-badge">Talon.one Advantage</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-partial">~</span><span class="status-text">Limited<span class="status-note">Capped at 15 tiers. Tier status is tied to current point balance or spend within rigid windows — redemptions reduce tier-qualifying balance. No tier/wallet decoupling. VIP progress is store-specific in multi-store setups.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Native<span class="status-note">Unlimited tiers. Tier conditions based on any attribute (spend, orders, LTV, product category). Critically: tier status tracks <em>Lifetime Points earned</em>, not active balance — redemptions never downgrade a customer's tier. Reevaluation frequency is configurable (every 30 min, daily, or fixed business cycle dates). Tags synced to Shopify customer profiles.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1 Week (Accelerator Native)</div>
+            <div class="time-slow">Yotpo: ~1 week (but structurally limited)</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">Points Expiry & Rollover Rules</span><span class="fdesc">Rolling expiry, activity-based reset, per-tier rules</span><div class="gap-badge">Talon.one Advantage</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-partial">~</span><span class="status-text">Partial<span class="status-note">Fixed annual expiry only. No activity-based reset or tier-differentiated rules.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Native<span class="status-note">Full expiry policy engine: rolling windows, purchase-triggered resets, per-tier differentiation. Automated via Omnivy scheduled jobs.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1 Week (Accelerator Native)</div>
+            <div class="time-na">Yotpo: Not configurable</div>
+          </td>
+        </tr>
+        <tr class="parity">
+          <td><span class="fname">Referral Program</span><span class="fdesc">Advocate + referee incentives, multi-step</span></td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">Native<span class="status-note">Standard single-sided or double-sided referral. Limited multi-step logic.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Native<span class="status-note">Multi-step referral chains. Separate effect chains for advocate vs. referee. Conditional rewards (e.g., advocate earns only after referee's 2nd purchase).</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1 Week (Accelerator Native)</div>
+            <div class="time-slow">Yotpo: ~1–2 weeks</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">Multi-currency / Multi-market Points</span><span class="fdesc">Market-specific earning rates (EUR, GBP, USD…)</span><div class="gap-badge">Talon.one Advantage</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Not Supported<span class="status-note">Single earning rate applied globally regardless of currency.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Native<span class="status-note">Shopify Markets currency passed to Talon.one session. Separate earning rule sets configured per market in campaign manager.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1 Week (Accelerator Native)</div>
+            <div class="time-na">Yotpo: Not available</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">B2B / Account-level Loyalty</span><span class="fdesc">Company-pooled points, buyer-level attribution</span><div class="gap-badge">Talon.one Advantage</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Not Supported<span class="status-note">Yotpo loyalty is consumer B2C only. No B2B company model.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Native<span class="status-note">Talon.one audience profiles mapped to Shopify B2B company entities via Omnivy. Points pooled or attributed at buyer level as configured.</span></span></div>
+          </td>
+          <td><span class="pill pill-hybrid">Hybrid</span>
+            <div style="margin-top:8px;font-size:11px;color:#4b5563;font-weight:300;line-height:1.5;border-top:1px dashed #d1d5db;padding-top:6px;">Integration work: Map Shopify B2B company IDs to Talon.one audience/group profiles via Omnivy config. Develop company-level balance display in the B2B account portal.</div></td>
+          <td>
+            <div class="time-fast">2 Weeks (Accelerator + config)</div>
+            <div class="time-na">Yotpo: Not available</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">Multi-Ledgers / Subledgers</span><span class="fdesc">Separate point wallets within a single customer profile</span><div class="gap-badge">Talon.one Exclusive</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Not Supported<span class="status-note">Yotpo provides a single global point balance per customer. Multi-store "sharing" merges balances with no separation — causing data conflicts and making franchise/salon financial reporting impossible.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Native<span class="status-note">Talon.one subledgers allow one customer profile to hold multiple independent point wallets simultaneously. Example: a <em>Salon Ledger</em> (points from professional services, redeemable only for services), a <em>Retail Ledger</em> (product purchase points, redeemable for product discounts), and a <em>Franchise Ledger</em> (location-specific points, redeemable only at the originating franchise). All subledgers inherit the global tier but remain financially and operationally separated.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1–2 Weeks (Accelerator Native)</div>
+            <div class="time-na">Yotpo: Not available</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- SECTION 2 — PROMOTIONS ENGINE -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <span class="section-title">Promotions Engine — The Core Gap</span>
+    <span class="section-tag">Where Yotpo Ends · Where Talon.one Begins</span>
+  </div>
+  <div class="section-rule"></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-feature" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Functionality</th>
+          <th class="col-yotpo col-yotpo" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Yotpo</th>
+          <th class="col-talon col-talon" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Talon.one + Omnivy</th>
+          <th class="col-type" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Implementation Type</th>
+          <th class="col-time" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Time to Market</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="parity">
+          <td><span class="fname">Coupon Codes (Bulk & Unique)</span><span class="fdesc">Single-use, multi-use, segmented batches</span></td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">Native<span class="status-note">Basic coupon generation. Limited bulk segmentation.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Native<span class="status-note">Millions of unique codes generated. Omnivy manages redemption sync back to Shopify order records in real time.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1 Week (Accelerator Native)</div>
+            <div class="time-slow">Yotpo: ~1 week</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">BOGO / Cheapest Item Free</span><span class="fdesc">Buy 2 get 1 free; cheapest in cart free</span><div class="gap-badge">Promotion Gap #1</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Not Supported<span class="status-note">Yotpo has no native BOGO or "cheapest free" logic. Requires a separate Shopify app or script.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Native<span class="status-note">"Add free item" and "discount cheapest item" effects configured in Talon.one. Omnivy injects via Shopify Functions at checkout — no code entry required.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1 Week (Accelerator Native)</div>
+            <div class="time-na">Yotpo: Not available</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">Dynamic Bundle Pricing</span><span class="fdesc">Price rules across specific SKU/collection combos</span><div class="gap-badge">Promotion Gap #2</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Not Supported<span class="status-note">Yotpo relies on native Shopify collection logic. Hard limit of ~100 SKUs per rule. Cannot automatically identify the cheapest or most expensive item in a dynamic product list. No pro-rata discount support.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Native<span class="status-note">Full cart contents (SKUs, collections, variants, Shopify Metafields) passed to Talon.one at session open. Bundles are dynamic rules — not static SKU lists — supporting unlimited catalog size. Talon.one automatically identifies cheapest or most expensive items and applies pro-rata discounts. Single recursive rule covers scenarios requiring multiple Shopify rules.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1 Week (Accelerator Native)</div>
+            <div class="time-na">Yotpo: Not available</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">Strikethrough / Promotional Pricing</span><span class="fdesc">Show original vs. promotional price at PDP level</span><div class="gap-badge">Promotion Gap #3</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Not Supported<span class="status-note">Yotpo has no price display or PDP-level promotional logic.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">Supported<span class="status-note">Talon.one returns eligible discount for a customer + product. Omnivy exposes a "preview" API endpoint. Frontend renders strikethrough from the response.</span></span></div>
+          </td>
+          <td><span class="pill pill-custom">Customization</span>
+            <div style="margin-top:8px;font-size:11px;color:#4b5563;font-weight:300;line-height:1.5;border-top:1px dashed #d1d5db;padding-top:6px;">Dev work: Build a PDP-level JavaScript call to the Omnivy preview endpoint, then render the original vs. discounted price in the theme or headless storefront component.</div></td>
+          <td>
+            <div class="time-fast">3–4 Weeks (frontend PDP integration)</div>
+            <div class="time-na">Yotpo: Not available</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">Geo-fenced Promotions</span><span class="fdesc">Country or region-specific discount rules</span><div class="gap-badge">Promotion Gap #4</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Not Supported<span class="status-note">No geographic condition logic in Yotpo's promotion engine.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Native<span class="status-note">Shopify market/locale and customer shipping address passed to Talon.one. Geo-condition rules set per campaign — zero code.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1 Week (Accelerator Native)</div>
+            <div class="time-na">Yotpo: Not available</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">Stackable Promotions (Controlled)</span><span class="fdesc">Define which promotions can combine; exclusive rules</span><div class="gap-badge">Promotion Gap #5</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Not Supported<span class="status-note">Yotpo has no campaign priority or exclusion logic. Risk of unintended discount stacking.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Native<span class="status-note">Campaign priority stacks and mutual exclusion rules configured in Talon.one. Omnivy ensures correct application order at Shopify checkout.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1 Week (Accelerator Native)</div>
+            <div class="time-na">Yotpo: Not available</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">Promotion Budgets & Abuse Caps</span><span class="fdesc">Max redemptions, max discount spend, per-user limits</span><div class="gap-badge">Talon.one Advantage</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Not Supported<span class="status-note">No real-time usage counter or fraud prevention in Yotpo promotions.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Native<span class="status-note">Real-time counters prevent over-redemption. Per-user, per-segment, and per-campaign caps enforced at session evaluation.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1 Week (Accelerator Native)</div>
+            <div class="time-na">Yotpo: Not available</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">A/B Testing Campaigns</span><span class="fdesc">Split promotion variants, measure incremental uplift</span><div class="gap-badge">Talon.one Advantage</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Not Supported</span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Native<span class="status-note">Campaign groups enable A/B splits. Shopify conversion data fed back via Omnivy for statistically tracked uplift measurement.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1–2 Weeks (Accelerator Native)</div>
+            <div class="time-na">Yotpo: Not available</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- SECTION 3 — GAMIFICATION -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <span class="section-title">Gamification</span>
+    <span class="section-tag">Challenges · Streaks · Badges</span>
+  </div>
+  <div class="section-rule"></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-feature" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Functionality</th>
+          <th class="col-yotpo col-yotpo" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Yotpo</th>
+          <th class="col-talon col-talon" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Talon.one + Omnivy</th>
+          <th class="col-type" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Implementation Type</th>
+          <th class="col-time" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Time to Market</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="adv">
+          <td><span class="fname">Multi-step Behavioral Challenges</span><span class="fdesc">"Buy 3 times in 10 days" → earn bonus points</span><div class="gap-badge">Talon.one Exclusive</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Not Supported<span class="status-note">Yotpo has no time-boxed, multi-event challenge engine.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">Supported<span class="status-note">Talon.one mission engine tracks event sequences with time windows. Shopify orders feed event stream via Omnivy. Challenge UI requires frontend development.</span></span></div>
+          </td>
+          <td><span class="pill pill-custom">Customization</span>
+            <div style="margin-top:8px;font-size:11px;color:#4b5563;font-weight:300;line-height:1.5;border-top:1px dashed #d1d5db;padding-top:6px;">Dev work: Build a "My Challenges" frontend component that reads mission state from the Omnivy API and renders active challenges, progress steps, and completion rewards in the customer account area.</div></td>
+          <td>
+            <div class="time-fast">Logic: 1 Week (Accelerator Native)</div>
+            <div class="time-note">UI Display: +3–5 weeks (headless widget)</div>
+            <div class="time-na">Yotpo: Not available</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">Purchase Streaks</span><span class="fdesc">Consecutive purchase windows; streak bonuses</span><div class="gap-badge">Talon.one Exclusive</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Not Supported</span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">Supported<span class="status-note">Streak counters in Talon.one customer profile. Shopify order webhooks update counters via Omnivy. Streak break/reset logic fully configurable.</span></span></div>
+          </td>
+          <td><span class="pill pill-custom">Customization</span>
+            <div style="margin-top:8px;font-size:11px;color:#4b5563;font-weight:300;line-height:1.5;border-top:1px dashed #d1d5db;padding-top:6px;">Dev work: Build a streak status UI component (e.g. "🔥 3-day streak — buy today to keep it!") reading from the Omnivy customer profile endpoint. Optional: Klaviyo flow to send streak nudge emails.</div></td>
+          <td>
+            <div class="time-fast">Logic: 1 Week (Accelerator Native)</div>
+            <div class="time-note">UI Display: +2–4 weeks</div>
+            <div class="time-na">Yotpo: Not available</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">Badges & Achievements</span><span class="fdesc">Milestone unlocks stored on customer profile</span><div class="gap-badge">Talon.one Exclusive</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Not Supported</span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">Supported<span class="status-note">Badge state stored as custom attributes in Talon.one profile. Omnivy exposes read API for frontend to render achievement gallery.</span></span></div>
+          </td>
+          <td><span class="pill pill-custom">Customization</span>
+            <div style="margin-top:8px;font-size:11px;color:#4b5563;font-weight:300;line-height:1.5;border-top:1px dashed #d1d5db;padding-top:6px;">Dev work: Build a badge/achievement gallery component on the account page. Each badge reads its unlocked/locked state from Omnivy. Design assets (badge icons) must be provided by the brand.</div></td>
+          <td>
+            <div class="time-fast">Logic: 1 Week (Accelerator Native)</div>
+            <div class="time-note">UI Display: +3–6 weeks</div>
+            <div class="time-na">Yotpo: Not available</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">Probabilistic Rewards (Spin-to-Win)</span><span class="fdesc">X% chance to win Y — randomized effect chains</span><div class="gap-badge">Talon.one Exclusive</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Not Supported</span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">Supported<span class="status-note">Talon.one supports weighted probabilistic effect selection. Omnivy exposes a trigger endpoint; spin game UI is custom frontend.</span></span></div>
+          </td>
+          <td><span class="pill pill-custom">Customization</span>
+            <div style="margin-top:8px;font-size:11px;color:#4b5563;font-weight:300;line-height:1.5;border-top:1px dashed #d1d5db;padding-top:6px;">Dev work: Build the spin/scratch animation UI (CSS/JS or a canvas component). On spin completion, call the Omnivy trigger endpoint to evaluate the probabilistic rule and retrieve the resulting reward. Display reward and optionally trigger a Klaviyo event.</div></td>
+          <td>
+            <div class="time-fast">Logic: 1 Week (Accelerator Native)</div>
+            <div class="time-note">Spin UI: +4–6 weeks</div>
+            <div class="time-na">Yotpo: Not available</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- SECTION 4 — OMNICHANNEL & POS -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <span class="section-title">Omnichannel — Real-time POS Sync</span>
+    <span class="section-tag">Omnivy Bridge · In-store · Unified Ledger</span>
+  </div>
+  <div class="section-rule"></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-feature" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Functionality</th>
+          <th class="col-yotpo col-yotpo" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Yotpo</th>
+          <th class="col-talon col-talon" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Talon.one + Omnivy</th>
+          <th class="col-type" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Implementation Type</th>
+          <th class="col-time" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Time to Market</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="parity">
+          <td><span class="fname">Shopify POS — Points Earning</span><span class="fdesc">In-store purchases earn loyalty points</span></td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">Native<span class="status-note">Shopify POS orders trigger Yotpo point earning automatically.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Bridge<span class="status-note">Shopify POS orders flow through the same Omnivy webhook pipeline as online orders. No separate integration.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1 Week (Accelerator Native)</div>
+            <div class="time-slow">Yotpo: ~1 week</div>
+          </td>
+        </tr>
+        <tr class="parity">
+          <td><span class="fname">Shopify POS — Redemption</span><span class="fdesc">Redeem points / apply coupon at till</span></td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">Native</span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Bridge<span class="status-note">Coupon generated by Talon.one entered at POS. Omnivy syncs balance post-order in real time.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1 Week (Accelerator Native)</div>
+            <div class="time-slow">Yotpo: ~1 week</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">POS Customer Profile Lookup</span><span class="fdesc">Staff view tier, balance, history at till</span></td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">Pre-built POS screen<span class="status-note">Yotpo ships an OOTB Shopify POS UI extension. Staff can see balance without custom development.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">Supported<span class="status-note">Omnivy exposes a secure balance/profile lookup API. A Shopify POS UI extension surfaces this data to staff — requires custom frontend build.</span></span></div>
+          </td>
+          <td><span class="pill pill-custom">Customization</span>
+            <div style="margin-top:8px;font-size:11px;color:#4b5563;font-weight:300;line-height:1.5;border-top:1px dashed #d1d5db;padding-top:6px;">Dev work: Build a Shopify POS UI Extension (React-based) that looks up the customer in Omnivy by email/phone at checkout, then displays tier, point balance, and available rewards on the staff screen.</div></td>
+          <td>
+            <div class="time-fast">3–5 Weeks (POS UI extension)</div>
+            <div class="time-slow">Yotpo: ~1 week (pre-built) ← Yotpo has edge here</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">Non-Shopify POS Integration</span><span class="fdesc">Oracle MICROS, NetSuite POS, Lightspeed, EPOS Now, custom POS</span><div class="gap-badge">Talon.one Advantage</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Shopify POS Only<span class="status-note">Yotpo is tightly coupled to Shopify POS. No API pathway for third-party POS systems.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">Omnivy Bridge — Any POS<span class="status-note">Talon.one's REST API is POS-agnostic. Omnivy provides reference connector adapters for common enterprise POS platforms. Budgets and profiles sync across all channels in real time.</span></span></div>
+          </td>
+          <td><span class="pill pill-hybrid">Hybrid</span>
+            <div style="margin-top:8px;font-size:11px;color:#4b5563;font-weight:300;line-height:1.5;border-top:1px dashed #d1d5db;padding-top:6px;">Integration work: Implement Omnivy's POS connector adapter for the target system (Oracle MICROS, NetSuite POS, Lightspeed, etc.). Connector maps POS cart payload to Talon.one session format and sends loyalty/promotion effects back to POS in real time.</div></td>
+          <td>
+            <div class="time-fast">4–8 Weeks (per POS platform)</div>
+            <div class="time-na">Yotpo: Not available</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">In-store Promotion Rules</span><span class="fdesc">Apply same campaign logic at POS as online</span><div class="gap-badge">Talon.one Advantage</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Not Supported<span class="status-note">Yotpo promotions are online-only. No in-store discount rule engine.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">Omnivy Bridge<span class="status-note">POS sends cart to Talon.one evaluation API. Identical campaign rules apply in-store and online from a single unified engine — no duplicate campaign management.</span></span></div>
+          </td>
+          <td><span class="pill pill-hybrid">Hybrid</span>
+            <div style="margin-top:8px;font-size:11px;color:#4b5563;font-weight:300;line-height:1.5;border-top:1px dashed #d1d5db;padding-top:6px;">Integration work: As part of the POS connector build, implement the cart evaluation call to Talon.one at the time of POS checkout. Map returned discount effects to the POS's native discount application mechanism.</div></td>
+          <td>
+            <div class="time-fast">4–8 Weeks (POS integration)</div>
+            <div class="time-na">Yotpo: Not available</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">Unified Online + Offline Point Ledger</span><span class="fdesc">Single customer profile across all channels</span><div class="gap-badge">Talon.one Advantage</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-partial">~</span><span class="status-text">Partial<span class="status-note">Shopify POS only. No unified ledger across non-Shopify channels.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Bridge<span class="status-note">Talon.one is inherently channel-agnostic. All events — Shopify online, Shopify POS, mobile app, kiosk — post to one customer profile. Omnivy ensures consistent identity resolution.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1–2 Weeks (Shopify channels)</div>
+            <div class="time-note">+weeks for non-Shopify channels</div>
+            <div class="time-slow">Yotpo: 2–4 weeks (Shopify only)</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- SECTION 5 — HEADLESS UI -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <span class="section-title">Headless UI — Displaying Loyalty on a Custom Shopify Frontend</span>
+    <span class="section-tag">The Real OOTB Comparison</span>
+  </div>
+  <div class="section-rule"></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-feature" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Functionality</th>
+          <th class="col-yotpo col-yotpo" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Yotpo</th>
+          <th class="col-talon col-talon" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Talon.one + Omnivy</th>
+          <th class="col-type" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Implementation Type</th>
+          <th class="col-time" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Time to Market</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="parity">
+          <td><span class="fname">Points Balance Widget</span><span class="fdesc">Customer-facing balance display on account page</span></td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">Pre-built Widget<span class="status-note">Yotpo ships an embeddable JS widget. Works on standard Shopify themes. Headless requires manual API integration.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">API Ready via Omnivy<span class="status-note">Omnivy exposes a secure balance/tier endpoint. Headless teams build the widget per design system. Full design control.</span></span></div>
+          </td>
+          <td><span class="pill pill-custom">Customization</span>
+            <div style="margin-top:8px;font-size:11px;color:#4b5563;font-weight:300;line-height:1.5;border-top:1px dashed #d1d5db;padding-top:6px;">Dev work: Build a loyalty account widget (React or Liquid component) that calls the Omnivy balance endpoint on page load and renders points balance, current tier, and next tier threshold. One-time build, reusable across pages.</div></td>
+          <td>
+            <div class="time-fast">Talon+Omnivy: 3–4 Weeks (widget dev)</div>
+            <div class="time-slow">Yotpo Standard Theme: ~1 week</div>
+            <div class="time-slow">Yotpo Headless: also 3–4 weeks (same API work)</div>
+          </td>
+        </tr>
+        <tr class="parity">
+          <td><span class="fname">Tier Progress Bar</span><span class="fdesc">Show progress toward next tier</span></td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">Pre-built (standard theme)<span class="status-note">Available OOTB on standard Shopify. Headless requires dev.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">API Ready via Omnivy<span class="status-note">Progress % calculated by Omnivy and returned in balance response. Headless team builds progress bar component.</span></span></div>
+          </td>
+          <td><span class="pill pill-custom">Customization</span>
+            <div style="margin-top:8px;font-size:11px;color:#4b5563;font-weight:300;line-height:1.5;border-top:1px dashed #d1d5db;padding-top:6px;">Dev work: Extend the balance widget with a progress bar sub-component using the tier_progress_pct value from the Omnivy API response. Minimal additional effort if the balance widget is already built.</div></td>
+          <td>
+            <div class="time-fast">Talon+Omnivy: +1 week on top of balance widget</div>
+            <div class="time-slow">Yotpo Headless: similar effort</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">Challenge & Mission Progress</span><span class="fdesc">Display active challenges, completion %</span><div class="gap-badge">Talon.one Exclusive</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Not Supported<span class="status-note">No gamification engine, no display.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">API Ready via Omnivy<span class="status-note">Mission state returned per customer. Frontend renders progress UI. Full design freedom.</span></span></div>
+          </td>
+          <td><span class="pill pill-custom">Customization</span>
+            <div style="margin-top:8px;font-size:11px;color:#4b5563;font-weight:300;line-height:1.5;border-top:1px dashed #d1d5db;padding-top:6px;">Dev work: Build a "My Missions" account section component reading active mission state from Omnivy. Render step-by-step progress (e.g. "2 of 3 purchases complete") with reward preview. Can share logic with the challenge backend built in Section 3.</div></td>
+          <td>
+            <div class="time-fast">Talon+Omnivy: 3–5 Weeks</div>
+            <div class="time-na">Yotpo: Not available at any price</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">Real-time Cart Discount Preview</span><span class="fdesc">Show applicable discount before checkout</span><div class="gap-badge">Talon.one Advantage</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Not Supported</span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">Omnivy Native<span class="status-note">Omnivy calls Talon.one at cart state change. Returns eligible offers for display — no Shopify Functions required for preview step.</span></span></div>
+          </td>
+          <td><span class="pill pill-custom">Customization</span>
+            <div style="margin-top:8px;font-size:11px;color:#4b5563;font-weight:300;line-height:1.5;border-top:1px dashed #d1d5db;padding-top:6px;">Dev work: Implement a cart-change event listener in the storefront that calls the Omnivy preview endpoint. Render the returned eligible promotions (e.g. "You've unlocked free shipping!" or "Add 1 more item for 20% off") as a cart-drawer callout component.</div></td>
+          <td>
+            <div class="time-fast">Talon+Omnivy: 2–3 Weeks</div>
+            <div class="time-na">Yotpo: Not available</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- SECTION 6 — KLAVIYO INTEGRATION -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <span class="section-title">Klaviyo Integration — Beyond Point Balances</span>
+    <span class="section-tag">Next Best Offer · Behavioral Signals</span>
+  </div>
+  <div class="section-rule"></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-feature" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Functionality</th>
+          <th class="col-yotpo col-yotpo" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Yotpo</th>
+          <th class="col-talon col-talon" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Talon.one + Omnivy</th>
+          <th class="col-type" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Implementation Type</th>
+          <th class="col-time" style="font-size:14px;font-weight:700;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">Time to Market</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="parity">
+          <td><span class="fname">Point Balance to Klaviyo</span><span class="fdesc">Sync current balance for email personalization</span></td>
+          <td>
+            <div class="status"><span class="status-icon si-yes">✓</span><span class="status-text">Native Sync<span class="status-note">Yotpo pushes balance and tier to Klaviyo profile properties. One-directional — Klaviyo data cannot influence Yotpo's discounting logic.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Real-Time State Engine<span class="status-note">Omnivy is not a standard connector — it operates as a sub-second state engine (40ms sync). Balance, tier, expiry date, and redemption history pushed to Klaviyo after every Talon.one event. Also enables "Checkout Simulation": showing a customer exactly how many points they will earn for their current cart — including tier multipliers and brand-specific rules — before they pay.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1 Week (Accelerator Native)</div>
+            <div class="time-slow">Yotpo: ~1 week</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">Klaviyo Predictions → Talon.one Rules</span><span class="fdesc">Klaviyo RFM scores & AI segments feed promotion logic</span><div class="gap-badge">Talon.one Advantage</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">One-way Only<span class="status-note">Yotpo's Klaviyo integration is passive and one-directional. It delivers notifications but cannot receive Klaviyo predictions to modify discounting or earning logic.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Native — Bi-directional<span class="status-note">Omnivy syncs Klaviyo-calculated attributes (RFM scores, predictive CLV, segment membership) into Talon.one customer profiles as rule-triggerable attributes. Example: Klaviyo flags a customer as <em>at_risk_segment</em> → Omnivy writes attribute to Talon.one → Talon.one automatically activates a win-back rule awarding 50% bonus points on their next purchase. Proven in BioTechUSA and e.l.f. Cosmetics implementations.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1–2 Weeks (Accelerator Native)</div>
+            <div class="time-na">Yotpo: Architecturally impossible</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">"Next Best Offer" Payload to Klaviyo</span><span class="fdesc">Push the specific offer each customer is eligible for right now</span><div class="gap-badge">Talon.one Advantage</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Not Supported<span class="status-note">Yotpo can only send balance and tier. It cannot evaluate what promotional offer a customer is currently eligible for.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Native<span class="status-note">Omnivy triggers a Talon.one "preview session" per customer, captures the best eligible promotion, and pushes the offer name, discount value, and expiry to Klaviyo. Enables true 1:1 triggered email personalization.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1–2 Weeks (Accelerator Native)</div>
+            <div class="time-na">Yotpo: Not possible</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">Challenge Progress to Klaviyo</span><span class="fdesc">Trigger emails based on challenge completion %</span><div class="gap-badge">Talon.one Advantage</div></td>
+          <td>
+            <div class="status"><span class="status-icon si-no">✗</span><span class="status-text">Not Supported</span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Native<span class="status-note">Mission progress events pushed to Klaviyo. Enables flow triggers like "50% through challenge — send nudge email." Powerful engagement loop.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1–2 Weeks (Accelerator Native)</div>
+            <div class="time-na">Yotpo: Not available</div>
+          </td>
+        </tr>
+        <tr class="adv">
+          <td><span class="fname">Coupon Code in Klaviyo Email</span><span class="fdesc">Unique, pre-generated code in transactional email</span></td>
+          <td>
+            <div class="status"><span class="status-icon si-partial">~</span><span class="status-text">Partial<span class="status-note">Yotpo can send a generic coupon. Codes are not customer-unique unless batch-generated separately.</span></span></div>
+          </td>
+          <td>
+            <div class="status"><span class="status-icon si-native">⚡</span><span class="status-text">Omnivy Native<span class="status-note">Talon.one generates a unique single-use coupon per customer. Omnivy pushes code to Klaviyo profile property before flow trigger fires. Always fresh, always unique.</span></span></div>
+          </td>
+          <td><span class="pill pill-config">Configuration</span></td>
+          <td>
+            <div class="time-fast">1 Week (Accelerator Native)</div>
+            <div class="time-slow">Yotpo: 2–3 weeks with workarounds</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- EXECUTIVE SUMMARY -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="exec-section">
+    <h2 class="exec-title">The <span class="myth">"OOTB" Myth</span></h2>
+    <p class="exec-subtitle">An Architectural Reframe for Decision Makers</p>
+
+    <div class="exec-body">
+      <div class="exec-col">
+        <h4 class="red">The Yotpo Assumption</h4>
+        <p>The perception that Yotpo is "easier" rests on a narrow definition of "out of the box." Yotpo is fast to deploy for a specific, fixed set of features — points, tiers, a referral page, and a Klaviyo balance sync. This is genuine value if those features represent 100% of your ambition.</p>
+        <br>
+        <p>The problem surfaces the moment your roadmap evolves. When the merchandising team asks for bundle promotions, when the CX team wants in-store sync for non-Shopify POS, when the growth team demands behavioral challenges or geo-fenced flash sales — Yotpo's answer is consistently the same: <em>"that's not on our roadmap."</em></p>
+        <br>
+        <p>You will have paid for a loyalty widget and built your customer data model around a tool that cannot grow with you. Migrating off Yotpo 18 months in is the real implementation cost that no one includes in the comparison.</p>
+      </div>
+      <div class="exec-col">
+        <h4 class="green" style="color:#0062ff !important;">The Talon.one + Omnivy Counter-Argument</h4>
+        <ul>
+          <li><strong>Week 1 parity:</strong> Every feature Yotpo delivers natively is available via the Omnivy Accelerator in the same timeframe — points, tiers, referrals, Klaviyo balance sync, Shopify POS earning and redemption. The "OOTB speed" argument collapses.</li>
+          <li><strong>No functional ceiling:</strong> The same engine that runs basic points on Day 1 runs geo-fenced bundles, multi-step challenges, unlimited-catalog bundle pricing, and Next Best Offer personalization on Day 90. No platform migration required.</li>
+          <li><strong>Subledgers — the franchise differentiator:</strong> Talon.one supports multiple independent point wallets within a single customer profile. A Salon Ledger, a Retail Ledger, and a Franchise Ledger can coexist — operationally and financially separated — while sharing one global tier. Yotpo's single global balance makes this architecturally impossible.</li>
+          <li><strong>Tiers that don't punish redemption:</strong> Talon.one's tier logic tracks Lifetime Points earned, not active balance. Customers who redeem never lose their tier status. Yotpo ties tiers to current balance — meaning every redemption is a demotion risk.</li>
+          <li><strong>API-first architecture:</strong> Every capability is exposed as an API. The Omnivy layer abstracts complexity. Headless, mobile, kiosk, and POS all consume the same unified API — something Yotpo's widget-first model fundamentally cannot offer.</li>
+          <li><strong>Honest trade-off:</strong> Gamification UI widgets and the POS lookup screen require frontend development. The logic is native and instant; the display layer is custom. This is the only genuine OOTB gap — and it is a one-time build, not a permanent constraint.</li>
+          <li><strong>The Klaviyo multiplier — both directions:</strong> Omnivy pushes Next Best Offer data <em>to</em> Klaviyo for 1:1 email personalization. But critically, it also pulls Klaviyo predictions <em>back into</em> Talon.one as live rule attributes — turning Klaviyo's AI segments into real-time discount triggers. Yotpo's Klaviyo integration is one-way by design. This bi-directionality is proven in production at BioTechUSA and e.l.f. Cosmetics.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- PROMOTION POWER CHAPTER -->
+    <div style="margin-top:40px;padding-top:36px;border-top:1px solid #e2e4e9;">
+      <h3 style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#0062ff;letter-spacing:-0.01em;margin-bottom:6px;">Why Talon.one is a Categorically More Powerful Incentive Engine</h3>
+      <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#6b7280;margin-bottom:28px;">Scalability · Rule Depth · Commercial Precision</p>
+
+      <div class="promo-grid-3" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;">
+
+        <div style="background:#f4f4f6;border-left:3px solid #0062ff;padding:20px 20px 20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:#0062ff;margin-bottom:10px;">Rule Engine Architecture</div>
+          <p style="font-size:13px;color:#1a1f36;line-height:1.65;font-weight:300;">Yotpo operates on <strong style="font-weight:600;">fixed campaign templates</strong> — marketers choose from a preset menu of promotion types. Talon.one is built on a <strong style="font-weight:600;">composable rule engine</strong>: any combination of IF / AND / OR conditions across customer attributes, cart contents, product metadata, time windows, geolocation, and external data. A promotion that Yotpo cannot express at all can be built in Talon.one's campaign manager in under an hour — with zero code.</p>
+        </div>
+
+        <div style="background:#f4f4f6;border-left:3px solid #0062ff;padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:#0062ff;margin-bottom:10px;">Performance at Scale</div>
+          <p style="font-size:13px;color:#1a1f36;line-height:1.65;font-weight:300;">Talon.one evaluates promotions at <strong style="font-weight:600;">40ms response time</strong> — in real time, at the cart level, per session. This enables live strikethrough pricing, pre-checkout discount previews, and real-time POS evaluation without perceptible latency. Yotpo applies discounts as a post-process through Shopify's native discount system, offering no real-time evaluation layer and no sub-second session state. For high-traffic flash sales or peak trading periods, this architectural gap becomes a commercial liability.</p>
+        </div>
+
+        <div style="background:#f4f4f6;border-left:3px solid #0062ff;padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:#0062ff;margin-bottom:10px;">Promotion Catalogue Depth</div>
+          <p style="font-size:13px;color:#1a1f36;line-height:1.65;font-weight:300;">Yotpo covers <strong style="font-weight:600;">loyalty rewards and basic coupons</strong>. Talon.one covers the full commercial promotion spectrum: BOGO, dynamic bundles, cheapest-item-free, pro-rata discounts, geo-fenced offers, stackable campaigns with exclusion rules, probabilistic rewards, multi-step behavioral challenges, A/B tested variants, and cart-level budget caps — all from a single engine, all configurable without development, and all enforced with fraud prevention built in.</p>
+        </div>
+
+      </div>
+
+      <div class="promo-grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px;">
+
+        <div style="background:#f4f4f6;border-left:3px solid #0062ff;padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:#0062ff;margin-bottom:10px;">SKU-Level Metadata Targeting</div>
+          <p style="font-size:13px;color:#1a1f36;line-height:1.65;font-weight:300;">Yotpo targets promotions at the <strong style="font-weight:600;">Shopify Collection level</strong> — a blunt instrument that frequently misfires when a product belongs to multiple collections simultaneously. Talon.one ingests any Shopify Metafield or custom attribute and uses it as a promotion condition. This means a rule can target products by margin band, brand, professional grade, or any custom taxonomy — with surgical precision and no risk of unintended discounting across overlapping categories.</p>
+        </div>
+
+        <div style="background:#f4f4f6;border-left:3px solid #0062ff;padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:#0062ff;margin-bottom:10px;">Enterprise Fraud & Budget Control</div>
+          <p style="font-size:13px;color:#1a1f36;line-height:1.65;font-weight:300;">Yotpo has no native promotion fraud prevention. Talon.one enforces <strong style="font-weight:600;">real-time budget caps</strong> — maximum total redemptions, maximum discount spend, and per-customer usage limits — evaluated at every session. Combined with velocity-based abuse detection, this means a viral coupon leak or a flash sale spike cannot blow through your promotional budget. For a high-volume retailer, this capability alone justifies the platform choice.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="verdict">
+      <p>The choice is not between <strong>"fast"</strong> and <strong>"powerful."</strong> The Omnivy Accelerator has eliminated that trade-off. The real choice is between a tool that gets you to feature parity in Week 1 and then stops, versus a promotion engine that reaches the same Week 1 milestone — and then <strong>continues to scale with every commercial requirement your business will ever have.</strong> Yotpo is a loyalty widget with a single point balance, a 15-tier ceiling, and a one-way Klaviyo pipe. Talon.one + Omnivy is a full promotion and loyalty operating system: unlimited subledgers for franchise operations, tier logic that never punishes redemption, and a bi-directional Klaviyo bridge that turns AI predictions into real-time discount triggers. The OOTB myth ends at Week 1. The capability gap compounds every month after.</p>
+    </div>
+  </div>
+
+  <div class="footnote">
+    <span>Talon.one + Omnivy Accelerator · Solution Architecture Comparison</span>
+    <span>⚡ Accelerator Native = 1 Week · Custom Dev timeframes are estimates based on standard headless Shopify projects</span>
+    <span>Prepared by: Sébastien Cereze · Head of Talon.one Solution Engineering, APAC</span>
+  </div>
+
+</div>
+</body>
+</html>

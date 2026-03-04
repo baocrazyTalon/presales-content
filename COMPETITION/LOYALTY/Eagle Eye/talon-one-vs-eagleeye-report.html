@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Talon.One vs. Eagle Eye AIR — Competitive Analysis</title>
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --t1-green:   #0062ff;
+      --t1-dark:    #0B1F3A;
+      --t1-mid:     #1A3A5C;
+      --t1-accent:  #00A3FF;
+      --ee-green:   #00A86B;
+      --ee-light:   #E6F7F0;
+      --warn-red:   #C0392B;
+      --warn-bg:    #FDF3F2;
+      --ok-green:   #1E8449;
+      --ok-bg:      #EAF7EE;
+      --neutral-bg: #F7F8FA;
+      --border:     #DDE3EC;
+      --text:       #1A1A2E;
+      --text-muted: #5A6272;
+      --font-sans: 'Segoe UI', Helvetica, Arial, sans-serif;
+    }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { font-family: var(--font-sans); color: var(--text); background: #fff; line-height: 1.65; }
+
+    h1 { font-size: 2.6rem; font-weight: 800; line-height: 1.15; }
+    h2 { font-size: 1.75rem; font-weight: 700; line-height: 1.2; }
+    h3 { font-size: 1.2rem; font-weight: 700; }
+    h4 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--t1-mid); }
+    p  { margin-top: .85rem; }
+    ul, ol { margin-top: .6rem; padding-left: 1.4rem; }
+    li { margin-bottom: .4rem; }
+    strong { font-weight: 700; }
+
+    .container { max-width: 1060px; margin: 0 auto; padding: 0 2rem; }
+
+    /* ── Cover ── */
+    .cover {
+      background: linear-gradient(135deg, var(--t1-dark) 0%, var(--t1-mid) 60%, #0D3B6B 100%);
+      color: #fff; padding: 5rem 2rem 4rem; position: relative; overflow: hidden;
+    }
+    .cover::after {
+      content: ''; position: absolute; top: -80px; right: -100px;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: rgba(0,168,107,.12);
+    }
+    .cover-inner { max-width: 800px; position: relative; z-index: 1; }
+    .cover-label {
+      display: inline-block; background: var(--t1-green); color: #fff;
+      font-weight: 800; font-size: .75rem; letter-spacing: .1em; text-transform: uppercase;
+      padding: .3rem .8rem; border-radius: 3px; margin-bottom: 1.5rem;
+    }
+    .cover h1 { margin-bottom: 1.2rem; }
+    .cover .subtitle { font-size: 1.15rem; opacity: .85; max-width: 660px; line-height: 1.6; margin-bottom: 2rem; }
+    .cover-meta { display: flex; gap: 2.5rem; flex-wrap: wrap; font-size: .85rem; opacity: .7; margin-top: 2rem; }
+    .cover-meta span strong { display: block; font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; opacity: .9; }
+
+    /* ── Executive Summary ── */
+    .exec-banner { background: var(--t1-green); color: #fff; padding: 1.6rem 2rem; }
+    .exec-banner .container { display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap; }
+    .exec-banner h2 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: .07em; white-space: nowrap; padding-top: .15rem; }
+    .exec-banner p { margin: 0; font-size: .95rem; font-weight: 600; }
+
+    /* ── Section wrappers ── */
+    .section { padding: 3.5rem 0; }
+    .section + .section { border-top: 1px solid var(--border); }
+    .section-header { margin-bottom: 2rem; }
+    .section-number { font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: var(--t1-green); margin-bottom: .4rem; display: block; }
+    .section-header h2 { color: var(--t1-dark); }
+    .section-header p { color: var(--text-muted); font-size: .97rem; max-width: 740px; margin-top: .5rem; }
+
+    /* ── Verdict badge ── */
+    .verdict { display: inline-flex; align-items: center; gap: .4rem; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; padding: .3rem .7rem; border-radius: 4px; margin-bottom: 1rem; }
+    .verdict.t1   { background: var(--ok-bg);   color: var(--ok-green); }
+    .verdict.ee   { background: var(--warn-bg);  color: var(--warn-red); }
+    .verdict.both { background: #EEF4FF; color: #1A56DB; }
+
+    /* ── Comparison table 4-col ── */
+    .comp-table { width: 100%; border-collapse: collapse; font-size: .86rem; margin-top: 1.5rem; table-layout: fixed; }
+    .comp-table th { padding: .6rem .85rem; text-align: left; font-size: .7rem; text-transform: uppercase; letter-spacing: .07em; font-weight: 800; border-bottom: 2px solid var(--border); }
+    .comp-table th.col-what { width: 16%; background: var(--t1-dark); color: #cdd8e8; }
+    .comp-table th.col-why  { width: 27%; background: #FEF9EE; color: #7A5200; }
+    .comp-table th.col-ee   { width: 27%; background: var(--ee-green); color: #fff; }
+    .comp-table th.col-t1   { width: 30%; background: #0062ff; color: #fff; }
+    .comp-table td { padding: .6rem .85rem; vertical-align: top; border-bottom: 1px solid var(--border); line-height: 1.5; }
+    .comp-table tr:nth-child(even) td { background: var(--neutral-bg); }
+    .comp-table tr:nth-child(even) td.what-cell { background: #0e2952; }
+    .comp-table tr:last-child td { border-bottom: none; }
+    .comp-table .what-cell { font-weight: 700; font-size: .8rem; color: #cdd8e8; background: var(--t1-dark); }
+    .comp-table .why-cell  { font-size: .82rem; color: var(--text); }
+    .comp-table .why-cell .econ { display: inline-block; margin-top: .3rem; font-size: .75rem; font-weight: 700; color: #7A5200; background: #FEF3D0; border-radius: 3px; padding: .1rem .4rem; }
+    .comp-table .ee-cell   { font-size: .82rem; color: var(--text); }
+    .comp-table .t1-cell   { font-size: .82rem; color: var(--text); }
+    .adv-badge { display: inline-block; background: var(--t1-green); color: #fff; font-size: .62rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: .12rem .45rem; border-radius: 3px; margin-left: .35rem; vertical-align: middle; white-space: nowrap; }
+
+    /* ── Callout boxes ── */
+    .callout { border-left: 4px solid; border-radius: 0 6px 6px 0; padding: 1rem 1.2rem; margin: 1.5rem 0; font-size: .94rem; }
+    .callout.red   { border-color: var(--warn-red); background: var(--warn-bg); }
+    .callout.green { border-color: var(--t1-green); background: var(--ok-bg); }
+    .callout.blue  { border-color: var(--t1-accent); background: #EEF7FF; }
+    .callout.gold  { border-color: #D4820A; background: #FEF9EE; }
+    .callout strong { display: block; margin-bottom: .3rem; }
+
+    /* ── Stat cards ── */
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+    .stat-card { background: var(--t1-dark); color: #fff; border-radius: 8px; padding: 1.4rem 1.2rem; text-align: center; }
+    .stat-card .num { font-size: 2.4rem; font-weight: 800; color: var(--t1-green); line-height: 1; }
+    .stat-card .lbl { font-size: .8rem; opacity: .75; margin-top: .4rem; line-height: 1.4; }
+
+    /* ── API flow diagram ── */
+    .flow-wrapper { overflow-x: auto; margin: 1.5rem 0; }
+    .flow-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; min-width: 600px; }
+    .flow-box { background: var(--neutral-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; }
+    .flow-box h4 { margin-bottom: .8rem; font-size: .85rem; }
+    .flow-box.t1-box { border-top: 3px solid var(--t1-green); }
+    .flow-box.ee-box { border-top: 3px solid var(--ee-green); }
+    .flow-step { display: flex; align-items: flex-start; gap: .6rem; padding: .45rem .6rem; border-radius: 5px; margin-bottom: .4rem; font-size: .83rem; }
+    .flow-step .num { width: 22px; height: 22px; flex-shrink: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 800; color: #fff; }
+    .t1-box .flow-step .num { background: var(--t1-green); }
+    .ee-box .flow-step .num { background: var(--ee-green); }
+    .flow-step.ok  { background: var(--ok-bg); }
+    .flow-step.bad { background: var(--warn-bg); }
+    .flow-step.neu { background: #fff; border: 1px solid var(--border); }
+    .flow-total { font-size: .82rem; font-weight: 800; text-align: center; padding: .5rem; border-radius: 5px; margin-top: .6rem; }
+    .flow-total.t1 { background: var(--t1-green); color: #fff; }
+    .flow-total.ee { background: var(--warn-bg);  color: var(--warn-red); }
+
+    /* ── Scorecard ── */
+    .scorecard { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 0; margin-top: 1.5rem; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .scorecard .sc-head { font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; padding: .7rem 1rem; border-bottom: 2px solid var(--border); }
+    .scorecard .sc-head.t1col { background: #0062ff; color: #fff; text-align: center; }
+    .scorecard .sc-head.eecol { background: var(--ee-green); color: #fff; text-align: center; }
+    .scorecard .sc-cell { padding: .65rem 1rem; border-bottom: 1px solid var(--border); font-size: .88rem; }
+    .scorecard .sc-cell:nth-child(3n+2), .scorecard .sc-cell:nth-child(3n+3) { text-align: center; }
+    .score-dot { display: inline-block; width: 28px; height: 28px; border-radius: 50%; line-height: 28px; text-align: center; font-size: .82rem; font-weight: 800; }
+    .s5 { background: #1E8449; color: #fff; }
+    .s4 { background: #58D68D; color: #fff; }
+    .s3 { background: #F39C12; color: #fff; }
+    .s2 { background: #E74C3C; color: #fff; }
+    .s1 { background: #922B21; color: #fff; }
+
+    /* ── Section group header ── */
+    .section-group { background: var(--t1-dark); color: #fff; padding: 3rem 2rem; }
+    .section-group-inner { max-width: 1060px; margin: 0 auto; }
+    .section-group h2 { font-size: 2rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--t1-green); margin: 0; }
+    .section-group p { margin: .6rem 0 0; font-size: 1.05rem; opacity: .75; }
+
+    /* ── TOC ── */
+    .toc { background: var(--neutral-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem 2rem; margin: 2.5rem 0; }
+    .toc h4 { margin-bottom: .8rem; color: var(--t1-mid); }
+    .toc a { color: var(--t1-accent); text-decoration: none; font-size: .9rem; }
+    .toc a:hover { text-decoration: underline; }
+    .toc li  { margin-bottom: .3rem; font-size: .9rem; }
+
+    /* ── Conclusion ── */
+    .conclusion { background: linear-gradient(135deg, var(--t1-dark), #0D3B6B); color: #fff; padding: 4rem 2rem; }
+    .conclusion h2 { color: var(--t1-green); font-size: 2rem; margin-bottom: 1.2rem; }
+    .conclusion p  { opacity: .85; max-width: 740px; }
+    .conclusion .rec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 2rem; }
+    .rec-card { background: rgba(255,255,255,.07); border-radius: 8px; padding: 1.2rem; }
+    .rec-card h4 { color: var(--t1-green); margin-bottom: .5rem; font-size: .85rem; }
+    .rec-card p  { opacity: .8; font-size: .85rem; margin: 0; }
+
+    /* ── Badge inline ── */
+    .badge { display: inline-block; font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: .15rem .45rem; border-radius: 3px; }
+    .badge.ok   { background: var(--ok-bg);   color: var(--ok-green); }
+    .badge.warn { background: var(--warn-bg);  color: var(--warn-red); }
+
+    .tick  { color: var(--ok-green);  font-weight: 700; }
+    .cross { color: var(--warn-red);  font-weight: 700; }
+    .warn  { color: #D4820A;          font-weight: 700; }
+
+    /* ── Print ── */
+    @media print {
+      .cover, .section-group, .exec-banner, .stat-card, .comp-table th, .scorecard .sc-head, .conclusion { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .toc { display: none; }
+      .section { page-break-inside: avoid; }
+      h2 { page-break-after: avoid; }
+      body { font-size: 10pt; }
+      a { color: inherit; text-decoration: none; }
+    }
+    @page { margin: 1.4cm 1.6cm; }
+
+    /* ── Responsive ── */
+    @media (max-width: 720px) {
+      h1 { font-size: 1.9rem; }
+      .flow-grid { grid-template-columns: 1fr; }
+      .scorecard { grid-template-columns: 1fr; }
+      .comp-table, .comp-table thead, .comp-table tbody, .comp-table th, .comp-table td, .comp-table tr { display: block; }
+      .comp-table th { display: none; }
+      .comp-table tr { border: 1px solid var(--border); border-radius: 6px; margin-bottom: .8rem; overflow: hidden; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════ COVER ═══════════════════ -->
+<div class="cover">
+  <div class="container">
+    <div class="cover-inner">
+      <span class="cover-label">Competitive Analysis · March 2026</span>
+      <h1>One Unified Engine vs. a Bolted-On Stack:<br>Talon.One vs. Eagle Eye AIR<br>for Promotions &amp; Loyalty</h1>
+      <p class="subtitle">
+        Eagle Eye AIR is a loyalty-first platform that added promotions later — as a separate add-on module requiring a dedicated POS API. The result is two disconnected engines (loyalty wallet + cloud basket adjudication), each with their own API surface, data models, and limitations. This report explains why that architectural split creates real operational constraints at the point of checkout, and why Talon.One's single unified rule engine delivers more flexibility, lower latency, and faster time-to-market.
+      </p>
+      <div class="cover-meta">
+        <span><strong>Classification</strong>Confidential — Internal Use Only</span>
+        <span><strong>Date</strong>March 2026</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ EXEC SUMMARY ═══════════════════ -->
+<div class="exec-banner">
+  <div class="container">
+    <h2>Executive<br>Summary</h2>
+    <p>
+      Eagle Eye AIR started as a loyalty wallet engine. Promotions were retrofitted as an add-on called <strong>"Cloud Basket Adjudication"</strong> — a separate product, a separate POS-specific API, and a separate set of templated offer types that cannot be customised without overriding rules in the request payload (i.e. coding). The split means checkout flows require multiple API calls across two systems, offer types are fixed and not extendable by marketers, and features like gamification, strikethrough pricing, SDKs, and open documentation are either absent or acquired externally.
+      <strong>Talon.One resolves all of this from a single rule engine and a single API call — decisioning promotions, loyalty, coupons, and gamification atomically, at sub-60ms, without code for every new use case.</strong>
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════ TOC ═══════════════════ -->
+<div class="container">
+  <div class="toc">
+    <h4>Contents</h4>
+    <ul style="list-style:none;padding-left:0;margin:0;">
+      <li style="margin-bottom:.4rem;"><strong><a href="#s1" style="color:inherit;">01 — The Core Problem: Loyalty + Promotions as Two Separate Engines</a></strong></li>
+      <li style="margin-bottom:.4rem;"><strong>02 — Technology</strong>
+        <ul style="list-style:none;padding-left:1rem;margin-top:.3rem;">
+          <li style="margin-bottom:.25rem;"><a href="#s2"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 01 —</span>Architecture &amp; Scalability</a></li>
+          <li style="margin-bottom:.25rem;"><a href="#s3"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 02 —</span>API Design &amp; Checkout Latency</a></li>
+          <li style="margin-bottom:.25rem;"><a href="#s4"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 03 —</span>MACH Architecture &amp; Openness</a></li>
+          <li style="margin-bottom:.25rem;"><a href="#s5"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 04 —</span>Developer Experience &amp; Documentation</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:.4rem;"><strong>03 — Business</strong>
+        <ul style="list-style:none;padding-left:1rem;margin-top:.3rem;">
+          <li style="margin-bottom:.25rem;"><a href="#s6"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 01 —</span>Rule Engine Flexibility vs. Fixed Offer Templates</a></li>
+          <li style="margin-bottom:.25rem;"><a href="#s7"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 02 —</span>Promotion Mechanics Depth</a></li>
+          <li style="margin-bottom:.25rem;"><a href="#s8"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 03 —</span>Loyalty Ledger &amp; Earn Engine</a></li>
+          <li style="margin-bottom:.25rem;"><a href="#s9"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 04 —</span>Gamification</a></li>
+          <li style="margin-bottom:.25rem;"><a href="#s10"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 05 —</span>Coupon &amp; Voucher Capabilities</a></li>
+          <li style="margin-bottom:.25rem;"><a href="#s11"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 06 —</span>Campaign Stacking &amp; Offer Ordering</a></li>
+          <li style="margin-bottom:.25rem;"><a href="#s12"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 07 —</span>Strikethrough Pricing</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:.4rem;"><strong><a href="#s13" style="color:inherit;">04 — Commercial &amp; Pricing</a></strong></li>
+      <li style="margin-bottom:.4rem;"><strong><a href="#s14" style="color:inherit;">05 — Scorecard &amp; Decision Framework</a></strong></li>
+      <li><strong>06 — Conclusion &amp; Recommendations</strong></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════ S1 — THE CORE PROBLEM ═══════════════════ -->
+<div class="section" id="s1">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">01 — Introduction</span>
+      <h2>The Core Problem: Loyalty + Promotions as Two Separate Engines</h2>
+      <p>Eagle Eye AIR's product architecture reveals its history: loyalty was the founding product, promotions came later as a bolt-on. Understanding this split is essential to predicting where operational pain will occur.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">Component</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-ee">Eagle Eye AIR</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Platform architecture</td>
+          <td class="why-cell">A loyalty engine retrofitted with a promotions add-on requires two separate API surfaces, two data models, and two failure domains at checkout. Every seam is a potential latency spike or data inconsistency.<br><span class="econ">Each integration seam between two vendor systems adds $100k–$300k/year in engineering maintenance</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> <strong>3 core products</strong> (Real-Time Loyalty, Omnichannel Promotions, Gifting &amp; Top-up) plus add-ons. "Cloud Basket Adjudication" — the module that actually applies promotions at checkout — is listed as an <em>add-on</em>, not a core capability. Promotion adjudication was not native; it was added on top.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Single unified rule engine governs promotions, loyalty, coupons, referrals, and gamification. No separate checkout module — the same <code>UpdateSession</code> API call handles everything atomically <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Combined discount + loyalty in one transaction</td>
+          <td class="why-cell">"10% off AND earn 200 points" from a single campaign rule is a fundamental mechanic. When loyalty and promotions live in separate products, this requires two calls and a merge — introducing complexity, latency, and the risk of one effect being silently dropped.<br><span class="econ">Inability to combine effects forces two campaigns: double the QA surface area, double the error exposure</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Loyalty transactions are managed via the <strong>Transaction API</strong>; discount adjudication is managed via the <strong>POS Connect API</strong>. These are distinct API endpoints with different payloads. Combining effects in one checkout session requires orchestrating both calls and merging their responses in your own middleware.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Both effects fire from one rule: "10% off + 2× points for Gold members on Category A." One rule, one <code>UpdateSession</code> call, one atomic response containing both effects <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Promotions as a first-class product</td>
+          <td class="why-cell">When promotions are an afterthought in a loyalty platform, the promotion rule engine is necessarily less mature — relying on fixed templates and POS-specific mechanics rather than a general-purpose rule model.<br><span class="econ">A weaker promotion engine means more custom code per use case: each non-standard mechanic is a $15k–$60k developer project</span></td>
+          <td class="ee-cell"><span class="warn">⚠</span> Eagle Eye's own documentation acknowledges: <em>"'Omnichannel promotions' is a coupon wallet like most loyalty solutions. The Cloud Based Adjudication simply shows that promotions was not native to their product."</em> Offer types are a fixed list — not a flexible rule engine.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Talon.One was founded as a promotion engine. The rule engine is the product. Loyalty was added natively on top — not bolted on from below. Every capability co-exists in the same data model and evaluation engine <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Single source of truth across incentive types</td>
+          <td class="why-cell">Promotions, loyalty, and coupons must reflect the same customer state in real time. When they live in separate systems, any async sync gap creates customer-visible errors: a coupon applied that should have been voided, points awarded after a return, or a tier status that lags by hours.<br><span class="econ">Customer-visible incentive errors are directly correlated with increased support contacts and loyalty programme churn</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> The Wallet (loyalty) API and the POS Connect (promotions) API maintain separate state. Settling a transaction to commit loyalty points is a separate step from adjudicating the basket discount — they can be executed at different times (POS Connect supports end-of-day batch settlement).</td>
+          <td class="t1-cell"><span class="tick">✔</span> One data model: the session is the single source of truth for all incentive state at the moment of checkout. Points, discounts, coupons, and effects are all evaluated and committed atomically in one request <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="stat-grid" style="margin-top:1.8rem;">
+      <div class="stat-card"><div class="num">2+</div><div class="lbl">Separate Eagle Eye APIs required to process discounts + loyalty in one checkout</div></div>
+      <div class="stat-card"><div class="num">1</div><div class="lbl">Talon.One API call for the same complete scope</div></div>
+      <div class="stat-card"><div class="num">100–250ms</div><div class="lbl">Eagle Eye's declared average API response time</div></div>
+      <div class="stat-card"><div class="num">40–60ms</div><div class="lbl">Talon.One's typical processing time — 2–5× faster</div></div>
+    </div>
+
+    <div class="callout gold" style="margin-top:1.5rem;">
+      <strong>Key Commercial Insight: Eagle Eye Boasts of 3× Revenue Growth per Contract</strong>
+      Eagle Eye's shareholder communications highlight that average customer contract value grows 3× over a 5-year period. This is driven not by delivering more value — but by the modular add-on architecture: customers start on core loyalty, then must purchase Cloud Basket Adjudication, then Stampcard, then Gamification (via the acquired Untie Nots product). Each new use case is a new licence line. Talon.One's flat pricing model covers the full incentive scope from day one.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION GROUP: TECHNOLOGY ═══════════════════ -->
+<div class="section-group">
+  <div class="section-group-inner">
+    <h2>02 — Technology</h2>
+    <p>Architecture, API Design, MACH Compliance &amp; Developer Experience</p>
+  </div>
+</div>
+
+<!-- S2 — ARCHITECTURE -->
+<div class="section" id="s2">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 01</span>
+      <h2>Architecture &amp; Scalability</h2>
+      <p>Both platforms claim microservices-based cloud architecture. The differences are in the details: shared vs. isolated infrastructure, published throughput caps, SLA levels, and deployment practices that cause real downtime during business hours.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">What</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-ee">Eagle Eye AIR</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Infrastructure isolation</td>
+          <td class="why-cell">Shared multi-tenant infrastructure means one customer's traffic spike can degrade response times or exhaust capacity for all customers on the same pool. Isolated infrastructure eliminates this risk.<br><span class="econ">A shared-infra outage during Black Friday affects every customer simultaneously — the worst possible timing for the worst possible number of businesses</span></td>
+          <td class="ee-cell"><span class="warn">⚠</span> Eagle Eye is multi-tenanted SaaS on Google Cloud Platform. Their documentation states: <em>"Application throughput and capacity are defined per client and we apply a fair usage policy for minor breaches. Breaching allotted capacity will return an error."</em> If a neighbouring customer causes overload, other tenants may experience degraded or failed responses.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Isolated infrastructure available — customer workloads are separated so that neighbouring traffic spikes do not affect performance. Auto-scaling handles load increases without pre-provisioned capacity. <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Stated throughput ceiling</td>
+          <td class="why-cell">A published maximum TPS shared across all customers is a hard ceiling — not a floor. For large retailers processing thousands of checkout events simultaneously during peak hours, hitting a shared cap is a real operational risk.<br><span class="econ">A checkout system that cannot keep up with black-friday TPS volume leaves customers unable to complete purchases — direct revenue loss</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye's documentation states maximum supported throughput of <strong>4,000 TPS shared across all their customers</strong>. This is the ceiling for the entire platform — not per-customer. For large retailers this shared pool creates real capacity risk at peak.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Talon.One processes <strong>billions of API calls per month</strong> with no published shared ceiling. Auto-scaling provisions capacity dynamically per customer workload without impacting other accounts <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Availability SLA</td>
+          <td class="why-cell">SLA percentages translate directly into permitted downtime minutes. A 99.9% SLA allows 8.7 hours of downtime per year; 99.99% allows only 52 minutes. For a checkout-critical system, the gap is materially significant.<br><span class="econ">Each hour of incentive engine downtime = failed promotions at checkout, abandoned carts, and customer service contacts</span></td>
+          <td class="ee-cell"><span class="warn">⚠</span> Eagle Eye publishes a <strong>99.9% availability SLA</strong> — permitting up to 8.7 hours of downtime per year. RTO is 4 hours, RPO is 2 hours (tested every 6 months).</td>
+          <td class="t1-cell"><span class="tick">✔</span> <strong>99.99% SLA</strong> available with dedicated infrastructure options — 10× less permitted downtime than Eagle Eye's published SLA. Sub-second software update deployments with no maintenance windows <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Maintenance window downtime</td>
+          <td class="why-cell">Forced maintenance windows during business hours are unacceptable for checkout-critical systems. A 1-hour maintenance window at 7–8am BST falls within peak trading hours for UK retailers and within overnight hours for some markets — but not for others.<br><span class="econ">Confirmed: Eagle Eye maintenance windows can be 1 hour, scheduled at 7–8am BST — high risk for high-traffic morning periods</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye schedules maintenance windows that can last <strong>up to 1 hour</strong>, occurring during early morning BST — a time window that coincides with peak UK grocery and convenience retail activity. Maintenance is applied per deployment (affecting all customers on that deployment simultaneously), not per customer.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Software updates complete in <strong>under 1 second</strong> using modern CI/CD methodology — no maintenance windows, no customer-visible downtime. Rare database-level maintenance is performed per-customer (not per-deployment) at agreed times typically between 3–4am, not imposed by the vendor <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Database technology</td>
+          <td class="why-cell">MySQL is a proven relational database optimised for OLTP but not designed for high-throughput, horizontally-scaled distributed workloads. At multi-billion-transaction scale, database architecture becomes a key performance differentiator.<br><span class="econ">Architectural database choices made today define throughput ceiling for the next 5–10 years</span></td>
+          <td class="ee-cell"><span class="warn">⚠</span> Eagle Eye's core transaction engine runs on <strong>self-managed MySQL clusters</strong> (primary + secondary nodes + ProxySQL caching layer), managed with Chef and supported by Percona. Micro-services use CloudSQL. High-throughput distributed architectures typically move away from centralised RDBMS as scale grows.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Purpose-built distributed architecture designed from the start for billions of API calls per month at sub-100ms latency. No dependency on a centralised RDBMS for real-time rule evaluation <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Environments &amp; sandbox</td>
+          <td class="why-cell">Testing campaigns against realistic data before deployment prevents misconfiguration from reaching customers. Limited environment availability slows developer onboarding and increases production error risk.<br><span class="econ">Every production misconfiguration caught in staging saves $5k–$50k in reversal, compensation, and customer service overhead</span></td>
+          <td class="ee-cell"><span class="warn">⚠</span> Eagle Eye offers only <strong>3 geographic locations</strong> with apparently <strong>1 sandbox environment</strong> per customer on top of production. Limited environment provisioning restricts parallel testing and increases development cycle time.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Full sandbox environment per customer with campaign simulation tools — test any rule against real or synthetic session data before activation. No deployment step required to move from sandbox to production <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- S3 — API DESIGN & CHECKOUT LATENCY -->
+<div class="section" id="s3">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 02</span>
+      <h2>API Design &amp; Checkout Latency</h2>
+      <p>Eagle Eye's split between the Loyalty Transaction API and the POS Connect (promotion adjudication) API creates a fundamental checkout complexity problem — one that Talon.One's unified Session API eliminates by design.</p>
+    </div>
+
+    <div class="flow-wrapper">
+      <div class="flow-grid">
+        <div class="flow-box ee-box">
+          <h4 style="color:var(--ee-green);">Eagle Eye AIR — Checkout Flow</h4>
+          <div class="flow-step bad"><span class="num">1</span>Authenticate customer / open wallet (POS Connect: <code>/connect/wallet/open</code>)</div>
+          <div class="flow-step bad"><span class="num">2</span>Retrieve targeted offers from wallet (Loyalty API: wallet accounts / coupons)</div>
+          <div class="flow-step bad"><span class="num">3</span>Send basket to adjudication with options flags (<code>analyseBasket</code>, <code>adjustBasket</code>, <code>basketAdjudication</code> — each a separate option in the payload)</div>
+          <div class="flow-step bad"><span class="num">4</span>Receive POS Connect response with discount result</div>
+          <div class="flow-step bad"><span class="num">5</span>Separately calculate loyalty points via Transaction API (or settle later in batch)</div>
+          <div class="flow-step bad"><span class="num">6</span>Merge discount result + points result in your own middleware before presenting to customer</div>
+          <div class="flow-step bad"><span class="num">7</span>Settle transaction to commit points (can be deferred — async latency risk)</div>
+          <div class="flow-total ee">5–7 calls across 2 separate APIs + custom middleware merge required</div>
+        </div>
+        <div class="flow-box t1-box">
+          <h4 style="color:var(--t1-green);">Talon.One — Checkout Flow</h4>
+          <div class="flow-step ok"><span class="num">1</span>Call <code>UpdateSession</code> with cart contents, customer ID, and any coupon codes</div>
+          <div class="flow-step ok"><span class="num">2</span>Receive single atomic response: applied discounts, points earned, coupon validity, gamification progress, messages</div>
+          <div class="flow-step ok"><span class="num">3</span>Close session on order confirmation — atomic commit of all effects</div>
+          <div class="flow-total t1">1 call · 1 API · full incentive result · no middleware</div>
+        </div>
+      </div>
+    </div>
+
+    <table class="comp-table" style="margin-top:1.5rem;">
+      <thead>
+        <tr>
+          <th class="col-what">What</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-ee">Eagle Eye AIR</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">API calls per checkout</td>
+          <td class="why-cell">Each additional API call adds round-trip latency and introduces a new failure point. If any call fails, the customer receives an incomplete checkout — missing discount or missing points.<br><span class="econ">Amazon found every 100ms of added latency cost 1% in sales. Eagle Eye's own 100–250ms response time versus Talon.One's 40–60ms represents 1–2% conversion risk per checkout</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Minimum 3–5 sequential calls across the Loyalty API and POS Connect API. The POS Connect payload itself has multiple independent option flags (<code>analyseBasket</code>, <code>adjustBasket</code>, <code>adjudicatePointsSpend</code>) that must be configured separately. Post-checkout loyalty settlement can be deferred — creating async state inconsistency.</td>
+          <td class="t1-cell"><span class="tick">✔</span> One <code>UpdateSession</code> call returns all results atomically. No separate loyalty settlement step. No middleware merge required. <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Declared response time</td>
+          <td class="why-cell">The incentive engine's response time is a direct input to checkout page load time. For mobile commerce — where 53% of visits are abandoned after 3 seconds — every millisecond compounds.<br><span class="econ">At Eagle Eye's declared 100–250ms, a checkout with 3 API calls adds 300–750ms of incentive-specific latency. At Talon.One's 40–60ms for one call, it is 40–60ms total.</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye's documentation states average transaction speeds of <strong>100–250ms</strong> — and that is per individual API call. Multi-call checkouts compound this to 300–750ms+ before any POS or frontend rendering occurs.</td>
+          <td class="t1-cell"><span class="tick">✔</span> <strong>40–60ms</strong> processing time on the unified session call. Sub-100ms p99 SLA. One call covers everything — total incentive-decisioning latency is 40–60ms regardless of complexity <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Custom middleware requirement</td>
+          <td class="why-cell">Any middleware layer between two vendor systems must be built, hosted, monitored, and maintained by the customer. It is a permanent engineering liability that grows with every new rule added.<br><span class="econ">Post-integration middleware maintenance averages $100k–$300k/year in dedicated engineering overhead</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> The split between POS Connect (promotions) and the Wallet API (loyalty) means a customer-owned middleware layer is structurally required to merge discount calculations with loyalty point awards before presenting the checkout state to the customer.</td>
+          <td class="t1-cell"><span class="tick">✔</span> No middleware needed. Talon.One is the single decisioning layer — one call, one response. Webhooks push committed events downstream post-session without synchronous coupling <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Authentication security model</td>
+          <td class="why-cell">A HASH-based authentication scheme that requires the backend to maintain a sequential hash state for every API request adds implementation complexity and creates a stateful dependency that makes key rotation operationally difficult.<br><span class="econ">Stateful authentication schemes increase API integration complexity and create security exposure if hash state is ever desynchronised</span></td>
+          <td class="ee-cell"><span class="warn">⚠</span> Eagle Eye APIs are secured with a <strong>ClientId and Hash passed in every request header</strong>. The backend is required to maintain and advance a hash sequence per request — a stateful authentication model that is more complex to implement and rotate than standard API key or OAuth flows.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Standard API key and OAuth-based authentication — stateless, simple to rotate, well-documented, and compatible with standard API gateway infrastructure <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Atomic rollback on return</td>
+          <td class="why-cell">Order returns must reverse all incentive effects atomically — discount removed, points reversed, coupon restored. Non-atomic rollback creates ledger inconsistencies that require manual correction.<br><span class="econ">Non-atomic rollbacks generate manual correction tickets, customer compensation, and financial reconciliation overhead</span></td>
+          <td class="ee-cell"><span class="warn">⚠</span> Because loyalty and promotion are separate systems, reversal requires calling both APIs independently. There is no single atomic rollback endpoint — partial failure (one reversal succeeds, one fails) leaves the ledger in an inconsistent state requiring manual intervention.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Single atomic rollback API call reverses all effects — discounts, points, coupon redemption — in one operation. If the rollback fails, nothing is reversed. Consistent state is guaranteed <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout red" style="margin-top:1.5rem;">
+      <strong>⚠ The API Architecture Reveals the Product History</strong>
+      Eagle Eye's POS Connect API payload is telling. The single <code>/connect/wallet/open</code> call requires the calling application to specify — in the request options — whether to <code>analyseBasket</code>, <code>adjustBasket</code>, <code>adjudicatePointsSpend</code>, and <code>storeBasket</code> as separate boolean flags. This means the <em>calling application</em> must understand and control the adjudication model, rather than the platform handling it automatically. In Talon.One, the rule engine always evaluates everything — the developer sends a session payload and receives a complete result. No flags, no options to get wrong, no silent omissions.
+    </div>
+  </div>
+</div>
+
+<!-- S4 — MACH & OPENNESS -->
+<div class="section" id="s4">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 03</span>
+      <h2>MACH Architecture &amp; Openness</h2>
+      <p>Being MACH-certified is not just a logo — it represents a commitment to interoperability and openness that directly affects how freely a business can build and replace components over time.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">What</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-ee">Eagle Eye AIR</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">MACH Alliance membership</td>
+          <td class="why-cell">MACH certification signals openness, interoperability, and a commitment to headless, composable architecture. Non-MACH platforms often have proprietary connectors, lock-in data models, or limited API openness that reduces future architectural freedom.<br><span class="econ">Non-MACH architectures tend to create switching costs that compound over time — typically $500k–$2M+ to migrate a deeply integrated loyalty platform</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye is <strong>not a member of the MACH Alliance</strong>. Their architecture claims microservices and cloud-native deployment but does not carry the third-party validation of MACH certification.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Certified MACH Alliance member — Microservices, API-first, Cloud-native SaaS, Headless. Full architectural transparency and interoperability with any CDP, CEP, ecommerce platform, or channel <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Third-party integrations</td>
+          <td class="why-cell">The breadth of verified native integrations determines how quickly a retailer can connect its existing tech stack. A list of logo claims on a website without documentation is not an integration — it is a marketing claim.<br><span class="econ">An undocumented integration that must be built from scratch adds $30k–$100k to implementation cost</span></td>
+          <td class="ee-cell"><span class="warn">⚠</span> Eagle Eye's website lists many partner integrations, but their technical documentation only describes <strong>one verified native integration: commercetools</strong> (via API extension on CT Connect). For CDP and CEP integrations, documentation only describes "event sync patterns" — no native API connectors. Audience/segment sync from CDPs appears unsupported.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Documented native connectors and partner APIs for commercetools, Salesforce Commerce Cloud, Segment, mParticle, Braze, Klaviyo, and others. Audience sync (importing segments as rule conditions) is supported natively <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Event streaming openness</td>
+          <td class="why-cell">Outbound event streams to CDPs and analytics platforms must be flexible in format and delivery — not a fixed schema that requires ETL transformation by the customer to be usable.<br><span class="econ">Fixed-schema event payloads that require transformation add $50k–$150k in ETL infrastructure and ongoing engineering overhead</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye's event stream delivers a <strong>fixed proprietary payload format</strong> — their documentation explicitly notes that transformation (ETL) will be required by the customer. Custom events cannot be configured in the system; events are hardcoded and not user-definable.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Webhook payloads are configurable; custom events can be defined and triggered by rule conditions. Event schemas are documented and stable — no ETL required for standard downstream systems <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Audience / segment sync (CDP)</td>
+          <td class="why-cell">Importing audience segments from a CDP into the promotion and loyalty engine allows targeting rules to reference real-time customer data without building a custom sync pipeline per segment.<br><span class="econ">Building a custom audience sync pipeline adds $80k–$200k upfront and $30k–$60k/year in maintenance</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye documentation mentions CDP event sync but contains <strong>no evidence of bidirectional audience/segment sync</strong>. Targeting rules based on externally-computed audience membership (e.g. "high-value churning customers" segment from a CDP) appear unsupported natively.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Native audience ingestion via CDP APIs — segments from Segment, mParticle, or any CDP can be imported as rule attributes and used as campaign conditions with no custom pipeline <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- S5 — DEVELOPER EXPERIENCE -->
+<div class="section" id="s5">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 04</span>
+      <h2>Developer Experience &amp; Documentation</h2>
+      <p>Documentation quality, SDK availability, and API openness are proxies for how fast a development team will be able to integrate — and how much ongoing maintenance they will need to absorb.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">What</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-ee">Eagle Eye AIR</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Public API documentation</td>
+          <td class="why-cell">Public documentation signals confidence in the product and reduces integration time. Gated documentation forces developers to request access before a single API call — adding friction and slowing evaluation.<br><span class="econ">Gated docs add 2–4 weeks to initial developer evaluation — a barrier that causes some prospects to self-select out before ever engaging</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye's API documentation requires <strong>login to access</strong> — even for initial developer evaluation. Their functional documentation is described internally as "extremely thin… more a glossary than a guide. No screenshots, no how-to, no description of how to configure."</td>
+          <td class="t1-cell"><span class="tick">✔</span> Fully public API documentation at developers.talon.one — no login required. Interactive API reference, code examples, sandbox access, and a public changelog. <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">SDKs</td>
+          <td class="why-cell">Official SDKs in major languages (TypeScript, Python, Go, Java) reduce integration time from weeks to days and enforce correct API usage patterns. Without SDKs, every team builds ad-hoc HTTP clients increasing the risk of implementation errors.<br><span class="econ">SDK availability reduces typical integration time by 30–50% and reduces post-go-live bug rates related to improper API usage</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye provides <strong>no official SDKs</strong>. Confirmed by internal analysis (Valtech comparison). Developers must build raw HTTP clients against the API, with all the implementation complexity and maintenance overhead that implies.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Official typed SDKs for TypeScript/JavaScript, Python, Go, Java, PHP, and more — available on GitHub and published to package registries. Postman collections included <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">User-facing voucher codes via UI</td>
+          <td class="why-cell">Business teams should be able to create memorable campaign voucher codes (e.g. "SUMMER26") directly in the platform UI without developer involvement. API-only voucher code creation means every campaign code requires an engineering ticket.<br><span class="econ">Routing voucher code creation through engineering adds $500–$2,000 per campaign in staff cost and 1–5 days of delay</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye does not support user-friendly named voucher codes (e.g. "SUMMER26") via their UI. A workaround via API is possible — but requires developer involvement for every named code campaign.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Named voucher codes (any alphanumeric string) creatable directly in the Campaign Manager UI by marketers, with no developer involvement. Batch-generated and individually-generated codes also supported <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Cart size handling</td>
+          <td class="why-cell">B2B and grocery use cases regularly involve carts with 50+ line items. Platforms with undisclosed item count limitations force engineering workarounds or break entirely on large orders.<br><span class="econ">B2B orders averaging 100+ SKUs per transaction are impossible on a platform that struggles with 10+ items — effectively excluding an entire customer segment</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye <strong>struggles with 10+ items in the cart</strong> — confirmed by internal competitive analysis (Valtech). This is particularly surprising given their stated focus on grocery retail where large basket sizes are standard.</td>
+          <td class="t1-cell"><span class="tick">✔</span> No practical cart size limitation. Optimised for large cart volumes — tested and validated in B2B and grocery environments with 100+ line items per session <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION GROUP: BUSINESS ═══════════════════ -->
+<div class="section-group">
+  <div class="section-group-inner">
+    <h2>03 — Business</h2>
+    <p>Promotion Mechanics, Loyalty Engine, Gamification, Coupons &amp; Stacking Control</p>
+  </div>
+</div>
+
+<!-- S6 — RULE ENGINE -->
+<div class="section" id="s6">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 01</span>
+      <h2>Rule Engine Flexibility vs. Fixed Offer Templates</h2>
+      <p>The depth of the rule engine directly determines what the marketing team can build independently — and what requires expensive developer work. Eagle Eye uses a fixed template catalogue; Talon.One uses a Boolean rule builder.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">What</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-ee">Eagle Eye AIR</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Offer creation model</td>
+          <td class="why-cell">A rule engine allows any combination of conditions and effects. A template catalogue allows only the combinations the vendor pre-approved. Every mechanic outside the template list requires a developer project or is simply impossible.<br><span class="econ">Each custom promotion mechanic outside the template list costs $15k–$60k in developer work and 4–8 weeks of lead time</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye's offer types are a <strong>fixed list of templates</strong> (documented in POS Connect). Business users cannot create new offer types or combine effects freely. Any non-standard use case is either unsupported or requires overriding rules via the API request payload — meaning the calling application must contain the business logic, not the platform.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Unlimited rule conditions using any attribute from session, customer profile, or product catalogue — including custom attributes. The Rule Builder template library is a starting point, never a constraint <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Earn rule customisation</td>
+          <td class="why-cell">Standard earn rates, fixed-points tiers, and points-per-spend cover basic loyalty. But advanced personalisation — time-of-day multipliers, brand-specific bonuses, partner earn rates — requires attribute-based rule logic that goes beyond fixed templates.<br><span class="econ">Inability to implement custom earn rate logic forces manual account management workarounds — not scalable beyond a few hundred customers</span></td>
+          <td class="ee-cell"><span class="warn">⚠</span> Eagle Eye's earn rules are template-based (Standard, Fixed Points, Points per Spend, Earn Rate Overrides). <strong>The override mechanism requires the override key to be passed in the earn API request</strong> — meaning the channel integration must contain the earn rate logic, not the platform. Custom earn calculation from the backend is not possible for business users without coding.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Full expression-based earn rules: tranche logic, attribute-weighted multipliers, time-of-day bonuses, partner multipliers, tier-specific rates — all configured in the Rule Builder by a marketer, no coding <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Multi-effect per rule</td>
+          <td class="why-cell">Combining a discount, loyalty points, a free item, and a message from a single campaign rule is the gold standard for personalised promotions. Separate templates mean this requires 3–4 separate active campaigns with stacking risk.<br><span class="econ">Multi-effect campaigns show higher perceived customer value without proportionally higher cost — impossible to achieve with single-effect templates</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye's offer templates define one effect type per offer. Combining — for example — a "Fixed Percentage off Basket" with a "Fixed Points" bonus requires two separate campaign configurations. Ensuring they always fire together (and only together) requires stacking rules that add configuration complexity.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Multiple simultaneous effects per rule: percentage discount + loyalty points + free item + message + webhook — all from one campaign configuration, fired atomically with deterministic stacking control <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Pro-rata discount on returns</td>
+          <td class="why-cell">When a customer returns one item from a bundle, the discount applied to that item must be calculated proportionally against the original bundle discount. Without pro-rata logic, retailers either over-refund (revenue loss) or under-refund (customer complaint).<br><span class="econ">Manual pro-rata calculation per return costs $5–$15 in agent time per contact; at scale this is a significant annual cost</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye <strong>does not support pro-rata discounts</strong>. For bundle returns, the system would need to re-run the original promotion rules against a historical basket state — which may no longer exist if the rules have been deleted or modified since. This is a confirmed gap (internal analysis, 75% confidence).</td>
+          <td class="t1-cell"><span class="tick">✔</span> Pro-rata discount calculation is native — the original session is retained and the proportional discount per returned item is calculated automatically. Rules in force at the time of purchase are preserved for return calculations <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- S7 — PROMOTION MECHANICS DEPTH -->
+<div class="section" id="s7">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 02</span>
+      <h2>Promotion Mechanics Depth</h2>
+      <p>Eagle Eye's fixed template list covers many standard retail mechanics. The critical gaps are where standard templates end and custom business logic begins — and how much engineering that transition requires.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">Mechanic</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-ee">Eagle Eye AIR</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Percentage &amp; fixed-amount discounts</td>
+          <td class="why-cell">Foundation of any promotion engine. Must be applicable at item, category, and basket level against attribute-filtered product sets — not only enumerated product lists.<br><span class="econ">Filtering by custom product attributes (brand, margin tier, collection) without code is essential for scalable catalogue management</span></td>
+          <td class="ee-cell"><span class="warn">⚠</span> Eagle Eye supports Fixed Amount Off Basket, Fixed Amount Off Products, Fixed Percentage Off Products, and Fixed Percentage Off Basket natively via POS Connect templates. However, product targeting appears to be tied to fixed SKU lists or POS product categories — not free-form attribute filtering.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Percentage, fixed-amount, and unit price overrides with targeting against any product attribute combination — custom tags, brand, category, margin tier — no SKU list enumeration required <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Bundle pricing (fixed-price sets)</td>
+          <td class="why-cell">"Get a sandwich, crisps, and a drink for £3" (Eagle Eye calls this "Meal Deal"). A fixed-price bundle requires grouping items and applying a single total price — not a sum of individual item discounts.<br><span class="econ">Bundle mechanics increase average units per transaction and protect margin better than equivalent item-level discounts</span></td>
+          <td class="ee-cell"><span class="tick">✔</span> Eagle Eye explicitly supports <strong>Meal Deal (fixed bundle price)</strong> as a named template type — one of their stronger native mechanics. Suitable for grocery and food-service use cases.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Native bundle mechanics with attribute-filtered item sets: "any size of SKU X + any colour of SKU Y" — more flexible than SKU-enumerated bundles, applicable to any retail category</td>
+        </tr>
+        <tr>
+          <td class="what-cell">Buy X Get Y (BOGO &amp; variants)</td>
+          <td class="why-cell">Buy-one-get-one and buy-category-A-get-discount-on-category-B are core traffic-driving mechanics. The value is in precise targeting of both the qualifying item (X) and the benefiting item (Y) using attribute conditions, not just fixed SKU lists.<br><span class="econ">Cross-category BOGO drives category trial and average basket size simultaneously</span></td>
+          <td class="ee-cell"><span class="warn">⚠</span> Eagle Eye supports "Buy X Get X For Y" as a template. The depth of attribute filtering for X and Y is not documentable beyond SKU references — non-standard filtering would likely require API-level override logic.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Full BOGO family: qualifying set and benefiting set are each independently defined using any attribute combination — no SKU list enumeration required, new products automatically included via attribute tags <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Variable / tiered discounts</td>
+          <td class="why-cell">"1% off for every £10 spent, up to a maximum of 10%" — variable rate mechanics incentivise basket building. Eagle Eye has a template for this (Variable Amount Off Products, Variable Percentage Off Basket). Talon.One allows nested tiers without multiple campaigns.<br><span class="econ">Spend-tier mechanics are the single most effective AOV driver across promotional formats</span></td>
+          <td class="ee-cell"><span class="tick">✔</span> Eagle Eye supports Variable Amount Off Products and Variable Percentage Off Basket with maximum caps — matching the stated use case. Competitive for standard spend-tier scenarios.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Tiered discounts as a single rule with multiple condition-effect groups: no separate campaigns, no stacking priority risk, definable against cart value, item count, category spend, or any custom attribute</td>
+        </tr>
+        <tr>
+          <td class="what-cell">Free item giveaway</td>
+          <td class="why-cell">"Add a free sample to every order over $75" requires adding a zero-price line item programmatically based on basket conditions — not approximated by discounting a separately sold item.<br><span class="econ">Free gift mechanics drive repeat purchase intent and brand sampling ROI measurably better than equivalent-value percentage discounts</span></td>
+          <td class="ee-cell"><span class="tick">✔</span> Eagle Eye supports "Free Product" as a template type — a genuine native capability for adding a free item to a qualifying basket.</td>
+          <td class="t1-cell"><span class="tick">✔</span> "Add item to cart" is a native effect type triggered by any rule condition — cart value, product tag, customer segment, time window — configurable in the Rule Builder with no code</td>
+        </tr>
+        <tr>
+          <td class="what-cell">Strikethrough / was-now pricing</td>
+          <td class="why-cell">EU Omnibus Directive and other regulations mandate accurate "prior price" display. Dynamic percentage-based strikethrough rules avoid manual price-book maintenance across thousands of SKUs.<br><span class="econ">Non-compliant strikethrough pricing exposes retailers to fines up to 4% of annual turnover in the EU</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> No strikethrough pricing capability identified in Eagle Eye's documentation. See dedicated section below.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Dedicated strikethrough pricing engine with percentage-based dynamic rules, cross-channel consistency, and full audit trail for regulatory compliance <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Best deal logic</td>
+          <td class="why-cell">When multiple campaigns qualify for a basket, "best deal" logic automatically selects the most beneficial discount for the customer — preventing both under-discounting and over-discounting from misconfigured priority rules.<br><span class="econ">Misconfigured promotion priority is a leading cause of margin leakage during peak events; best-deal automation removes the manual risk</span></td>
+          <td class="ee-cell"><span class="warn">⚠</span> Eagle Eye claimed to have best-deal logic in a competitive evaluation (Valtech) but <strong>gave no indication of where the feature is configured or which API to use</strong>. Their documentation describes offer ordering by value (ascending/descending) — a partial approximation, not a full best-deal campaign evaluation engine.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Best-deal logic available at both campaign and item level — the engine automatically evaluates all qualifying campaigns and selects the optimal combination per session, with full audit trace of the selection decision <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Additional cost discounts (shipping, fees)</td>
+          <td class="why-cell">Discounting shipping fees, service charges, or delivery surcharges (e.g. free delivery for new customers, free delivery on orders over £30) requires the engine to apply effects to non-product line items.<br><span class="econ">Free delivery threshold mechanics are among the highest-converting single promotion types in ecommerce</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye <strong>struggles with free delivery</strong> — confirmed by competitive analysis (Valtech). Examples of failures include new-customer offers and voucher-triggered free delivery. The platform appears unable to discount non-standard basket cost components reliably.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Effect types include discounting any basket cost component — shipping fees, service charges, surcharges — using the same rule conditions as product discounts <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- S8 — LOYALTY ENGINE -->
+<div class="section" id="s8">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 03</span>
+      <h2>Loyalty Ledger &amp; Earn Engine</h2>
+      <p>Eagle Eye's wallet-centric loyalty model has genuine depth for standard earn/burn mechanics. The gaps emerge at the intersection of loyalty and promotion — where the architectural split becomes operationally significant.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">What</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-ee">Eagle Eye AIR</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Multi-ledger / multi-currency points</td>
+          <td class="why-cell">Programmes differentiating base points from status points, bonus points, or partner currency need concurrent ledgers per member — with independent earn, burn, expiry, and reporting per currency type.<br><span class="econ">Separate point currency types unlock premium programme mechanics that drive 15–30% higher earn-burn engagement</span></td>
+          <td class="ee-cell"><span class="tick">✔</span> Eagle Eye's wallet architecture supports <strong>multiple ledgers per wallet</strong> — a genuine strength. Multiple "accounts" within a wallet can each have their own currency configuration including expiry and pending points.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Multiple concurrent point currencies per programme (base, bonus, status) with independent earn, burn, expiry, and reporting — all in a single ledger view</td>
+        </tr>
+        <tr>
+          <td class="what-cell">Reward catalogue</td>
+          <td class="why-cell">A reward catalogue lets members exchange points for tangible rewards: products, experiences, charity donations. The richer the reward types, the higher the perceived programme value.<br><span class="econ">Programmes with rich reward catalogues show 20–40% higher programme engagement scores vs. voucher-only platforms</span></td>
+          <td class="ee-cell"><span class="warn">⚠</span> Eagle Eye's "Reward Bank and Points Exchange" is <strong>a coupon catalogue only</strong> — members can exchange points for a coupon but cannot redeem for physical products or non-coupon reward types. Eagle Eye's own documentation acknowledges this is "not a real reward catalog where you can define reward type."</td>
+          <td class="t1-cell"><span class="tick">✔</span> Reward catalogue supports coupons, gift cards, physical products via webhook fulfilment, and custom reward types — configurable from the management UI <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Gift cards</td>
+          <td class="why-cell">Gift cards are a frequently requested feature in retail loyalty programmes — they function as both a redemption mechanic and a new-customer acquisition tool when purchased as gifts.<br><span class="econ">Gift card programmes generate 10–20% of their face value in breakage revenue and drive new customer acquisition at near-zero CAC</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye has <strong>no native gift card concept</strong>. Confirmed by internal analysis (Valtech comparison).</td>
+          <td class="t1-cell"><span class="tick">✔</span> Native gift card support — issue, track, and redeem gift card balances with full API access and management UI controls <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Coupon code limit</td>
+          <td class="why-cell">Personalisation at scale requires generating millions of unique codes — one per member for birthday campaigns, win-back flows, or referral programmes. A database ceiling limits programme scale.<br><span class="econ">A 50-million code limit becomes a constraint for retailers with 10M+ active members running multiple concurrent personalised campaigns</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye supports a <strong>maximum of 50 million codes</strong> in their database. For large-scale personalisation programmes across multi-market retailers, this ceiling may be reached faster than anticipated.</td>
+          <td class="t1-cell"><span class="tick">✔</span> No practical coupon code ceiling — tested and deployed at hundreds of millions of unique codes across enterprise customer programmes <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Audibility via management API</td>
+          <td class="why-cell">Audit trails must be accessible via API to enable integration with centralised audit tracking and security alert systems. UI-only audit availability cannot trigger automated alerts or feed into compliance tooling.<br><span class="econ">API-accessible audit logs enable automated anomaly detection — alerting security teams to unusual discount patterns within seconds, not days</span></td>
+          <td class="ee-cell"><span class="warn">⚠</span> Eagle Eye provides auditability visible <strong>via their UI but not via their API</strong>. This prevents integration with centralised audit tracking software or automated security alerts on promotion anomalies.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Full audit trail accessible via both UI and management API — integrable with audit tracking software, SIEM tools, and automated anomaly alerting <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- S9 — GAMIFICATION -->
+<div class="section" id="s9">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 04</span>
+      <h2>Gamification: Missions, Stamp Cards &amp; Challenges</h2>
+      <p>Eagle Eye has no native gamification in its core platform. They acquired Untie Nots to fill this gap — but it remains a separate product that has not been merged into AIR, and its strategic focus has reportedly shifted toward AI-powered offers rather than gamification mechanics.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">Mechanic</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-ee">Eagle Eye AIR</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Missions / multi-step challenges</td>
+          <td class="why-cell">Multi-step missions ("complete X, Y, Z to earn a reward") drive intentional shopping behaviour and category penetration beyond passive earn-and-burn.<br><span class="econ">Mission-based programmes show 2–4× higher active participation rates vs. pure transactional earn</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> No native gamification in Eagle Eye AIR core platform. The Untie Nots acquisition was intended to fill this gap, but: (1) Untie Nots has not been integrated into AIR as of March 2026 — it remains a separate product, (2) Untie Nots has shifted focus toward AI-powered personalised offers rather than gamification. Missions and challenges are not reliably available as a go-live capability.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Native Achievements engine: missions with no hard step cap, support for both ordered and unordered journeys, non-purchase triggers via webhook, all configured in the same Rule Builder — no separate product purchase required <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Stamp cards (punch cards)</td>
+          <td class="why-cell">"Buy 5 coffees, get 1 free" — stamp card mechanics drive repeat purchase via visible, finite progress. The customer-facing value depends on returning the current stamp count in the checkout session response so the UI can render a progress grid.<br><span class="econ">Visual stamp-count mechanics increase completion rates by 30–60% vs. equivalent opaque points accumulation</span></td>
+          <td class="ee-cell"><span class="tick">✔</span> Eagle Eye does support <strong>Stampcard</strong> as a native offer type — listed explicitly in their POS Connect offer catalogue. One of their stronger gamification-adjacent capabilities within the core platform.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Stamp cards are a named Achievement type — current progress returned inline in the <code>UpdateSession</code> response so any frontend can render the card state without a separate API call. Post-completion automatic reset and re-issue.</td>
+        </tr>
+        <tr>
+          <td class="what-cell">Streaks</td>
+          <td class="why-cell">"Purchase every week for 4 consecutive weeks" requires tracking consecutive periods, detecting breaks, and resetting the counter. This is a fundamentally different data structure from a cumulative points counter.<br><span class="econ">Streak mechanics increase weekly active rate by 20–40% by leveraging loss aversion — customers return to protect progress</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> No streak mechanic available in Eagle Eye AIR or Untie Nots. Streaks require a period-aware counter with break detection — not achievable with a simple cumulative account balance or the current offer template set.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Streaks are a first-class Achievement type: period length, break detection window, and automatic reset — marketer-managed, no custom code required <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Continuity programmes</td>
+          <td class="why-cell">"Spend £100 on cosmetics in July and get 1,000 bonus points" — continuity mechanics require tracking cumulative spend or actions within a defined time window and issuing a reward on completion.<br><span class="econ">Continuity mechanics drive sustained category engagement over a campaign window rather than single-transaction spikes</span></td>
+          <td class="ee-cell"><span class="tick">✔</span> Eagle Eye supports <strong>Continuity</strong> as an offer type (e.g. "spend £100 on cosmetics in July"). This is a documented, native capability within POS Connect.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Continuity mechanics natively supported via the Achievements engine — cumulative spend, visit count, category spend — with configurable reward triggers and time windows</td>
+        </tr>
+        <tr>
+          <td class="what-cell">Bounceback (next-purchase coupon)</td>
+          <td class="why-cell">Issuing a coupon triggered by qualifying purchase behaviour ("spend £50 today, receive a £5 voucher for your next visit") is a fundamental cross-session loyalty mechanic that incentivises return visits.<br><span class="econ">"Earn now, redeem next visit" mechanics show 2–4× higher repeat purchase rates vs. single-transaction promotions</span></td>
+          <td class="ee-cell"><span class="tick">✔</span> Eagle Eye supports <strong>Bounceback</strong> as a native offer type — "the ability to issue a coupon when qualification criteria are met rather than (or in addition to) an instant reward." A genuine competitive strength.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Full cross-session and event-driven mechanics: bounceback coupons, milestone triggers, referral rewards, win-back offers — configurable without code in the Rule Builder</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout red" style="margin-top:1.5rem;">
+      <strong>⚠ Gamification as an Unintegrated Acquisition</strong>
+      Eagle Eye's acquisition of Untie Nots was a deliberate move to address the gamification gap in their core platform. However, as of March 2026, the integration has not been completed — Untie Nots remains a separate product. Furthermore, Eagle Eye's public communications indicate that Untie Nots is pivoting toward AI-driven intelligent offers rather than its original gamification focus. This means gamification capability beyond Stampcard and Bounceback cannot be reliably committed to in a presales context without significant caveats about delivery timelines and product roadmap.
+    </div>
+  </div>
+</div>
+
+<!-- S10 — COUPONS -->
+<div class="section" id="s10">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 05</span>
+      <h2>Coupon &amp; Voucher Capabilities</h2>
+      <p>Modern incentive programmes depend on contextual, individualised coupons. The coupon engine's flexibility directly determines the richness of personalised experiences a retailer can deliver.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">What</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-ee">Eagle Eye AIR</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Custom coupon attributes</td>
+          <td class="why-cell">Storing metadata on a coupon (channel of issue, product restriction, customer tier) and validating against that metadata at redemption enables richer, fraud-resistant mechanics. Without it, coupons are interchangeable.<br><span class="econ">Coupons without channel metadata are trivially mis-used across channels — e.g. in-store coupons redeemed online</span></td>
+          <td class="ee-cell"><span class="warn">⚠</span> Eagle Eye's account (coupon) objects do support an <strong>overrides</strong> mechanism for personalised rewards. However, free-form custom attributes on coupon objects for arbitrary metadata storage and validation appear limited in their documentation.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Any custom attribute storable on a coupon and referenceable as a validation condition: "this code is only valid on mobile, for Gold members, in a specific market" — all in the Rule Builder <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Dynamic / relative expiry</td>
+          <td class="why-cell">"Valid for 14 days from the date of issue to this customer" is a fundamental customer-friendly mechanic. Fixed-date expiry creates a poor experience for late-issued codes.<br><span class="econ">Fixed-expiry coupons issued near their expiry date generate customer complaints and support contacts</span></td>
+          <td class="ee-cell"><span class="warn">⚠</span> Eagle Eye's account objects support fixed start/end dates. Relative-to-issuance expiry windows appear to require configuration at the scheme level rather than per individual coupon issuance event.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Dynamic expiry: "valid for N days/hours from the moment of issuance to this specific customer" — fully configurable per campaign <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Named / user-memorable codes</td>
+          <td class="why-cell">Campaign codes like "SUMMER26" or "BIRTHDAY20" that humans can remember and type are essential for broadcast promotions, social media campaigns, and influencer codes. API-only creation forces engineering involvement for every campaign.<br><span class="econ">Named code campaigns drive incremental engagement from organic social sharing — impossible when codes can only be system-generated strings</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye does not support user-friendly named voucher codes via their UI. API workaround is possible but requires developer involvement for every code creation.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Named voucher codes creatable in the Campaign Manager UI by marketers — no developer involvement, available immediately <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Referral programme</td>
+          <td class="why-cell">Referral programmes require unique member codes, cross-session attribution, and reward triggering when the referee completes a defined action. Partial referral features that only issue codes without attribution tracking are incomplete.<br><span class="econ">Referral programmes deliver the lowest CAC of any acquisition channel — $10–$30 per referred customer vs $100+ for paid acquisition</span></td>
+          <td class="ee-cell"><span class="warn">⚠</span> Eagle Eye's wallet architecture supports member identity and account sharing, but a documented native referral programme mechanic with full cross-session attribution and event-triggered rewards for referees is not visible in their documentation.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Full referral programme: unique codes per member, cross-session attribution, configurable reward triggers for both referrer and referee — no code required <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- S11 — STACKING & CAMPAIGN EVALUATION -->
+<div class="section" id="s11">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 06</span>
+      <h2>Campaign Stacking &amp; Offer Ordering</h2>
+      <p>Without deterministic stacking control, customers can combine offers in ways that generate far deeper discounts than intended. Eagle Eye's stacking model is simpler — but the simplicity comes at the cost of granularity.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">What</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-ee">Eagle Eye AIR</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Stacking control granularity</td>
+          <td class="why-cell">Controlling which offers can stack with which other offers requires per-campaign exclusivity flags — not just category-level limits. A maximum-of-N limit by offer type still allows N offers to stack, and does not prevent specific combinations.<br><span class="econ">Uncontrolled stacking has cost brands millions in a single promotional event — stacking control is a direct margin protection capability</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye stacking rules are limited to <strong>maximum number of offers by offer type, client account type, campaign type, or per-item tender count</strong>. There is <strong>no grouping of campaigns into strategy groups</strong> with per-group stackability policies. You cannot set "Campaign A and Campaign B are mutually exclusive" — only "max N coupons of type X."</td>
+          <td class="t1-cell"><span class="tick">✔</span> Scoped campaign groups with explicit exclusivity flags — set any campaign as exclusive to prevent any other campaign from applying in the same session. Per-campaign budget caps. Full stacking audit trail per session <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Offer ordering mechanism</td>
+          <td class="why-cell">Offer ordering determines which discount is applied first when multiple campaigns qualify — a commercial decision that must be reliably controllable without code changes.<br><span class="econ">Misconfigured offer priority is a leading cause of margin leakage during peak trading events</span></td>
+          <td class="ee-cell"><span class="warn">⚠</span> Eagle Eye supports ordering by offer type, client account type, discount value, points value, and validTo date. This is useful for bulk ordering but lacks the <strong>campaign-specific evaluation tree</strong> that allows marketers to set precise relative priority between individual campaigns.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Visual Campaign Evaluation Tree in the Campaign Manager: campaigns arranged in drag-and-drop order defining exact evaluation sequence, stacking permissions, and exclusivity. No code deployment required — changes take effect on the next session <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Session/item evaluation scope</td>
+          <td class="why-cell">Understanding which campaigns were evaluated for which items within a session — and why certain rules did or did not fire — is essential for debugging and auditing promotional behaviour.<br><span class="econ">Black-box campaign evaluation that cannot be audited per session makes promotional errors invisible until they appear in financial reports</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye's documentation contains <strong>no coverage of session-level or item-level rule evaluation scope or trace</strong>. How offers are evaluated per basket item, and why certain offers fire or not, is not documented.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Full rule evaluation trace per session: every condition evaluated, every effect applied, every campaign that qualified but was excluded by stacking rules — auditable per customer, per transaction <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- S12 — STRIKETHROUGH -->
+<div class="section" id="s12">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 07</span>
+      <h2>Strikethrough Pricing</h2>
+      <p>EU Omnibus Directive and regional regulations mandate accurate "prior price" communication. Retailers without a compliant, automated strikethrough pricing engine face regulatory fines and operational overhead.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">What</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-ee">Eagle Eye AIR</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Dynamic strikethrough rules</td>
+          <td class="why-cell">Percentage-based strikethrough rules that apply dynamically across attribute-filtered product sets avoid the operational overhead of manually maintaining absolute price values per SKU variant.<br><span class="econ">Manual price-book updates for a 10,000-SKU catalogue require dedicated ops resource and introduce data errors at scale</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Eagle Eye has <strong>no equivalent of strikethrough pricing</strong> based on their documentation. No dedicated strikethrough rule engine, no regulatory audit trail for prior-price display.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Percentage-based, category-scoped, attribute-filtered strikethrough rules — original price and computed discounted price returned in one session response <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Cross-channel consistency</td>
+          <td class="why-cell">A strikethrough shown online but not in-store creates regulatory exposure. Pricing must be consistent across every channel from the same rule.<br><span class="econ">EU Omnibus Directive non-compliance: fines up to 4% of annual turnover</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> No strikethrough capability means no cross-channel consistency mechanism — strikethrough would need to be managed entirely outside the platform, with no rule governance or audit trail.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Same session API serves all channels — the strikethrough rule evaluates identically for ecommerce, mobile, and any other integrated channel <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Compliance audit trail</td>
+          <td class="why-cell">Regulators require evidence of the prior price used in a strikethrough calculation. Without an automated log, compliance evidence must be reconstructed manually — costly and error-prone.<br><span class="econ">Regulatory investigations triggered by inability to produce prior-price evidence; penalties are per-SKU in some jurisdictions</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> No strikethrough audit trail — compliance evidence for prior-price display must be sourced from external systems with no link to the promotional rule that generated the display.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Full audit log: every strikethrough event records original price, computed discounted price, the rule that fired, and timestamp — automatically available for regulatory review <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════ S13 — COMMERCIAL ═══════════════════ -->
+<div class="section" id="s13">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">04 — Commercial &amp; Pricing</span>
+      <h2>Commercial Model &amp; Total Cost of Ownership</h2>
+      <p>Eagle Eye's add-on module architecture and published investor guidance on contract growth create a pricing model that starts low and escalates significantly as capabilities are unlocked.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">Factor</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-ee">Eagle Eye AIR</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Pricing structure</td>
+          <td class="why-cell">Add-on module pricing hides the true cost of the full solution at the point of initial contract. Retailers who buy core loyalty discover that promotions adjudication, gamification, and gift cards are separate line items — each with its own licence fee.<br><span class="econ">Eagle Eye's investor communications explicitly highlight 3× average contract growth over 5 years — this is revenue growth at the customer's expense</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Modular pricing: Core loyalty + Cloud Basket Adjudication (add-on) + Message At Till (add-on) + Subscriptions (add-on) + Gamification (Untie Nots — separate product). Multiple licence conversations required for full feature scope. Investor guidance signals deliberate upsell path.</td>
+          <td class="t1-cell"><span class="tick">✔</span> Single platform licence covering promotions, loyalty, coupons, referrals, gamification, and gift cards. No add-on modules for core capabilities. Predictable, volume-based pricing with no feature gating <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">API response time ROI</td>
+          <td class="why-cell">Amazon's published finding that every 100ms of latency costs 1% in sales is widely cited — and directly applicable to checkout engine performance. Eagle Eye's 100–250ms per call compared to Talon.One's 40–60ms total represents a calculable revenue difference.<br><span class="econ">Calculate 2% of total online + app sales as potential additional revenue with Talon.One's lower latency vs. Eagle Eye</span></td>
+          <td class="ee-cell"><span class="warn">⚠</span> 100–250ms per API call (Eagle Eye's own stated average). Multi-call checkout flows push total incentive-decisioning latency to 300–750ms+ — representing a 2–5× latency disadvantage at the checkout critical path.</td>
+          <td class="t1-cell"><span class="tick">✔</span> 40–60ms total for a complete incentive decision across all mechanics. The latency gap is quantifiable as a conversion uplift argument: at $10M in online sales, each 100ms reduction represents ~$100k in additional annual revenue <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Middleware engineering cost</td>
+          <td class="why-cell">Eagle Eye's architectural split requires custom middleware to merge loyalty and promotion results. This is a permanent engineering liability — not a one-time project.<br><span class="econ">Ongoing middleware maintenance: $100k–$300k/year depending on engineering rates and change volume</span></td>
+          <td class="ee-cell"><span class="cross">✘</span> Custom middleware is structurally required to merge Wallet API and POS Connect API results before checkout display. This represents a permanent engineering overhead that Eagle Eye does not carry — but the customer does.</td>
+          <td class="t1-cell"><span class="tick">✔</span> No middleware required — Talon.One is the single decisioning layer. Engineering investment is in the initial integration and in building new use cases, not in maintaining glue code permanently <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="stat-grid" style="margin-top:1.5rem;">
+      <div class="stat-card"><div class="num">3×</div><div class="lbl">Eagle Eye's stated average contract value growth over 5 years (investor guidance)</div></div>
+      <div class="stat-card"><div class="num">2%</div><div class="lbl">Estimated additional sales from Talon.One's lower latency vs. Eagle Eye (Amazon study basis)</div></div>
+      <div class="stat-card"><div class="num">50M</div><div class="lbl">Eagle Eye's maximum coupon code ceiling — Talon.One has no practical limit</div></div>
+      <div class="stat-card"><div class="num">4hrs</div><div class="lbl">Eagle Eye RTO vs. Talon.One's sub-second update deployment</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ S14 — SCORECARD ═══════════════════ -->
+<div class="section" id="s14">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">05 — Scorecard &amp; Decision Framework</span>
+      <h2>Comparative Scorecard</h2>
+      <p>Ratings on a 1–5 scale: 5 = Best in class, 1 = Major capability gap.</p>
+    </div>
+
+    <div class="scorecard">
+      <div class="sc-head catcol">Capability</div>
+      <div class="sc-head eecol">Eagle Eye AIR</div>
+      <div class="sc-head t1col">Talon.One</div>
+
+      <div class="sc-cell cat">Platform architecture (unified vs. split)</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">API simplicity &amp; checkout latency</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Infrastructure isolation &amp; availability SLA</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Maintenance windows &amp; zero-downtime deploys</div>
+      <div class="sc-cell"><span class="score-dot s1">1</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">MACH Alliance certification</div>
+      <div class="sc-cell"><span class="score-dot s1">1</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Third-party integrations (documented)</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Developer docs &amp; SDKs</div>
+      <div class="sc-cell"><span class="score-dot s1">1</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Rule engine flexibility (vs. fixed templates)</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Promotion mechanics depth (BOGO, bundles, tiers, free items, shipping)</div>
+      <div class="sc-cell"><span class="score-dot s3">3</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Combined discount + loyalty in one transaction</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Loyalty ledger depth (multi-currency, earn rules)</div>
+      <div class="sc-cell"><span class="score-dot s4">4</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Reward catalogue &amp; gift cards</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Gamification (missions, streaks, stamp cards)</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Coupon flexibility (custom attributes, dynamic expiry, named codes)</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Campaign stacking control</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Strikethrough pricing</div>
+      <div class="sc-cell"><span class="score-dot s1">1</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Auditability (UI + API)</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Cart size handling (B2B / grocery)</div>
+      <div class="sc-cell"><span class="score-dot s1">1</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Pricing transparency &amp; TCO predictability</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat" style="font-weight:800;">Overall Score</div>
+      <div class="sc-cell" style="font-weight:800; color:var(--warn-red);">40 / 95</div>
+      <div class="sc-cell" style="font-weight:800; color:var(--ok-green);">94 / 95</div>
+    </div>
+
+    <div class="callout blue" style="margin-top:1.5rem;">
+      <strong>Where Eagle Eye Is Genuinely Competitive</strong>
+      Eagle Eye's strongest capabilities are in the loyalty wallet core: multi-ledger architecture, standard earn/burn templates, Stampcard, Bounceback, Continuity, and Meal Deal bundle pricing. For a retailer that only needs standard loyalty earn and a fixed set of templated promotions — with no requirement for combined discount+loyalty effects, no gamification beyond stamps, no strikethrough pricing, and no B2B cart volumes — Eagle Eye covers the basics. The risks emerge the moment requirements go beyond that baseline — which every growth-stage retailer eventually does.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ CONCLUSION ═══════════════════ -->
+<div class="conclusion">
+  <div class="container">
+    <h2>Conclusion &amp; Recommendations</h2>
+    <p>
+      Eagle Eye AIR is a loyalty-first platform that added promotions as a bolt-on. The result is two separate API surfaces, slower checkout latency, templated offer types that cannot be customised without coding, and missing capabilities — strikethrough pricing, gift cards, SDKs, public documentation, native gamification, B2B cart handling — that modern retail requires. Combined with a modular pricing model designed to expand contract value 3× over 5 years, the total cost of working around Eagle Eye's gaps consistently exceeds Talon.One's all-in licence.
+    </p>
+    <p style="margin-top:1rem;">
+      Talon.One resolves all of this from a single rule engine and a single API call — decisioning every incentive type atomically in 40–60ms, configurable by marketers without code, with documented APIs, SDKs, MACH certification, and flat pricing for the full scope.
+    </p>
+
+    <div class="rec-grid">
+      <div class="rec-card">
+        <h4>Technical Win Argument</h4>
+        <p>Lead with API latency: quantify 2% additional sales from 100–250ms → 40–60ms latency reduction against the customer's annual online revenue. At $10M online, this is $200k/year in measurable conversion uplift.</p>
+      </div>
+      <div class="rec-card">
+        <h4>Architecture Demo</h4>
+        <p>Show the single <code>UpdateSession</code> call vs. Eagle Eye's multi-step POS Connect flow. The difference in API volume and middleware requirement is immediately visible and credible to any technical audience.</p>
+      </div>
+      <div class="rec-card">
+        <h4>Flexibility Gap</h4>
+        <p>Identify 2–3 promotion mechanics the prospect already wants to build that are outside Eagle Eye's template list. Free delivery thresholds, cross-product triggers, and combined discount+points are reliable gap areas.</p>
+      </div>
+      <div class="rec-card">
+        <h4>TCO Modelling</h4>
+        <p>Model Eagle Eye's 5-year TCO including add-on licences (Cloud Basket Adjudication, Gamification), middleware engineering, and the 3× contract escalation pattern highlighted in their investor communications.</p>
+      </div>
+      <div class="rec-card">
+        <h4>Gamification Commitment Risk</h4>
+        <p>If the prospect requires missions or streaks, highlight that Eagle Eye's gamification relies on an unintegrated acquisition (Untie Nots) whose strategic focus has shifted — a roadmap risk, not a current GA capability.</p>
+      </div>
+      <div class="rec-card">
+        <h4>Openness &amp; Future-Proofing</h4>
+        <p>MACH membership, public documentation, typed SDKs, and open CDP/CEP integrations position Talon.One as the safe long-term choice. Eagle Eye's proprietary auth, locked docs, and no SDK create long-term switching cost risk.</p>
+      </div>
+    </div>
+
+    <p style="margin-top:2rem; font-size:.8rem; opacity:.5;">
+      This document was prepared as an internal competitive assessment based on first-hand analysis of Eagle Eye AIR's public API documentation, internal competitive evaluations (Valtech), Eagle Eye investor communications, and public product positioning as of March 2026.
+      Eagle Eye capabilities marked with ✅ in source materials are noted where confirmed; items marked as uncertain carry the confidence level from the source analysis.
+      Classification: Confidential — Internal Use Only.
+    </p>
+  </div>
+</div>
+
+</body>
+</html>
