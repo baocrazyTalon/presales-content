@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Talon.One vs. Salesforce — Incentive Management for Omnichannel Retail</title>
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --t1-green:   #0062ff;
+      --t1-dark:    #0B1F3A;
+      --t1-mid:     #1A3A5C;
+      --t1-accent:  #00A3FF;
+      --sf-blue:    #0070D2;
+      --sf-light:   #E8F4FD;
+      --warn-red:   #C0392B;
+      --warn-bg:    #FDF3F2;
+      --ok-green:   #1E8449;
+      --ok-bg:      #EAF7EE;
+      --neutral-bg: #F7F8FA;
+      --border:     #DDE3EC;
+      --text:       #1A1A2E;
+      --text-muted: #5A6272;
+      --font-sans: 'Segoe UI', Helvetica, Arial, sans-serif;
+    }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { font-family: var(--font-sans); color: var(--text); background: #fff; line-height: 1.65; }
+
+    /* ── Typography ── */
+    h1 { font-size: 2.6rem; font-weight: 800; line-height: 1.15; }
+    h2 { font-size: 1.75rem; font-weight: 700; line-height: 1.2; }
+    h3 { font-size: 1.2rem; font-weight: 700; }
+    h4 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--t1-mid); }
+    p  { margin-top: .85rem; }
+    ul, ol { margin-top: .6rem; padding-left: 1.4rem; }
+    li { margin-bottom: .4rem; }
+    strong { font-weight: 700; }
+
+    /* ── Layout ── */
+    .container { max-width: 1060px; margin: 0 auto; padding: 0 2rem; }
+
+    /* ── Cover ── */
+    .cover {
+      background: linear-gradient(135deg, var(--t1-dark) 0%, var(--t1-mid) 60%, #0D3B6B 100%);
+      color: #fff;
+      padding: 5rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::after {
+      content: '';
+      position: absolute; top: -80px; right: -100px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: rgba(0,201,167,.12);
+    }
+    .cover-inner { max-width: 800px; position: relative; z-index: 1; }
+    .cover-label {
+      display: inline-block;
+      background: var(--t1-green);
+      color: #fff;
+      font-weight: 800;
+      font-size: .75rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .3rem .8rem;
+      border-radius: 3px;
+      margin-bottom: 1.5rem;
+    }
+    .cover h1 { margin-bottom: 1.2rem; }
+    .cover .subtitle {
+      font-size: 1.15rem;
+      opacity: .85;
+      max-width: 660px;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+    .cover-meta {
+      display: flex; gap: 2.5rem; flex-wrap: wrap;
+      font-size: .85rem; opacity: .7; margin-top: 2rem;
+    }
+    .cover-meta span strong { display: block; font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; opacity: .9; }
+
+    /* ── Executive Summary banner ── */
+    .exec-banner {
+      background: var(--t1-green);
+      color: #fff;
+      padding: 1.6rem 2rem;
+    }
+    .exec-banner .container { display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap; }
+    .exec-banner h2 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: .07em; white-space: nowrap; padding-top: .15rem; }
+    .exec-banner p { margin: 0; font-size: .95rem; font-weight: 600; }
+
+    /* ── Section wrappers ── */
+    .section { padding: 3.5rem 0; }
+    .section + .section { border-top: 1px solid var(--border); }
+    .section-header { margin-bottom: 2rem; }
+    .section-number {
+      font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--t1-green); margin-bottom: .4rem; display: block;
+    }
+    .section-header h2 { color: var(--t1-dark); }
+    .section-header p { color: var(--text-muted); font-size: .97rem; max-width: 740px; margin-top: .5rem; }
+
+    /* ── Verdict badge ── */
+    .verdict {
+      display: inline-flex; align-items: center; gap: .4rem;
+      font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+      padding: .3rem .7rem; border-radius: 4px; margin-bottom: 1rem;
+    }
+    .verdict.t1   { background: var(--ok-bg);   color: var(--ok-green); }
+    .verdict.sf   { background: var(--warn-bg);  color: var(--warn-red); }
+    .verdict.both { background: #EEF4FF; color: #1A56DB; }
+
+    /* ── Comparison table ── */
+    .compare-table { width: 100%; border-collapse: collapse; font-size: .92rem; margin-top: 1.5rem; }
+    .compare-table th {
+      padding: .75rem 1rem; text-align: left; font-size: .75rem;
+      text-transform: uppercase; letter-spacing: .07em; font-weight: 700; border-bottom: 2px solid var(--border);
+    }
+    .compare-table th.t1col  { color: var(--t1-green); background: var(--t1-dark); border-radius: 4px 4px 0 0; }
+    .compare-table th.sfcol  { color: var(--sf-blue);  background: var(--sf-light); }
+    .compare-table th.catcol { color: var(--text-muted); }
+    .compare-table td { padding: .7rem 1rem; vertical-align: top; border-bottom: 1px solid var(--border); }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:nth-child(even) td { background: var(--neutral-bg); }
+    .compare-table .cat { font-weight: 700; font-size: .82rem; color: var(--t1-mid); }
+    .tick  { color: var(--ok-green);  font-weight: 700; }
+    .cross { color: var(--warn-red);  font-weight: 700; }
+    .warn  { color: #D4820A;          font-weight: 700; }
+
+    /* ── Callout boxes ── */
+    .callout {
+      border-left: 4px solid;
+      border-radius: 0 6px 6px 0;
+      padding: 1rem 1.2rem; margin: 1.5rem 0; font-size: .94rem;
+    }
+    .callout.red   { border-color: var(--warn-red); background: var(--warn-bg); }
+    .callout.green { border-color: var(--t1-green); background: var(--ok-bg); }
+    .callout.blue  { border-color: var(--t1-accent); background: #EEF7FF; }
+    .callout.gold  { border-color: #D4820A; background: #FEF9EE; }
+    .callout strong { display: block; margin-bottom: .3rem; }
+
+    /* ── Stat cards ── */
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+    .stat-card {
+      background: var(--t1-dark);
+      color: #fff;
+      border-radius: 8px;
+      padding: 1.4rem 1.2rem;
+      text-align: center;
+    }
+    .stat-card .num { font-size: 2.4rem; font-weight: 800; color: var(--t1-green); line-height: 1; }
+    .stat-card .lbl { font-size: .8rem; opacity: .75; margin-top: .4rem; line-height: 1.4; }
+
+    /* ── API flow diagram ── */
+    .flow-wrapper { overflow-x: auto; margin: 1.5rem 0; }
+    .flow-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; min-width: 600px; }
+    .flow-box {
+      background: var(--neutral-bg); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.2rem;
+    }
+    .flow-box h4 { margin-bottom: .8rem; font-size: .85rem; }
+    .flow-box.t1-box { border-top: 3px solid var(--t1-green); }
+    .flow-box.sf-box { border-top: 3px solid var(--sf-blue); }
+    .flow-step {
+      display: flex; align-items: flex-start; gap: .6rem;
+      padding: .45rem .6rem; border-radius: 5px; margin-bottom: .4rem; font-size: .83rem;
+    }
+    .flow-step .num {
+      width: 22px; height: 22px; flex-shrink: 0;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: .72rem; font-weight: 800; color: #fff;
+    }
+    .t1-box .flow-step .num { background: var(--t1-green); color: #fff; }
+    .sf-box .flow-step .num { background: var(--sf-blue); }
+    .flow-step.ok  { background: var(--ok-bg); }
+    .flow-step.bad { background: var(--warn-bg); }
+    .flow-step.neu { background: #fff; border: 1px solid var(--border); }
+    .flow-total {
+      font-size: .82rem; font-weight: 800; text-align: center;
+      padding: .5rem; border-radius: 5px; margin-top: .6rem;
+    }
+    .flow-total.t1 { background: var(--t1-green); color: #fff; }
+    .flow-total.sf { background: var(--warn-bg);  color: var(--warn-red); }
+
+    /* ── Architecture diagram ── */
+    .arch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+    .arch-box {
+      border-radius: 8px; padding: 1.4rem;
+      border: 1px solid var(--border);
+    }
+    .arch-box.t1  { background: var(--t1-dark); color: #fff; }
+    .arch-box.sf  { background: var(--sf-light); color: var(--t1-dark); }
+    .arch-box h3  { margin-bottom: 1rem; }
+    .arch-box.t1 h3 { color: var(--t1-green); }
+    .arch-box.sf h3 { color: var(--sf-blue); }
+    .arch-item {
+      display: flex; align-items: center; gap: .6rem;
+      padding: .5rem .7rem; border-radius: 5px; margin-bottom: .5rem; font-size: .88rem;
+    }
+    .arch-box.t1 .arch-item { background: rgba(255,255,255,.07); }
+    .arch-box.sf .arch-item { background: rgba(0,112,210,.06); }
+    .arch-badge {
+      font-size: .68rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+      padding: .15rem .45rem; border-radius: 3px; flex-shrink: 0;
+    }
+    .arch-box.t1 .arch-badge { background: var(--t1-green); color: #fff; }
+    .arch-box.sf .arch-badge { background: var(--sf-blue);  color: #fff; font-size: .63rem; }
+    .db-note {
+      font-size: .78rem; opacity: .7; margin-top: .6rem; font-style: italic;
+    }
+
+    /* ── Scorecard ── */
+    .scorecard { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 0; margin-top: 1.5rem; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .scorecard .sc-head { font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; padding: .7rem 1rem; border-bottom: 2px solid var(--border); }
+    .scorecard .sc-head.t1col { background: #0062ff; color: #fff; text-align: center; }
+    .scorecard .sc-head.sfcol { background: #00a1e0; color: #fff; text-align: center; }
+    .scorecard .sc-row { display: contents; }
+    .scorecard .sc-cell { padding: .65rem 1rem; border-bottom: 1px solid var(--border); font-size: .88rem; }
+    .scorecard .sc-cell:nth-child(3n+2), .scorecard .sc-cell:nth-child(3n+3) { text-align: center; }
+    .scorecard .sc-cell:last-child { border-right: none; }
+    .score-dot {
+      display: inline-block; width: 28px; height: 28px; border-radius: 50%;
+      line-height: 28px; text-align: center; font-size: .82rem; font-weight: 800;
+    }
+    .s5 { background: #1E8449; color: #fff; }
+    .s4 { background: #58D68D; color: #fff; }
+    .s3 { background: #F39C12; color: #fff; }
+    .s2 { background: #E74C3C; color: #fff; }
+    .s1 { background: #922B21; color: #fff; }
+
+    /* ── Integration chapter ── */
+    .int-card {
+      display: flex; gap: 1.2rem; align-items: flex-start;
+      background: var(--neutral-bg); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.3rem; margin-bottom: 1rem;
+    }
+    .int-card .int-icon {
+      flex-shrink: 0; width: 48px; height: 48px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; font-weight: 800;
+    }
+    .int-card .int-icon.dc  { background: #E8F0FE; color: #1A73E8; }
+    .int-card .int-icon.cc  { background: #E8F8FF; color: #00A1E0; }
+    .int-card .int-icon.mc  { background: #FFF0F5; color: #C0392B; }
+    .int-card h3 { font-size: 1rem; margin-bottom: .3rem; }
+    .int-card p  { margin-top: .3rem; font-size: .9rem; color: var(--text-muted); }
+    .int-card ul { font-size: .88rem; color: var(--text-muted); }
+    .int-banner {
+      background: linear-gradient(135deg, var(--t1-dark), var(--t1-mid));
+      color: #fff; border-radius: 10px; padding: 2rem; margin-bottom: 1.5rem;
+    }
+    .int-banner h3 { color: var(--t1-green); font-size: 1.1rem; margin-bottom: .6rem; }
+    .int-banner p  { margin: 0; opacity: .85; font-size: .93rem; }
+
+    /* ── Conclusion ── */
+    .conclusion {
+      background: linear-gradient(135deg, var(--t1-dark), #0D3B6B);
+      color: #fff; padding: 4rem 2rem;
+    }
+    .conclusion h2 { color: var(--t1-green); font-size: 2rem; margin-bottom: 1.2rem; }
+    .conclusion p  { opacity: .85; max-width: 740px; }
+    .conclusion .rec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 2rem; }
+    .rec-card { background: rgba(255,255,255,.07); border-radius: 8px; padding: 1.2rem; }
+    .rec-card h4 { color: var(--t1-green); margin-bottom: .5rem; font-size: .85rem; }
+    .rec-card p  { opacity: .8; font-size: .85rem; margin: 0; }
+
+    /* ── TOC ── */
+    .toc {
+      background: var(--neutral-bg); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.5rem 2rem; margin: 2.5rem 0;
+    }
+    .toc h4 { margin-bottom: .8rem; color: var(--t1-mid); }
+    .toc ol  { margin: 0; }
+    .toc li  { margin-bottom: .3rem; font-size: .9rem; }
+    .toc a   { color: var(--t1-accent); text-decoration: none; font-size: .9rem; }
+    .toc a:hover { text-decoration: underline; }
+
+    /* ── 4-column comparison table ── */
+    .comp-table { width: 100%; border-collapse: collapse; font-size: .86rem; margin-top: 1.5rem; table-layout: fixed; }
+    .comp-table thead tr { background: transparent; }
+    .comp-table th { padding: .6rem .85rem; text-align: left; font-size: .7rem; text-transform: uppercase; letter-spacing: .07em; font-weight: 800; border-bottom: 2px solid var(--border); }
+    .comp-table th.col-what { width: 16%; background: var(--t1-dark); color: #cdd8e8; }
+    .comp-table th.col-why  { width: 27%; background: #FEF9EE; color: #7A5200; }
+    .comp-table th.col-sf   { width: 27%; background: #00a1e0; color: #fff; }
+    .comp-table th.col-t1   { width: 30%; background: #0062ff; color: #fff; }
+    .comp-table td { padding: .6rem .85rem; vertical-align: top; border-bottom: 1px solid var(--border); line-height: 1.5; }
+    .comp-table tr:nth-child(even) td { background: var(--neutral-bg); }
+    .comp-table tr:nth-child(even) td.what-cell { background: #0e2952; }
+    .comp-table tr:last-child td { border-bottom: none; }
+    .comp-table .what-cell { font-weight: 700; font-size: .8rem; color: #cdd8e8; background: var(--t1-dark); }
+    .comp-table .why-cell  { font-size: .82rem; color: var(--text); }
+    .comp-table .why-cell .econ { display: inline-block; margin-top: .3rem; font-size: .75rem; font-weight: 700; color: #7A5200; background: #FEF3D0; border-radius: 3px; padding: .1rem .4rem; }
+    .comp-table .sf-cell   { font-size: .82rem; color: var(--text); }
+    .comp-table .t1-cell   { font-size: .82rem; color: var(--text); }
+    .adv-badge {
+      display: inline-block;
+      background: var(--t1-green); color: #fff;
+      font-size: .62rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+      padding: .12rem .45rem; border-radius: 3px; margin-left: .35rem; vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    /* ── Section group header (Technology / Business) ── */
+    .section-group {
+      background: var(--t1-dark); color: #fff;
+      padding: 3rem 2rem;
+    }
+    .section-group-inner { max-width: 1060px; margin: 0 auto; }
+    .section-group h2 { font-size: 2rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--t1-green); margin: 0; }
+    .section-group p { margin: .6rem 0 0; font-size: 1.05rem; opacity: .75; }
+
+    /* ── Print / PDF ── */
+    @media print {
+      .cover, .section-group, .exec-banner, .stat-card, .comp-table th, .scorecard .sc-head,
+      .arch-box.t1, .conclusion, .int-banner
+        { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .toc { display: none; }
+      .section { page-break-inside: avoid; }
+      h2 { page-break-after: avoid; }
+      .flow-grid, .arch-grid, .scorecard, .stat-grid { page-break-inside: avoid; }
+      .comp-table { page-break-inside: auto; font-size: 7.5pt; }
+      .comp-table tr { page-break-inside: avoid; }
+      .comp-table th, .comp-table td { padding: .35rem .55rem; }
+      .adv-badge { font-size: 6pt; padding: .1rem .3rem; }
+      .section-group { page-break-after: avoid; }
+      body { font-size: 10pt; }
+      .cover h1 { font-size: 20pt; }
+      a { color: inherit; text-decoration: none; }
+      .print-hide { display: none; }
+    }
+    @page { margin: 1.4cm 1.6cm; }
+
+    /* ── Responsive ── */
+    @media (max-width: 720px) {
+      h1 { font-size: 1.9rem; }
+      .flow-grid, .arch-grid { grid-template-columns: 1fr; }
+      .scorecard { grid-template-columns: 1fr; }
+      .scorecard .sc-head, .scorecard .sc-cell { display: block; }
+      .comp-table, .comp-table thead, .comp-table tbody, .comp-table th, .comp-table td, .comp-table tr { display: block; }
+      .comp-table th { display: none; }
+      .comp-table td { border-bottom: none; }
+      .comp-table tr { border: 1px solid var(--border); border-radius: 6px; margin-bottom: .8rem; overflow: hidden; }
+      .comp-table .what-cell { font-size: .9rem; padding: .5rem .85rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     COVER
+══════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="container">
+    <div class="cover-inner">
+      <span class="cover-label">Competitive Analysis · March 2026</span>
+      <h1>One Platform to Rule Them All:<br>Talon.One vs. the Salesforce Stack<br>for Omnichannel Incentive Management</h1>
+      <p class="subtitle">
+        An assessment of why building loyalty and promotions on Salesforce Commerce Cloud,
+        Salesforce Loyalty Management, and Salesforce CRM creates structural complexity, high TCO,
+        and an inability to scale — versus deploying a single, MACH-native Promotions &amp; Loyalty Engine.
+      </p>
+      <div class="cover-meta">
+        <span><strong>Classification</strong>Confidential — Internal Use only</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     EXECUTIVE SUMMARY
+══════════════════════════════════════════════════ -->
+<div class="exec-banner">
+  <div class="container">
+    <h2>Executive<br>Summary</h2>
+    <p>
+      An omnichannel retailer operating ecommerce and stores requires a single source of truth for promotions, loyalty,
+      coupons, and referrals — responsive in real time across every touchpoint.
+      The Salesforce approach forces businesses to purchase, integrate, and operate <strong>at least three separate products</strong>
+      (Commerce Cloud for promotions, Loyalty Management for loyalty, and CRM/Data Cloud for customer profiles),
+      each with its own rule model, data schema, and API surface.
+      The result is high implementation cost, slow time-to-market, error-prone rule management, and structural barriers
+      to true omnichannel consistency.
+      <strong>Talon.One delivers all capabilities — promotions, loyalty, coupons, referrals, and real-time decisioning —
+      through a <em>single</em> rule engine and a <em>single</em> API endpoint, while remaining fully open to
+      best-of-breed partners including Salesforce's own Data Cloud, Commerce Cloud, and Marketing Cloud.</strong>
+    </p>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     TABLE OF CONTENTS
+══════════════════════════════════════════════════ -->
+<div class="container">
+  <div class="toc print-hide">
+    <h4>Contents</h4>
+    <ul style="list-style:none;padding-left:0;margin:0;">
+      <li style="margin-bottom:.4rem;"><strong><a href="#s1" style="color:inherit;text-decoration:none;">01 — Introduction: The Salesforce Stack: Three Products for managing Incentives, One Problem</a></strong></li>
+      <li style="margin-bottom:.4rem;"><strong>02 — Technology</strong>
+        <ul style="list-style:none;padding-left:1rem;margin-top:.3rem;">
+          <li style="margin-bottom:.25rem;"><a href="#s2"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 01 —</span>Architecture &amp; Scalability</a></li>
+          <li style="margin-bottom:.25rem;"><a href="#s4"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 02 —</span>API Response Time &amp; Cart Session Data Flow</a></li>
+          <li style="margin-bottom:.25rem;"><a href="#s8"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 03 —</span>Single Environment for All Countries &amp; Brands</a></li>
+          <li style="margin-bottom:.25rem;"><a href="#s9"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 04 —</span>MACH Architecture vs. Monolith Stack</a></li>
+          <li style="margin-bottom:.25rem;"><a href="#s11"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 05 —</span>Innovation Velocity: Release Cadence</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:.4rem;"><strong>03 — Business</strong>
+        <ul style="list-style:none;padding-left:1rem;margin-top:.3rem;">
+          <li style="margin-bottom:.25rem;"><a href="#s3"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 01 —</span>Rule Engine Flexibility vs. Templatised Promotion Builders</a></li>
+          <li style="margin-bottom:.25rem;"><a href="#s16"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 02 —</span>Promotion Mechanics Depth: Discounts, Bundles &amp; Effects</a></li>
+          <li style="margin-bottom:.25rem;"><a href="#s5"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 03 —</span>Omnichannel Strikethrough Pricing</a></li>
+          <li style="margin-bottom:.25rem;"><a href="#s6"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 04 —</span>Coupon Flexibility</a></li>
+          <li style="margin-bottom:.25rem;"><a href="#s7"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 05 —</span>Loyalty Ledgers, Multi-Currency &amp; Time Zones</a></li>
+          <li style="margin-bottom:.25rem;"><a href="#s15"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 06 —</span>Gamification: Achievements, Streaks &amp; Stamp Cards</a></li>
+          <li style="margin-bottom:.25rem;"><a href="#s17"><span style="color:var(--text-muted);font-weight:400;margin-right:.4rem;">Section 07 —</span>Analytics &amp; Reporting: Native Self-Service vs. Bolt-On Modules</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:.4rem;"><strong><a href="#s10" style="color:inherit;text-decoration:none;">04 — Developer &amp; Marketer Experience</a></strong></li>
+      <li style="margin-bottom:.4rem;"><strong><a href="#s13" style="color:inherit;text-decoration:none;">05 — Good News for Salesforce Customers</a></strong></li>
+      <li style="margin-bottom:.4rem;"><strong><a href="#s14" style="color:inherit;text-decoration:none;">06 — Scorecard &amp; Decision Framework</a></strong></li>
+      <li><strong>07 — Conclusion &amp; Recommendations</strong></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     S1 — THE STACK PROBLEM
+══════════════════════════════════════════════════ -->
+<div class="section" id="s1">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">01 — Introduction</span>
+      <h2>The Salesforce Stack: Three Products for managing Incentives, One Problem</h2>
+      <p>Salesforce markets an "omnichannel promotion and loyalty" offering. In practice it is an assembly of separate products — each with its own rule model, database, developer toolchain, and pricing tier — that must be purchased, integrated, and operated simultaneously.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">Component</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-sf">Salesforce</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Platform unity</td>
+          <td class="why-cell">Fragmented platforms multiply licence costs, integration projects, and operational teams. Every seam between products is a potential failure point and a budget line item.<br><span class="econ">Each integration layer costs $200k–$500k+ to build and maintain annually</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> Requires SFCC (ecommerce promotions) + SFLM (loyalty) + SF CRM (identity) + Data Cloud (segmentation) + Marketing Cloud (comms) — five separate products, five contracts</td>
+          <td class="t1-cell"><span class="tick">✔</span> One platform for promotions, loyalty, coupons, referrals, giveaways, and real-time decisioning — one contract, one API, one rule engine <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Combined discount + loyalty effects</td>
+          <td class="why-cell">Customers expect "earn points AND get a discount" in a single transaction. Inability to combine effects forces two separate campaigns and produces inconsistent customer experiences.<br><span class="econ">Missed personalisation = lower basket size and loyalty programme devaluation</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFCC promotions and SFLM loyalty are governed by completely separate products with no shared campaign model — a discount and a point accrual cannot be triggered by one rule</td>
+          <td class="t1-cell"><span class="tick">✔</span> Both effects fire from a single rule: e.g. "10% off + 2× points on Category A for Gold members" — one campaign, one configuration <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Total cost of ownership</td>
+          <td class="why-cell">Platform TCO includes licence fees, implementation, integration maintenance, and specialist headcount. A fragmented stack multiplies all four.<br><span class="econ">SFLM alone starts at $20k+/month before SFCC, CRM, or Data Cloud licences</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> Minimum 3 product licences required for full scope; Apex developer headcount required for customisation; integration middleware must be built and owned by the customer</td>
+          <td class="t1-cell"><span class="tick">✔</span> Single licence covers the full incentive scope; no proprietary developer language; integration via standard REST APIs <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Data consistency</td>
+          <td class="why-cell">Customer profile, transaction history, and loyalty balance must be in sync across every product in real time. Out-of-sync data causes incorrect offer targeting and point balance errors shown to customers.<br><span class="econ">Customer-visible balance errors directly erode trust and loyalty programme NPS</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFCC, SFLM, and CRM each maintain separate databases; keeping them in sync requires near-real-time ETL or event streaming infrastructure — a permanent operational overhead</td>
+          <td class="t1-cell"><span class="tick">✔</span> One data model across all capabilities — no synchronisation required, no risk of divergence <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="stat-grid" style="margin-top:1.8rem;">
+      <div class="stat-card"><div class="num">3+</div><div class="lbl">Salesforce products required for full omnichannel incentives</div></div>
+      <div class="stat-card"><div class="num">1</div><div class="lbl">Talon.One platform for the same scope</div></div>
+      <div class="stat-card"><div class="num">$20k+</div><div class="lbl">SFLM monthly starting price — before SFCC &amp; CRM licences</div></div>
+      <div class="stat-card"><div class="num">6 wks</div><div class="lbl">Time to build one promotion in SFCC (Reebok reference case)</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION GROUP: TECHNOLOGY
+══════════════════════════════════════════════════ -->
+<div class="section-group">
+  <div class="section-group-inner">
+    <h2>02 — Technology</h2>
+    <p>Architecture, API, Scalability, Openness &amp; Innovation Velocity</p>
+  </div>
+</div>
+
+<!-- S2 — ARCHITECTURE & SCALABILITY -->
+<div class="section" id="s2">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 01</span>
+      <h2>Architecture &amp; Scalability</h2>
+      <p>Architectural choices made during platform selection define the operational ceiling for the next decade — especially for omnichannel retailers facing Black Friday peaks, flash sales, and simultaneous global events.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">What</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-sf">Salesforce</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Deployment model</td>
+          <td class="why-cell">A cloud-native, microservices architecture scales horizontally on demand. Shared-resource platforms cap throughput under load, causing failed checkouts and lost revenue during peak events.<br><span class="econ">A 1-hour checkout outage on peak day = 5–10% of annual online revenue at risk</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> SFCC is multi-tenant SaaS; SFLM runs on the Salesforce Platform with shared governor limits — throughput is capped at the platform level, not just per customer</td>
+          <td class="t1-cell"><span class="tick">✔</span> Cloud-native, horizontally auto-scaling microservices; customers process billions of API calls per month with no capacity pre-provisioning <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Cross-channel real-time coverage</td>
+          <td class="why-cell">A single session API that covers all channels — ecommerce, mobile, kiosk, call centre — ensures rule consistency everywhere. Channel-specific APIs require duplicate configuration and inevitably diverge.<br><span class="econ">Inconsistent offers across channels drive customer complaints and erode brand trust</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFCC promotions are ecommerce-only; in-store requires custom middleware; loyalty points require a separate SFLM API call — no single cross-channel session</td>
+          <td class="t1-cell"><span class="tick">✔</span> One UpdateSession API covers every channel identically — ecommerce, mobile app, kiosk, call centre — same rules, same result, consistently <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">API-first design</td>
+          <td class="why-cell">True API-first means every capability is accessible programmatically with no proprietary language required. Proprietary APIs and extensions lock development into specialist skillsets and slow onboarding.<br><span class="econ">Apex developer day rates run 2–3× standard developer rates; scarce skill pool</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> SFCC uses proprietary OCAPI/SCAPI; SFLM exposes REST but many loyalty operations require Apex or Flow to complete — standard developers cannot fully operate the platform</td>
+          <td class="t1-cell"><span class="tick">✔</span> Every feature is REST API-accessible; full headless deployment supported; standard developer skills sufficient; Postman collections and SDKs provided <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">No-code customisation</td>
+          <td class="why-cell">If marketers need developers to change promotion logic, campaign velocity drops and IT backlogs grow. Rule Builder UIs allow business teams to operate independently, reducing TTM from weeks to hours.<br><span class="econ">Developer dependency adds $5k–$20k per campaign iteration in large enterprises</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> Complex scenarios in SFCC require APEX cartridge development; SFLM needs Apex for anything outside 8 fixed templates — routine changes require engineering resource</td>
+          <td class="t1-cell"><span class="tick">✔</span> Boolean Rule Builder UI (AND/OR/NOT, nested groups) — marketers build arbitrarily complex campaigns without code; developers only needed for initial integration <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Uptime SLA</td>
+          <td class="why-cell">Incentive engine downtime means discounts and loyalty cannot be applied at checkout — forcing either a degraded customer experience or a complete checkout failure. Shared-platform incidents cascade across all accounts.<br><span class="econ">Every hour of incentive engine downtime risks abandoned baskets and customer complaints</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> Shared Salesforce platform SLAs — any Salesforce-wide incident (which occur several times per year) affects all SFCC and SFLM instances simultaneously; no dedicated infra option</td>
+          <td class="t1-cell"><span class="tick">✔</span> 99.99% uptime SLA available with dedicated infrastructure options; customer incidents are isolated and do not affect other accounts <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- S4 — API RESPONSE TIME & CART SESSION DATA FLOW -->
+<div class="section" id="s4">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 02</span>
+      <h2>API Response Time &amp; Cart Session Data Flow</h2>
+      <p>Every millisecond of checkout latency has a measurable impact on conversion. The number of sequential API round-trips in the critical checkout path is the primary driver of latency and partial-failure risk.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">What</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-sf">Salesforce</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">API calls per checkout</td>
+          <td class="why-cell">Each additional API call in the checkout critical path adds latency and introduces a new failure point. If any call fails, the customer receives an incomplete result — missing discount or missing points.<br><span class="econ">100ms added checkout latency reduces conversion by ~1% (Google/Deloitte study)</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> Minimum 5–7 sequential calls required: SFCC price-books → SFCC promotions → SFCC coupon validation → SFLM accrual → SFLM member offers → custom middleware merge → final render</td>
+          <td class="t1-cell"><span class="tick">✔</span> Single <code>UpdateSession</code> call returns all results: discounts, points delta, coupon validity, offer list, messages — one call, one response, full coverage <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">p99 checkout latency</td>
+          <td class="why-cell">Tail latency (p99) defines the worst experience 1 in 100 customers gets. Under load, multi-step pipelines compound latency multiplicatively — a 50ms step becomes a 400ms+ checkout on Black Friday.<br><span class="econ">Slow checkouts are the #1 driver of cart abandonment on mobile</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> No published SLA for checkout decisioning latency; multi-system orchestration means p99 is dominated by the slowest call plus middleware processing time</td>
+          <td class="t1-cell"><span class="tick">✔</span> Consistent sub-100ms p99 latency on the incentive decisioning call; SLA-backed performance; load-tested at billions of calls per month <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Partial failure resilience</td>
+          <td class="why-cell">When one system in a multi-call pipeline fails, the customer receives a checkout with missing data: no discount shown, or no points applied. This drives customer contacts and erodes trust in the incentive programme.<br><span class="econ">Each mispplied incentive generates an average 2–4 customer service contacts</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> If SFLM is unavailable, loyalty points are silently dropped; if SFCC coupon service fails, coupons are not validated — no atomic rollback across systems</td>
+          <td class="t1-cell"><span class="tick">✔</span> Single atomic session — the response either contains all effects or none; API-level rollback reverses all effects (points, discounts) atomically if an order is cancelled <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Custom middleware requirement</td>
+          <td class="why-cell">Any middleware layer between two vendor systems must be built, hosted, monitored, and maintained by the customer. It is a permanent engineering liability that grows with every new rule or product added.<br><span class="econ">Post-integration middleware maintenance averages $100k–$300k/year in dedicated engineering</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> A custom middleware layer is architecturally mandatory to merge SFCC promotion results with SFLM loyalty results before sending to the checkout — this is not optional</td>
+          <td class="t1-cell"><span class="tick">✔</span> No middleware needed — Talon.One is the single decisioning layer; webhooks push results to downstream systems post-session without synchronous coupling <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Live points preview at cart</td>
+          <td class="why-cell">Showing a customer "you will earn 240 points on this order" before checkout is a proven conversion driver. Delivering it requires a real-time calculation against the loyalty engine — without permanently writing a transaction to the ledger.<br><span class="econ">Live "points you'll earn" displays at cart increase loyalty programme engagement and checkout completion rates measurably</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> Salesforce provides a <strong>Transaction Journal Simulation API</strong> (SFLM Loyalty Connect) to approximate this — but it is a cross-cloud call from SFCC to the Salesforce Platform, with three separate implementation methods (Direct API, Flow Action, or Marketing Cloud Personalization), each with its own latency profile. Salesforce's own documentation advises against calling it on every "Add to Cart" click due to API governor limits and latency — restricting it to "View Cart" or "Checkout" only. The simulation also does not share a rule engine with SFCC's promotion system, meaning the combined discount + points preview still requires merging two separate API responses</td>
+          <td class="t1-cell"><span class="tick">✔</span> The standard <code>UpdateSession</code> call already returns the full pending state — discounts applied, points that will be earned, coupons validated — on every cart update, at every touchpoint, with no separate simulation endpoint, no governor limits, and no restriction on call frequency. One call, one response, live at every interaction <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout red" style="margin-top:1.5rem;">
+      <strong>⚠ How Salesforce's "Simulation" API Exposes the Architectural Gap</strong>
+      <p style="margin:.5rem 0 0;">The existence of a dedicated simulation endpoint is itself evidence of the problem. Because SFLM and SFCC are separate systems with separate databases, Salesforce had to build a special non-committing API call just to answer the question: "what will this cart be worth in points?" This API:</p>
+      <table style="margin:.75rem 0 0; width:100%; border-collapse:collapse; font-size:.81rem;">
+        <tr style="border-bottom:1px solid rgba(0,0,0,.08);">
+          <td style="padding:.55rem .6rem .55rem 0; vertical-align:top; white-space:nowrap; color:#c0392b; font-weight:700; padding-right:.75rem;">Cross-cloud round-trip</td>
+          <td style="padding:.55rem 0; vertical-align:top; line-height:1.55;">SFCC (standalone cloud) → Salesforce Platform (separate cloud), adding network hops that do not exist in a single-platform architecture.</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(0,0,0,.08);">
+          <td style="padding:.55rem .6rem .55rem 0; vertical-align:top; white-space:nowrap; color:#c0392b; font-weight:700; padding-right:.75rem;">API governor limits</td>
+          <td style="padding:.55rem 0; vertical-align:top; line-height:1.55;">Counts against Salesforce Platform API governor limits shared across all integrations in the org — a busy checkout period can exhaust limits needed by other processes.</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(0,0,0,.08);">
+          <td style="padding:.55rem .6rem .55rem 0; vertical-align:top; white-space:nowrap; color:#c0392b; font-weight:700; padding-right:.75rem;">Rate-limiting required</td>
+          <td style="padding:.55rem 0; vertical-align:top; line-height:1.55;">Salesforce explicitly recommends not calling it on every "Add to Cart" click — real-time per-item feedback is architecturally discouraged.</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(0,0,0,.08);">
+          <td style="padding:.55rem .6rem .55rem 0; vertical-align:top; white-space:nowrap; color:#c0392b; font-weight:700; padding-right:.75rem;">Second merge step</td>
+          <td style="padding:.55rem 0; vertical-align:top; line-height:1.55;">Simulation returns loyalty points only; SFCC's promotion result is a separate response. Combining them into a single "discount + points" display requires custom integration code.</td>
+        </tr>
+        <tr>
+          <td style="padding:.55rem .6rem .55rem 0; vertical-align:top; white-space:nowrap; color:#c0392b; font-weight:700; padding-right:.75rem;">Three implementation paths</td>
+          <td style="padding:.55rem 0; vertical-align:top; line-height:1.55;">Direct API, Flow Action, and Marketing Cloud Personalization each carry different latency characteristics, different failure modes, and different maintenance overhead.</td>
+        </tr>
+      </table>
+      <p style="margin:.6rem 0 0;"><strong>Talon.One has no simulation endpoint because it does not need one.</strong> The same <code>UpdateSession</code> call that governs the checkout also returns the complete pending incentive state — discounts, points, coupons — on every update, atomically, from a single system. Critically, points are calculated in real time against the <em>post-discount</em> net value: the engine evaluates the full rule logic set by business users — including item-level discounts, order-level deductions, and any active multipliers — and computes the exact loyalty earn on the final cart value before the customer has even reached the payment screen.</p>
+    </div>
+  </div>
+</div>
+
+<!-- S8 — SINGLE ENVIRONMENT: MULTI-BRAND / MULTI-COUNTRY -->
+<div class="section" id="s8">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 03</span>
+      <h2>Single Environment for All Countries &amp; Brands</h2>
+      <p>Retail groups operating multiple brands and geographies need a platform with shared governance and reporting while preserving brand-level isolation — without duplicating infrastructure or operational teams per brand.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">What</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-sf">Salesforce</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Multi-brand in one instance</td>
+          <td class="why-cell">Running separate instances per brand multiplies platform costs, admin overhead, and the number of teams needed. Cross-brand promotions (e.g. group-wide loyalty) become technically impossible.<br><span class="econ">Each additional SFCC realm adds ~$30k–$80k/year in licence and ops costs</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFCC requires a separate storefront realm per brand; SFLM requires separate org configuration per brand — no shared management layer</td>
+          <td class="t1-cell"><span class="tick">✔</span> Multiple brand Applications scoped within a single Talon.One account — shared governance, isolated rule sets, single contract <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Multi-country rule variations</td>
+          <td class="why-cell">Country-specific pricing, VAT rules, and regulatory restrictions must be expressed as attributes within a campaign, not as entirely separate campaigns. Duplicating campaigns per country creates an unmaintainable rule estate.<br><span class="econ">Duplicate campaign management multiplies human error risk and time-to-market per market</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> Requires separate promotions per SFCC storefront; no mechanism to share or inherit rules across storefronts — every country is a full rebuild</td>
+          <td class="t1-cell"><span class="tick">✔</span> Country/locale is a first-class rule attribute: one campaign can express "10% off in UAE, 15% off in Kuwait" in a single rule with localised conditions <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Centralised reporting</td>
+          <td class="why-cell">Group-level marketing and finance teams need cross-brand performance data without building a bespoke BI aggregation layer. Siloed reporting per realm means the CFO cannot see total incentive spend across the group.<br><span class="econ">Building a cross-realm BI layer costs $150k–$400k and requires ongoing ETL maintenance</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> Reporting is siloed per SFCC realm and per SFLM org — a separate data warehousing project is required for any cross-brand or cross-country view</td>
+          <td class="t1-cell"><span class="tick">✔</span> Group-level dashboards available natively: total incentive spend, redemption rates, loyalty balances — across all brands and countries in one view <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Role-based access per brand</td>
+          <td class="why-cell">Brand marketers should operate independently within their scope without risk of touching another brand's rules or budgets. Overly permissive access models create misconfiguration risk at scale.<br><span class="econ">A single cross-brand misconfiguration can trigger unintended discounts across the entire catalogue</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> SFCC's permission model is complex; a documented quirk allows marketers to create promotions referencing product catalogues not assigned to their storefront — a silent, undetected misconfiguration</td>
+          <td class="t1-cell"><span class="tick">✔</span> Granular RBAC: brand marketers see and edit only their Application; group-level admins have cross-brand visibility and budget governance <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Global budget management</td>
+          <td class="why-cell">Without real-time budget caps across campaigns and brands, promotion overspend is only detected after the damage is done — when the finance team reconciles the month.<br><span class="econ">Uncontrolled stacking has cost brands millions in a single promotional event (see SFCC stacking incidents)</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> No native cross-brand budget governance; budget monitoring requires custom reporting built on top of SFCC and SFLM data exports</td>
+          <td class="t1-cell"><span class="tick">✔</span> Real-time budget caps per campaign, per brand, and per group — system stops issuing rewards automatically when the cap is reached <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- S9 — MACH ARCHITECTURE -->
+<div class="section" id="s9">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 04</span>
+      <h2>MACH Architecture vs. Tightly Coupled Stack</h2>
+      <p>The architecture of the incentive platform determines how freely a business can adopt new channels, data sources, or adjacent technologies — and how deep the vendor lock-in becomes over time.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">What</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-sf">Salesforce</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Microservices (M)</td>
+          <td class="why-cell">Independent, deployable services allow the incentive engine, loyalty ledger, and coupon vault to scale and be updated independently without a full-platform release cycle.<br><span class="econ">Monolithic release dependencies block new features for 4–16 months at Salesforce's 3×/year cadence</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> SFCC and SFLM are separate monolithic products; changes to one can require re-testing and re-certification of the other; no independent service scaling</td>
+          <td class="t1-cell"><span class="tick">✔</span> Every capability (promotion engine, loyalty ledger, coupon vault, rule evaluator) is an independently deployed, auto-scaled microservice <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">API-first (A)</td>
+          <td class="why-cell">Every feature must be accessible via a documented, stable API. Proprietary extension languages create staffing dependency and create code that becomes a liability when the vendor natively ships the feature.<br><span class="econ">Apex custom code becomes technical debt when Salesforce ships native solutions — rewrite cost is full project scope</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> Complex customisation requires Apex — a proprietary Java-like language tied to the Salesforce platform. Apex developers command premium rates and are a scarce hiring pool</td>
+          <td class="t1-cell"><span class="tick">✔</span> All features exposed via documented REST API. No proprietary language required. Any standard developer can integrate and extend <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Cloud-native SaaS (C)</td>
+          <td class="why-cell">A true cloud-native SaaS requires no infrastructure ownership, no capacity planning, and auto-scales transparently. On-prem components or shared-pool SaaS shift operational risk back to the customer.<br><span class="econ">Self-managed infra layers add $50k–$200k/year in ops overhead</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> Both SFCC and SFLM are SaaS, but run on the shared Salesforce Platform — governor limits, shared resource pools, and Salesforce-wide incidents affect all customers</td>
+          <td class="t1-cell"><span class="tick">✔</span> Fully managed cloud-native SaaS: zero infrastructure ownership, auto-scaled, 99.99% SLA with dedicated infrastructure options <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Headless &amp; open (H)</td>
+          <td class="why-cell">A headless system connects to any front-end, any CDP, any CEP without requiring the vendor's own ecosystem. Closed ecosystems force unnecessary add-on purchases to unlock segmentation or communication features.<br><span class="econ">Being forced into Salesforce Data Cloud just for SFLM segmentation adds $30k–$100k+/month</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> Advanced segmentation in SFLM requires Salesforce Data Cloud — no native support for external CDPs (Segment, mParticle, etc.); Marketing Cloud is the preferred but not mandatory CEP</td>
+          <td class="t1-cell"><span class="tick">✔</span> Open to any CDP (Segment, mParticle, Bloomreach, Salesforce Data Cloud), any CEP (Braze, Klaviyo, Salesforce Marketing Cloud), and any channel via universal APIs <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Vendor lock-in risk</td>
+          <td class="why-cell">Deep investment in a proprietary stack creates switching costs that compound over time. Custom Apex code, Salesforce-specific data models, and SFLM's flow builder are all non-transferable assets.<br><span class="econ">Replacing a deeply integrated Salesforce incentive stack costs $1M–$3M+ in migration projects</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> Apex code, SFLM data models, and SFCC cartridges are Salesforce-exclusive; swapping any adjacent component (CDP, storefront, CEP) requires renegotiating the full stack dependency</td>
+          <td class="t1-cell"><span class="tick">✔</span> MACH architecture preserves freedom: swap the CDP, storefront, or CEP without rebuilding the incentive layer. Talon.One is the stable centre; everything else is pluggable <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- S11 — INNOVATION VELOCITY -->
+<div class="section" id="s11">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 05</span>
+      <h2>Innovation Velocity: Release Cadence</h2>
+      <p>The speed at which a platform addresses gaps and ships new capabilities determines how quickly a retailer can respond to market trends, competitive moves, and unmet customer needs.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">What</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-sf">Salesforce</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Release frequency</td>
+          <td class="why-cell">Faster releases mean missing features or critical bugs are resolved in weeks, not quarters. A 4-month gap between releases forces businesses to either wait or commission custom code that becomes technical debt.<br><span class="econ">A 4-month delay to fix a loyalty engine bug = one full promotional season running with known limitations</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> Salesforce releases three times per year (Spring, Summer, Winter). Gaps identified today may not be addressed for 4–16 months. Features are frequently previewed on roadmap before they are actually delivered</td>
+          <td class="t1-cell"><span class="tick">✔</span> Talon.One ships every two weeks — 26 releases per year (8.7× more frequent). Features are shipped before being announced; the public changelog is the proof <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Roadmap reliability</td>
+          <td class="why-cell">Buying a platform based on a roadmap promise is a strategic risk. If the feature does not ship on time, the customer is left with custom code workarounds and a vendor who has already collected the contract value.<br><span class="econ">Apex workarounds built against a promised feature become stranded assets when SF eventually delivers natively</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> Salesforce has a documented history of announcing roadmap features significantly ahead of general availability — multi-timezone loyalty support, combined discount+loyalty effects are long-standing gaps with roadmap references but no GA date</td>
+          <td class="t1-cell"><span class="tick">✔</span> Policy: ship before you announce. Every feature in the Talon.One changelog was already GA when communicated. No forward-looking roadmap substitutes for delivered capability <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Gap resolution speed</td>
+          <td class="why-cell">When a critical feature gap is identified in production (e.g. a missing time-zone parameter, an incorrect loyalty accrual rule), the time to fix it determines business exposure. A 6-month wait is not operationally acceptable.<br><span class="econ">Operating with a known gap in loyalty calculation accuracy damages member trust and creates financial correction liability</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> Gaps fall into the next release window — minimum 3 months, up to 16 months. The only alternative is Apex code which then must be maintained and removed when SF ships the native fix</td>
+          <td class="t1-cell"><span class="tick">✔</span> Critical fixes and enhancements ship within the next two-week sprint. Customer success teams can escalate features into the release pipeline through normal support channels <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="stat-grid" style="margin-top:1.5rem;">
+      <div class="stat-card"><div class="num">3×</div><div class="lbl">Salesforce major releases per year</div></div>
+      <div class="stat-card"><div class="num">26×</div><div class="lbl">Talon.One releases per year — every 2 weeks</div></div>
+      <div class="stat-card"><div class="num">8.7×</div><div class="lbl">More frequent release cadence at Talon.One</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION GROUP: BUSINESS
+══════════════════════════════════════════════════ -->
+<div class="section-group">
+  <div class="section-group-inner">
+    <h2>03 — Business</h2>
+    <p>Promotions, Loyalty, Coupons, Strikethrough Pricing &amp; Multi-Currency</p>
+  </div>
+</div>
+
+<!-- S3 — RULE ENGINE -->
+<div class="section" id="s3">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 01</span>
+      <h2>Rule Engine Flexibility vs. Templatised Promotion Builders</h2>
+      <p>The depth of the rule engine directly determines what the marketing team can build independently — and what requires expensive developer sprints. Rigid templates limit business outcomes; flexible engines enable them.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">What</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-sf">Salesforce</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Promotion template flexibility</td>
+          <td class="why-cell">Fixed templates limit which mechanics a business can implement. Any mechanic outside the template catalogue requires a developer project — adding weeks and thousands of dollars per new concept.<br><span class="econ">Each custom cartridge development cycle in SFCC costs $15k–$60k and 4–8 weeks</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFCC: promotions built from fixed templates; no free-form rule expression. SFLM: 8 fixed promotion types — anything outside the list requires Apex code development</td>
+          <td class="t1-cell"><span class="tick">✔</span> No template ceiling — unlimited rule conditions using any attribute from the session, customer profile, or product catalogue, including custom attributes. Template library available for speed, never a constraint <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Multi-effect per rule</td>
+          <td class="why-cell">"10% off + free shipping + double points" in a single transaction is a common mechanic. Inability to combine effects forces multiple campaigns that must fire in the precise order — introducing configuration risk and unpredictable stacking.<br><span class="econ">Uncontrolled coupon stacking was at the root of a documented Reebok incident resulting in unquantifiable revenue loss</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFCC: one promotion = one effect. SFLM: discount and loyalty effects cannot be combined in a single campaign — they are governed by separate products with separate trigger models</td>
+          <td class="t1-cell"><span class="tick">✔</span> Multiple simultaneous effects per rule: discounts, loyalty points, coupons, free items, messages, and webhooks can all fire from a single campaign with deterministic stacking control <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Rule condition logic</td>
+          <td class="why-cell">Complex targeting requires Boolean logic: AND/OR/NOT combinations with nested groups. OR-only logic means conditions are additive, not restrictive — causing promotions to fire in cases they should not.<br><span class="econ">Incorrectly broad conditions cause over-redemption: the cost is discovered in finance reports, weeks after the damage</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFCC: cart item filters limited to SKU or product category; all conditions are OR-based; no cumulative logic. SFLM: only 4 customer eligibility conditions, all OR logic</td>
+          <td class="t1-cell"><span class="tick">✔</span> Full Boolean expression builder (AND/OR/NOT, nested groups) with arithmetic operators. Any attribute — custom or standard — can be a condition <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Campaign stacking control</td>
+          <td class="why-cell">Without deterministic stack control, customers can combine promotions in ways that generate far deeper discounts than intended. This is a business risk that can materialise silently over months.<br><span class="econ">Uncontrolled stacking can erode margin on an entire product category for the duration of a campaign period</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFCC uses a coarse CLASS/GLOBAL priority model — stacking outcomes are genuinely difficult to predict without exhaustive testing; no per-campaign exclusivity flags</td>
+          <td class="t1-cell"><span class="tick">✔</span> Scoped campaign groups, explicit stack control (exclusive/inclusive flags), per-campaign budget caps — stacking behaviour is deterministic and auditable at every session <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Next-purchase &amp; cross-session incentives</td>
+          <td class="why-cell">"Earn now, redeem next visit" and "refer a friend, earn on their first purchase" are fundamental loyalty mechanics. Without them, a programme is transactional, not relational — with measurably lower retention impact.<br><span class="econ">Loyalty programmes with cross-session mechanics show 2–4× higher repeat purchase rates vs. single-transaction programmes</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFCC cannot create a coupon for a future order, track referral attribution, or trigger any incentive based on a prior-session event — all logic is scoped to the current transaction</td>
+          <td class="t1-cell"><span class="tick">✔</span> Full cross-session and event-driven mechanics: next-purchase coupons, referral programmes, milestone triggers, win-back offers — all configurable without code <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- S16 — PROMOTION MECHANICS DEPTH -->
+<div class="section" id="s16">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 02</span>
+      <h2>Promotion Mechanics Depth: Discounts, Bundles &amp; Effects</h2>
+      <p>Beyond the rule engine architecture, the practical question is: which specific promotion mechanics can a retailer build, and at what operational cost? SFCC's ~12 fixed promotion templates cover standard retail scenarios — but break down the moment a business needs cross-product triggers, tiered cart discounts, mix-and-match bundles, or multiple simultaneous effects on a single transaction.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">Mechanic</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-sf">Salesforce Commerce Cloud (SFCC)</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Percentage &amp; fixed-amount discounts</td>
+          <td class="why-cell">The foundation of any promotion engine. Percentage-off and fixed-amount discounts must be applicable at product, category, or cart level with full attribute filtering — not just to pre-defined product lists.<br><span class="econ">Inability to apply discounts to dynamically filtered product sets forces manual SKU list maintenance, which degrades quickly at scale</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> SFCC supports both types natively at product and order level. However, the attribute scope is narrow: conditions are limited to product ID, product category, shipping method, customer group, and coupon code. Filtering by custom product attributes (e.g. brand, collection, margin tier) requires Apex cartridge code</td>
+          <td class="t1-cell"><span class="tick">✔</span> Percentage, fixed-amount, and unit price override discounts are all native. The discount scope can reference any attribute in the session: custom product fields, customer LTV tier, basket composition, time-of-day, geographic market — no Apex required <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Buy X Get Y (BOGO &amp; variants)</td>
+          <td class="why-cell">Buy‑one‑get‑one, buy 2 get 1 free, and buy from Category A to get a discount on Category B are core traffic-driving mechanics. The value is in the precise targeting of both the qualifying item (X) and the benefiting item (Y) — not in a generic template.<br><span class="econ">Cross-category BOGO drives category trial and average basket size simultaneously — one of the highest-ROI mechanics in retail promotions</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> SFCC has a native Buy-X-Get-Y template, but both X and Y must be defined as product lists or categories within SFCC's product catalogue. It cannot express: "buy any item from Brand X at full price AND get 30% off any item from the Accessories category" — custom attribute references in either X or Y require cartridge development</td>
+          <td class="t1-cell"><span class="tick">✔</span> Full BOGO family natively: the qualifying set and the benefiting set are each independently defined using any attribute combination. "Buy 2 SKUs tagged 'hero-product', get the cheapest item in category 'accessories' for free" — one rule, no code, live in minutes <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Bundle pricing (fixed-price sets)</td>
+          <td class="why-cell">"Buy product A + product B together for a fixed price of $X" — bundle mechanics require recognising a specific combination of items in the cart and applying a price that cannot be derived from individual item discounts. This is a fundamental category management and margin protection tool.<br><span class="econ">Bundle promotions increase average units per transaction and protect margin better than equivalent percentage discounts applied to individual items</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFCC has no native bundle-price promotion type. The closest approximation — "Product Set" promotions — applies a discount to a grouped set but cannot assign a single fixed total price to the combination. True bundle pricing requires a custom price book entry per bundle variant, multiplied across every regional storefront</td>
+          <td class="t1-cell"><span class="tick">✔</span> Native bundle mechanics: define the required item combination, set the bundle total price or discount delta, and the engine applies it automatically when all components are present. Bundles can include attribute-filtered items (e.g. any size of SKU X + any colour of SKU Y) <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Mix-and-match / collection deals</td>
+          <td class="why-cell">"Any 3 items from this summer collection for $99" — mix-and-match requires counting qualifying items regardless of specific SKU, then applying a single blended price or discount. This is operationally impossible to express with SKU-specific fixed price books.<br><span class="econ">Mix-and-match mechanics drive higher units-per-transaction on seasonal or clearance stock without requiring individual SKU price changes</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFCC cannot natively count "any N items from an attribute-defined collection". The product list in a promotion must be explicitly enumerated; dynamic collection membership based on custom attributes (collection tag, season, margin tier) is not supported without Apex</td>
+          <td class="t1-cell"><span class="tick">✔</span> Mix-and-match natively: "count items tagged 'summer-collection', when count ≥ 3, apply fixed set price" — the qualifying set is attribute-driven, not SKU-enumerated. New products tagged to the collection are automatically included <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Tiered cart discounts</td>
+          <td class="why-cell">"Spend $100–$199 = 10% off, spend $200–$299 = 15% off, spend $300+ = 20% off" — spend-tier mechanics incentivise basket building. Each tier must be a single promotion with a clear threshold, not multiple promotions that must stack in a precise priority order to produce the right outcome.<br><span class="econ">Spend-tier mechanics are the single most effective driver of average order value inflation across promotional formats</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFCC has no native tiered discount type. Implementing spend tiers requires creating a separate promotion per tier band, assigning them exclusive priority classes so only one fires, and testing exhaustively that the priority ordering holds under all cart compositions — a fragile, maintenance-heavy approach</td>
+          <td class="t1-cell"><span class="tick">✔</span> Tiered discounts are a single rule with multiple condition-effect groups: threshold A triggers effect A, threshold B triggers effect B, all evaluated in one pass with deterministic priority and no stacking risk. Tiers can be defined against cart value, item count, category spend, or any custom attribute <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Free item giveaways</td>
+          <td class="why-cell">"Add a free sample to every order over $75" or "Add a gift with every purchase of the hero SKU" — free item mechanics require adding a zero-price line item to the cart programmatically based on conditions. They cannot be approximated with percentage discounts on a separately sold item.<br><span class="econ">Free gift mechanics drive repeat purchase intent and brand sampling ROI measurably better than equivalent-value percentage discounts</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFCC's "Buy X Get Product" template adds a product to the cart, but the qualifying condition (X) must be a specific product or enumerated list — it cannot reference a cart value threshold or a custom attribute. Adding a gift for "any cart over $75" requires a custom Apex promotion</td>
+          <td class="t1-cell"><span class="tick">✔</span> "Add item to cart" is a native effect type: triggered by any rule condition — cart value, product tag, customer segment, time window. The giveaway SKU, quantity, and eligibility conditions are all configured in the Rule Builder with no code <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Cross-product triggered discounts</td>
+          <td class="why-cell">"If the customer has SKU A (a main product) in their cart, apply 20% to the matching accessory category" — cross-product triggering is fundamental to upsell and cross-sell promotion mechanics. It requires the engine to evaluate relationships between line items within a single session.<br><span class="econ">Cross-sell promotions triggered by anchor product presence drive 15–25% higher attach rates for accessory categories</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFCC's promotion conditions operate on individual line items or cart totals — there is no condition type that evaluates "item A is present AND applies effect to item B". This mechanic requires a custom Apex cartridge to evaluate item presence and inject the dependent discount</td>
+          <td class="t1-cell"><span class="tick">✔</span> Cross-item conditions are native: "IF cart contains item with tag 'camera-body' THEN apply 20% to items with tag 'camera-accessory'" — evaluated atomically in one session, no secondary call, no cartridge, configurable by a marketer in minutes <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Multiple simultaneous effects per transaction</td>
+          <td class="why-cell">Real promotions combine effects: "20% off the bundle + free shipping + a giveaway item + double points" should fire from one campaign configuration. When each effect requires a separate promotion, the risk of stacking conflicts, customer-visible inconsistencies, and QA overhead multiplies with every added effect.<br><span class="econ">Promotions with combined effects produce higher perceived value per customer without proportionally higher cost to the retailer</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFCC: one promotion = one effect. To combine a product discount, free shipping, and a free gift simultaneously, three separate promotions must be active, assigned compatible priority classes, tested for stacking conflicts, and deployed independently — four times the configuration risk</td>
+          <td class="t1-cell"><span class="tick">✔</span> A single Talon.One campaign can fire unlimited simultaneous effects from one rule: product discount + order discount + free item + shipping waiver + loyalty points + outbound webhook — all atomic, all governed by the same stacking control <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Campaign evaluation order &amp; discount prioritisation</td>
+          <td class="why-cell">"Which discount fires first when two campaigns could apply?" is a commercial question, not a technical one — yet the answer must be controlled reliably without code changes. Discount prioritisation determines margin exposure: an incorrectly ordered stack can over-discount a basket or suppress a higher-value promotion unintentionally.<br><span class="econ">Misconfigured promotion priority is one of the leading causes of margin leakage during peak trading events — business ownership of evaluation order eliminates the deploy cycle that gates every fix</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFCC assigns each promotion a numeric priority. When two promotions qualify for the same cart, the lower number wins — but the interaction between exclusivity flags, stacking permissions, and priority tiers across dozens of live promotions becomes opaque at scale. Validating a new promotion's priority against all active ones requires manual cross-referencing; there is no visual evaluation graph, and adjustments require a full deployment cycle if promotions are managed via cartridge configuration</td>
+          <td class="t1-cell"><span class="tick">✔</span> Talon.One exposes a visual <strong>Campaign Evaluation Tree</strong> in the Campaign Manager: campaigns are arranged in a drag-and-drop tree that defines exact evaluation order, stacking permissions, and exclusivity rules. Business users — not developers — reorder the tree, set exclusive vs. additive branches, and see immediately which campaigns will fire in which sequence. No code deployment required; changes take effect on the next session. Rules within each campaign are evaluated top-to-bottom as they appear in the Rule Builder, giving complete deterministic control from macro evaluation order down to individual effect sequencing <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout red" style="margin-top:1.5rem;">
+      <strong>⚠ SFCC's Template Ceiling Is a Business Constraint, Not a Developer Problem</strong>
+      SFCC's ~12 promotion templates were designed for standard ecommerce scenarios. The moment a retailer needs bundle pricing, mix-and-match, spend-tiered discounts, cross-product triggers, or multi-effect campaigns, SFCC requires a custom Apex cartridge. Each cartridge is a bespoke software project — with development cost, QA cycles, and long-term maintenance overhead that grows with every new mechanic the business wants to try. Talon.One ships all eight of these mechanics as first-class, no-code features available to every customer today.
+    </div>
+  </div>
+</div>
+
+<!-- S5 — STRIKETHROUGH PRICING -->
+<div class="section" id="s5">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 03</span>
+      <h2>Omnichannel Strikethrough Pricing</h2>
+      <p>Strikethrough (was/now) pricing is a legal and commercial-critical capability. EU Omnibus Directive and regional regulations mandate accurate "prior price" communication, with significant fines for non-compliance.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">What</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-sf">Salesforce</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Dynamic percentage-based strikethrough</td>
+          <td class="why-cell">Manually maintaining absolute price values per product variant is operationally untenable at scale. A single rule "30% off all summer products" must compute dynamically — not require a data-feed update for every variant.<br><span class="econ">Manual price-book updates for a 10,000-SKU catalogue require dedicated ops resource and introduce data errors</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFCC has no dedicated strikethrough rule engine. The only mechanism is a secondary price book with manually set absolute values per variant — no percentage-based, dynamic rule support</td>
+          <td class="t1-cell"><span class="tick">✔</span> Percentage-based, category-scoped, attribute-filtered strikethrough rules configured in the Rule Builder — original price and computed discounted price returned in one session response <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Cross-channel consistency</td>
+          <td class="why-cell">A strikethrough shown online but not in-store (or vice versa) drives customer complaints and creates regulatory exposure. Pricing must be consistent from the same rule across every channel.<br><span class="econ">Pricing inconsistency across channels is a breach of EU Omnibus Directive — fines up to 4% of annual turnover in the EU</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> Price books are an ecommerce construct — they do not natively propagate to in-store channels; cross-channel strikethrough requires a bespoke synchronisation job, adding latency and error risk</td>
+          <td class="t1-cell"><span class="tick">✔</span> Same session API serves all channels — the strikethrough rule evaluates identically for ecommerce, mobile, and any other channel connected via the universal API <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Compliance audit trail</td>
+          <td class="why-cell">Regulators increasingly require retailers to evidence the prior price used in the strikethrough calculation. Without an automated audit log, compliance evidence must be reconstructed manually — a time-consuming and error-prone process.<br><span class="econ">Regulatory investigations are triggered by inability to produce prior-price evidence; penalties are per-SKU in some jurisdictions</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> No audit trail linking a displayed strikethrough to the rule or price book entry that generated it — compliance evidence must be sourced from external data systems</td>
+          <td class="t1-cell"><span class="tick">✔</span> Full audit log: every strikethrough event records the original price, the computed discounted price, the rule that fired, and the timestamp — automatically available for regulatory review <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- S6 — COUPONS -->
+<div class="section" id="s6">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 04</span>
+      <h2>Coupon Flexibility</h2>
+      <p>Modern incentive programmes depend on contextual, individualised coupons — birthday codes, win-back offers, referral rewards, event-triggered gifts. The coupon engine's flexibility is a direct proxy for the richness of customer experiences a retailer can deliver.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">What</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-sf">Salesforce</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">On-the-fly individual generation</td>
+          <td class="why-cell">Birthday coupons, win-back offers, and real-time triggers require generating a unique code for a specific customer at the moment of the event — not from a pre-generated batch. Batch-only systems cannot support event-driven personalisation.<br><span class="econ">Personalised trigger-based coupons achieve 3–5× higher redemption rates than generic batch codes</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFCC coupon generation is batch-only — codes cannot be generated at runtime for a specific profile event; SFLM single-code issuance exists but is not event-triggered</td>
+          <td class="t1-cell"><span class="tick">✔</span> API-triggered individual code generation at any point — birthday, purchase milestone, referral completion, win-back trigger — with the full rule engine governing validity <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Dynamic expiry model</td>
+          <td class="why-cell">"Valid for 14 days from the date of issue" is a fundamental customer-friendly mechanic. Fixed-date expiry means a coupon issued in January that expires February 1st is irrelevant to a customer who receives it on January 29th.<br><span class="econ">Fixed expiry coupons generate customer complaints and "expired before I could use it" support contacts</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFLM supports fixed-date or fixed-period expiry only — no customer-relative issuance window; the activation date is also fixed, not relative to when the member receives the code</td>
+          <td class="t1-cell"><span class="tick">✔</span> Dynamic expiry: "valid for N days/hours from the moment of issuance to this specific customer" — fully configurable per campaign <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Custom coupon attributes &amp; validation</td>
+          <td class="why-cell">Putting metadata on a coupon — channel of issue, product restriction, customer tier — and then validating against that metadata at redemption enables much richer, fraud-resistant mechanics. Without it, all coupons of a type are interchangeable.<br><span class="econ">Coupons without validation metadata are easier to abuse: distribution channel ambiguity enables cross-channel misuse</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFLM has no custom attributes on coupon objects; validation against coupon metadata is not supported — coupons are defined by their parent campaign rules only</td>
+          <td class="t1-cell"><span class="tick">✔</span> Any attribute can be stored on a coupon and referenced as a condition in validation rules — e.g. "this code is only valid on mobile, for Gold members, in Kuwait" <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Referral programme</td>
+          <td class="why-cell">Referral programmes require unique member codes, attribution tracking across sessions, and reward triggering when the referee completes a defined action (first purchase, registration). Partial referral features that only issue codes but do not track attribution are operationally useless.<br><span class="econ">Referral programmes deliver the lowest CAC of any acquisition channel — $10–$30 per referred customer vs $100+ for paid acquisition</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> SFLM referral is limited: code is issued at member creation only; there is no event-driven reward when the referee completes an action; full attribution tracking requires custom Apex</td>
+          <td class="t1-cell"><span class="tick">✔</span> Full referral programme: unique codes per member, cross-session attribution, configurable reward triggers (e.g. referee's first purchase, value threshold) — no code required <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Coupon stacking control</td>
+          <td class="why-cell">Customers who discover stacking opportunities can apply multiple codes to achieve much deeper discounts than intended. Without deterministic stack control, this revenue leakage is only detected in financial reconciliation.<br><span class="econ">In the Reebok/SFCC incident, customers achieved 60% discount on items intended to be 15% off — revenue loss was unquantifiable</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFCC CLASS/GLOBAL priority model makes stacking outcomes genuinely difficult to predict; no per-campaign exclusivity flags; stack control is approximate, not deterministic</td>
+          <td class="t1-cell"><span class="tick">✔</span> Configurable stackability: "exclusive" campaigns block all other discounts; budget caps ceiling total discount per session; all stack decisions are logged and auditable <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- S7 — LOYALTY LEDGERS -->
+<div class="section" id="s7">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 05</span>
+      <h2>Loyalty Ledgers, Multi-Currency &amp; Time Zones</h2>
+      <p>International retailers need loyalty programmes that operate accurately across currencies, time zones, and regulatory environments without manual per-market configuration or bespoke code per deployment.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">What</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-sf">Salesforce</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Accrual formula flexibility</td>
+          <td class="why-cell">Tranche-based logic ("10 points per every $50 spent, rounded down") is a basic loyalty requirement. Inability to express it natively forces Apex development — a recurring cost for each formula variation per market.<br><span class="econ">Each Apex accrual formula costs $10k–$30k to develop and test; every market variation doubles the cost</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFLM supports only fixed amount or simple multiplier accrual. Tranche-based, attribute-weighted, or conditional accrual formulae all require custom Apex code</td>
+          <td class="t1-cell"><span class="tick">✔</span> Full expression-based accrual: tranche logic, attribute-weighted multipliers, conditional earn (e.g. double points on birthday month) — all in the Rule Builder without code <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Multi-timezone support</td>
+          <td class="why-cell">Without per-member time-zone support, point expiry and tier downgrade calculations use a single reference time zone — meaning some members lose points or tier status at midnight in a time zone that is not theirs. This generates avoidable complaints and compensation costs.<br><span class="econ">Incorrect point expiry is the #1 driver of loyalty programme NPS detractors in multi-market programmes</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> No native per-member or per-market time-zone support in SFLM point expiry or tier downgrade calculations. Salesforce's own guidance is to build a custom Apex solution per market</td>
+          <td class="t1-cell"><span class="tick">✔</span> Native time-zone support: expiry and tier calculations respect the member's local time zone without any custom code — fully automatic per-member timezone resolution <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Multiple point currencies</td>
+          <td class="why-cell">Programmes with base points, status points, and bonus points require concurrent currency management. Conflating all point types into a single balance prevents tiered earning, category bonuses, and non-monetary redemption options.<br><span class="econ">Separate point currency types unlock premium programme mechanics that drive 15–30% higher earn-burn engagement</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> SFLM supports multiple currency types in theory, but managing them across markets requires significant configuration overhead and separate ledger tracking with no unified cross-currency view</td>
+          <td class="t1-cell"><span class="tick">✔</span> Multiple concurrent point currencies per programme (base, bonus, status points) with independent earn, burn, expiry, and reporting — single unified ledger view across all currencies <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Tier logic consistency</td>
+          <td class="why-cell">In SFLM, tier thresholds shown to customers in the UI are configured separately from the processing logic that performs tier assignments. Misconfiguring them creates a gap between what customers are told and what the system actually does — a trust and legal risk.<br><span class="econ">Displaying incorrect tier criteria to members is a consumer protection issue in multiple jurisdictions</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> Tier display thresholds and tier processing rules are independent configurations — it is operationally trivial to display incorrect tier criteria with no system warning</td>
+          <td class="t1-cell"><span class="tick">✔</span> Tier logic is governed by the same rule engine as promotions — the thresholds, mechanics, and display are always derived from the same configuration; inconsistency is structurally impossible <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Loyalty ledger auditability</td>
+          <td class="why-cell">A double-entry ledger with full transaction history is required for customer service (balance disputes), regulatory compliance, and financial audits. Without reversals and adjustments, customer service cannot correct errors without workarounds.<br><span class="econ">Manual balance correction without a reversal API requires customer service workarounds that introduce new errors</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> SFLM maintains transaction journals but point reversal requires separate API calls; no atomic multi-currency reversal; debugging cross-product issues (SFCC discount + SFLM points) requires inspecting two systems</td>
+          <td class="t1-cell"><span class="tick">✔</span> Full double-entry ledger: earn, burn, expiry, reversal, manual adjustment — all auditable with timestamps, amounts, rules fired, and agent notes. Real-time balance queries at sub-100ms <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     S15 — GAMIFICATION
+══════════════════════════════════════════════════ -->
+<div class="section" id="s15">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 06</span>
+      <h2>Gamification: Achievements, Streaks &amp; Stamp Cards</h2>
+      <p>Salesforce Loyalty Management does provide a native gamification mechanism — the <strong>Engagement Trail</strong> promotion template with <strong>Engagement Attributes</strong>. This is a genuine capability and should not be dismissed. The real question is operational: how much configuration complexity, how many separate objects, and how fast can a marketer build and iterate versus Talon.One's unified Achievements engine.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">Mechanic</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-sf">Salesforce Loyalty Management</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Missions &amp; Engagement Trails</td>
+          <td class="why-cell">Multi-step "complete X, Y, Z to earn a reward" journeys drive intentional shopping behaviour and category penetration beyond passive earn-and-burn. The key differentiators are: how many steps, whether order matters, and how fast a marketer can build and change them.<br><span class="econ">Mission-based programmes show 2–4× higher active participation rates vs. pure transactional earn</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> SFLM provides the <strong>Engagement Trail</strong> template with up to <strong>5 milestones</strong>, completable in any order. Each milestone is a separate Engagement Attribute object that must be created and configured independently. Non-purchase triggers (social follow, review submission) require a separate Salesforce Flow per event type. The three-object setup (Engagement Attribute + Promotion + Flow) is functional but adds significant configuration overhead per programme variation</td>
+          <td class="t1-cell"><span class="tick">✔</span> Native <strong>Achievements</strong> engine with no hard cap on steps, support for both sequence-agnostic and ordered journeys, and non-purchase events triggered by any API webhook — all configured within the same Rule Builder interface used for every other campaign. A new mission is a single configuration object, not three <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Streaks</td>
+          <td class="why-cell">Streaks ("Purchase every week for 4 consecutive weeks") require the platform to track consecutive periods, detect breaks, and reset the counter — not just accumulate a total count. This is a fundamentally different data model from a cumulative Engagement Attribute counter.<br><span class="econ">Streak mechanics increase weekly active customer rate by 20–40% by leveraging loss aversion — customers return to protect progress already made</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> Engagement Attributes are cumulative counters — they increment on each qualifying event but have no native concept of consecutive periods, temporal gaps, or automatic reset on break. A true streak mechanic requires a scheduled Flow to evaluate the last-event timestamp, determine if the streak is intact, and reset the attribute if the window was missed. This is Apex/Flow engineering, not marketer configuration</td>
+          <td class="t1-cell"><span class="tick">✔</span> Streaks are a first-class Achievement type: define the qualifying action, the consecutive period length, the break detection window, and the reward. The engine tracks period-by-period status, fires notifications on break risk via webhook, and resets automatically — fully marketer-managed, no Flow required <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Stamp Cards (Punch Cards)</td>
+          <td class="why-cell">A stamp card is a visual, finite progress mechanic — "earn 1 stamp per visit, collect 10 for a free item." The customer-facing experience depends on returning the current stamp count (not just total points) in the checkout session so the UI can render a grid or progress bar that motivates the next action.<br><span class="econ">Visual stamp-count progress mechanics increase completion rates by 30–60% vs equivalent opaque points accumulation</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> An Engagement Attribute can approximate a stamp counter — it increments to a target value and triggers a reward on completion, which is the correct behaviour. However, there is no native "stamp card" UI object; the progress data is exposed via the Member API and requires a custom front-end component to render the visual grid. Resetting the card after completion for a new cycle requires additional Flow logic</td>
+          <td class="t1-cell"><span class="tick">✔</span> Stamp cards are a named variant of the Achievements engine: configured with a stamp count, qualifying action, and reward. Current stamp progress is returned directly in the <code>UpdateSession</code> response so any front-end can render the card state without a separate API call. Post-completion reset and re-issue is automatic <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Optional sub-goals ("complete any 5 of 8")</td>
+          <td class="why-cell">Rigid all-or-nothing missions lose participants who complete 4 of 5 steps but miss the last. Optional paths ("complete any 5 of these 8 actions") retain a broader audience and accommodate varying customer lifestyles without requiring more campaigns.<br><span class="econ">Optional-path challenges maintain higher programme completion rates by removing the binary pass/fail that causes abandonment</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> Engagement Trail requires <em>all</em> defined milestones to be completed before the reward fires — there is no native "N of M" partial completion model. Implementing optional paths requires multiple separate Engagement Attributes and a Flow condition that evaluates them collectively, significantly increasing configuration and testing complexity</td>
+          <td class="t1-cell"><span class="tick">✔</span> Achievements natively support compound goals with partial thresholds: "complete any 5 sub-goals from this set" triggers a partial reward; completing all 8 triggers the full reward — a single configuration, no secondary Flow logic required <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Real-time progress at checkout</td>
+          <td class="why-cell">"2 more purchases to complete your challenge" displayed at cart is a powerful within-session nudge. Delivering it requires the current milestone progress to be available synchronously in the checkout API response — not as a separate profile query.<br><span class="econ">Real-time "progress to reward" messaging at checkout increases conversion rate for the qualifying transaction by 15–25%</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> Engagement Attribute current values are stored on the Salesforce Platform. Surfacing them at SFCC checkout requires a cross-cloud API call to retrieve the member's attribute state — a separate round-trip, separate latency, and separate failure point from the existing SFLM simulation architecture. The progress data is not bundled in any single checkout response</td>
+          <td class="t1-cell"><span class="tick">✔</span> Achievement progress — current step count, stamps earned, milestone status, reward proximity — is included in the <code>UpdateSession</code> response at zero additional API cost. The front-end receives everything it needs to render progress messaging in a single call <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Marketer configuration speed</td>
+          <td class="why-cell">Time-to-market for a new gamification campaign is a direct function of how many separate objects need to be created and maintained. Every additional configuration step adds time, adds QA surface area, and increases the risk of misconfiguration between objects.<br><span class="econ">Each additional configuration object per campaign multiplies setup time and the probability of inconsistency errors that only surface in production</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> Building one Engagement Trail mission requires: (1) creating each Engagement Attribute with target values, (2) building the Promotion and associating the trail, (3) configuring a Flow for any non-purchase event type, and (4) testing across the SFLM + SFCC boundary. That is a minimum of 3 separate platform objects per programme — and any change to step count or reward requires updating all three. Functional, but not fast</td>
+          <td class="t1-cell"><span class="tick">✔</span> One Achievement configuration covers all steps, all triggers (purchase and non-purchase via webhook), all rewards, and all progress tracking. A change to step count, time window, or reward is a single field edit. A marketer with no developer support can build, test in sandbox, and launch a new mission in under an hour <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout red" style="margin-top:1.5rem;">
+      <strong>⚠ SFLM Has Gamification — But Operational Complexity Is the Gap.</strong>
+      <p style="margin:.5rem 0 0;">The honest differentiation is operational: SFLM requires 3+ separate configuration objects per mission, a maximum of 5 milestones, no streak data model, no native optional-path logic, and separate API calls to retrieve progress at checkout. Talon.One's Achievements engine handles all of these mechanics in a single configuration object, with no milestone cap, with streak support, with optional sub-goals, and with progress delivered inline in the checkout session API. For a marketing team that needs to launch and iterate multiple gamification mechanics across markets without developer involvement, the configuration surface area difference is significant.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     S17 — ANALYTICS & REPORTING
+══════════════════════════════════════════════════ -->
+<div class="section" id="s17">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">Section 07</span>
+      <h2>Analytics &amp; Reporting: Native Self-Service vs. Bolt-On Modules</h2>
+    </div>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">Capability</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-sf">Salesforce Loyalty Mgmt + SFCC</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell"><strong>Native vs. add-on analytics</strong></td>
+          <td class="why-cell">Out-of-the-box analytics reduce total cost of ownership and eliminate dependency on a second implementation project before marketers can see results.<br><span class="econ">CRM Analytics (Tableau CRM) licences start at ~$75/user/month on top of existing Salesforce costs — a mid-size retail team of 20 users adds $18k+/year before implementation</span></td>
+          <td class="sf-cell"><span class="badge warn">Add-on required</span> Neither SFLM nor SFCC ships with a native analytics layer. Reporting requires <strong>CRM Analytics (Tableau CRM)</strong> — a separately licensed Salesforce product. Without it, users are limited to raw object reports in Salesforce Reports &amp; Dashboards, which have no pre-built loyalty or promotion KPI views.</td>
+          <td class="t1-cell"><span class="badge ok">Included</span> Talon.One ships a <strong>full self-service analytics module</strong> as part of the core platform — no additional licence, no separate implementation. Pre-built dashboards cover campaign performance, coupon redemption, loyalty ledger movement, and audience segmentation.</td>
+        </tr>
+        <tr>
+          <td class="what-cell"><strong>Unified incentive data model</strong></td>
+          <td class="why-cell">A single data model across all incentive types (promotions, loyalty, coupons, referrals) means analysts query one dataset, not two — eliminating join complexity and mismatched record counts.<br><span class="econ">Building and maintaining a cross-system ETL pipeline to join SFCC + SFLM data typically costs $80k–$200k to implement and $30k–$80k/year to operate</span></td>
+          <td class="sf-cell"><span class="badge warn">Split model</span> SFCC manages promotion and coupon data in its own schema; SFLM manages loyalty points, tier and transaction data in Salesforce CRM objects. To report across both — e.g., "how much discount did a member receive vs. points earned on the same basket?" — an ETL or a CRM Analytics recipe must join two separate data stores.</td>
+          <td class="t1-cell"><span class="badge ok">Unified</span> Every incentive event — rule-engine effects, coupon codes, loyalty ledger credits, giveaways, referral rewards — is written to a <strong>single session data model</strong>. Analysts and marketers query one source to see the complete incentive picture per customer, per transaction, per campaign.</td>
+        </tr>
+        <tr>
+          <td class="what-cell"><strong>Self-service dashboard building</strong></td>
+          <td class="why-cell">If building or modifying a dashboard requires a developer or BI administrator, marketing velocity drops and insight cycles stretch from hours to weeks.<br><span class="econ">A single custom CRM Analytics dashboard build takes 2–6 weeks of certified developer time; at $150–$250/hour that is $12k–$60k per report iteration</span></td>
+          <td class="sf-cell"><span class="badge warn">Admin-dependent</span> CRM Analytics dashboards are built in <strong>Einstein Analytics Studio</strong> using JSON lens definitions and SAQL (Salesforce Analytics Query Language). Creating or customising a dashboard from scratch requires a certified CRM Analytics developer. Marketing teams cannot self-serve beyond basic filter adjustments.</td>
+          <td class="t1-cell"><span class="badge ok">Marketer self-service</span> Talon.One's analytics UI provides a <strong>drag-and-drop report builder</strong> where marketers select metrics, dimensions, and time ranges with no code. New campaign dashboards can be created in minutes, and results are visible to the team that owns the programme — without raising a ticket.</td>
+        </tr>
+        <tr>
+          <td class="what-cell"><strong>Campaign performance attribution</strong></td>
+          <td class="why-cell">Attributing revenue lift to a specific promotion or loyalty mechanic requires tying order value, discount given, and points awarded back to a single campaign ID — essential for justifying incentive budget.<br><span class="econ">Without reliable attribution, incentive budgets are set by intuition rather than ROI — typically resulting in 15–30% overspend on underperforming mechanics</span></td>
+          <td class="sf-cell"><span class="badge warn">Multi-source join required</span> Because SFCC owns the cart/discount event and SFLM owns the points event, attribution requires joining records from both systems on a shared order ID. This join is not provided out of the box; it must be built in CRM Analytics or extracted to a data warehouse. Attribution latency is typically T+1 at best.</td>
+          <td class="t1-cell"><span class="badge ok">Single-session attribution</span> Each checkout session carries the campaign tag, the applied effects, and the loyalty points awarded as a single linked record. Attribution reports show, for every campaign, the orders influenced, the total discount issued, the loyalty currency awarded, and the net revenue contribution — all from one query, with no joins.</td>
+        </tr>
+        <tr>
+          <td class="what-cell"><strong>Reporting data freshness</strong></td>
+          <td class="why-cell">Near-real-time reporting lets commercial teams react to campaign performance within hours — not the next morning after a batch run completes.<br><span class="econ">A misconfigured flash-sale promotion running undetected overnight can generate $100k+ in unbudgeted discount liability before the next batch report surfaces the issue</span></td>
+          <td class="sf-cell"><span class="badge warn">Scheduled batch syncs</span> CRM Analytics datasets are populated via <strong>scheduled dataflows</strong> that typically run on a 24-hour or configurable interval cycle. Live or near-real-time reporting on SFCC transaction data requires the Salesforce Data Cloud add-on (further additional licence) or a third-party streaming pipeline.</td>
+          <td class="t1-cell"><span class="badge ok">Near real-time</span> Talon.One's analytics dashboards refresh on a <strong>near-real-time basis</strong> — typically within minutes of a session completing. Commercial and CRM teams can monitor a flash sale or a loyalty double-points day as it unfolds, adjust budgets, and surface anomalies before significant overspend occurs.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="callout t1">
+      <strong>Structural Advantage: One Platform, One Data Model</strong>
+      <p style="margin:.5rem 0 0;">The analytics gap between SFLM+SFCC and Talon.One is not primarily about feature depth — it is about architecture. Salesforce's loyalty and promotion capabilities live in two separate products with two separate data stores, and the analytics layer (CRM Analytics) is a third product requiring its own licence and implementation effort. Talon.One was built as a unified incentive engine from day one: every promotion, coupon, loyalty event, and giveaway writes to the same session model. For marketing teams that need to answer the question "what did our incentive programme cost and what did it return?" without opening a BI team ticket, this architectural decision translates directly into speed, autonomy, and lower total cost.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     S10 — DEV & MARKETER EXPERIENCE
+══════════════════════════════════════════════════ -->
+<div class="section" id="s10">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">04 — Developer &amp; Marketer Experience</span>
+      <h2>Developer &amp; Marketer Experience</h2>
+      <p>Platform usability directly affects campaign velocity, error rates, and the dependency on expensive specialist resources. A platform that requires Apex developers for routine campaign changes is a structural cost disadvantage that compounds over time.</p>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="col-what">What</th>
+          <th class="col-why">Why It Matters &amp; Impact</th>
+          <th class="col-sf">Salesforce</th>
+          <th class="col-t1">Talon.One</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Marketer self-serve</td>
+          <td class="why-cell">If every campaign change requires a developer, the business pays developer rates for marketing operations and accumulates an IT backlog. Self-serve means the marketing team launches campaigns independently, measured in hours not weeks.<br><span class="econ">Eliminating developer dependency for campaign changes saves $200k–$500k/year in a mid-size retail operation</span></td>
+          <td class="sf-cell"><span class="cross">✘</span> SFLM requires navigating 4+ separate screens to activate one rule; SFCC requires cartridge development for any non-standard promotion; standard marketers cannot operate either platform fully independently</td>
+          <td class="t1-cell"><span class="tick">✔</span> Drag-and-drop Rule Builder: marketers launch arbitrarily complex campaigns without developer involvement; sandboxed simulation before activation; campaign cloning for rapid iteration <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Campaign testing &amp; simulation</td>
+          <td class="why-cell">A sandbox environment that simulates rule execution before a campaign goes live prevents misconfiguration from reaching customers. Without simulation, testing requires staging environment deployments — slow, expensive, and risky.<br><span class="econ">SFCC staging deployment for one promotion takes up to 6 weeks; errors restart the clock completely</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> SFLM simulation runs only on active processes, not in draft; SFCC staging promotion deployment is certification-dependent and takes weeks — a single misconfiguration restarts the entire process</td>
+          <td class="t1-cell"><span class="tick">✔</span> Full sandbox environment with live simulation: test any campaign against real or synthetic session data before activation — no staging deployment required, changes go live in seconds <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Audit &amp; debugging</td>
+          <td class="why-cell">When a customer reports a missing discount or incorrect points, the support team needs to trace exactly which rules fired (or didn't) for that specific session. Without a rule evaluation trace, debugging requires manual log analysis across multiple systems.<br><span class="econ">Average customer service contact resolution time doubles when cross-system debugging is required</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> Debugging a cross-product issue (SFCC discount + SFLM loyalty) requires inspecting two separate systems with different log formats; no unified session-level rule evaluation trace</td>
+          <td class="t1-cell"><span class="tick">✔</span> Full rule evaluation trace per session: every condition evaluated, every effect applied, every rule that did not fire and why — auditable per customer, per transaction <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Return &amp; rollback</td>
+          <td class="why-cell">Order returns require reversing all incentive effects atomically — the discount is removed, the points are reversed, the coupon is re-validated. Partial rollbacks create discrepancies between financial systems and loyalty ledgers.<br><span class="econ">Non-atomic rollbacks require manual correction tickets, customer compensation, and financial reconciliation overhead</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> SFCC rollback is limited to the promotion context; SFLM point reversal requires a separate API call; there is no mechanism to atomically reverse all effects across both systems simultaneously</td>
+          <td class="t1-cell"><span class="tick">✔</span> API-level atomic rollback: a single call reverses all effects (discounts, points, coupon redemption) in one operation, leaving the ledger in a consistent state <span class="adv-badge">Advantage</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">CSR interface</td>
+          <td class="why-cell">Customer service agents need a single screen to view a member's full programme picture and perform corrections: reset password, issue vouchers manually, override tier status. A weak CSR interface increases call handling time.<br><span class="econ">Each additional minute of call handle time × volume = material cost at contact centre scale</span></td>
+          <td class="sf-cell"><span class="tick">✔</span> SFLM's CSR interface (backed by Salesforce CRM/Service Cloud) is strong — agents can view full loyalty picture, reset passwords, issue vouchers, and override tiers in one screen. Requires Salesforce CRM licence</td>
+          <td class="t1-cell"><span class="warn">⚠</span> Functional and improving — supports balance view, manual adjustments, and transaction history. Full CSR suite on roadmap; Most Talon.One customers leverage APIs to surface loyalty information and execute customer service actions through their own service solution such as Zendesk, Salesforce CRM or ServiceNow.</td>
+        </tr>
+        <tr>
+          <td class="what-cell">Developer documentation</td>
+          <td class="why-cell">Quality documentation determines integration speed and the rate of developer errors during implementation. Inconsistent or outdated documentation forces developers to trial-and-error their way through integration — doubling implementation time.<br><span class="econ">Poor documentation adds 20–40% to integration project timelines; community-reported API gaps multiply support tickets</span></td>
+          <td class="sf-cell"><span class="warn">⚠</span> SFCC and SFLM documentation is maintained separately, historically inconsistent, with community-reported API gaps and outdated code examples</td>
+          <td class="t1-cell"><span class="tick">✔</span> Developer-first documentation: public API reference, interactive Postman collections, typed SDKs (TypeScript, Python, Go), and a versioned public changelog — all in one developer portal <span class="adv-badge">Advantage</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     S13 — GOOD NEWS: SF INTEGRATIONS
+══════════════════════════════════════════════════ -->
+<div class="section" id="s13">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">05 — Good News for Salesforce Customers</span>
+      <h2>Good News for Salesforce Customers: Talon.One Integrates Natively with the Salesforce Ecosystem</h2>
+      <p>Choosing Talon.One does not mean abandoning Salesforce. It means using each Salesforce product for what it was designed to do — and replacing the tools that were never designed for incentive decisioning.</p>
+    </div>
+
+    <div class="int-banner">
+      <h3>The Architecture That Makes Both Worlds Work</h3>
+      <p>Talon.One acts as the central incentive decisioning engine. Salesforce Data Cloud manages customer identity and segmentation. Salesforce Commerce Cloud powers the storefront. Salesforce Marketing Cloud orchestrates journeys. Talon.One connects to all three — natively — with no incentive logic leaking into products that are not built to carry it.</p>
+    </div>
+
+    <table class="comp-table" style="margin-top:1.5rem;">
+      <thead>
+        <tr>
+          <th class="col-what">Salesforce Product</th>
+          <th class="col-why">What It Does Best</th>
+          <th class="col-sf">Its Incentive Limitation (when used alone)</th>
+          <th class="col-t1">Talon.One Integration</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="what-cell">Salesforce Data Cloud (CDP)</td>
+          <td class="why-cell">Unified customer profiles — purchase history, behavioural segments, lifetime value tiers, consent flags — across all Salesforce products</td>
+          <td class="sf-cell">Used as SFLM's only supported segmentation source — making advanced incentive targeting impossible for retailers not on Salesforce CRM</td>
+          <td class="t1-cell"><span class="tick">✔</span> Talon.One connects to Data Cloud via standard CDP APIs — segments and profile attributes flow directly into rule conditions; bidirectional streaming enriches Data Cloud with loyalty events <span class="adv-badge">Native CDP endpoint</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Salesforce Commerce Cloud (SFCC)</td>
+          <td class="why-cell">Full-featured ecommerce storefront: catalogue, browse, payment, order management, and fulfilment</td>
+          <td class="sf-cell">SFCC's native promotion engine is template-limited, staging-deployment-dependent, and cannot combine discount + loyalty effects in one campaign</td>
+          <td class="t1-cell"><span class="tick">✔</span> Native SFCC connector cartridge replaces SFCC's promotion engine at checkout — all incentive logic is delegated to Talon.One; SFCC continues to handle storefront, catalogue, and orders <span class="adv-badge">Native Connector</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Salesforce Marketing Cloud (CEP)</td>
+          <td class="why-cell">Journey Builder, personalised messaging, and multi-channel communication orchestration at scale</td>
+          <td class="sf-cell">Cannot receive real-time Talon.One incentive events (tier upgrade, expiry warning, coupon issued) without a custom webhook integration being built and maintained</td>
+          <td class="t1-cell"><span class="tick">✔</span> Talon.One webhooks trigger Marketing Cloud journey flows for any incentive event: tier upgrade, points milestone, coupon issuance, referral completion — with unique personalised codes per message <span class="adv-badge">Native CEP endpoint</span></td>
+        </tr>
+        <tr>
+          <td class="what-cell">Salesforce CRM / Service Cloud</td>
+          <td class="why-cell">360° customer view, case management, and agent tooling — the platform most Salesforce customers already use for customer service operations</td>
+          <td class="sf-cell">No native access to Talon.One loyalty balances, coupon history, or promotion data — agents must switch between systems to handle incentive-related contacts, increasing handle time and error risk</td>
+          <td class="t1-cell"><span class="tick">✔</span> Using Salesforce Apex and the Talon.One REST API, loyalty balances, point transaction history, active coupons, and tier status can be surfaced directly inside the Service Cloud agent screen. Agents can issue manual point adjustments, reissue coupons, and review a member's full incentive history — all without leaving the CRM <span class="adv-badge">API Integration</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout green" style="margin-top:1.5rem;">
+      <strong>The Bottom Line</strong>
+      Retain Salesforce Data Cloud for identity. Retain SFCC for storefront. Retain Marketing Cloud for journeys. Replace SFLM's weak loyalty engine and SFCC's brittle promotion builder with Talon.One. Every Salesforce investment is preserved and enhanced.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     S14 — SCORECARD
+══════════════════════════════════════════════════ -->
+<div class="section" id="s14">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">06 — Scorecard &amp; Decision Framework</span>
+      <h2>Comparative Scorecard &amp; Decision Framework</h2>
+      <p>Ratings on a 1–5 scale: 5 = Best in class, 1 = Major capability gap.</p>
+    </div>
+
+    <div class="scorecard">
+      <div class="sc-head catcol">Capability</div>
+      <div class="sc-head sfcol">Salesforce Stack</div>
+      <div class="sc-head t1col">Talon.One</div>
+
+      <div class="sc-cell cat">Omnichannel channel coverage</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Architecture &amp; scalability</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">API simplicity &amp; latency</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Multi-brand / multi-country</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">MACH / open architecture</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Innovation / release cadence</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Rule engine flexibility</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Promotion mechanics depth (bundles, BOGO, tiers, free items)</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Strikethrough pricing</div>
+      <div class="sc-cell"><span class="score-dot s1">1</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Coupon flexibility</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Loyalty ledger depth</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Multi-currency &amp; time-zone</div>
+      <div class="sc-cell"><span class="score-dot s1">1</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Combined discount + loyalty effects</div>
+      <div class="sc-cell"><span class="score-dot s1">1</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Marketer self-serve</div>
+      <div class="sc-cell"><span class="score-dot s2">2</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Campaign deployment speed</div>
+      <div class="sc-cell"><span class="score-dot s1">1</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">CSR (customer service) interface</div>
+      <div class="sc-cell"><span class="score-dot s4">4</span></div>
+      <div class="sc-cell"><span class="score-dot s3">3</span></div>
+
+      <div class="sc-cell cat">Salesforce ecosystem integration</div>
+      <div class="sc-cell"><span class="score-dot s3">3</span><span style="font-size:.75rem;color:var(--text-muted);"> (native only)</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Gamification (achievements, streaks, stamp cards)</div>
+      <div class="sc-cell"><span class="score-dot s1">1</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat">Analytics &amp; self-service reporting</div>
+      <div class="sc-cell"><span class="score-dot s1">1</span></div>
+      <div class="sc-cell"><span class="score-dot s5">5</span></div>
+
+      <div class="sc-cell cat" style="font-weight:800;">Overall Score</div>
+      <div class="sc-cell" style="font-weight:800; color:var(--warn-red);">35 / 95</div>
+      <div class="sc-cell" style="font-weight:800; color:var(--ok-green);">88 / 95</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     CONCLUSION
+══════════════════════════════════════════════════ -->
+<div class="conclusion">
+  <div class="container">
+    <h2>Conclusion &amp; Recommendations</h2>
+    <p>
+      For an omnichannel retailer operating ecommerce and physical stores, the Salesforce stack represents
+      a structurally fragmented approach to incentive management — one that requires purchasing, integrating,
+      and operating at least three products, writing proprietary Apex code for non-standard use cases,
+      and accepting architectural latency in every checkout flow.
+    </p>
+    <p style="margin-top:1rem;">
+      Talon.One resolves all of these constraints at source — a single, purpose-built, MACH-native engine
+      that handles every incentive mechanic across every channel through one API call, evaluated in under 100ms,
+      manageable by marketers without developer involvement. For organisations with existing Salesforce
+      investments, Talon.One integrates natively with Data Cloud, Commerce Cloud, and Marketing Cloud,
+      freeing each product to perform its core function.
+    </p>
+
+    <div class="rec-grid">
+      <div class="rec-card">
+        <h4>Immediate Action</h4>
+        <p>Replace SFCC native promotion engine and SFLM with Talon.One via the native SFCC connector cartridge. Retain SFCC for storefront and order management.</p>
+      </div>
+      <div class="rec-card">
+        <h4>Data Strategy</h4>
+        <p>Connect Salesforce Data Cloud to Talon.One. Unlock advanced segmentation across all incentive mechanics without additional SFLM licences.</p>
+      </div>
+      <div class="rec-card">
+        <h4>Communication Layer</h4>
+        <p>Configure Talon.One webhooks to trigger Salesforce Marketing Cloud journeys for loyalty milestones, coupon issuance, and referral events.</p>
+      </div>
+      <div class="rec-card">
+        <h4>Omnichannel Expansion</h4>
+        <p>Extend Talon.One's session API to every channel — same rules, same loyalty ledger, same coupons as ecommerce — enabling true omnichannel incentive consistency from day one.</p>
+      </div>
+      <div class="rec-card">
+        <h4>Governance</h4>
+        <p>Establish a single incentive governance team in Talon.One's Rule Builder. Eliminate the parallel workflow of entering rules in SFCC and SFLM separately.</p>
+      </div>
+      <div class="rec-card">
+        <h4>Risk Mitigation</h4>
+        <p>Implement Talon.One's budget caps and stack exclusivity controls immediately to eliminate coupon stacking risk and protect margin during peak promotional events.</p>
+      </div>
+    </div>
+
+    <p style="margin-top:2rem; font-size:.8rem; opacity:.5;">
+      This document was prepared as an internal competitive assessment based on
+      first-hand product testing, reference customer accounts, and publicly available Salesforce documentation as of March 2026.
+      All Salesforce pricing references are indicative; verify current pricing with Salesforce directly.
+      Talon.One capabilities referenced are available in the current generally available product release.
+      Classification: Confidential — Internal Use only.
+    </p>
+  </div>
+</div>
+
+</body>
+</html>
