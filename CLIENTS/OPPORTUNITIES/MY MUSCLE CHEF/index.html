@@ -641,10 +641,130 @@
   </div>
 </section>
 
-<!-- 4. SESSION API -->
+<!-- 4. CUSTOMER PROFILE -->
+<section id="customer-profile" style="background: var(--light-gray); max-width: 100%;">
+  <div class="inner">
+    <div class="section-label">05 — Customer Data</div>
+    <h2>Customer Profile API</h2>
+    <p>Update customer attributes in Talon.One to power <strong>segmentation and targeting</strong> within campaign rules. Profiles can be updated via the Session API (automatically) or the dedicated Profile endpoint.</p>
+    <p>You can also sync <strong>audience memberships</strong> in real-time — push your segment/audience IDs alongside profile attributes so Talon.One campaign rules can target customers based on your own segmentation logic (e.g. from your CDP, CRM, or Customer.io).</p>
+
+    <h3>Endpoint</h3>
+    <div class="code-block">
+      <code><span class="kw">PUT</span> /v2/customer_profiles/{<span class="key">integrationId</span>}</code>
+    </div>
+
+    <h3>Example — Updating Customer Attributes</h3>
+
+    <!-- Version toggle -->
+    <div style="margin-bottom: 12px;">
+      <button class="version-toggle active" onclick="toggleProfileVersion('standard')">Standard</button>
+      <button class="version-toggle" onclick="toggleProfileVersion('audience')">With Audience Sync</button>
+    </div>
+
+    <!-- Standard version -->
+    <div id="profile-standard" class="profile-version">
+      <div class="code-block">
+        <code><span class="cm">// PUT /v2/customer_profiles/MMC-CUST-98421</span>
+{
+  <span class="key">"attributes"</span>: {
+    <span class="key">"dietary_preference"</span>: <span class="str">"high_protein"</span>,
+    <span class="key">"subscription_plan"</span>: <span class="str">"weekly_10"</span>,
+    <span class="key">"city"</span>: <span class="str">"Sydney"</span>,
+    <span class="key">"state"</span>: <span class="str">"NSW"</span>,
+    <span class="key">"lifetime_orders"</span>: <span class="num">47</span>,
+    <span class="key">"last_order_date"</span>: <span class="str">"2026-03-20T10:30:00Z"</span>,
+    <span class="key">"preferred_meals"</span>: [<span class="str">"chicken"</span>, <span class="str">"fish"</span>]
+  }
+}</code>
+      </div>
+    </div>
+
+    <!-- Audience sync version -->
+    <div id="profile-audience" class="profile-version" style="display:none;">
+      <div class="highlight-box" style="margin-bottom: 12px; background: #f0fafb; border-color: #0891b2;">
+        <p><strong>With Audience Sync:</strong> Include the <code>audiencesChanges</code> object to add or remove audience memberships in real-time. Talon.One will evaluate campaign rules based on these audience IDs — enabling targeted promotions for specific customer segments from your CDP, CRM, or Customer.io.</p>
+      </div>
+      <div class="code-block">
+        <code><span class="cm">// PUT /v2/customer_profiles/MMC-CUST-98421</span>
+{
+  <span class="key">"attributes"</span>: {
+    <span class="key">"dietary_preference"</span>: <span class="str">"high_protein"</span>,
+    <span class="key">"subscription_plan"</span>: <span class="str">"weekly_10"</span>,
+    <span class="key">"city"</span>: <span class="str">"Sydney"</span>,
+    <span class="key">"state"</span>: <span class="str">"NSW"</span>,
+    <span class="key">"lifetime_orders"</span>: <span class="num">47</span>,
+    <span class="key">"last_order_date"</span>: <span class="str">"2026-03-20T10:30:00Z"</span>,
+    <span class="key">"preferred_meals"</span>: [<span class="str">"chicken"</span>, <span class="str">"fish"</span>]
+  },
+  <span class="key">"audiencesChanges"</span>: {
+    <span class="key">"adds"</span>: [
+      <span class="num">14</span>        <span class="cm">// Add to audience ID 14</span>
+    ],
+    <span class="key">"deletes"</span>: [
+      <span class="num">8</span>         <span class="cm">// Remove from audience ID 8</span>
+    ]
+  }
+}</code>
+      </div>
+    </div>
+
+    <script>
+    function toggleProfileVersion(version) {
+      document.getElementById('profile-standard').style.display = version === 'standard' ? 'block' : 'none';
+      document.getElementById('profile-audience').style.display = version === 'audience' ? 'block' : 'none';
+      var btns = event.target.parentElement.querySelectorAll('.version-toggle');
+      btns.forEach(function(btn) { btn.classList.remove('active'); });
+      event.target.classList.add('active');
+    }
+    </script>
+
+    <h3>Attributes Power Campaign Rules</h3>
+    <p>Once attributes are synced, the marketing team can create rules such as:</p>
+    <ul class="check-list">
+      <li><strong>"If dietary_preference = high_protein"</strong> → 2x cashback on new Protein range</li>
+      <li><strong>"If city = Melbourne"</strong> → Free delivery cashback for Melbourne launch</li>
+      <li><strong>"If lifetime_orders > 50"</strong> → VIP bonus cashback tier</li>
+      <li><strong>"If subscription_plan = weekly_10"</strong> → Subscriber-only exclusive offers</li>
+    </ul>
+
+    <h3>Bulk Update — Multiple Customer Profiles</h3>
+    <p>Update (or create) up to <strong>1,000 customer profiles in a single request</strong> using the batch endpoint. This is ideal for initial data migration, nightly syncs, or bulk attribute updates from your CRM or data warehouse.</p>
+    <p>The <code>integrationId</code> must be any identifier that remains stable for the customer. Do not use an ID that the customer can update themselves — for example, use a database ID.</p>
+
+    <div class="code-block">
+      <code><span class="kw">PUT</span> /v2/customer_profiles</code>
+    </div>
+
+    <div class="code-block">
+      <code><span class="cm">// PUT /v2/customer_profiles — batch update up to 1,000 profiles</span>
+{
+  <span class="key">"customerProfiles"</span>: [
+    {
+      <span class="key">"integrationId"</span>: <span class="str">"MMC-CUST-98421"</span>,
+      <span class="key">"attributes"</span>: {
+        <span class="key">"dietary_preference"</span>: <span class="str">"high_protein"</span>,
+        <span class="key">"city"</span>: <span class="str">"Sydney"</span>
+      }
+    },
+    {
+      <span class="key">"integrationId"</span>: <span class="str">"MMC-CUST-10234"</span>,
+      <span class="key">"attributes"</span>: {
+        <span class="key">"dietary_preference"</span>: <span class="str">"vegan"</span>,
+        <span class="key">"city"</span>: <span class="str">"Melbourne"</span>
+      }
+    }
+    <span class="cm">// ... up to 1,000 profiles per request</span>
+  ]
+}</code>
+    </div>
+  </div>
+</section>
+
+<!-- 5. SESSION API -->
 <section id="session-api" style="background: var(--light-gray); max-width: 100%;">
   <div class="inner">
-    <div class="section-label">05 — Core Integration</div>
+    <div class="section-label">06 — Core Integration</div>
     <h2>Customer Session</h2>
     <p>The Session API is the heart of Talon.One integration. It represents a <strong>shopping session / cart / order</strong> and evaluates all active campaign rules in real-time.</p>
 
@@ -817,9 +937,9 @@
   </div>
 </section>
 
-<!-- 5. EVENT API -->
+<!-- 6. EVENT API -->
 <section id="event-api">
-  <div class="section-label">06 — Custom Events</div>
+  <div class="section-label">07 — Custom Events</div>
   <h2>Event API — Non-Transactional Triggers</h2>
   <p>Use the Event API to send <strong>non-cart events</strong> into Talon.One. These can trigger campaigns, award loyalty points, or track engagement — without a session/order context.</p>
   <p>The data model is fully open: each event type can carry its own set of custom attributes, defined by you. There is no fixed schema — you decide what data to send with each event, and Talon.One campaign rules can evaluate any of those attributes in real-time.</p>
@@ -863,125 +983,6 @@
   </div>
 </section>
 
-<!-- 6. CUSTOMER PROFILE -->
-<section id="customer-profile" style="background: var(--light-gray); max-width: 100%;">
-  <div class="inner">
-    <div class="section-label">07 — Customer Data</div>
-    <h2>Customer Profile API</h2>
-    <p>Update customer attributes in Talon.One to power <strong>segmentation and targeting</strong> within campaign rules. Profiles can be updated via the Session API (automatically) or the dedicated Profile endpoint.</p>
-    <p>You can also sync <strong>audience memberships</strong> in real-time — push your segment/audience IDs alongside profile attributes so Talon.One campaign rules can target customers based on your own segmentation logic (e.g. from your CDP, CRM, or Customer.io).</p>
-
-    <h3>Endpoint</h3>
-    <div class="code-block">
-      <code><span class="kw">PUT</span> /v2/customer_profiles/{<span class="key">integrationId</span>}</code>
-    </div>
-
-    <h3>Example — Updating Customer Attributes</h3>
-
-    <!-- Version toggle -->
-    <div style="margin-bottom: 12px;">
-      <button class="version-toggle active" onclick="toggleProfileVersion('standard')">Standard</button>
-      <button class="version-toggle" onclick="toggleProfileVersion('audience')">With Audience Sync</button>
-    </div>
-
-    <!-- Standard version -->
-    <div id="profile-standard" class="profile-version">
-      <div class="code-block">
-        <code><span class="cm">// PUT /v2/customer_profiles/MMC-CUST-98421</span>
-{
-  <span class="key">"attributes"</span>: {
-    <span class="key">"dietary_preference"</span>: <span class="str">"high_protein"</span>,
-    <span class="key">"subscription_plan"</span>: <span class="str">"weekly_10"</span>,
-    <span class="key">"city"</span>: <span class="str">"Sydney"</span>,
-    <span class="key">"state"</span>: <span class="str">"NSW"</span>,
-    <span class="key">"lifetime_orders"</span>: <span class="num">47</span>,
-    <span class="key">"last_order_date"</span>: <span class="str">"2026-03-20T10:30:00Z"</span>,
-    <span class="key">"preferred_meals"</span>: [<span class="str">"chicken"</span>, <span class="str">"fish"</span>]
-  }
-}</code>
-      </div>
-    </div>
-
-    <!-- Audience sync version -->
-    <div id="profile-audience" class="profile-version" style="display:none;">
-      <div class="highlight-box" style="margin-bottom: 12px; background: #f0fafb; border-color: #0891b2;">
-        <p><strong>With Audience Sync:</strong> Include the <code>audiencesChanges</code> object to add or remove audience memberships in real-time. Talon.One will evaluate campaign rules based on these audience IDs — enabling targeted promotions for specific customer segments from your CDP, CRM, or Customer.io.</p>
-      </div>
-      <div class="code-block">
-        <code><span class="cm">// PUT /v2/customer_profiles/MMC-CUST-98421</span>
-{
-  <span class="key">"attributes"</span>: {
-    <span class="key">"dietary_preference"</span>: <span class="str">"high_protein"</span>,
-    <span class="key">"subscription_plan"</span>: <span class="str">"weekly_10"</span>,
-    <span class="key">"city"</span>: <span class="str">"Sydney"</span>,
-    <span class="key">"state"</span>: <span class="str">"NSW"</span>,
-    <span class="key">"lifetime_orders"</span>: <span class="num">47</span>,
-    <span class="key">"last_order_date"</span>: <span class="str">"2026-03-20T10:30:00Z"</span>,
-    <span class="key">"preferred_meals"</span>: [<span class="str">"chicken"</span>, <span class="str">"fish"</span>]
-  },
-  <span class="key">"audiencesChanges"</span>: {
-    <span class="key">"adds"</span>: [
-      <span class="num">14</span>        <span class="cm">// Add to audience ID 14</span>
-    ],
-    <span class="key">"deletes"</span>: [
-      <span class="num">8</span>         <span class="cm">// Remove from audience ID 8</span>
-    ]
-  }
-}</code>
-      </div>
-    </div>
-
-    <script>
-    function toggleProfileVersion(version) {
-      document.getElementById('profile-standard').style.display = version === 'standard' ? 'block' : 'none';
-      document.getElementById('profile-audience').style.display = version === 'audience' ? 'block' : 'none';
-      var btns = event.target.parentElement.querySelectorAll('.version-toggle');
-      btns.forEach(function(btn) { btn.classList.remove('active'); });
-      event.target.classList.add('active');
-    }
-    </script>
-
-    <h3>Attributes Power Campaign Rules</h3>
-    <p>Once attributes are synced, the marketing team can create rules such as:</p>
-    <ul class="check-list">
-      <li><strong>"If dietary_preference = high_protein"</strong> → 2x cashback on new Protein range</li>
-      <li><strong>"If city = Melbourne"</strong> → Free delivery cashback for Melbourne launch</li>
-      <li><strong>"If lifetime_orders > 50"</strong> → VIP bonus cashback tier</li>
-      <li><strong>"If subscription_plan = weekly_10"</strong> → Subscriber-only exclusive offers</li>
-    </ul>
-
-    <h3>Bulk Update — Multiple Customer Profiles</h3>
-    <p>Update (or create) up to <strong>1,000 customer profiles in a single request</strong> using the batch endpoint. This is ideal for initial data migration, nightly syncs, or bulk attribute updates from your CRM or data warehouse.</p>
-    <p>The <code>integrationId</code> must be any identifier that remains stable for the customer. Do not use an ID that the customer can update themselves — for example, use a database ID.</p>
-
-    <div class="code-block">
-      <code><span class="kw">PUT</span> /v2/customer_profiles</code>
-    </div>
-
-    <div class="code-block">
-      <code><span class="cm">// PUT /v2/customer_profiles — batch update up to 1,000 profiles</span>
-{
-  <span class="key">"customerProfiles"</span>: [
-    {
-      <span class="key">"integrationId"</span>: <span class="str">"MMC-CUST-98421"</span>,
-      <span class="key">"attributes"</span>: {
-        <span class="key">"dietary_preference"</span>: <span class="str">"high_protein"</span>,
-        <span class="key">"city"</span>: <span class="str">"Sydney"</span>
-      }
-    },
-    {
-      <span class="key">"integrationId"</span>: <span class="str">"MMC-CUST-10234"</span>,
-      <span class="key">"attributes"</span>: {
-        <span class="key">"dietary_preference"</span>: <span class="str">"vegan"</span>,
-        <span class="key">"city"</span>: <span class="str">"Melbourne"</span>
-      }
-    }
-    <span class="cm">// ... up to 1,000 profiles per request</span>
-  ]
-}</code>
-    </div>
-  </div>
-</section>
 
 <!-- 7. CUSTOMER INVENTORY -->
 <section id="customer-inventory">
