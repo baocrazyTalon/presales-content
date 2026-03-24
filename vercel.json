@@ -2,7 +2,7 @@
   "cleanUrls": false,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/my-muscle-chef", "destination": "/CLIENTS/OPPORTUNITIES/MY%20MUSCLE%20CHEF/index.html" }
+    { "source": "/my-muscle-chef", "destination": "/CLIENTS/OPPORTUNITIES/MY%20MUSCLE%20CHEF/mmcTalonone.html" }
   ],
   "headers": [
     {
