@@ -290,16 +290,16 @@
 
       <!-- ============ AWS BOX ============ -->
       <div class="arch-cloud arch-aws-box">
-        <div class="arch-cloud-hdr">
+        <div class="arch-cloud-hdr" style="justify-content: center;">
           <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS" style="height:22px;" />
-          <span>My Muscle Chef — AWS</span>
+          <span>My Muscle Chef</span>
         </div>
         <div class="arch-aws-inner">
           <!-- Left column: Channels + Backend -->
           <div class="arch-aws-left">
             <div class="arch-aws-channels">
-              <div class="arch-tile arch-tile-navy">🌐 Website<small>React · Ant Design</small></div>
-              <div class="arch-tile arch-tile-navy">📱 Mobile App<small>React Native</small></div>
+              <div class="arch-tile arch-tile-navy">🌐 Website<small>React</small></div>
+              <div class="arch-tile arch-tile-navy">📱 Mobile App</div>
             </div>
             <div class="arch-tile arch-tile-dark" style="margin-top: 8px;">⚙️ Backend Services<small>Order Mgmt · ERP · CRM</small></div>
             <div class="arch-aws-data-row">
@@ -328,12 +328,12 @@
                 <span class="arch-tag arch-tag-green">🛒 Sessions</span>
                 <span class="arch-tag arch-tag-green">⚡ Events</span>
               </div>
-              <svg width="100%" height="22" class="arch-flow-svg"><line x1="0" y1="11" x2="90%" y2="11" stroke="#0891b2" stroke-width="2.5"/><polygon points="92%,5 100%,11 92%,17" fill="#0891b2"/></svg>
+              <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="arch-flow-svg"><line x1="0" y1="11" x2="188" y2="11" stroke="#0891b2" stroke-width="2.5"/><polygon points="188,5 200,11 188,17" fill="#0891b2"/></svg>
               <div class="arch-flow-method">REST API</div>
             </div>
             <div class="arch-flow-ret">
-              <svg width="100%" height="22" class="arch-flow-svg"><line x1="10%" y1="11" x2="100%" y2="11" stroke="#ff2146" stroke-width="2.5"/><polygon points="8%,5 0,11 8%,17" fill="#ff2146"/></svg>
-              <div class="arch-flow-ret-label">← Incentives (Effects)</div>
+              <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="arch-flow-svg"><line x1="12" y1="11" x2="200" y2="11" stroke="#ff2146" stroke-width="2.5"/><polygon points="12,5 0,11 12,17" fill="#ff2146"/></svg>
+              <div class="arch-flow-ret-label">Incentives (Effects)</div>
               <div class="arch-effect-tags">
                 <span>💰 Cashback</span><span>🎟️ Coupons</span><span>🏆 Tier</span><span>🎁 Rewards</span>
               </div>
@@ -348,7 +348,7 @@
               <span class="arch-tag arch-tag-cyan">👤 Customer Profiles</span>
               <span class="arch-tag arch-tag-cyan">📦 Product Catalog</span>
             </div>
-            <svg width="100%" height="22" class="arch-flow-svg"><line x1="0" y1="11" x2="90%" y2="11" stroke="#0e7490" stroke-width="2" stroke-dasharray="6,4"/><polygon points="92%,5 100%,11 92%,17" fill="#0e7490"/></svg>
+            <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="arch-flow-svg"><line x1="0" y1="11" x2="188" y2="11" stroke="#0e7490" stroke-width="2" stroke-dasharray="6,4"/><polygon points="188,5 200,11 188,17" fill="#0e7490"/></svg>
             <div class="arch-flow-method">REST API · Batch sync</div>
           </div>
         </div>
@@ -390,8 +390,10 @@
 
     </div>
 
-    <!-- ============ BOTTOM ROW: Customer.io centered ============ -->
+    <!-- ============ BOTTOM ROW: Customer.io aligned with flow zone ============ -->
     <div class="arch-cio-row">
+      <!-- Spacer to push content under the flow zone -->
+      <div class="arch-cio-spacer"></div>
       <!-- Left arrows: AWS ↔ Customer.io -->
       <div class="arch-cio-side arch-cio-left">
         <div class="arch-cio-side-label">MMC (AWS)</div>
@@ -481,7 +483,7 @@
     .arch-flow-fwd-tags { display: flex; gap: 4px; justify-content: center; margin-bottom: 4px; }
     .arch-flow-method { font-size: 9px; color: var(--gray); margin-top: 2px; }
     .arch-flow-ret-label { font-size: 10px; font-weight: 700; color: #ff2146; margin-top: 2px; }
-    .arch-flow-svg { display: block; width: 100%; }
+    .arch-flow-svg { display: block; width: 100%; height: 22px; }
     .arch-effect-tags { display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; margin-top: 3px; }
     .arch-effect-tags span { background: #ffe6ea; color: #c41a3a; padding: 2px 5px; border-radius: 4px; font-size: 8px; font-weight: 600; }
     .arch-tag { display: inline-block; padding: 3px 7px; border-radius: 6px; font-size: 10px; font-weight: 600; }
@@ -489,8 +491,9 @@
     .arch-tag-cyan { background: #cffafe; color: #0e7490; }
     .arch-tag-purple { background: #ede9fe; color: #6d28d9; }
 
-    /* Bottom: Customer.io centered */
-    .arch-cio-row { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 24px; padding-top: 20px; border-top: 1px dashed var(--border); min-width: 960px; }
+    /* Bottom: Customer.io aligned with flow zone */
+    .arch-cio-row { display: flex; align-items: center; gap: 16px; margin-top: 24px; padding-top: 20px; border-top: 1px dashed var(--border); min-width: 960px; }
+    .arch-cio-spacer { width: 300px; flex-shrink: 0; }
     .arch-cio-box { background: #6366f1; color: var(--white); border-radius: 12px; padding: 14px 22px; text-align: center; flex-shrink: 0; }
     .arch-cio-header { font-size: 15px; font-weight: 700; }
     .arch-cio-desc { font-size: 11px; opacity: .8; margin-top: 4px; }
