@@ -78,8 +78,8 @@ export default async function handler(req: any, res: any) {
     const resend = new Resend(RESEND_API_KEY);
 
     try {
-      await resend.emails.send({
-        from: SENDER_EMAIL,
+      const emailResult = await resend.emails.send({
+        from: `Document Access <${SENDER_EMAIL}>`,
         to: email,
         subject: "You've been invited to view a document",
         html: `
@@ -99,6 +99,16 @@ export default async function handler(req: any, res: any) {
           </div>
         `,
       });
+
+      if (emailResult.error) {
+        console.error("Resend API error:", JSON.stringify(emailResult.error));
+        return res.status(200).json({
+          success: true,
+          token,
+          warning: `Invite created but email failed: ${emailResult.error.message}. Share the link manually.`,
+          accessUrl,
+        });
+      }
     } catch (emailError) {
       console.error("Failed to send email:", emailError);
       return res.status(200).json({
