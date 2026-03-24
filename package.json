@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@upstash/redis": "^1.37.0",
+    "@vercel/edge": "^1.2.2",
+    "jose": "^5.2.0",
+    "resend": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@vercel/node": "^3.0.0",
+    "typescript": "^5.4.0"
+  }
+}

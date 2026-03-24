@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Access Management</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      padding: 40px 24px;
+    }
+    h1 { font-size: 1.5rem; margin-bottom: 4px; }
+    .subtitle { color: #666; margin-bottom: 32px; font-size: 0.9rem; }
+
+    /* Login */
+    #login-section, #admin-section { max-width: 700px; margin: 0 auto; }
+    #admin-section { display: none; }
+
+    label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; margin-top: 14px; }
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d0d0d0;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      background: #fff;
+    }
+    input:focus, select:focus { outline: none; border-color: #4361ee; }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 24px;
+      background: #4361ee;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-top: 18px;
+    }
+    .btn:hover { background: #3a56d4; }
+    .btn-danger { background: #e53e3e; }
+    .btn-danger:hover { background: #c53030; }
+    .btn-sm { padding: 6px 14px; font-size: 0.8rem; margin-top: 0; }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+    .card h2 { font-size: 1rem; margin-bottom: 12px; }
+
+    /* Invites table */
+    .invite-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .invite-table th { text-align: left; color: #888; font-weight: 600; padding: 8px 6px; border-bottom: 1px solid #e0e0e0; }
+    .invite-table td { padding: 10px 6px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+    .invite-table tr:last-child td { border-bottom: none; }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-weight: 600;
+    }
+    .badge-active { background: #e6ffed; color: #22863a; }
+    .badge-expired { background: #fff5f5; color: #e53e3e; }
+    .badge-permanent { background: #eef2ff; color: #4361ee; }
+
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      background: #222;
+      color: #fff;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .toast.show { opacity: 1; }
+
+    .empty-state { color: #999; font-size: 0.9rem; padding: 20px 0; text-align: center; }
+
+    @media (max-width: 600px) {
+      body { padding: 20px 12px; }
+      .invite-table { font-size: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="login-section">
+  <h1>🔐 Admin Access</h1>
+  <p class="subtitle">Enter your admin password to manage document invitations.</p>
+  <div class="card">
+    <label for="password">Admin Password</label>
+    <input type="password" id="password" placeholder="Enter password…" />
+    <button class="btn" onclick="login()">Sign In</button>
+  </div>
+</div>
+
+<div id="admin-section">
+  <h1>📋 Access Management</h1>
+  <p class="subtitle">Create and manage per-document invitations.</p>
+
+  <div class="card">
+    <h2>Create New Invitation</h2>
+    <label for="email">Recipient Email</label>
+    <input type="email" id="email" placeholder="colleague@company.com" />
+
+    <label for="filePath">Document</label>
+    <select id="filePath">
+      <option value="COMPETITION/LOYALTY/Salesforce/talon-one-vs-salesforce-report.html">Talon.One vs Salesforce Loyalty</option>
+      <option value="COMPETITION/LOYALTY/Yopto/talon-omnivy-vs-yotpo.html">Talon.One + Omnivy vs Yotpo</option>
+      <option value="CLIENTS/OPPORTUNITIES/MY MUSCLE CHEF/mmcTalonone.html">My Muscle Chef — Talon.One (v1)</option>
+      <option value="CLIENTS/OPPORTUNITIES/MY MUSCLE CHEF/mmcTalonone 2.html">My Muscle Chef — Talon.One (v2)</option>
+      <option value="PARTNERS/CEP/talon-one-cep-gtm-template.html">CEP — Go-To-Market Blueprint</option>
+    </select>
+
+    <label for="expiry">Access Duration</label>
+    <select id="expiry">
+      <option value="">Permanent</option>
+      <option value="1">1 day</option>
+      <option value="7">7 days</option>
+      <option value="30">30 days</option>
+      <option value="90">90 days</option>
+    </select>
+
+    <button class="btn" onclick="createInvite()">Send Invitation</button>
+  </div>
+
+  <div class="card">
+    <h2>Active Invitations</h2>
+    <div id="invites-container">
+      <div class="empty-state">Loading…</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  let adminPassword = "";
+
+  function showToast(msg, duration = 3000) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), duration);
+  }
+
+  function authHeaders() {
+    return { Authorization: "Bearer " + adminPassword, "Content-Type": "application/json" };
+  }
+
+  async function login() {
+    adminPassword = document.getElementById("password").value;
+    if (!adminPassword) return;
+
+    try {
+      const res = await fetch("/api/invites", { headers: authHeaders() });
+      if (res.status === 401) {
+        showToast("Wrong password");
+        adminPassword = "";
+        return;
+      }
+      document.getElementById("login-section").style.display = "none";
+      document.getElementById("admin-section").style.display = "block";
+      sessionStorage.setItem("ap", adminPassword);
+      loadInvites();
+    } catch (e) {
+      showToast("Connection error");
+    }
+  }
+
+  // Auto-login if password is in sessionStorage
+  (function () {
+    const saved = sessionStorage.getItem("ap");
+    if (saved) {
+      adminPassword = saved;
+      document.getElementById("login-section").style.display = "none";
+      document.getElementById("admin-section").style.display = "block";
+      loadInvites();
+    }
+  })();
+
+  // Enter key triggers login
+  document.getElementById("password").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") login();
+  });
+
+  async function createInvite() {
+    const email = document.getElementById("email").value.trim();
+    const filePath = document.getElementById("filePath").value;
+    const expiryVal = document.getElementById("expiry").value;
+    const expiryDays = expiryVal ? parseInt(expiryVal) : null;
+
+    if (!email) { showToast("Please enter an email"); return; }
+
+    try {
+      const res = await fetch("/api/invite", {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({ email, filePath, expiryDays }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(data.warning || "Invitation sent!");
+        document.getElementById("email").value = "";
+        loadInvites();
+      } else {
+        showToast("Error: " + (data.error || "Unknown error"));
+      }
+    } catch (e) {
+      showToast("Failed to create invite");
+    }
+  }
+
+  async function loadInvites() {
+    const container = document.getElementById("invites-container");
+    try {
+      const res = await fetch("/api/invites", { headers: authHeaders() });
+      const data = await res.json();
+
+      if (!data.invites || data.invites.length === 0) {
+        container.innerHTML = '<div class="empty-state">No active invitations yet.</div>';
+        return;
+      }
+
+      // Sort: active first, then by creation date descending
+      data.invites.sort((a, b) => {
+        if (a.isExpired !== b.isExpired) return a.isExpired ? 1 : -1;
+        return (b.createdAt || 0) - (a.createdAt || 0);
+      });
+
+      let html = '<table class="invite-table"><thead><tr><th>Email</th><th>Document</th><th>Status</th><th>Created</th><th></th></tr></thead><tbody>';
+
+      for (const inv of data.invites) {
+        const created = inv.createdAt ? new Date(inv.createdAt).toLocaleDateString() : "—";
+        const fileName = inv.filePath ? inv.filePath.split("/").pop() : "—";
+
+        let statusBadge;
+        if (inv.isExpired) {
+          statusBadge = '<span class="badge badge-expired">Expired</span>';
+        } else if (inv.expiresAt) {
+          const days = Math.ceil((inv.expiresAt - Date.now()) / (1000 * 60 * 60 * 24));
+          statusBadge = `<span class="badge badge-active">${days}d left</span>`;
+        } else {
+          statusBadge = '<span class="badge badge-permanent">Permanent</span>';
+        }
+
+        html += `<tr>
+          <td>${escapeHtml(inv.email || "—")}</td>
+          <td title="${escapeHtml(inv.filePath || "")}">${escapeHtml(fileName)}</td>
+          <td>${statusBadge}</td>
+          <td>${created}</td>
+          <td><button class="btn btn-danger btn-sm" onclick="revokeInvite('${inv.token}')">Revoke</button></td>
+        </tr>`;
+      }
+
+      html += "</tbody></table>";
+      container.innerHTML = html;
+    } catch (e) {
+      container.innerHTML = '<div class="empty-state">Failed to load invitations.</div>';
+    }
+  }
+
+  async function revokeInvite(token) {
+    if (!confirm("Revoke this invitation? The person will lose access immediately.")) return;
+
+    try {
+      const res = await fetch("/api/revoke", {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({ token }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast("Invitation revoked");
+        loadInvites();
+      } else {
+        showToast("Error: " + (data.error || "Unknown error"));
+      }
+    } catch (e) {
+      showToast("Failed to revoke");
+    }
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  }
+</script>
+
+</body>
+</html>
