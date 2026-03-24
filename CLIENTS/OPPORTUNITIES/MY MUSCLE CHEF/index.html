@@ -271,40 +271,150 @@
     <p><strong>Why this matters for My Muscle Chef:</strong> Your team already builds and maintains a custom headless ecommerce platform. Talon.One slots in as a backend API service — no iframes, no widgets, no frontend lock-in. Your developers call the Integration API from your existing services and control every aspect of the user experience.</p>
   </div>
 
-  <div class="diagram" style="margin-top: 32px;">
-    <pre>
-  ┌─────────────────────────────────────────────────────────────────────────────┐
-  │                        <span class="hl">My Muscle Chef — Headless Stack (AWS)</span>               │
-  │                                                                             │
-  │   ┌──────────┐    ┌──────────────┐    ┌────────────┐    ┌──────────────┐   │
-  │   │  Website  │    │  Mobile App  │    │   POS/In   │    │   Backend    │   │
-  │   │ (Next.js) │    │  (Flutter?)  │    │   Store    │    │  Services    │   │
-  │   └─────┬─────┘    └──────┬───────┘    └─────┬──────┘    └──────┬───────┘   │
-  │         │                 │                   │                  │           │
-  │         └────────────┬────┴───────────────────┘                  │           │
-  │                      │                                           │           │
-  │                      ▼                                           │           │
-  │          ┌───────────────────────┐                               │           │
-  │          │   <span class="hl2">Integration Layer</span>   │◄──────────────────────────────┘           │
-  │          │   (API Gateway/BFF)   │                                           │
-  │          └───────────┬───────────┘                                           │
-  └──────────────────────┼──────────────────────────────────────────────────────┘
-                         │ REST API calls
-                         ▼
-          ┌──────────────────────────────┐
-          │    <span class="hl">Talon.One Engine (GCP)</span>       │
-          │                              │
-          │  ┌──────────┐ ┌───────────┐  │
-          │  │ Session  │ │  Loyalty   │  │
-          │  │   API    │ │  Engine    │  │
-          │  └──────────┘ └───────────┘  │
-          │  ┌──────────┐ ┌───────────┐  │
-          │  │  Event   │ │  Rules /   │  │
-          │  │   API    │ │  Campaign  │  │
-          │  └──────────┘ └───────────┘  │
-          └──────────────────────────────┘
-    </pre>
+  <!-- ARCHITECTURE DIAGRAM — CSS-based -->
+  <div class="arch-diagram" style="margin-top: 32px;">
+
+    <!-- Row 1: Customer + MMC Systems + Data/Events + Talon.One -->
+    <div class="arch-row-main">
+
+      <!-- Customer -->
+      <div class="arch-customer">
+        <div class="arch-customer-icon">👤</div>
+        <div class="arch-customer-label">Customer</div>
+      </div>
+
+      <!-- Arrow: Customer → Systems -->
+      <div class="arch-connector">
+        <div class="arch-arrow-h">
+          <svg width="48" height="24"><line x1="0" y1="12" x2="40" y2="12" stroke="#1a1f36" stroke-width="2" stroke-dasharray="4"/><polygon points="40,6 48,12 40,18" fill="#1a1f36"/></svg>
+        </div>
+      </div>
+
+      <!-- MMC Systems Box (AWS) -->
+      <div class="arch-cloud-box arch-aws">
+        <div class="arch-cloud-header">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS" class="arch-cloud-logo" style="height: 20px;" />
+          <span>My Muscle Chef</span>
+        </div>
+        <div class="arch-items">
+          <div class="arch-item arch-item-navy">🌐 Website<small>React · Ant Design</small></div>
+          <div class="arch-item arch-item-navy">📱 Mobile App<small>React Native</small></div>
+          <div class="arch-item arch-item-navy">⚙️ Backend Services<small>APIs · Order Mgmt</small></div>
+        </div>
+        <div class="arch-mw-label">Backend / Middleware</div>
+      </div>
+
+      <!-- Center: Data + Events (going right) / Effects (coming back) -->
+      <div class="arch-data-flow">
+        <div class="arch-flow-block">
+          <div class="arch-flow-label">Session &amp; Event Data →</div>
+          <div class="arch-flow-tags">
+            <div class="arch-flow-col">
+              <div class="arch-flow-col-title">Data</div>
+              <span class="arch-tag arch-tag-green">SKU</span>
+              <span class="arch-tag arch-tag-green">Qty</span>
+              <span class="arch-tag arch-tag-green">Price</span>
+            </div>
+            <div class="arch-flow-col">
+              <div class="arch-flow-col-title">Events</div>
+              <span class="arch-tag arch-tag-green">Review</span>
+              <span class="arch-tag arch-tag-green">Sign-up</span>
+              <span class="arch-tag arch-tag-green">Birthday</span>
+            </div>
+          </div>
+        </div>
+        <div class="arch-flow-block arch-flow-back">
+          <div class="arch-flow-label">← Incentives (Effects)</div>
+          <div class="arch-flow-tags" style="justify-content: center;">
+            <span class="arch-tag arch-tag-effect">💰 Cashback</span>
+            <span class="arch-tag arch-tag-effect">🎟️ Coupons</span>
+            <span class="arch-tag arch-tag-effect">🏆 Tier Update</span>
+            <span class="arch-tag arch-tag-effect">🎁 Rewards</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Talon.One Box (GCP) -->
+      <div class="arch-cloud-box arch-gcp">
+        <div class="arch-cloud-header">
+          <img src="https://www.gstatic.com/devrel-devsite/prod/vbd4700e58d826f0eab371eadc20e0e343567df356800794a790eebf2ac059db2/cloud/images/cloud-logo.svg" alt="GCP" class="arch-cloud-logo" style="height: 22px;" />
+          <span>Talon.One</span>
+        </div>
+        <div class="arch-items">
+          <div class="arch-item arch-item-t1">🔄 Session API</div>
+          <div class="arch-item arch-item-t1">⚡ Event API</div>
+          <div class="arch-item arch-item-t1">💰 Loyalty Engine</div>
+          <div class="arch-item arch-item-t1">📋 Rule Engine</div>
+          <div class="arch-item arch-item-t1">📊 Campaign Manager</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Row 2: Data Syncs + 3rd Party Tools -->
+    <div class="arch-row-bottom">
+      <div class="arch-bottom-spacer"></div>
+      <div class="arch-sync-box">
+        <div class="arch-sync-title">Data Syncs</div>
+        <div class="arch-sync-tags">
+          <span class="arch-tag arch-tag-cyan">👤 Customer Profiles</span>
+          <span class="arch-tag arch-tag-cyan">📦 Product Catalog</span>
+        </div>
+        <div class="arch-sync-arrow">
+          <svg width="24" height="40"><line x1="12" y1="0" x2="12" y2="32" stroke="#0891b2" stroke-width="2" stroke-dasharray="4"/><polygon points="6,32 12,40 18,32" fill="#0891b2"/></svg>
+        </div>
+      </div>
+      <div class="arch-thirdparty-box">
+        <div class="arch-sync-title">3rd Party Tools</div>
+        <div class="arch-sync-tags">
+          <span class="arch-tag arch-tag-cyan">📧 Customer.io</span>
+          <span class="arch-tag arch-tag-cyan">📊 GoodData</span>
+        </div>
+        <div class="arch-sync-arrow">
+          <svg width="24" height="40"><line x1="12" y1="0" x2="12" y2="32" stroke="#0891b2" stroke-width="2" stroke-dasharray="4"/><polygon points="6,32 12,40 18,32" fill="#0891b2"/></svg>
+        </div>
+      </div>
+    </div>
+
   </div>
+
+  <style>
+    .arch-diagram { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 36px 28px 28px; overflow-x: auto; }
+    .arch-row-main { display: flex; align-items: stretch; gap: 16px; justify-content: center; flex-wrap: nowrap; min-width: 900px; }
+    .arch-customer { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 70px; }
+    .arch-customer-icon { font-size: 44px; }
+    .arch-customer-label { font-size: 13px; font-weight: 600; color: var(--navy); margin-top: 6px; }
+    .arch-connector { display: flex; align-items: center; justify-content: center; }
+    .arch-cloud-box { border-radius: 14px; padding: 20px; min-width: 200px; position: relative; }
+    .arch-aws { background: #f8f9fc; border: 2px solid #232f3e; }
+    .arch-gcp { background: #f0fafb; border: 2px solid #0891b2; }
+    .arch-cloud-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .arch-cloud-header span { font-weight: 700; font-size: 15px; color: var(--navy); }
+    .arch-cloud-logo { height: 20px; }
+    .arch-items { display: flex; flex-direction: column; gap: 8px; }
+    .arch-item { padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--white); }
+    .arch-item small { display: block; font-weight: 400; font-size: 11px; opacity: .8; margin-top: 2px; }
+    .arch-item-navy { background: #1a1f36; }
+    .arch-item-t1 { background: #0891b2; }
+    .arch-mw-label { text-align: center; font-size: 11px; color: var(--gray); margin-top: 10px; font-style: italic; }
+    .arch-data-flow { display: flex; flex-direction: column; gap: 12px; justify-content: center; min-width: 220px; max-width: 260px; }
+    .arch-flow-block { background: var(--light-gray); border-radius: 10px; padding: 14px; }
+    .arch-flow-back { background: #fff5f7; border: 1px dashed var(--red); }
+    .arch-flow-label { font-size: 12px; font-weight: 700; color: var(--navy); margin-bottom: 8px; text-align: center; }
+    .arch-flow-tags { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+    .arch-flow-col { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+    .arch-flow-col-title { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 2px; }
+    .arch-tag { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+    .arch-tag-green { background: #d1fae5; color: #065f46; }
+    .arch-tag-effect { background: #ffe6ea; color: #c41a3a; }
+    .arch-tag-cyan { background: #cffafe; color: #0e7490; }
+    .arch-row-bottom { display: flex; gap: 16px; justify-content: center; margin-top: 20px; min-width: 900px; }
+    .arch-bottom-spacer { min-width: 300px; }
+    .arch-sync-box, .arch-thirdparty-box { text-align: center; min-width: 200px; }
+    .arch-sync-title { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .arch-sync-tags { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: 8px; }
+    .arch-sync-arrow { display: flex; justify-content: center; }
+  </style>
 </section>
 
 <!-- 2. ENVIRONMENTS -->
