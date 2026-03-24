@@ -803,6 +803,7 @@
     <div class="section-label">06 — Customer Data</div>
     <h2>Customer Profile API</h2>
     <p>Update customer attributes in Talon.One to power <strong>segmentation and targeting</strong> within campaign rules. Profiles can be updated via the Session API (automatically) or the dedicated Profile endpoint.</p>
+    <p>You can also sync <strong>audience memberships</strong> in real-time — push your segment/audience IDs alongside profile attributes so Talon.One campaign rules can target customers based on your own segmentation logic (e.g. from your CDP, CRM, or Customer.io).</p>
 
     <h3>Endpoint</h3>
     <div class="code-block">
@@ -810,8 +811,17 @@
     </div>
 
     <h3>Example — Updating Customer Attributes</h3>
-    <div class="code-block">
-      <code><span class="cm">// PUT /v2/customer_profiles/MMC-CUST-98421</span>
+
+    <!-- Version toggle -->
+    <div style="margin-bottom: 12px;">
+      <button class="version-toggle active" onclick="toggleProfileVersion('standard')">Standard</button>
+      <button class="version-toggle" onclick="toggleProfileVersion('audience')">With Audience Sync</button>
+    </div>
+
+    <!-- Standard version -->
+    <div id="profile-standard" class="profile-version">
+      <div class="code-block">
+        <code><span class="cm">// PUT /v2/customer_profiles/MMC-CUST-98421</span>
 {
   <span class="key">"attributes"</span>: {
     <span class="key">"dietary_preference"</span>: <span class="str">"high_protein"</span>,
@@ -823,7 +833,44 @@
     <span class="key">"preferred_meals"</span>: [<span class="str">"chicken"</span>, <span class="str">"fish"</span>]
   }
 }</code>
+      </div>
     </div>
+
+    <!-- Audience sync version -->
+    <div id="profile-audience" class="profile-version" style="display:none;">
+      <div class="highlight-box" style="margin-bottom: 12px; background: #f0fafb; border-color: #0891b2;">
+        <p><strong>With Audience Sync:</strong> Include the <code>audienceMemberships</code> array to sync your segments in real-time. Talon.One will evaluate campaign rules based on these audience IDs — enabling targeted promotions for specific customer segments from your CDP, CRM, or Customer.io.</p>
+      </div>
+      <div class="code-block">
+        <code><span class="cm">// PUT /v2/customer_profiles/MMC-CUST-98421</span>
+{
+  <span class="key">"attributes"</span>: {
+    <span class="key">"dietary_preference"</span>: <span class="str">"high_protein"</span>,
+    <span class="key">"subscription_plan"</span>: <span class="str">"weekly_10"</span>,
+    <span class="key">"city"</span>: <span class="str">"Sydney"</span>,
+    <span class="key">"state"</span>: <span class="str">"NSW"</span>,
+    <span class="key">"lifetime_orders"</span>: <span class="num">47</span>,
+    <span class="key">"last_order_date"</span>: <span class="str">"2026-03-20T10:30:00Z"</span>,
+    <span class="key">"preferred_meals"</span>: [<span class="str">"chicken"</span>, <span class="str">"fish"</span>]
+  },
+  <span class="key">"audienceMemberships"</span>: [
+    { <span class="key">"id"</span>: <span class="num">101</span>, <span class="key">"name"</span>: <span class="str">"High Value Subscribers"</span> },
+    { <span class="key">"id"</span>: <span class="num">204</span>, <span class="key">"name"</span>: <span class="str">"Protein Lovers"</span> },
+    { <span class="key">"id"</span>: <span class="num">318</span>, <span class="key">"name"</span>: <span class="str">"NSW Metro"</span> }
+  ]
+}</code>
+      </div>
+    </div>
+
+    <script>
+    function toggleProfileVersion(version) {
+      document.getElementById('profile-standard').style.display = version === 'standard' ? 'block' : 'none';
+      document.getElementById('profile-audience').style.display = version === 'audience' ? 'block' : 'none';
+      var btns = event.target.parentElement.querySelectorAll('.version-toggle');
+      btns.forEach(function(btn) { btn.classList.remove('active'); });
+      event.target.classList.add('active');
+    }
+    </script>
 
     <h3>Attributes Power Campaign Rules</h3>
     <p>Once attributes are synced, the marketing team can create rules such as:</p>
