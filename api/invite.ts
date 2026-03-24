@@ -1,5 +1,6 @@
-import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { Redis } from "@upstash/redis";
+import { Resend } from "resend";
+import { randomUUID } from "crypto";
 
 function getKV() {
   return new Redis({
@@ -7,21 +8,19 @@ function getKV() {
     token: process.env.UPSTASH_REDIS_REST_TOKEN || "",
   });
 }
-import { Resend } from "resend";
-import { randomUUID } from "crypto";
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "";
 const BASE_URL = process.env.BASE_URL || "";
 const RESEND_API_KEY = process.env.RESEND_API_KEY || "";
 const SENDER_EMAIL = process.env.SENDER_EMAIL || "onboarding@resend.dev";
 
-function verifyAdmin(req: VercelRequest): boolean {
+function verifyAdmin(req: any): boolean {
   const auth = req.headers.authorization;
   if (!auth || !auth.startsWith("Bearer ")) return false;
   return auth.slice(7) === ADMIN_PASSWORD;
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: any, res: any) {
   try {
     if (req.method !== "POST") {
       return res.status(405).json({ error: "Method not allowed" });

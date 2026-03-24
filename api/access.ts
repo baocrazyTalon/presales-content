@@ -1,5 +1,5 @@
-import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { Redis } from "@upstash/redis";
+import { SignJWT } from "jose";
 
 function getKV() {
   return new Redis({
@@ -7,11 +7,10 @@ function getKV() {
     token: process.env.UPSTASH_REDIS_REST_TOKEN || "",
   });
 }
-import { SignJWT } from "jose";
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "");
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: any, res: any) {
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });
   }

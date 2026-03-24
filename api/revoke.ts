@@ -1,4 +1,3 @@
-import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { Redis } from "@upstash/redis";
 
 function getKV() {
@@ -10,13 +9,13 @@ function getKV() {
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "";
 
-function verifyAdmin(req: VercelRequest): boolean {
+function verifyAdmin(req: any): boolean {
   const auth = req.headers.authorization;
   if (!auth || !auth.startsWith("Bearer ")) return false;
   return auth.slice(7) === ADMIN_PASSWORD;
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
