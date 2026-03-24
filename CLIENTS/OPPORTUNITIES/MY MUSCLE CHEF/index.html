@@ -1708,33 +1708,6 @@ curl_close($ch);</code>
         <p>Platform updates are rolling deployments with no service interruption. You always run the latest version automatically.</p>
       </div>
     </div>
-
-    <div class="diagram">
-      <pre>
-  ┌──────────────────────────────────────────────────────────────────────────┐
-  │                        <span class="hl">Talon.One Platform (GCP)</span>                        │
-  │                                                                          │
-  │  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐                 │
-  │  │  <span class="hl2">API Gateway</span>  │   │ <span class="hl2">Rule Engine</span>  │   │  <span class="hl2">Loyalty</span>     │                 │
-  │  │  (Load       │──►│  (Campaign   │──►│  <span class="hl2">Engine</span>      │                 │
-  │  │   Balanced)  │   │   Eval)      │   │  (Points/    │                 │
-  │  │              │   │              │   │   Tiers)     │                 │
-  │  └──────────────┘   └──────────────┘   └──────────────┘                 │
-  │         │                                       │                        │
-  │         ▼                                       ▼                        │
-  │  ┌──────────────┐                        ┌──────────────┐               │
-  │  │  <span class="hl3">PostgreSQL</span>  │                        │  <span class="hl3">Webhook</span>      │               │
-  │  │  (Multi-AZ   │                        │  <span class="hl3">Dispatcher</span>  │               │
-  │  │   Replicated)│                        │  → Customer.io│               │
-  │  └──────────────┘                        │  → Your APIs  │               │
-  │                                          └──────────────┘               │
-  │  ┌──────────────┐   ┌──────────────┐                                    │
-  │  │  <span class="hl3">GoodData</span>    │   │  <span class="hl3">Management</span>  │                                    │
-  │  │  Analytics   │   │  API / UI    │                                    │
-  │  └──────────────┘   └──────────────┘                                    │
-  └──────────────────────────────────────────────────────────────────────────┘
-      </pre>
-    </div>
   </div>
 </section>
 
