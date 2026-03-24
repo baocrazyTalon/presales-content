@@ -1231,18 +1231,88 @@
   <h2>Integration with Customer.io</h2>
   <p>Talon.One integrates with Customer.io through <strong>webhooks</strong> and <strong>broadcast API</strong>. This creates a powerful loop: Talon.One triggers messaging via Customer.io, and Customer.io pushes audience segments back into Talon.One.</p>
 
-  <div class="diagram">
-    <pre>
-  ┌───────────────────┐         <span class="hl">Webhooks</span>          ┌───────────────────┐
-  │                   │ ──────────────────────► │                   │
-  │                   │  • Trigger campaigns     │                   │
-  │    <span class="hl">Talon.One</span>      │  • Loyalty data updates  │  <span class="hl2">Customer.io</span>      │
-  │                   │                          │                   │
-  │                   │ ◄────────────────────── │                   │
-  │                   │     <span class="hl3">Broadcast API</span>        │                   │
-  └───────────────────┘  • Segment sync          └───────────────────┘
-    </pre>
+  <!-- CSS-based Customer.io diagram -->
+  <div class="cio-diagram" style="margin-top: 32px;">
+    <div class="cio-diagram-main">
+
+      <!-- Talon.One box -->
+      <div class="cio-diagram-box cio-box-talon">
+        <div class="cio-diagram-box-hdr">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="#0891b2" opacity="0.2"/>
+            <path d="M12 2L2 7v10l10 5 10-5V7L12 2z" stroke="#0891b2" stroke-width="1.5" fill="none"/>
+          </svg>
+          <span>Talon.One</span>
+        </div>
+        <div class="cio-diagram-box-items">
+          <div class="cio-diagram-chip">📋 Rule Engine</div>
+          <div class="cio-diagram-chip">📊 Campaign Manager</div>
+          <div class="cio-diagram-chip">💰 Loyalty Program</div>
+        </div>
+      </div>
+
+      <!-- Center arrows -->
+      <div class="cio-diagram-arrows">
+        <div class="cio-diagram-arrow-block">
+          <div class="cio-diagram-arrow-label">Webhooks</div>
+          <div class="cio-diagram-arrow-sub">Loyalty events · Coupon delivery · Tier changes</div>
+          <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="cio-arrow-svg">
+            <line x1="0" y1="11" x2="188" y2="11" stroke="#0891b2" stroke-width="2.5"/>
+            <polygon points="188,5 200,11 188,17" fill="#0891b2"/>
+          </svg>
+        </div>
+        <div class="cio-diagram-arrow-block">
+          <div class="cio-diagram-arrow-label">Profile Updates</div>
+          <div class="cio-diagram-arrow-sub">Tier · Cashback balance · Spend data</div>
+          <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="cio-arrow-svg">
+            <line x1="0" y1="11" x2="188" y2="11" stroke="#0891b2" stroke-width="2"/>
+            <polygon points="188,5 200,11 188,17" fill="#0891b2"/>
+          </svg>
+        </div>
+        <div class="cio-diagram-arrow-block" style="margin-top: 8px;">
+          <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="cio-arrow-svg">
+            <line x1="12" y1="11" x2="200" y2="11" stroke="#6366f1" stroke-width="2.5"/>
+            <polygon points="12,5 0,11 12,17" fill="#6366f1"/>
+          </svg>
+          <div class="cio-diagram-arrow-label" style="color: #6366f1;">Broadcast API</div>
+          <div class="cio-diagram-arrow-sub">Segment sync · Audience import</div>
+        </div>
+      </div>
+
+      <!-- Customer.io box -->
+      <div class="cio-diagram-box cio-box-cio">
+        <div class="cio-diagram-box-hdr">
+          <span style="font-size: 18px;">📧</span>
+          <span>Customer.io</span>
+        </div>
+        <div class="cio-diagram-box-items">
+          <div class="cio-diagram-chip cio-chip-purple">✉️ Email Campaigns</div>
+          <div class="cio-diagram-chip cio-chip-purple">📱 Push Notifications</div>
+          <div class="cio-diagram-chip cio-chip-purple">💬 SMS</div>
+          <div class="cio-diagram-chip cio-chip-purple">🎯 Segments</div>
+        </div>
+      </div>
+
+    </div>
   </div>
+
+  <style>
+    .cio-diagram { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 28px 20px 20px; overflow-x: auto; }
+    .cio-diagram-main { display: flex; align-items: stretch; gap: 16px; min-width: 700px; }
+    .cio-diagram-box { border-radius: 14px; padding: 18px; flex-shrink: 0; width: 200px; }
+    .cio-box-talon { background: #f0fafb; border: 2px solid #0891b2; }
+    .cio-box-cio { background: #f5f3ff; border: 2px solid #6366f1; }
+    .cio-diagram-box-hdr { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .cio-diagram-box-hdr span { font-weight: 700; font-size: 14px; color: var(--navy); }
+    .cio-diagram-box-items { display: flex; flex-direction: column; gap: 6px; }
+    .cio-diagram-chip { background: #0891b2; color: var(--white); padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: 600; }
+    .cio-chip-purple { background: #6366f1; }
+    .cio-diagram-arrows { display: flex; flex-direction: column; gap: 6px; justify-content: center; flex: 1; min-width: 200px; max-width: 300px; }
+    .cio-diagram-arrow-block { text-align: center; }
+    .cio-diagram-arrow-label { font-size: 11px; font-weight: 700; color: var(--navy); }
+    .cio-diagram-arrow-sub { font-size: 9px; color: var(--gray); margin-bottom: 2px; }
+    .cio-arrow-svg { display: block; width: 100%; height: 22px; }
+  </style>
 
   <h3>1. Webhooks: Talon.One → Customer.io (Event Triggers)</h3>
   <p>When a campaign rule fires in Talon.One, it can send a <strong>webhook to Customer.io</strong> to trigger automated messaging workflows.</p>
