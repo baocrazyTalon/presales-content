@@ -891,11 +891,16 @@
 
   <h3>Endpoint</h3>
   <div class="code-block">
-    <code><span class="kw">GET</span> /v2/customer_profiles/{<span class="key">integrationId</span>}/inventory</code>
+    <code><span class="kw">GET</span> /v1/customer_profiles/{<span class="key">integrationId</span>}/inventory?<span class="str">profile=true</span>&amp;<span class="str">referrals=true</span>&amp;<span class="str">coupons=true</span>&amp;<span class="str">loyalty=true</span>&amp;<span class="str">giveaways=false</span>&amp;<span class="str">achievements=true</span></code>
   </div>
 
   <h3>What You Get Back</h3>
   <div class="cards">
+    <div class="card">
+      <div class="card-icon">👤</div>
+      <h4>Customer Profile</h4>
+      <p>Full profile attributes, audience memberships, and account metadata for the customer.</p>
+    </div>
     <div class="card">
       <div class="card-icon">💰</div>
       <h4>Loyalty / Cashback Balance</h4>
@@ -907,12 +912,17 @@
       <p>All personal coupons allocated to this customer — including status, expiry, and usage count.</p>
     </div>
     <div class="card">
-      <div class="card-icon">📊</div>
-      <h4>Giveaway Items</h4>
-      <p>Free products or gifts awarded through campaigns that the customer hasn't redeemed yet.</p>
+      <div class="card-icon">🔗</div>
+      <h4>Referral Code</h4>
+      <p>The customer's personal referral code, usage count, and referral campaign details.</p>
     </div>
     <div class="card">
       <div class="card-icon">🏆</div>
+      <h4>Achievements</h4>
+      <p>Unlocked achievements and progress toward achievement goals (e.g. "10 Orders Milestone", "First Review").</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🥇</div>
       <h4>Tier Information</h4>
       <p>Current tier, tier progress, spend needed for next tier, tier upgrade/downgrade dates.</p>
     </div>
@@ -921,6 +931,14 @@
   <h3>Example Response (Simplified)</h3>
   <div class="code-block">
     <code>{
+  <span class="key">"profile"</span>: {
+    <span class="key">"integrationId"</span>: <span class="str">"MMC-CUST-98421"</span>,
+    <span class="key">"attributes"</span>: {
+      <span class="key">"dietary_preference"</span>: <span class="str">"high_protein"</span>,
+      <span class="key">"city"</span>: <span class="str">"Sydney"</span>,
+      <span class="key">"lifetime_orders"</span>: <span class="num">47</span>
+    }
+  },
   <span class="key">"loyalty"</span>: {
     <span class="key">"programId"</span>: <span class="num">12</span>,
     <span class="key">"programName"</span>: <span class="str">"MMC Rewards"</span>,
@@ -934,6 +952,26 @@
   },
   <span class="key">"coupons"</span>: [
     { <span class="key">"code"</span>: <span class="str">"SILVER-BIRTHDAY-2026"</span>, <span class="key">"expiryDate"</span>: <span class="str">"2026-04-15"</span> }
+  ],
+  <span class="key">"referrals"</span>: [
+    {
+      <span class="key">"code"</span>: <span class="str">"MMC-REF-98421"</span>,
+      <span class="key">"timesUsed"</span>: <span class="num">3</span>,
+      <span class="key">"campaignId"</span>: <span class="num">45</span>
+    }
+  ],
+  <span class="key">"achievements"</span>: [
+    {
+      <span class="key">"name"</span>: <span class="str">"10 Orders Milestone"</span>,
+      <span class="key">"status"</span>: <span class="str">"completed"</span>,
+      <span class="key">"completionDate"</span>: <span class="str">"2026-02-10T08:15:00Z"</span>
+    },
+    {
+      <span class="key">"name"</span>: <span class="str">"First Social Share"</span>,
+      <span class="key">"status"</span>: <span class="str">"in_progress"</span>,
+      <span class="key">"progress"</span>: <span class="num">0</span>,
+      <span class="key">"target"</span>: <span class="num">1</span>
+    }
   ]
 }</code>
   </div>
