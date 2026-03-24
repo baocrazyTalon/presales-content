@@ -1,7 +1,6 @@
 {
   "framework": null,
-  "buildCommand": "",
-  "outputDirectory": ".",
+  "installCommand": "npm install",
   "cleanUrls": false,
   "trailingSlash": false,
   "functions": {
