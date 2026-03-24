@@ -12,37 +12,42 @@ function verifyAdmin(req: VercelRequest): boolean {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== "GET") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+  try {
+    if (req.method !== "GET") {
+      return res.status(405).json({ error: "Method not allowed" });
+    }
 
-  if (!verifyAdmin(req)) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
+    if (!verifyAdmin(req)) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
 
-  // Scan KV for all invite:* keys
-  const invites: Array<Record<string, unknown>> = [];
-  let done = false;
-  let cursor = "0";
+    const invites: Array<Record<string, unknown>> = [];
+    let done = false;
+    let cursor = "0";
 
-  while (!done) {
-    const [nextCursor, keys] = (await kv.scan(cursor, {
-      match: "invite:*",
-      count: 100,
-    })) as [string, string[]];
+    while (!done) {
+      const [nextCursor, keys] = (await kv.scan(cursor, {
+        match: "invite:*",
+        count: 100,
+      })) as [string, string[]];
 
-    cursor = nextCursor;
-    if (cursor === "0") done = true;
+      cursor = nextCursor;
+      if (cursor === "0") done = true;
 
-    for (const key of keys) {
-      const raw = await kv.get<string>(key);
-      if (raw) {
-        const invite = typeof raw === "string" ? JSON.parse(raw) : raw;
-        const isExpired = invite.expiresAt ? Date.now() > invite.expiresAt : false;
-        invites.push({ ...invite, isExpired });
+      for (const key of keys) {
+        const raw = await kv.get<string>(key);
+        if (raw) {
+          const invite = typeof raw === "string" ? JSON.parse(raw) : raw;
+          const isExpired = invite.expiresAt ? Date.now() > invite.expiresAt : false;
+          invites.push({ ...invite, isExpired });
+        }
       }
     }
-  }
 
-  return res.status(200).json({ invites });
+    return res.status(200).json({ invites });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("Invites handler error:", err);
+    return res.status(500).json({ error: message });
+  }
 }
