@@ -227,7 +227,7 @@
     <img src="https://www.datocms-assets.com/81001/1666837322-01_mymc_blk.svg" alt="My Muscle Chef" />
   </div>
   <h1>Technical Integration <em>Deep Dive</em></h1>
-  <p class="sub">Loyalty program powered by Cashback — Tier-based spending, flexible earn &amp; redemption, seamlessly integrated with My Muscle Chef's headless platform on AWS.</p>
+  <p class="sub">Loyalty program powered by Cashback — Tier-based spending, flexible earn &amp; redemption, seamlessly integrated with My Muscle Chef's headless platform on AWS. Talon.One hosted on GCP Australia.</p>
   <div class="tags">
     <span>Cashback Loyalty</span>
     <span>Tier by Spend</span>
@@ -242,7 +242,7 @@
 <section id="mach">
   <div class="section-label">01 — Architecture</div>
   <h2>MACH Architecture &amp; API-First Approach</h2>
-  <p>Talon.One is built as a <strong>MACH-compliant</strong> promotion engine — Microservices, API-first, Cloud-native, and Headless. This aligns perfectly with My Muscle Chef's in-house headless ecommerce stack already running on AWS.</p>
+  <p>Talon.One is built as a <strong>MACH-compliant</strong> promotion engine — Microservices, API-first, Cloud-native, and Headless. Talon.One is hosted on <strong>Google Cloud Platform (GCP)</strong>, while My Muscle Chef's in-house headless ecommerce stack runs on AWS — both connected seamlessly via API.</p>
 
   <div class="cards">
     <div class="card">
@@ -258,7 +258,7 @@
     <div class="card">
       <div class="card-icon">☁️</div>
       <h4>Cloud-Native</h4>
-      <p>SaaS platform deployed on AWS (same cloud as MMC). Auto-scaling, high availability, managed infrastructure.</p>
+      <p>SaaS platform deployed on <strong>Google Cloud Platform (GCP)</strong>. Auto-scaling, high availability, managed infrastructure. GCP Australia data center for low latency.</p>
     </div>
     <div class="card">
       <div class="card-icon">🔗</div>
@@ -274,7 +274,7 @@
   <div class="diagram" style="margin-top: 32px;">
     <pre>
   ┌─────────────────────────────────────────────────────────────────────────────┐
-  │                       <span class="hl">My Muscle Chef — Headless Stack (AWS)</span>                │
+  │                        <span class="hl">My Muscle Chef — Headless Stack (AWS)</span>               │
   │                                                                             │
   │   ┌──────────┐    ┌──────────────┐    ┌────────────┐    ┌──────────────┐   │
   │   │  Website  │    │  Mobile App  │    │   POS/In   │    │   Backend    │   │
@@ -292,7 +292,7 @@
                          │ REST API calls
                          ▼
           ┌──────────────────────────────┐
-          │      <span class="hl">Talon.One Engine</span>         │
+          │    <span class="hl">Talon.One Engine (GCP)</span>       │
           │                              │
           │  ┌──────────┐ ┌───────────┐  │
           │  │ Session  │ │  Loyalty   │  │
@@ -895,7 +895,7 @@
   ┌──────────────┐     Management API     ┌──────────────┐    ┌──────────────┐
   │              │ ─────────────────────►  │              │ ──►│              │
   │  <span class="hl">Talon.One</span>   │    Paginated JSON       │   <span class="hl2">ETL Job</span>    │    │  <span class="hl3">Data</span>        │
-  │              │    (Nightly / Hourly)   │  (AWS Glue/  │    │  <span class="hl3">Warehouse</span>   │
+  │              │    (Nightly / Hourly)   │  (AWS Glue/  │    │  <span class="hl3">Data</span>        │
   │              │                         │   Lambda)    │    │  (Redshift/  │
   │              │                         │              │    │   BigQuery)  │
   └──────────────┘                         └──────────────┘    └──────────────┘
@@ -943,7 +943,7 @@
     <div class="card">
       <div class="card-icon">🌏</div>
       <h4>Data Residency</h4>
-      <p>Talon.One offers regional deployments. Data can be hosted in regions appropriate for Australian privacy requirements.</p>
+      <p>Talon.One runs on GCP with regional deployments. For MMC, data will be hosted on <strong>GCP Australia (Sydney)</strong>, meeting Australian privacy and data residency requirements.</p>
     </div>
     <div class="card">
       <div class="card-icon">📜</div>
@@ -963,13 +963,13 @@
   <div class="inner">
     <div class="section-label">14 — Infrastructure</div>
     <h2>Hosting &amp; Architecture</h2>
-    <p>Talon.One is a fully managed <strong>SaaS platform</strong> hosted on AWS — the same cloud provider as My Muscle Chef's infrastructure. No servers to manage, no scaling to worry about.</p>
+    <p>Talon.One is a fully managed <strong>SaaS platform</strong> hosted on <strong>Google Cloud Platform (GCP)</strong> — with a dedicated <strong>Australia region</strong> deployment ensuring low latency for MMC customers. Your infrastructure runs on AWS, connected to Talon.One via REST APIs. No servers to manage, no scaling to worry about.</p>
 
     <div class="cards">
       <div class="card">
         <div class="card-icon">☁️</div>
-        <h4>AWS Hosted</h4>
-        <p>Runs on AWS infrastructure with multi-AZ deployments for high availability. Same cloud as MMC — minimal network latency.</p>
+        <h4>GCP Hosted — Australia Region</h4>
+        <p>Runs on Google Cloud Platform with multi-zone deployments for high availability. <strong>GCP Australia (sydney)</strong> data center ensures low latency for MMC's Australian customers.</p>
       </div>
       <div class="card">
         <div class="card-icon">📈</div>
@@ -989,7 +989,7 @@
       <div class="card">
         <div class="card-icon">🌏</div>
         <h4>Regional Deployment</h4>
-        <p>Data hosted in the appropriate region for Australian compliance and latency requirements.</p>
+        <p>Talon.One deployed on <strong>GCP Australia (Sydney)</strong> for Australian compliance and lowest latency to MMC's users and AWS infrastructure.</p>
       </div>
       <div class="card">
         <div class="card-icon">🔧</div>
@@ -1001,7 +1001,7 @@
     <div class="diagram">
       <pre>
   ┌──────────────────────────────────────────────────────────────────────────┐
-  │                        <span class="hl">Talon.One Platform (AWS)</span>                        │
+  │                        <span class="hl">Talon.One Platform (GCP)</span>                        │
   │                                                                          │
   │  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐                 │
   │  │  <span class="hl2">API Gateway</span>  │   │ <span class="hl2">Rule Engine</span>  │   │  <span class="hl2">Loyalty</span>     │                 │
