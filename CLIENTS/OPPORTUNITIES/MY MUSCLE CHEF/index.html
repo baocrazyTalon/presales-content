@@ -1466,58 +1466,149 @@ curl_close($ch);</code>
     <h2>Management API — ETL into Your Data Warehouse</h2>
     <p>Talon.One's <strong>Management API</strong> allows you to extract all promotion and loyalty data for ingestion into your own data warehouse — enabling custom analytics, BI reporting, and cross-platform data joins.</p>
 
-    <h3>Available Data Exports</h3>
+    <p style="margin-bottom: 20px; color: var(--gray); font-style: italic;">Below are examples of commonly used export endpoints. Many more are available in the <a href="https://docs.talon.one/management-api" target="_blank" style="color: var(--red); font-weight: 600;">full Management API reference</a>.</p>
+
+    <h3>Analytics</h3>
     <table>
       <thead>
-        <tr><th>Data Type</th><th>Endpoint</th><th>Use Case</th></tr>
+        <tr><th>Endpoint</th><th>Description</th></tr>
       </thead>
       <tbody>
         <tr>
-          <td>Customer Sessions</td>
-          <td><code>GET /v1/applications/{id}/sessions</code></td>
-          <td>Order-level promotion data for revenue analysis</td>
+          <td><code>GET /v1/applications/{applicationId}/export_effects</code></td>
+          <td>Download a CSV of all triggered effects (discounts, coupons, loyalty points, etc.) with campaign ID, rule, session, and revenue data. Filterable by campaign, date range, and date format.</td>
         </tr>
         <tr>
-          <td>Loyalty Ledger</td>
-          <td><code>GET /v1/loyalty_programs/{id}/ledger</code></td>
-          <td>Full cashback transaction history</td>
-        </tr>
-        <tr>
-          <td>Campaign Analytics</td>
-          <td><code>GET /v1/applications/{id}/campaigns</code></td>
-          <td>Campaign performance metrics</td>
-        </tr>
-        <tr>
-          <td>Coupon Usage</td>
-          <td><code>GET /v1/applications/{id}/coupons</code></td>
-          <td>Coupon redemption tracking</td>
-        </tr>
-        <tr>
-          <td>Customer Profiles</td>
-          <td><code>GET /v1/applications/{id}/customers</code></td>
-          <td>Enriched customer data with loyalty attributes</td>
-        </tr>
-        <tr>
-          <td>Webhook Logs</td>
-          <td><code>GET /v1/webhooks/logs</code></td>
-          <td>Audit trail for all outbound webhooks</td>
+          <td><code>GET /v1/applications/{applicationId}/export_customer_sessions</code></td>
+          <td>Download a CSV of customer sessions including cart items, discounts, totals, attributes, state, coupons, and referral data. Filter by date, profile, or session state.</td>
         </tr>
       </tbody>
     </table>
 
-    <div class="diagram">
-      <pre>
-  ┌──────────────┐     Management API     ┌──────────────┐    ┌──────────────┐
-  │              │ ─────────────────────►  │              │ ──►│              │
-  │  <span class="hl">Talon.One</span>   │    Paginated JSON       │   <span class="hl2">ETL Job</span>    │    │  <span class="hl3">Data</span>        │
-  │              │    (Nightly / Hourly)   │  (AWS Glue/  │    │  <span class="hl3">Data</span>        │
-  │              │                         │   Lambda)    │    │  (Redshift/  │
-  │              │                         │              │    │   BigQuery)  │
-  └──────────────┘                         └──────────────┘    └──────────────┘
-      </pre>
+    <h3>Loyalty</h3>
+    <table>
+      <thead>
+        <tr><th>Endpoint</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>GET /v1/loyalty_programs/{loyaltyProgramId}/profile/{integrationId}/ledger_transactions</code></td>
+          <td>Paginated list of a customer's loyalty transactions — additions, subtractions, imports. Filter by date, subledger, transaction type, or session IDs.</td>
+        </tr>
+        <tr>
+          <td><code>GET /v1/loyalty_programs/{loyaltyProgramId}/profile/{integrationId}/export_log</code></td>
+          <td>Download a CSV of a customer's full loyalty ledger history including rule name, campaign ID, amount, expiry date, and transaction UUID.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Customer Data</h3>
+    <table>
+      <thead>
+        <tr><th>Endpoint</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>GET /v1/customers/no_total</code></td>
+          <td>List all customer profiles with their integration IDs, total sales, closed sessions, loyalty memberships, audience memberships, and last activity timestamp.</td>
+        </tr>
+        <tr>
+          <td><code>GET /v1/applications/{applicationId}/customer_activity_reports/no_total</code></td>
+          <td>Summary activity reports for all customers in an application — coupon redemptions, failed attempts, accrued discounts, accrued revenue, and total orders within a time range.</td>
+        </tr>
+        <tr>
+          <td><code>GET /v1/applications/{applicationId}/customers/{customerId}/analytics</code></td>
+          <td>Analytics for a specific customer: accepted coupons, created coupons, free items, total orders, total revenue, total discounts, and discounted orders.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Logs</h3>
+    <table>
+      <thead>
+        <tr><th>Endpoint</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>GET /v1/applications/{applicationId}/access_logs/no_total</code></td>
+          <td>Retrieve API access logs with full request/response payloads, HTTP method, URI, status code, and timestamps. Filter by path, method, status, and date range.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- CSS-based ETL diagram -->
+    <div class="cio-diagram" style="margin-top: 32px;">
+      <div class="cio-diagram-main">
+
+        <!-- Talon.One box -->
+        <div class="cio-diagram-box cio-box-talon">
+          <div class="cio-diagram-box-hdr">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="#0891b2" opacity="0.2"/>
+              <path d="M12 2L2 7v10l10 5 10-5V7L12 2z" stroke="#0891b2" stroke-width="1.5" fill="none"/>
+            </svg>
+            <span>Talon.One</span>
+          </div>
+          <div class="cio-diagram-box-items">
+            <div class="cio-diagram-chip">📊 Management API</div>
+            <div class="cio-diagram-chip">📋 CSV Exports</div>
+            <div class="cio-diagram-chip">📄 Paginated JSON</div>
+          </div>
+        </div>
+
+        <!-- Center arrow -->
+        <div class="cio-diagram-arrows">
+          <div class="cio-diagram-arrow-block">
+            <div class="cio-diagram-arrow-label">Nightly / Hourly</div>
+            <div class="cio-diagram-arrow-sub">Scheduled data extraction</div>
+            <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="cio-arrow-svg">
+              <line x1="0" y1="11" x2="188" y2="11" stroke="#0891b2" stroke-width="2.5"/>
+              <polygon points="188,5 200,11 188,17" fill="#0891b2"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- ETL Job box -->
+        <div class="cio-diagram-box" style="background: #fef3c7; border: 2px solid #f59e0b; width: 160px;">
+          <div class="cio-diagram-box-hdr" style="border-bottom-color: #fde68a;">
+            <span style="font-size: 18px;">⚙️</span>
+            <span>ETL Job</span>
+          </div>
+          <div class="cio-diagram-box-items">
+            <div class="cio-diagram-chip" style="background: #f59e0b;">AWS Glue</div>
+            <div class="cio-diagram-chip" style="background: #f59e0b;">Lambda</div>
+            <div class="cio-diagram-chip" style="background: #f59e0b;">Airflow</div>
+          </div>
+        </div>
+
+        <!-- Arrow to warehouse -->
+        <div class="cio-diagram-arrows" style="min-width: 100px; max-width: 140px;">
+          <div class="cio-diagram-arrow-block">
+            <div class="cio-diagram-arrow-label">Load</div>
+            <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="cio-arrow-svg">
+              <line x1="0" y1="11" x2="188" y2="11" stroke="#f59e0b" stroke-width="2.5"/>
+              <polygon points="188,5 200,11 188,17" fill="#f59e0b"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Data Warehouse box -->
+        <div class="cio-diagram-box cio-box-cio" style="background: #fef2f2; border-color: #ef4444;">
+          <div class="cio-diagram-box-hdr">
+            <span style="font-size: 18px;">🗄️</span>
+            <span>Data Warehouse</span>
+          </div>
+          <div class="cio-diagram-box-items">
+            <div class="cio-diagram-chip cio-chip-purple" style="background: #ef4444;">Redshift</div>
+            <div class="cio-diagram-chip cio-chip-purple" style="background: #ef4444;">BigQuery</div>
+            <div class="cio-diagram-chip cio-chip-purple" style="background: #ef4444;">S3 / BI Tools</div>
+          </div>
+        </div>
+
+      </div>
     </div>
 
-    <div class="highlight-box">
+    <div class="highlight-box" style="margin-top: 20px;">
       <p><strong>For MMC:</strong> Since your stack runs on AWS, a typical pattern is AWS Lambda or Glue jobs calling the Management API on a schedule, transforming the data, and loading it into Redshift or S3 for your BI team.</p>
     </div>
   </div>
