@@ -883,6 +883,37 @@
       <li><strong>"If lifetime_orders > 50"</strong> → VIP bonus cashback tier</li>
       <li><strong>"If subscription_plan = weekly_10"</strong> → Subscriber-only exclusive offers</li>
     </ul>
+
+    <h3>Bulk Update — Multiple Customer Profiles</h3>
+    <p>Update (or create) up to <strong>1,000 customer profiles in a single request</strong> using the batch endpoint. This is ideal for initial data migration, nightly syncs, or bulk attribute updates from your CRM or data warehouse.</p>
+    <p>The <code>integrationId</code> must be any identifier that remains stable for the customer. Do not use an ID that the customer can update themselves — for example, use a database ID.</p>
+
+    <div class="code-block">
+      <code><span class="kw">PUT</span> /v2/customer_profiles</code>
+    </div>
+
+    <div class="code-block">
+      <code><span class="cm">// PUT /v2/customer_profiles — batch update up to 1,000 profiles</span>
+{
+  <span class="key">"customerProfiles"</span>: [
+    {
+      <span class="key">"integrationId"</span>: <span class="str">"MMC-CUST-98421"</span>,
+      <span class="key">"attributes"</span>: {
+        <span class="key">"dietary_preference"</span>: <span class="str">"high_protein"</span>,
+        <span class="key">"city"</span>: <span class="str">"Sydney"</span>
+      }
+    },
+    {
+      <span class="key">"integrationId"</span>: <span class="str">"MMC-CUST-10234"</span>,
+      <span class="key">"attributes"</span>: {
+        <span class="key">"dietary_preference"</span>: <span class="str">"vegan"</span>,
+        <span class="key">"city"</span>: <span class="str">"Melbourne"</span>
+      }
+    }
+    <span class="cm">// ... up to 1,000 profiles per request</span>
+  ]
+}</code>
+    </div>
   </div>
 </section>
 
