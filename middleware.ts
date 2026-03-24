@@ -3,27 +3,28 @@ import { jwtVerify } from "jose";
 
 export const config = {
   matcher: [
-    /*
-     * Match all .html requests EXCEPT:
-     *  - /index.html (public hub)
-     *  - /admin.html (has its own auth)
-     *  - /denied.html (must be accessible)
-     *  - /api/* routes
-     */
     "/((?!api/|index\\.html$|admin\\.html$|denied\\.html$).*\\.html$)",
-    // Also match rewritten paths (e.g. /my-muscle-chef)
     "/my-muscle-chef",
   ],
 };
 
-const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL!;
-const UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN!;
+/** Base64url encode a string (Edge Runtime compatible — no Buffer) */
+function toBase64Url(str: string): string {
+  return btoa(String.fromCharCode(...new TextEncoder().encode(str)))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+}
+
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "");
 
 /** Minimal KV GET for Edge Runtime (no Node.js deps) */
 async function kvGet(key: string): Promise<string | null> {
-  const res = await fetch(`${UPSTASH_URL}/get/${encodeURIComponent(key)}`, {
-    headers: { Authorization: `Bearer ${UPSTASH_TOKEN}` },
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) return null;
+  const res = await fetch(`${url}/get/${encodeURIComponent(key)}`, {
+    headers: { Authorization: `Bearer ${token}` },
   });
   if (!res.ok) return null;
   const data = await res.json();
@@ -31,15 +32,15 @@ async function kvGet(key: string): Promise<string | null> {
 }
 
 export default async function middleware(request: Request) {
-  const url = new URL(request.url);
-  let filePath = decodeURIComponent(url.pathname);
+  const reqUrl = new URL(request.url);
+  const filePath = decodeURIComponent(reqUrl.pathname);
 
   // Normalize: strip leading slash for cookie name consistency
   const normalizedPath = filePath.startsWith("/") ? filePath.slice(1) : filePath;
 
   // Look for an access cookie for this specific file
   const cookies = request.headers.get("cookie") || "";
-  const cookieName = `access_${Buffer.from(normalizedPath).toString("base64url")}`;
+  const cookieName = `access_${toBase64Url(normalizedPath)}`;
   const cookieMatch = cookies
     .split(";")
     .map((c) => c.trim())
