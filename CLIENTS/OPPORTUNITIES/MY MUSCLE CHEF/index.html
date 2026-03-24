@@ -229,13 +229,13 @@
     <img src="https://www.datocms-assets.com/81001/1666837322-01_mymc_blk.svg" alt="My Muscle Chef" />
   </div>
   <h1>Technical Integration <em>Deep Dive</em></h1>
-  <p class="sub">Incentives program powered by Cashback — Tier-based spending, flexible earn &amp; redemption, and tailored discounts, seamlessly integrated with My Muscle Chef's headless platform on AWS.</p>
+  <p class="sub">Incentives program powered by Cashback — Tier-based spending, flexible earn &amp; redemption, and tailored discounts, seamlessly integrated with My Muscle Chef's headless platform on GCP.</p>
   <div class="tags">
     <span>Cashback Loyalty</span>
     <span>Tier by Spend</span>
     <span>Discounts &amp; Promotions</span>
     <span>Headless Commerce</span>
-    <span>AWS Infrastructure</span>
+    <span>GCP Infrastructure</span>
     <span>API-First</span>
     <span>Customer.io</span>
   </div>
@@ -246,7 +246,7 @@
   <div class="inner">
   <div class="section-label">01 — Architecture</div>
   <h2>MACH Architecture &amp; API-First Approach</h2>
-  <p>Talon.One is built as a <strong>MACH-compliant</strong> promotion engine — Microservices, API-first, Cloud-native, and Headless. It will power both the <strong>loyalty program</strong> (cashback, tiers) and <strong>all discounts &amp; promotions</strong>, consolidating and replacing MMC's existing discount solution into a single, unified engine. Talon.One is hosted on <strong>Google Cloud Platform (GCP)</strong>, while My Muscle Chef's in-house headless ecommerce stack runs on AWS — both connected seamlessly via API.</p>
+  <p>Talon.One is built as a <strong>MACH-compliant</strong> promotion engine — Microservices, API-first, Cloud-native, and Headless. It will power both the <strong>loyalty program</strong> (cashback, tiers) and <strong>all discounts &amp; promotions</strong>, consolidating and replacing MMC's existing discount solution into a single, unified engine. Talon.One is hosted on <strong>Google Cloud Platform (GCP)</strong>, while My Muscle Chef's in-house headless ecommerce stack runs on GCP — both connected seamlessly via API.</p>
 
   <div class="cards">
     <div class="card">
@@ -278,7 +278,7 @@
   <!-- ARCHITECTURE DIAGRAM — CSS-based -->
   <div class="arch-diagram" style="margin-top: 32px;">
 
-    <!-- Main row: Customer → AWS → Flows → GCP -->
+    <!-- Main row: Customer → GCP (MMC) → Flows → GCP (Talon.One) -->
     <div class="arch-main">
 
       <!-- Customer -->
@@ -287,32 +287,38 @@
         <div class="arch-customer-label">Customer</div>
       </div>
 
-      <!-- Arrow: Customer → AWS -->
+      <!-- Arrow: Customer → GCP -->
       <div class="arch-arrow-col">
         <svg width="32" height="24"><line x1="0" y1="12" x2="24" y2="12" stroke="#1a1f36" stroke-width="2"/><polygon points="24,6 32,12 24,18" fill="#1a1f36"/></svg>
       </div>
 
-      <!-- ============ AWS BOX ============ -->
-      <div class="arch-cloud arch-aws-box">
+      <!-- ============ GCP / MMC BOX ============ -->
+      <div class="arch-cloud arch-mmc-box">
         <div class="arch-cloud-hdr" style="justify-content: center; flex-direction: column; align-items: center; gap: 4px;">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS" style="height:22px;" />
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="#4285F4" opacity="0.15"/>
+            <path d="M15.5 9.88l1.85-1.85.12-.76A8.99 8.99 0 0 0 3.28 9.9l.65-.05 3.7-.6s.19-.32.29-.3a5.29 5.29 0 0 1 7.58.93z" fill="#EA4335"/>
+            <path d="M19.27 9.9a9.05 9.05 0 0 0-2.73-4.37l-2.54 2.54a5.26 5.26 0 0 1 1.93 4.18v.53a2.64 2.64 0 0 1 0 5.27h-3.7l-.52.54v3.16l.52.53h3.7a6.34 6.34 0 0 0 3.34-11.38z" fill="#4285F4"/>
+            <path d="M8.23 22.28h3.7v-4.23h-3.7a2.62 2.62 0 0 1-1.1-.24l-.74.23-2.13 2.13-.19.73a6.3 6.3 0 0 0 4.16 1.38z" fill="#34A853"/>
+            <path d="M8.23 9.6a6.34 6.34 0 0 0-4.16 11.17l3.06-3.06a2.64 2.64 0 1 1 3.5-3.5l3.06-3.06A6.32 6.32 0 0 0 8.23 9.6z" fill="#FBBC05"/>
+          </svg>
           <span>My Muscle Chef</span>
         </div>
-        <div class="arch-aws-inner">
+        <div class="arch-mmc-inner">
           <!-- Left column: Channels + Backend -->
-          <div class="arch-aws-left">
-            <div class="arch-aws-channels">
+          <div class="arch-mmc-left">
+            <div class="arch-mmc-channels">
               <div class="arch-tile arch-tile-navy">🌐 Website<small>React</small></div>
               <div class="arch-tile arch-tile-navy">📱 Mobile App</div>
             </div>
             <div class="arch-tile arch-tile-dark" style="margin-top: 8px;">⚙️ Backend Services<small>Order Mgmt · ERP · CRM</small></div>
-            <div class="arch-aws-data-row">
+            <div class="arch-mmc-data-row">
               <div class="arch-tile arch-tile-outline">👤 Customer Profiles</div>
               <div class="arch-tile arch-tile-outline">📦 Product Catalog</div>
             </div>
           </div>
           <!-- Right column: Middleware (full height) -->
-          <div class="arch-aws-mw">
+          <div class="arch-mmc-mw">
             <div class="arch-mw-bar">
               <div class="arch-mw-title">🔗 API Middleware</div>
               <div class="arch-mw-desc">Orchestrates all data flow with Talon.One</div>
@@ -398,9 +404,9 @@
     <div class="arch-cio-row">
       <!-- Spacer to push content under the flow zone -->
       <div class="arch-cio-spacer"></div>
-      <!-- Left arrows: AWS ↔ Customer.io -->
+      <!-- Left arrows: GCP (MMC) ↔ Customer.io -->
       <div class="arch-cio-side arch-cio-left">
-        <div class="arch-cio-side-label">MMC (AWS)</div>
+        <div class="arch-cio-side-label">MMC (GCP)</div>
         <div class="arch-cio-side-sub">Customer data · Triggers</div>
         <svg width="120" height="36">
           <line x1="0" y1="12" x2="110" y2="12" stroke="#232f3e" stroke-width="2"/>
@@ -441,17 +447,17 @@
 
     /* Cloud boxes */
     .arch-cloud { border-radius: 14px; padding: 16px; position: relative; flex-shrink: 0; }
-    .arch-aws-box { background: #fafbfe; border: 2px solid #232f3e; width: 300px; }
+    .arch-mmc-box { background: #fafbfe; border: 2px solid #4285F4; width: 300px; }
     .arch-gcp-box { background: #f0fafb; border: 2px solid #0891b2; width: 220px; }
     .arch-cloud-hdr { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
     .arch-cloud-hdr span { font-weight: 700; font-size: 13px; color: var(--navy); }
 
-    /* AWS inner layout */
-    .arch-aws-inner { display: flex; gap: 8px; }
-    .arch-aws-left { flex: 1; display: flex; flex-direction: column; }
-    .arch-aws-channels { display: flex; gap: 6px; }
-    .arch-aws-data-row { display: flex; gap: 6px; margin-top: 8px; }
-    .arch-aws-mw { display: flex; }
+    /* MMC inner layout */
+    .arch-mmc-inner { display: flex; gap: 8px; }
+    .arch-mmc-left { flex: 1; display: flex; flex-direction: column; }
+    .arch-mmc-channels { display: flex; gap: 6px; }
+    .arch-mmc-data-row { display: flex; gap: 6px; margin-top: 8px; }
+    .arch-mmc-mw { display: flex; }
     .arch-mw-bar {
       background: linear-gradient(180deg, #1a1f36 0%, #2d3352 100%);
       color: var(--white); border-radius: 10px; padding: 12px 10px;
@@ -554,7 +560,7 @@
       <li>Each application has <strong>separate API keys</strong> — no risk of dev changes hitting production</li>
       <li>Campaign rules can be built and tested in sandbox before promoting to production</li>
       <li>Sandbox applications are included in your Talon.One license at no extra cost</li>
-      <li>Each environment can be mapped to your existing <strong>AWS dev / staging / prod</strong> infrastructure</li>
+      <li>Each environment can be mapped to your existing <strong>GCP dev / staging / prod</strong> infrastructure</li>
       <li>Data is fully isolated between applications</li>
     </ul>
 
@@ -1689,8 +1695,8 @@ MMC-CUST-12045</code>
             <span>ETL Job</span>
           </div>
           <div class="cio-diagram-box-items">
-            <div class="cio-diagram-chip" style="background: #f59e0b;">AWS Glue</div>
-            <div class="cio-diagram-chip" style="background: #f59e0b;">Lambda</div>
+            <div class="cio-diagram-chip" style="background: #f59e0b;">Cloud Dataflow</div>
+            <div class="cio-diagram-chip" style="background: #f59e0b;">Cloud Functions</div>
             <div class="cio-diagram-chip" style="background: #f59e0b;">Airflow</div>
           </div>
         </div>
@@ -1713,9 +1719,9 @@ MMC-CUST-12045</code>
             <span>Data Warehouse</span>
           </div>
           <div class="cio-diagram-box-items">
-            <div class="cio-diagram-chip cio-chip-purple" style="background: #ef4444;">Redshift</div>
             <div class="cio-diagram-chip cio-chip-purple" style="background: #ef4444;">BigQuery</div>
-            <div class="cio-diagram-chip cio-chip-purple" style="background: #ef4444;">S3 / BI Tools</div>
+            <div class="cio-diagram-chip cio-chip-purple" style="background: #ef4444;">BigQuery</div>
+            <div class="cio-diagram-chip cio-chip-purple" style="background: #ef4444;">Cloud Storage / BI</div>
           </div>
         </div>
 
@@ -1723,7 +1729,7 @@ MMC-CUST-12045</code>
     </div>
 
     <div class="highlight-box" style="margin-top: 20px;">
-      <p><strong>For MMC:</strong> Since your stack runs on AWS, a typical pattern is AWS Lambda or Glue jobs calling the Management API on a schedule, transforming the data, and loading it into Redshift or S3 for your BI team.</p>
+      <p><strong>For MMC:</strong> Since your stack runs on GCP, a typical pattern is Cloud Functions or Dataflow jobs calling the Management API on a schedule, transforming the data, and loading it into BigQuery or Cloud Storage for your BI team.</p>
     </div>
   </div>
 </section>
@@ -1779,7 +1785,7 @@ MMC-CUST-12045</code>
     <div class="card">
       <div class="card-icon">🌐</div>
       <h4>IP Whitelisting</h4>
-      <p>Restrict API access to specific IP addresses or CIDR ranges. Only requests originating from your whitelisted IPs (e.g., your AWS infrastructure) will be accepted, adding an extra layer of network-level security.</p>
+      <p>Restrict API access to specific IP addresses or CIDR ranges. Only requests originating from your whitelisted IPs (e.g., your GCP infrastructure) will be accepted, adding an extra layer of network-level security.</p>
     </div>
   </div>
   </div>
@@ -1790,7 +1796,7 @@ MMC-CUST-12045</code>
   <div class="inner">
     <div class="section-label">15 — Infrastructure</div>
     <h2>Hosting &amp; Architecture</h2>
-    <p>Talon.One is a fully managed <strong>SaaS platform</strong> hosted on <strong>Google Cloud Platform (GCP)</strong> — with a dedicated <strong>Australia region</strong> deployment ensuring low latency for MMC customers. Your infrastructure runs on AWS, connected to Talon.One via REST APIs. No servers to manage, no scaling to worry about.</p>
+    <p>Talon.One is a fully managed <strong>SaaS platform</strong> hosted on <strong>Google Cloud Platform (GCP)</strong> — with a dedicated <strong>Australia region</strong> deployment ensuring low latency for MMC customers. Your infrastructure runs on GCP, connected to Talon.One via REST APIs. No servers to manage, no scaling to worry about.</p>
 
     <div class="cards">
       <div class="card">
@@ -1816,7 +1822,7 @@ MMC-CUST-12045</code>
       <div class="card">
         <div class="card-icon">🌏</div>
         <h4>Regional Deployment</h4>
-        <p>Talon.One deployed on <strong>GCP Australia (Sydney)</strong> for Australian compliance and lowest latency to MMC's users and AWS infrastructure.</p>
+        <p>Talon.One deployed on <strong>GCP Australia (Sydney)</strong> for Australian compliance and lowest latency to MMC's users and GCP infrastructure.</p>
       </div>
       <div class="card">
         <div class="card-icon">🔧</div>
@@ -1885,7 +1891,7 @@ MMC-CUST-12045</code>
       </tr>
       <tr>
         <td><strong>ETL / Data Warehouse</strong></td>
-        <td>Build ETL jobs (AWS Lambda/Glue) using Management API</td>
+        <td>Build ETL jobs (Cloud Functions/Dataflow) using Management API</td>
         <td>MMC Data Team</td>
       </tr>
       <tr>
