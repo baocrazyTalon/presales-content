@@ -1387,19 +1387,22 @@
     <h2>API-Based Audience Import</h2>
     <p>If Customer.io is not available or preferred for segment sync, Talon.One offers direct APIs to import and manage audiences programmatically.</p>
 
-    <h3>Option A: Update Customer Profile Attributes</h3>
-    <p>Use the <strong>Update Customer Profile</strong> endpoint to set segment-related attributes directly on profiles. This is the same endpoint used for standard profile updates (see <a href="#customer-profile" style="color: var(--red); font-weight: 600;">Section 6</a>):</p>
+    <h3>Option A: Update Customer Profile — Audience Changes</h3>
+    <p>Use the same <strong>Update Customer Profile</strong> endpoint with the <code>audiencesChanges</code> payload to add or remove a customer from audiences (see <a href="#customer-profile" style="color: var(--red); font-weight: 600;">Section 6</a>):</p>
     <div class="code-block">
       <code><span class="kw">PUT</span> /v2/customer_profiles/{integrationId}
 {
-  <span class="key">"attributes"</span>: {
-    <span class="key">"segment_churn_risk"</span>: <span class="kw">true</span>,
-    <span class="key">"segment_high_value"</span>: <span class="kw">true</span>,
-    <span class="key">"segment_new_customer"</span>: <span class="kw">false</span>
+  <span class="key">"audiencesChanges"</span>: {
+    <span class="key">"adds"</span>: [
+      <span class="kw">14</span>        <span class="cm">// Add to audience ID 14</span>
+    ],
+    <span class="key">"deletes"</span>: [
+      <span class="kw">8</span>         <span class="cm">// Remove from audience ID 8</span>
+    ]
   }
 }</code>
     </div>
-    <p>Campaign rules then use these attributes: <em>"If segment_churn_risk = true → 15% bonus cashback"</em>.</p>
+    <p>Campaign rules then target audiences directly: <em>"If customer is in audience 14 (Churn Risk) → 15% bonus cashback"</em>.</p>
 
     <h3>Option B: Import Audience Memberships via CSV</h3>
     <p>Upload a CSV file containing the integration IDs of the members you want to add to an audience.</p>
