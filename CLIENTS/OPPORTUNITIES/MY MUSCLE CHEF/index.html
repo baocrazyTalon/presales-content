@@ -839,7 +839,7 @@
     <!-- Audience sync version -->
     <div id="profile-audience" class="profile-version" style="display:none;">
       <div class="highlight-box" style="margin-bottom: 12px; background: #f0fafb; border-color: #0891b2;">
-        <p><strong>With Audience Sync:</strong> Include the <code>audienceMemberships</code> array to sync your segments in real-time. Talon.One will evaluate campaign rules based on these audience IDs — enabling targeted promotions for specific customer segments from your CDP, CRM, or Customer.io.</p>
+        <p><strong>With Audience Sync:</strong> Include the <code>audiencesChanges</code> object to add or remove audience memberships in real-time. Talon.One will evaluate campaign rules based on these audience IDs — enabling targeted promotions for specific customer segments from your CDP, CRM, or Customer.io.</p>
       </div>
       <div class="code-block">
         <code><span class="cm">// PUT /v2/customer_profiles/MMC-CUST-98421</span>
@@ -853,11 +853,14 @@
     <span class="key">"last_order_date"</span>: <span class="str">"2026-03-20T10:30:00Z"</span>,
     <span class="key">"preferred_meals"</span>: [<span class="str">"chicken"</span>, <span class="str">"fish"</span>]
   },
-  <span class="key">"audienceMemberships"</span>: [
-    { <span class="key">"id"</span>: <span class="num">101</span>, <span class="key">"name"</span>: <span class="str">"High Value Subscribers"</span> },
-    { <span class="key">"id"</span>: <span class="num">204</span>, <span class="key">"name"</span>: <span class="str">"Protein Lovers"</span> },
-    { <span class="key">"id"</span>: <span class="num">318</span>, <span class="key">"name"</span>: <span class="str">"NSW Metro"</span> }
-  ]
+  <span class="key">"audiencesChanges"</span>: {
+    <span class="key">"adds"</span>: [
+      <span class="num">14</span>        <span class="cm">// Add to audience ID 14</span>
+    ],
+    <span class="key">"deletes"</span>: [
+      <span class="num">8</span>         <span class="cm">// Remove from audience ID 8</span>
+    ]
+  }
 }</code>
       </div>
     </div>
