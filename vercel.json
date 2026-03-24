@@ -3,11 +3,6 @@
   "installCommand": "npm install",
   "cleanUrls": false,
   "trailingSlash": false,
-  "functions": {
-    "api/**/*.ts": {
-      "runtime": "@vercel/node@3"
-    }
-  },
   "rewrites": [
     { "source": "/my-muscle-chef", "destination": "/CLIENTS/OPPORTUNITIES/MY%20MUSCLE%20CHEF/index.html" }
   ],
