@@ -1382,10 +1382,10 @@
     <h2>API-Based Audience Import</h2>
     <p>If Customer.io is not available or preferred for segment sync, Talon.One offers direct APIs to import and manage audiences programmatically.</p>
 
-    <h3>Option A: Update Customer Attributes</h3>
-    <p>Set segment-related attributes directly on customer profiles:</p>
+    <h3>Option A: Update Customer Profile Attributes</h3>
+    <p>Use the <strong>Update Customer Profile</strong> endpoint to set segment-related attributes directly on profiles. This is the same endpoint used for standard profile updates (see <a href="#customer-profile" style="color: var(--red); font-weight: 600;">Section 6</a>):</p>
     <div class="code-block">
-      <code><span class="kw">PUT</span> /v2/customer_profiles/MMC-CUST-98421
+      <code><span class="kw">PUT</span> /v2/customer_profiles/{integrationId}
 {
   <span class="key">"attributes"</span>: {
     <span class="key">"segment_churn_risk"</span>: <span class="kw">true</span>,
@@ -1396,23 +1396,36 @@
     </div>
     <p>Campaign rules then use these attributes: <em>"If segment_churn_risk = true → 15% bonus cashback"</em>.</p>
 
-    <h3>Option B: Audiences via Management API</h3>
-    <p>Create and manage audiences in Talon.One and import customer lists:</p>
-    <div class="code-block">
-      <code><span class="cm">// Create audience</span>
-<span class="kw">POST</span> /v1/audiences
-{
-  <span class="key">"name"</span>: <span class="str">"High Value Customers"</span>,
-  <span class="key">"integration_id"</span>: <span class="str">"seg-high-value"</span>
-}
-
-<span class="cm">// Add customers to audience</span>
-<span class="kw">POST</span> /v2/audiences/seg-high-value/memberships
-{
-  <span class="key">"profileIntegrationIds"</span>: [<span class="str">"MMC-CUST-98421"</span>, <span class="str">"MMC-CUST-12045"</span>, ...]
-}</code>
+    <h3>Option B: Import Audience Memberships via CSV</h3>
+    <p>Upload a CSV file containing the integration IDs of the members you want to add to an audience.</p>
+    <p>The file should be sent as <strong>multipart data</strong> and should contain only the following column (required):</p>
+    <ul style="margin: 10px 0 10px 24px; color: var(--navy);">
+      <li><code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-weight: 700;">profileintegrationid</code> — The integration ID of the customer profile.</li>
+    </ul>
+    <div class="highlight-box" style="margin-bottom: 16px;">
+      <strong>⚠️ Important:</strong> The import <strong>replaces</strong> the previous list of audience members. We recommend limiting your file size to <strong>500 MB</strong>.
     </div>
-    <p>This allows your data team to run batch jobs (e.g., nightly ETL) that compute segments in your data warehouse and push them into Talon.One.</p>
+    <div class="code-block">
+      <code><span class="kw">POST</span> /v1/audiences/{audienceId}/memberships/import
+Content-Type: multipart/form-data
+Authorization: ManagementKey-v1 &lt;your_api_key&gt;
+
+<span class="cm">// Example (cURL via PHP)</span>
+$ch = curl_init(<span class="str">"https://yourbaseurl.talon.one/v1/audiences/10/memberships/import"</span>);
+
+curl_setopt($ch, CURLOPT_POST, <span class="kw">true</span>);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+  <span class="str">'Content-Type: multipart/form-data'</span>,
+  <span class="str">'Authorization: ManagementKey-v1 &lt;your_api_key&gt;'</span>
+]);
+curl_setopt($ch, CURLOPT_POSTFIELDS, [
+  <span class="str">'upFile'</span> =&gt; <span class="str">''</span>
+]);
+
+curl_exec($ch);
+curl_close($ch);</code>
+    </div>
+    <p>This allows your data team to run batch jobs (e.g., nightly ETL) that compute segments in your data warehouse and push them into Talon.One via a simple CSV upload.</p>
   </div>
 </section>
 
