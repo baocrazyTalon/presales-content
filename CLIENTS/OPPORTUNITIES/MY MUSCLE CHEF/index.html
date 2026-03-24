@@ -509,6 +509,12 @@
     .version-toggle { display: inline-block; padding: 8px 18px; font-size: 13px; font-weight: 600; border: 2px solid var(--border); background: var(--white); color: var(--navy); border-radius: 8px; cursor: pointer; margin-right: 6px; transition: all .15s; }
     .version-toggle:hover { border-color: var(--navy); }
     .version-toggle.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+    /* Catalog tabs */
+    .catalog-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .catalog-tab { padding: 7px 14px; font-size: 12px; font-weight: 600; border: 2px solid var(--border); background: var(--white); color: var(--navy); border-radius: 8px; cursor: pointer; transition: all .15s; }
+    .catalog-tab:hover { border-color: var(--navy); }
+    .catalog-tab.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
   </style>
 </section>
 
@@ -1022,47 +1028,200 @@
     <h2>Product Catalog Synchronization</h2>
     <p>Sync your product catalog to Talon.One so campaign rules can reference product attributes like category, nutritional info, brand, or any custom attribute. It also enables <strong>strikethrough pricing</strong> on product listing pages.</p>
 
-    <h3>Sync Methods</h3>
-    <table>
-      <thead>
-        <tr><th>Method</th><th>Best For</th><th>How</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Catalog API (Real-time)</strong></td>
-          <td>Individual product updates</td>
-          <td><code>PUT /v1/catalogs/{catalogId}/items</code> — upsert products on change</td>
-        </tr>
-        <tr>
-          <td><strong>Bulk CSV Upload</strong></td>
-          <td>Initial load or periodic full sync</td>
-          <td>Upload CSV via Management API or Campaign Manager UI</td>
-        </tr>
-        <tr>
-          <td><strong>Cart Item Attributes</strong></td>
-          <td>Dynamic attribute at checkout</td>
-          <td>Send item attributes directly inside the session <code>cartItems</code> payload</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <h3>Example — Product Catalog Item</h3>
+    <h3>Endpoint</h3>
     <div class="code-block">
-      <code>{
-  <span class="key">"sku"</span>: <span class="str">"MEAL-GCR-001"</span>,
-  <span class="key">"price"</span>: <span class="num">12.95</span>,
-  <span class="key">"attributes"</span>: {
-    <span class="key">"name"</span>: <span class="str">"Grilled Chicken &amp; Brown Rice"</span>,
-    <span class="key">"category"</span>: <span class="str">"Ready Meals"</span>,
-    <span class="key">"protein_grams"</span>: <span class="num">42</span>,
-    <span class="key">"calories"</span>: <span class="num">450</span>,
-    <span class="key">"dietary_tags"</span>: [<span class="str">"high-protein"</span>, <span class="str">"gluten-free"</span>],
-    <span class="key">"brand"</span>: <span class="str">"My Muscle Chef"</span>,
-    <span class="key">"range"</span>: <span class="str">"Classics"</span>
-  }
-}</code>
+      <code><span class="kw">PUT</span> /v1/catalogs/{<span class="key">catalogId</span>}/sync</code>
     </div>
-    <p>This enables rules like <em>"3x cashback on meals with more than 40g protein"</em> or <em>"Bonus cashback on the new Breakfast range"</em>.</p>
+
+    <p>Perform the following actions for a given cart item catalog:</p>
+    <ul>
+      <li>Add an item to the catalog</li>
+      <li>Add multiple items to the catalog</li>
+      <li>Update the attributes of an item in the catalog</li>
+      <li>Update the attributes of multiple items in the catalog</li>
+      <li>Remove an item from the catalog</li>
+      <li>Remove multiple items from the catalog</li>
+    </ul>
+    <p>You can either add, update, or delete up to <strong>1,000 cart items in a single request</strong>. Each item synced to a catalog must have a <strong>unique SKU</strong>.</p>
+
+    <h3>Request Payload Examples</h3>
+
+    <!-- Catalog tabs -->
+    <div class="catalog-tabs">
+      <button class="catalog-tab active" onclick="showCatalogTab('cat-add-one')">Add Item</button>
+      <button class="catalog-tab" onclick="showCatalogTab('cat-add-multi')">Add Multiple</button>
+      <button class="catalog-tab" onclick="showCatalogTab('cat-update-one')">Update Item</button>
+      <button class="catalog-tab" onclick="showCatalogTab('cat-update-multi')">Update Multiple</button>
+      <button class="catalog-tab" onclick="showCatalogTab('cat-remove-one')">Remove Item</button>
+      <button class="catalog-tab" onclick="showCatalogTab('cat-remove-multi')">Remove Multiple</button>
+    </div>
+
+    <!-- Add one item -->
+    <div id="cat-add-one" class="catalog-panel">
+      <div class="code-block">
+        <code><span class="cm">// PUT /v1/catalogs/{catalogId}/sync — Add one item</span>
+{
+  <span class="key">"actions"</span>: [
+    {
+      <span class="key">"type"</span>: <span class="str">"ADD"</span>,
+      <span class="key">"payload"</span>: {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-GCR-001"</span>,
+        <span class="key">"price"</span>: <span class="num">12.95</span>,
+        <span class="key">"attributes"</span>: {
+          <span class="key">"name"</span>: <span class="str">"Grilled Chicken &amp; Brown Rice"</span>,
+          <span class="key">"category"</span>: <span class="str">"Ready Meals"</span>,
+          <span class="key">"protein_grams"</span>: <span class="num">42</span>,
+          <span class="key">"calories"</span>: <span class="num">450</span>,
+          <span class="key">"dietary_tags"</span>: [<span class="str">"high-protein"</span>, <span class="str">"gluten-free"</span>],
+          <span class="key">"brand"</span>: <span class="str">"My Muscle Chef"</span>,
+          <span class="key">"range"</span>: <span class="str">"Classics"</span>
+        }
+      }
+    }
+  ]
+}</code>
+      </div>
+    </div>
+
+    <!-- Add multiple items -->
+    <div id="cat-add-multi" class="catalog-panel" style="display:none;">
+      <div class="code-block">
+        <code><span class="cm">// PUT /v1/catalogs/{catalogId}/sync — Add multiple items</span>
+{
+  <span class="key">"actions"</span>: [
+    {
+      <span class="key">"type"</span>: <span class="str">"ADD"</span>,
+      <span class="key">"payload"</span>: {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-GCR-001"</span>,
+        <span class="key">"price"</span>: <span class="num">12.95</span>,
+        <span class="key">"attributes"</span>: {
+          <span class="key">"name"</span>: <span class="str">"Grilled Chicken &amp; Brown Rice"</span>,
+          <span class="key">"category"</span>: <span class="str">"Ready Meals"</span>,
+          <span class="key">"protein_grams"</span>: <span class="num">42</span>
+        }
+      }
+    },
+    {
+      <span class="key">"type"</span>: <span class="str">"ADD"</span>,
+      <span class="key">"payload"</span>: {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-PP-042"</span>,
+        <span class="key">"price"</span>: <span class="num">9.95</span>,
+        <span class="key">"attributes"</span>: {
+          <span class="key">"name"</span>: <span class="str">"Protein Pancakes"</span>,
+          <span class="key">"category"</span>: <span class="str">"Breakfast"</span>,
+          <span class="key">"protein_grams"</span>: <span class="num">35</span>
+        }
+      }
+    }
+    <span class="cm">// ... up to 1,000 items per request</span>
+  ]
+}</code>
+      </div>
+    </div>
+
+    <!-- Update one item -->
+    <div id="cat-update-one" class="catalog-panel" style="display:none;">
+      <div class="code-block">
+        <code><span class="cm">// PUT /v1/catalogs/{catalogId}/sync — Update one item's attributes</span>
+{
+  <span class="key">"actions"</span>: [
+    {
+      <span class="key">"type"</span>: <span class="str">"PATCH"</span>,
+      <span class="key">"payload"</span>: {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-GCR-001"</span>,
+        <span class="key">"price"</span>: <span class="num">13.95</span>,
+        <span class="key">"attributes"</span>: {
+          <span class="key">"calories"</span>: <span class="num">460</span>,
+          <span class="key">"range"</span>: <span class="str">"Premium Classics"</span>
+        }
+      }
+    }
+  ]
+}</code>
+      </div>
+    </div>
+
+    <!-- Update multiple items -->
+    <div id="cat-update-multi" class="catalog-panel" style="display:none;">
+      <div class="code-block">
+        <code><span class="cm">// PUT /v1/catalogs/{catalogId}/sync — Update multiple items</span>
+{
+  <span class="key">"actions"</span>: [
+    {
+      <span class="key">"type"</span>: <span class="str">"PATCH"</span>,
+      <span class="key">"payload"</span>: {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-GCR-001"</span>,
+        <span class="key">"price"</span>: <span class="num">13.95</span>,
+        <span class="key">"attributes"</span>: {
+          <span class="key">"range"</span>: <span class="str">"Premium Classics"</span>
+        }
+      }
+    },
+    {
+      <span class="key">"type"</span>: <span class="str">"PATCH"</span>,
+      <span class="key">"payload"</span>: {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-PP-042"</span>,
+        <span class="key">"price"</span>: <span class="num">10.95</span>,
+        <span class="key">"attributes"</span>: {
+          <span class="key">"category"</span>: <span class="str">"Premium Breakfast"</span>
+        }
+      }
+    }
+  ]
+}</code>
+      </div>
+    </div>
+
+    <!-- Remove one item -->
+    <div id="cat-remove-one" class="catalog-panel" style="display:none;">
+      <div class="code-block">
+        <code><span class="cm">// PUT /v1/catalogs/{catalogId}/sync — Remove one item</span>
+{
+  <span class="key">"actions"</span>: [
+    {
+      <span class="key">"type"</span>: <span class="str">"REMOVE"</span>,
+      <span class="key">"payload"</span>: {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-GCR-001"</span>
+      }
+    }
+  ]
+}</code>
+      </div>
+    </div>
+
+    <!-- Remove multiple items -->
+    <div id="cat-remove-multi" class="catalog-panel" style="display:none;">
+      <div class="code-block">
+        <code><span class="cm">// PUT /v1/catalogs/{catalogId}/sync — Remove multiple items</span>
+{
+  <span class="key">"actions"</span>: [
+    {
+      <span class="key">"type"</span>: <span class="str">"REMOVE"</span>,
+      <span class="key">"payload"</span>: {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-GCR-001"</span>
+      }
+    },
+    {
+      <span class="key">"type"</span>: <span class="str">"REMOVE"</span>,
+      <span class="key">"payload"</span>: {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-PP-042"</span>
+      }
+    }
+  ]
+}</code>
+      </div>
+    </div>
+
+    <script>
+    function showCatalogTab(tabId) {
+      document.querySelectorAll('.catalog-panel').forEach(function(p) { p.style.display = 'none'; });
+      document.getElementById(tabId).style.display = 'block';
+      document.querySelectorAll('.catalog-tab').forEach(function(t) { t.classList.remove('active'); });
+      event.target.classList.add('active');
+    }
+    </script>
+
+    <p style="margin-top: 16px;">This enables rules like <em>"3x cashback on meals with more than 40g protein"</em> or <em>"Bonus cashback on the new Breakfast range"</em>.</p>
   </div>
 </section>
 
