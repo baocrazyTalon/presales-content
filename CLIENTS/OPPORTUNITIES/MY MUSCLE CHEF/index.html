@@ -229,7 +229,7 @@
     <img src="https://www.datocms-assets.com/81001/1666837322-01_mymc_blk.svg" alt="My Muscle Chef" />
   </div>
   <h1>Technical Integration <em>Deep Dive</em></h1>
-  <p class="sub">Incentives program powered by Cashback — Tier-based spending, flexible earn &amp; redemption, and tailored discounts replacing your existing discount solution, seamlessly integrated with My Muscle Chef's headless platform on AWS.</p>
+  <p class="sub">Incentives program powered by Cashback — Tier-based spending, flexible earn &amp; redemption, and tailored discounts, seamlessly integrated with My Muscle Chef's headless platform on AWS.</p>
   <div class="tags">
     <span>Cashback Loyalty</span>
     <span>Tier by Spend</span>
@@ -1459,7 +1459,35 @@
     </div>
     <p>Campaign rules then target audiences directly: <em>"If customer is in audience 14 (Churn Risk) → 15% bonus cashback"</em>.</p>
 
-    <h3>Option B: Import Audience Memberships via CSV</h3>
+    <h3>Option B: Update Multiple Customer Profiles' Audiences</h3>
+    <p>Use the <strong>Integration API</strong> to add or remove customer profiles from an audience in bulk. This endpoint supports up to <strong>1,000 audience actions</strong> (<code>add</code> or <code>remove</code>) per request.</p>
+    <div class="code-block">
+      <code><span class="kw">POST</span> /v2/customer_audiences
+Authorization: ApiKey-v1 &lt;your_api_key&gt;
+
+{
+  <span class="key">"data"</span>: [
+    {
+      <span class="key">"action"</span>: <span class="str">"add"</span>,
+      <span class="key">"profileIntegrationId"</span>: <span class="str">"MMC-CUST-98421"</span>,
+      <span class="key">"audienceId"</span>: <span class="kw">14</span>
+    },
+    {
+      <span class="key">"action"</span>: <span class="str">"add"</span>,
+      <span class="key">"profileIntegrationId"</span>: <span class="str">"MMC-CUST-12045"</span>,
+      <span class="key">"audienceId"</span>: <span class="kw">14</span>
+    },
+    {
+      <span class="key">"action"</span>: <span class="str">"remove"</span>,
+      <span class="key">"profileIntegrationId"</span>: <span class="str">"MMC-CUST-30872"</span>,
+      <span class="key">"audienceId"</span>: <span class="kw">8</span>
+    }
+  ]
+}</code>
+    </div>
+    <p>This allows your backend to programmatically sync audience memberships in near real-time — for example, adding customers to a "Churn Risk" audience as soon as a scoring model flags them.</p>
+
+    <h3>Option C: Import Audience Memberships via CSV</h3>
     <p>Upload a CSV file containing the integration IDs of the members you want to add to an audience.</p>
     <p>The file should be sent as <strong>multipart data</strong> and should contain only the following column (required):</p>
     <ul style="margin: 10px 0 10px 24px; color: var(--navy);">
