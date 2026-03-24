@@ -504,6 +504,11 @@
     .arch-cio-right { /* arrow points right → to Talon.One */ }
 
     .arch-gcp-logo { flex-shrink: 0; }
+
+    /* Version toggle buttons */
+    .version-toggle { display: inline-block; padding: 8px 18px; font-size: 13px; font-weight: 600; border: 2px solid var(--border); background: var(--white); color: var(--navy); border-radius: 8px; cursor: pointer; margin-right: 6px; transition: all .15s; }
+    .version-toggle:hover { border-color: var(--navy); }
+    .version-toggle.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
   </style>
 </section>
 
@@ -574,12 +579,12 @@
 <section id="session-api" style="background: var(--light-gray); max-width: 100%;">
   <div class="inner">
     <div class="section-label">04 — Core Integration</div>
-    <h2>Session Integration API</h2>
+    <h2>Customer Session</h2>
     <p>The Session API is the heart of Talon.One integration. It represents a <strong>shopping session / cart / order</strong> and evaluates all active campaign rules in real-time.</p>
 
     <h3>Endpoint</h3>
     <div class="code-block">
-      <code><span class="kw">PUT</span> /v2/customer_sessions/{<span class="key">integrationId</span>}</code>
+      <code><span class="kw">PUT</span> /v2/customer_sessions/<span class="str" style="background:#fff3cd;padding:2px 4px;border-radius:4px;font-weight:700;">{customerSessionId}</span></code>
     </div>
 
     <h3>Session States</h3>
@@ -627,8 +632,17 @@
     </table>
 
     <h3>Example — Open Session (Cart Update)</h3>
-    <div class="code-block">
-      <code><span class="cm">// PUT /v2/customer_sessions/ORDER-2026-03-8842</span>
+
+    <!-- Version toggle -->
+    <div style="margin-bottom: 12px;">
+      <button class="version-toggle active" onclick="toggleSessionVersion('standard')">Standard</button>
+      <button class="version-toggle" onclick="toggleSessionVersion('catalog')">With Product Catalog Sync</button>
+    </div>
+
+    <!-- Standard version -->
+    <div id="session-standard" class="session-version">
+      <div class="code-block">
+        <code><span class="cm">// PUT /v2/customer_sessions/<span style="background:#fff3cd;padding:1px 3px;border-radius:3px;font-weight:700;">ORDER-2026-03-8842</span></span>
 {
   <span class="key">"customerSession"</span>: {
     <span class="key">"profileId"</span>: <span class="str">"MMC-CUST-98421"</span>,
@@ -639,6 +653,7 @@
         <span class="key">"sku"</span>: <span class="str">"MEAL-GCR-001"</span>,
         <span class="key">"quantity"</span>: <span class="num">3</span>,
         <span class="key">"price"</span>: <span class="num">12.95</span>,
+        <span class="key">"position"</span>: <span class="num">0</span>,
         <span class="key">"category"</span>: <span class="str">"Ready Meals"</span>
       },
       {
@@ -646,6 +661,7 @@
         <span class="key">"sku"</span>: <span class="str">"MEAL-PP-042"</span>,
         <span class="key">"quantity"</span>: <span class="num">2</span>,
         <span class="key">"price"</span>: <span class="num">9.95</span>,
+        <span class="key">"position"</span>: <span class="num">1</span>,
         <span class="key">"category"</span>: <span class="str">"Breakfast"</span>
       }
     ],
@@ -653,6 +669,37 @@
     <span class="key">"total"</span>: <span class="num">58.75</span>
   }
 }</code>
+      </div>
+    </div>
+
+    <!-- Catalog sync version -->
+    <div id="session-catalog" class="session-version" style="display:none;">
+      <div class="highlight-box" style="margin-bottom: 12px; background: #f0fafb; border-color: #0891b2;">
+        <p><strong>With Product Catalog Sync:</strong> When your product catalog is synced to Talon.One, cart items only need the <code>sku</code>, <code>quantity</code>, and <code>position</code>. Price, name, and other attributes are automatically read from the catalog.</p>
+      </div>
+      <div class="code-block">
+        <code><span class="cm">// PUT /v2/customer_sessions/<span style="background:#fff3cd;padding:1px 3px;border-radius:3px;font-weight:700;">ORDER-2026-03-8842</span></span>
+{
+  <span class="key">"customerSession"</span>: {
+    <span class="key">"profileId"</span>: <span class="str">"MMC-CUST-98421"</span>,
+    <span class="key">"state"</span>: <span class="str">"open"</span>,
+    <span class="key">"cartItems"</span>: [
+      {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-GCR-001"</span>,
+        <span class="key">"quantity"</span>: <span class="num">3</span>,
+        <span class="key">"position"</span>: <span class="num">0</span>
+      },
+      {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-PP-042"</span>,
+        <span class="key">"quantity"</span>: <span class="num">2</span>,
+        <span class="key">"position"</span>: <span class="num">1</span>
+      }
+    ],
+    <span class="key">"couponCodes"</span>: [<span class="str">"WELCOME10"</span>],
+    <span class="key">"total"</span>: <span class="num">58.75</span>
+  }
+}</code>
+      </div>
     </div>
 
     <h3>Response — Effects for MMC to Render</h3>
@@ -662,7 +709,11 @@
   <span class="key">"effects"</span>: [
     {
       <span class="key">"effectType"</span>: <span class="str">"setDiscount"</span>,
-      <span class="key">"props"</span>: { <span class="key">"name"</span>: <span class="str">"Coupon Discount"</span>, <span class="key">"value"</span>: <span class="num">5.87</span> }
+      <span class="key">"props"</span>: {
+        <span class="key">"name"</span>: <span class="str">"Coupon Discount"</span>,
+        <span class="key">"value"</span>: <span class="num">5.87</span>,
+        <span class="key">"position"</span>: <span class="num">0</span>
+      }
     },
     {
       <span class="key">"effectType"</span>: <span class="str">"addLoyaltyPoints"</span>,
@@ -673,14 +724,18 @@
         <span class="key">"subLedgerId"</span>: <span class="str">"main"</span>
       }
     }
-  ],
-  <span class="key">"customerProfile"</span>: {
-    <span class="key">"loyaltyMemberships"</span>: [
-      { <span class="key">"programId"</span>: <span class="num">12</span>, <span class="key">"currentTier"</span>: <span class="str">"Silver"</span>, <span class="key">"points"</span>: <span class="num">142.50</span> }
-    ]
-  }
+  ]
 }</code>
     </div>
+
+    <script>
+    function toggleSessionVersion(version) {
+      document.getElementById('session-standard').style.display = version === 'standard' ? 'block' : 'none';
+      document.getElementById('session-catalog').style.display = version === 'catalog' ? 'block' : 'none';
+      document.querySelectorAll('.version-toggle').forEach(function(btn) { btn.classList.remove('active'); });
+      event.target.classList.add('active');
+    }
+    </script>
 
     <div class="highlight-box">
       <p><strong>Cashback Loyalty Flow:</strong> When a session is <strong>open</strong>, Talon.One returns a cashback preview (e.g., "$2.64 cashback on this order"). When the session is <strong>closed</strong>, the cashback is credited to the customer's loyalty ledger. If the session is <strong>cancelled</strong>, the cashback is automatically reversed.</p>
