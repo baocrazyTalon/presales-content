@@ -1,7 +1,12 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { Redis } from "@upstash/redis";
 
-const kv = Redis.fromEnv();
+function getKV() {
+  return new Redis({
+    url: process.env.UPSTASH_REDIS_REST_URL || "",
+    token: process.env.UPSTASH_REDIS_REST_TOKEN || "",
+  });
+}
 import { Resend } from "resend";
 import { randomUUID } from "crypto";
 
@@ -55,6 +60,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     };
 
     // Store invite in KV
+    const kv = getKV();
     await kv.set(`invite:${token}`, JSON.stringify(invite));
 
     if (expiryDays) {

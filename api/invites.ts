@@ -1,7 +1,12 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { Redis } from "@upstash/redis";
 
-const kv = Redis.fromEnv();
+function getKV() {
+  return new Redis({
+    url: process.env.UPSTASH_REDIS_REST_URL || "",
+    token: process.env.UPSTASH_REDIS_REST_TOKEN || "",
+  });
+}
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "";
 
@@ -25,6 +30,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     let done = false;
     let cursor = "0";
 
+    const kv = getKV();
     while (!done) {
       const [nextCursor, keys] = (await kv.scan(cursor, {
         match: "invite:*",

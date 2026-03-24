@@ -1,7 +1,12 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { Redis } from "@upstash/redis";
 
-const kv = Redis.fromEnv();
+function getKV() {
+  return new Redis({
+    url: process.env.UPSTASH_REDIS_REST_URL || "",
+    token: process.env.UPSTASH_REDIS_REST_TOKEN || "",
+  });
+}
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "";
 
@@ -26,6 +31,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   // Get invite to find file path for cleaning up the index key
+  const kv = getKV();
   const inviteRaw = await kv.get<string>(`invite:${token}`);
   if (inviteRaw) {
     const invite = typeof inviteRaw === "string" ? JSON.parse(inviteRaw) : inviteRaw;

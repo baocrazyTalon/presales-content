@@ -1,7 +1,12 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { Redis } from "@upstash/redis";
 
-const kv = Redis.fromEnv();
+function getKV() {
+  return new Redis({
+    url: process.env.UPSTASH_REDIS_REST_URL || "",
+    token: process.env.UPSTASH_REDIS_REST_TOKEN || "",
+  });
+}
 import { SignJWT } from "jose";
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "");
@@ -17,6 +22,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   // Look up invite in KV
+  const kv = getKV();
   const inviteRaw = await kv.get<string>(`invite:${token}`);
   if (!inviteRaw) {
     return res.redirect(302, "/denied.html");
