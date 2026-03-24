@@ -1,6 +1,4 @@
 {
-  "framework": null,
-  "installCommand": "npm install",
   "cleanUrls": false,
   "trailingSlash": false,
   "rewrites": [
