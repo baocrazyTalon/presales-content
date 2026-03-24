@@ -32,12 +32,12 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 12px 40px; height: 64px;
     }
-    nav .logos { display: flex; align-items: center; gap: 18px; }
+    nav .logos { display: flex; align-items: center; gap: 18px; text-decoration: none; cursor: pointer; flex-shrink: 0; }
     nav .logos img { height: 24px; }
     nav .logos span { color: var(--red); font-weight: 700; font-size: 14px; }
     nav .nav-links { display: flex; flex: 1; gap: 0; flex-wrap: nowrap; justify-content: space-evenly; align-items: center; margin-left: 24px; }
     nav .nav-links a {
-      font-size: 11.5px; text-decoration: none; color: var(--gray);
+      font-size: 11.5px; font-weight: 600; text-decoration: none; color: var(--gray);
       padding: 4px 6px; border-radius: 6px; transition: .2s;
       text-align: center; line-height: 1.25;
     }
@@ -196,11 +196,11 @@
 
 <!-- NAVIGATION -->
 <nav>
-  <div class="logos">
+  <a href="#" class="logos" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
     <img src="https://a.storyblok.com/f/140059/118x24/886a9d9fc3/rebrand-talon-one-logo-navy.svg" alt="Talon.One Logo" />
     <span>×</span>
     <img src="https://www.datocms-assets.com/81001/1666837322-01_mymc_blk.svg" alt="My Muscle Chef Logo" />
-  </div>
+  </a>
   <div class="nav-links">
     <a href="#mach">MACH</a>
     <a href="#environments">Environments</a>
