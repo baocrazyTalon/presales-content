@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Braze & Talon.One: Technical & Strategic Integration Overview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #ffffff;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .logo-box {
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2563eb;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #2563eb;
+        }
+
+        .section-subtitle {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e40af;
+            margin: 2rem 0 1rem 0;
+        }
+
+        .outcomes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .outcome-card {
+            background: #dbeafe;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #2563eb;
+        }
+
+        .outcome-card h3 {
+            font-size: 1.2rem;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+
+        .outcome-card p {
+            color: #000000;
+            font-size: 0.95rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: #000000;
+        }
+
+        tr:hover {
+            background: #f7fafc;
+        }
+
+        .arrow {
+            font-size: 1.2rem;
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .flow-diagram {
+            background: #f8f9fa;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .flow-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2563eb;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .flow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #2563eb;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .step-actor {
+            font-weight: 600;
+            color: #1e40af;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .step-action {
+            color: #000000;
+            margin-top: 0.25rem;
+        }
+
+        .step-arrow {
+            text-align: center;
+            color: #2563eb;
+            font-size: 1.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .code-label {
+            font-size: 0.85rem;
+            color: #2563eb;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .comparison-table {
+            margin: 2rem 0;
+        }
+
+        .comparison-table td:first-child {
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .advantage {
+            color: #48bb78;
+            font-weight: 600;
+        }
+
+        .info-box {
+            background: #dbeafe;
+            border-left: 4px solid #2563eb;
+            padding: 1rem 1.5rem;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+        }
+
+        .info-box strong {
+            color: #1e40af;
+        }
+
+        .info-box p, .info-box ul, .info-box li {
+            color: #000000;
+        }
+
+        ul {
+            margin-left: 2rem;
+            margin-top: 0.5rem;
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        .nav-tabs {
+            background: white;
+            border-bottom: 2px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav-tabs-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .nav-tabs-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        .nav-tab:hover {
+            background: #f7fafc;
+            color: #2563eb;
+        }
+
+        .nav-tab.active {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+            background: #f7fafc;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .flow-step {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-tab {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Braze & Talon.One</h1>
+        <p class="subtitle">Technical & Strategic Integration Overview</p>
+        <div class="logo-container">
+            <div class="logo-box" style="background: white; padding: 1.5rem 2.5rem; display: flex; align-items: center; justify-content: center; min-width: 150px; min-height: 80px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/Braze_Logo.svg" alt="Braze Logo" style="height: 45px; width: auto; max-width: 180px;" onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\'font-size: 24px; font-weight: 700; color: #3EBBEF;\'>Braze</span>';">
+            </div>
+            <div style="font-size: 2rem; opacity: 0.8;">×</div>
+            <div class="logo-box" style="background: white; padding: 1.5rem 2.5rem; display: flex; align-items: center; justify-content: center; min-width: 150px; min-height: 80px;">
+                <img src="https://seeklogo.com/images/T/talon-one-logo-958DCABF7F-seeklogo.com.png" alt="Talon.One Logo" style="height: 40px; width: auto; max-width: 180px;" onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\'font-size: 22px; font-weight: 700; color: #FF6B6B;\'>Talon.One</span>';">
+            </div>
+        </div>
+    </div>
+
+    <nav class="nav-tabs">
+        <div class="nav-tabs-container">
+            <div class="nav-tab active" onclick="scrollToSection('section1')">Overview</div>
+            <div class="nav-tab" onclick="scrollToSection('section2')">Feature Connectivity</div>
+            <div class="nav-tab" onclick="scrollToSection('section3')">Setup & Data Flows</div>
+            <div class="nav-tab" onclick="scrollToSection('section4')">Braze Configuration</div>
+            <div class="nav-tab" onclick="scrollToSection('section5')">Infrastructure</div>
+            <div class="nav-tab" onclick="scrollToSection('section6')">Strategic Advantage</div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Section 1: Overview -->
+        <section class="section" id="section1">
+            <h2 class="section-title">1. Overview: Summary & Business Outcomes</h2>
+            <p>The Braze and Talon.One integration enables a seamless, <strong>bidirectional flow of data</strong> between the customer journey (Braze) and the incentive logic (Talon.One). This two-way communication architecture is critical: Braze pushes customer profile updates, segment changes, and behavioral triggers to Talon.One, while Talon.One instantly returns personalized offers, coupon codes, loyalty balances, and reward notifications back to Braze for immediate customer engagement.</p>
+            
+            <p style="margin-top: 1rem;">Instead of static, generic discounts managed in disconnected systems, promotions become <strong>dynamic, context-aware, and deeply integrated</strong> into every touchpoint of the user experience. When a customer qualifies for a reward in Talon.One, Braze knows instantly—no batch delays, no manual data exports. When Braze identifies a high-value segment, Talon.One can immediately apply exclusive offer eligibility rules.</p>
+
+            <div class="info-box" style="margin-top: 2rem; background: #dbeafe; border-left-color: #2563eb;">
+                <strong style="color: #1e40af; font-size: 1.1rem;">Why Bidirectional Integration Matters:</strong>
+                <ul style="color: #000000; margin-top: 0.5rem; margin-left: 1.5rem;">
+                    <li><strong>Real-Time Personalization:</strong> Customer actions in one system instantly influence the other—no waiting for overnight batch jobs</li>
+                    <li><strong>Closed-Loop Attribution:</strong> Track which Braze campaigns drove which Talon.One redemptions, enabling true ROI measurement</li>
+                    <li><strong>Contextual Intelligence:</strong> Combine Braze's engagement data (opens, clicks, channel preferences) with Talon.One's transaction data (purchase history, loyalty tier, coupon usage) for hyper-relevant incentives</li>
+                    <li><strong>Operational Efficiency:</strong> Marketers configure rules once in Talon.One, and Braze automatically delivers the right offer to the right customer at the right time across all channels</li>
+                </ul>
+            </div>
+            
+            <h3 class="section-subtitle">Key Business Outcomes</h3>
+            <div class="outcomes-grid">
+                <div class="outcome-card">
+                    <h3>Reduced Promotion Leakage</h3>
+                    <p>Real-time validation ensures codes are used only by eligible customers.</p>
+                </div>
+                <div class="outcome-card">
+                    <h3>Increased Conversion Rates</h3>
+                    <p>Deliver high-relevance incentives via the right channel at the moment of intent.</p>
+                </div>
+                <div class="outcome-card">
+                    <h3>Enhanced Loyalty Engagement</h3>
+                    <p>Use real-time ledger updates to trigger "Milestone" or "Tier Upgraded" messages.</p>
+                </div>
+                <div class="outcome-card">
+                    <h3>Operational Agility</h3>
+                    <p>Marketers launch campaigns via the Rule Builder without requiring dedicated engineering sprints.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Feature Connectivity -->
+        <section class="section" id="section2">
+            <h2 class="section-title">2. Feature Connectivity & Data Exchange</h2>
+            <p>The integration primarily utilizes Braze's Connected Content for pulling data and Webhooks/Notifications for pushing data.</p>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Braze Feature</th>
+                            <th>Talon.One Feature</th>
+                            <th>Data Exchanged</th>
+                            <th>Direction</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Connected Content</td>
+                            <td>API Endpoints</td>
+                            <td>Coupon codes, Loyalty balances, Referral codes</td>
+                            <td><span class="arrow">Braze ← Talon.One</span></td>
+                        </tr>
+                        <tr>
+                            <td>Canvas</td>
+                            <td>Webhooks / Notifications</td>
+                            <td>Triggering "Reward Earned" or "Tier Upgraded" events</td>
+                            <td><span class="arrow">Talon.One → Braze</span></td>
+                        </tr>
+                        <tr>
+                            <td>Email / Push / SMS</td>
+                            <td>Personalization (Liquid)</td>
+                            <td>Displaying unique codes or point balances in-message</td>
+                            <td><span class="arrow">Talon.One → Braze</span></td>
+                        </tr>
+                        <tr>
+                            <td>Audiences</td>
+                            <td>Customer Profiles</td>
+                            <td>Syncing Braze segments to Talon.One for eligibility</td>
+                            <td><span class="arrow">Braze → Talon.One</span></td>
+                        </tr>
+                        <tr>
+                            <td>Data Transformation</td>
+                            <td>Webhooks / Notifications</td>
+                            <td>Converting Talon.One webhook payloads into Braze event format</td>
+                            <td><span class="arrow">Talon.One → Braze</span></td>
+                        </tr>
+                        <tr>
+                            <td>Multivariate Testing</td>
+                            <td>Campaign Variants / Rule Sets</td>
+                            <td>Testing multiple incentive strategies simultaneously and measuring performance</td>
+                            <td><span class="arrow">Braze ↔ Talon.One</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 3: Setup Guidelines -->
+        <section class="section" id="section3">
+            <h2 class="section-title">3. How to Setup: Guidelines & Data Flows</h2>
+            <p>To achieve a successful integration, both platforms must use a shared <span class="highlight">Integration ID</span> (typically the Braze <code>external_id</code>).</p>
+
+            <!-- Scenario A -->
+            <h3 class="section-subtitle">Scenario A: Customer Profile Registration & Sync</h3>
+            <p>Keep Talon.One attributes in sync with Braze user profiles to power rule-based targeting.</p>
+            
+            <div class="flow-diagram">
+                <div class="flow-title">Data Flow: Profile Sync</div>
+                <div class="flow-steps">
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-actor">User Action</div>
+                            <div class="step-action">Customer updates profile (e.g., changes city, upgrades tier) or signs up</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-actor">Braze</div>
+                            <div class="step-action">Attribute change triggers a Webhook Campaign in Braze</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-actor">Braze → Talon.One</div>
+                            <div class="step-action">Braze sends PUT request to Talon.One Customer Profile API with updated attributes</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-actor">Talon.One</div>
+                            <div class="step-action">Updates customer profile with new attributes (Target_Segment, Last_City, etc.)</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <div class="step-actor">Talon.One</div>
+                            <div class="step-action">Profile is now available for rule-based targeting in campaigns</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Setup Steps:</strong>
+                <ul>
+                    <li>Create a Braze Webhook Campaign triggered by an attribute change or sign-up event</li>
+                    <li>Configure endpoint: <code>PUT https://[your_deployment].talon.one/v1/customer_profiles/{{${user_id}}}</code></li>
+                    <li>Set Content-Type to <code>application/json</code></li>
+                    <li>Add your Talon.One API Key in the headers</li>
+                </ul>
+            </div>
+
+            <div class="code-label">Example Payload:</div>
+            <div class="code-block">{
+  "attributes": {
+    "Target_Segment": "High_Value",
+    "Last_City": "{{${most_recent_location}}}"
+  }
+}</div>
+
+            <!-- Scenario B -->
+            <h3 class="section-subtitle">Scenario B: Transactions & Real-time Rewards</h3>
+            <p>Trigger loyalty points or rewards immediately after a purchase.</p>
+            
+            <div class="flow-diagram">
+                <div class="flow-title">Data Flow: Real-time Rewards</div>
+                <div class="flow-steps">
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-actor">User Action</div>
+                            <div class="step-action">Customer completes a purchase transaction</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-actor">E-commerce Platform</div>
+                            <div class="step-action">Sends transaction data to Talon.One via Session Update (Close)</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-actor">Talon.One</div>
+                            <div class="step-action">Evaluates rules and calculates rewards (e.g., 50 loyalty points earned)</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-actor">Talon.One → Braze</div>
+                            <div class="step-action">Sends webhook notification to Braze <code>/users/track</code> endpoint with points_earned event</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <div class="step-actor">Braze</div>
+                            <div class="step-action">Receives event and triggers "Points Earned" Canvas journey</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <div class="step-actor">Braze</div>
+                            <div class="step-action">Sends personalized notification (Email/Push/SMS) to customer with reward details</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Setup Steps:</strong>
+                <ul>
+                    <li>In Talon.One, create a Notification webhook triggered by "Session Update" (Close)</li>
+                    <li>Configure webhook to send to Braze <code>/users/track</code> endpoint</li>
+                    <li>Use Braze Data Transformations to map Talon.One's payload to valid Braze event format</li>
+                    <li>Create a Canvas in Braze that triggers on the <code>points_earned</code> event</li>
+                </ul>
+            </div>
+
+            <div class="code-label">Talon.One Notification Payload Example:</div>
+            <div class="code-block">{
+  "events": [
+    {
+      "external_id": "profile.IntegrationID",
+      "name": "points_earned",
+      "properties": {
+        "amount": 50
+      }
+    }
+  ]
+}</div>
+
+            <!-- Scenario C -->
+            <h3 class="section-subtitle">Scenario C: Audience Sync</h3>
+            <p>Synchronize Braze Segments to Talon.One Audiences for exclusive promotional eligibility.</p>
+            
+            <div class="flow-diagram">
+                <div class="flow-title">Data Flow: Audience Sync</div>
+                <div class="flow-steps">
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-actor">Braze</div>
+                            <div class="step-action">Segment is created/updated (e.g., "Churn_Risk" segment identified based on user behavior)</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-actor">Talon.One</div>
+                            <div class="step-action">Create corresponding Audience in Talon.One (e.g., "Churn_Risk" Audience with unique ID)</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-actor">Braze</div>
+                            <div class="step-action">Create a Canvas with Webhook tile at segment entrance</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-actor">User Action</div>
+                            <div class="step-action">Customer enters the "Churn_Risk" segment in Braze</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <div class="step-actor">Braze → Talon.One</div>
+                            <div class="step-action">Canvas webhook fires, adding user to Talon.One Audience via API</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <div class="step-actor">Talon.One</div>
+                            <div class="step-action">User is now member of "Churn_Risk" Audience and eligible for targeted campaigns</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">7</div>
+                        <div class="step-content">
+                            <div class="step-actor">Talon.One</div>
+                            <div class="step-action">Rules can now use condition: "Customer is in Audience: Churn_Risk" for exclusive offers</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Setup Steps:</strong>
+                <ul>
+                    <li>In Talon.One, create an Audience (e.g., "Churn_Risk") and note the Audience ID</li>
+                    <li>In Braze, create a Canvas with a Webhook tile at the segment entrance</li>
+                    <li>Configure webhook to call Talon.One's Audience API to add the user</li>
+                    <li>Use the condition in Talon.One rules: "Customer is in Audience: Churn_Risk"</li>
+                </ul>
+            </div>
+
+            <!-- Scenario D -->
+            <h3 class="section-subtitle">Scenario D: Data Transformation</h3>
+            <p>Transform incoming Talon.One webhook payloads into Braze-compatible event formats automatically. This is critical for loyalty point notifications, coupon redemptions, tier upgrades, and reward milestones generated by Talon.One to be instantly processed by Braze for customer engagement. Data Transformation ensures both systems remain in sync—when Talon.One awards points or issues a coupon, Braze immediately knows about it and can trigger the appropriate Canvas journey, eliminating the need for manual data exports or batch synchronization jobs.</p>
+            
+            <div class="flow-diagram">
+                <div class="flow-title">Data Flow: Webhook Data Transformation</div>
+                <div class="flow-steps">
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-actor">User Action</div>
+                            <div class="step-action">Customer redeems a coupon code during checkout</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-actor">Talon.One</div>
+                            <div class="step-action">Validates redemption and triggers webhook notification with raw payload</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-actor">Talon.One → Braze</div>
+                            <div class="step-action">Webhook hits Braze Data Transformation endpoint with Talon.One payload structure</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-actor">Braze Data Transformation</div>
+                            <div class="step-action">JavaScript code transforms Talon.One payload into Braze /users/track event format</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <div class="step-actor">Braze</div>
+                            <div class="step-action">Receives properly formatted event (e.g., "coupon_redeemed") and updates customer profile</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <div class="step-actor">Braze Canvas</div>
+                            <div class="step-action">Event triggers appropriate Canvas journey (e.g., "Thank you for redeeming!" email)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Setup Steps:</strong>
+                <ul>
+                    <li>In Braze, navigate to <strong>Data Settings → Data Transformation</strong></li>
+                    <li>Create a new transformation with a unique webhook URL</li>
+                    <li>Write JavaScript transformation code to map Talon.One fields to Braze event structure</li>
+                    <li>In Talon.One, configure webhook notification to send to the Braze Data Transformation URL</li>
+                    <li>Test end-to-end flow with sample webhook payload</li>
+                </ul>
+            </div>
+
+            <div class="code-label">Example Transformation Code:</div>
+            <div class="code-block">// Braze Data Transformation JavaScript
+// Input: Talon.One webhook payload
+// Output: Braze /users/track event
+
+return {
+  "events": [{
+    "external_id": payload.customerProfileId,
+    "name": "coupon_redeemed",
+    "time": new Date().toISOString(),
+    "properties": {
+      "coupon_code": payload.couponCode,
+      "discount_amount": payload.discountValue,
+      "campaign_name": payload.campaignName
+    }
+  }]
+};</div>
+
+            <!-- Scenario E -->
+            <h3 class="section-subtitle">Scenario E: Multivariate Testing</h3>
+            <p>Test multiple incentive variants simultaneously to optimize promotional performance.</p>
+            
+            <div class="flow-diagram">
+                <div class="flow-title">Data Flow: Multivariate Testing</div>
+                <div class="flow-steps">
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-actor">Marketing Team</div>
+                            <div class="step-action">Creates 3 offer variants in Talon.One: Path 1) $5 OFF, Path 2) Save 5%, Path 3) Coupon</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-actor">Talon.One</div>
+                            <div class="step-action">Configures rule to randomly assign customers to variants based on experiment split (5%, 5%, 5% test paths + 80% control + 5% holdout)</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-actor">Braze Canvas</div>
+                            <div class="step-action">Sends promotional email with Connected Content call to Talon.One to fetch assigned variant</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-actor">Talon.One</div>
+                            <div class="step-action">Returns assigned variant for customer (e.g., "Path 2: Save 5%")</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <div class="step-actor">Braze</div>
+                            <div class="step-action">Personalizes email content with assigned offer and sends to customer</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <div class="step-actor">Customer</div>
+                            <div class="step-action">Redeems offer (or doesn't) - behavior tracked in both systems</div>
+                        </div>
+                    </div>
+                    <div class="step-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">7</div>
+                        <div class="step-content">
+                            <div class="step-actor">Analytics</div>
+                            <div class="step-action">Compare conversion rates, AOV, and revenue across variants to determine winner</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Setup Steps:</strong>
+                <ul>
+                    <li>In Talon.One, create multiple campaign variants with different offer types or discount amounts</li>
+                    <li>Configure allocation rules (e.g., 5% per test path with 80% control group for statistical significance)</li>
+                    <li>In Braze, use Connected Content to fetch the assigned variant for each customer</li>
+                    <li>Track redemptions and conversions by variant in Talon.One analytics</li>
+                    <li>Use Braze reporting to measure engagement metrics (open rate, click rate) by variant</li>
+                    <li>Combine data from both systems to calculate ROI per variant and declare winner</li>
+                </ul>
+            </div>
+
+            <div class="info-box" style="background: #ebf8ff; border-left-color: #4299e1;">
+                <strong>💡 Pro Tip:</strong> Multivariate testing in Talon.One goes beyond simple A/B splits. Test combinations like "$5 OFF vs Save 5% vs Coupon code" with different allocation percentages - all dynamically assigned and tracked without manual segmentation. Use control groups to measure true incremental lift.
+            </div>
+
+            <!-- Configuration Examples with Screenshots -->
+            <h3 class="section-subtitle" style="margin-top: 4rem;">Configuration Examples: Dashboard Screenshots</h3>
+            <p>Below are real-world configuration examples showing how Talon.One and Braze integrate in practice. These screenshots demonstrate the bidirectional data flow in action.</p>
+
+            <!-- Example 1: Talon.One Campaign with Webhooks -->
+            <div class="flow-diagram" style="margin-top: 2rem;">
+                <div class="flow-title">Example 1: Talon.One Webhook Configuration - Pass Loyalty Details to Braze</div>
+                <p style="margin-bottom: 1rem; color: #4a5568;">This screenshot shows a Talon.One webhook template configured to pass loyalty point details to Braze when a customer earns points from a transaction.</p>
+                
+                <img src="talon-one-webhook-config.png" alt="Talon.One Webhook Configuration - Pass Loyalty Details to Braze" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #e2e8f0;">
+                
+                <div style="margin-top: 1rem; padding: 1rem; background: #f7fafc; border-radius: 4px;">
+                    <p style="font-size: 0.9rem; color: #4a5568;"><strong>Key Elements in This Configuration:</strong></p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem; color: #718096; font-size: 0.9rem;">
+                        <li><strong>Template Name:</strong> "Pass Loyalty details to Braze" - calling an external API to send loyalty data</li>
+                        <li><strong>CustomerID Mapping:</strong> Uses <code>Integration ID (Customer Profile)</code> to match Talon.One customer with Braze external_id</li>
+                        <li><strong>LoyaltyPtsAdded Calculation:</strong> Dynamic formula <code>ROUND_UP([Session.Total] * 5%)</code> - calculates 5% of transaction value as points earned</li>
+                        <li><strong>CurrentTotalPoints:</strong> References <code>[Loyalty.Programs.demo_ledger.Ledger.CurrentBalance]</code> - pulls current loyalty balance from Talon.One ledger</li>
+                        <li><strong>Real-Time Calculation:</strong> Points are calculated and sent in real-time during transaction processing, ensuring Braze receives immediate updates</li>
+                        <li><strong>Use Case:</strong> When a customer completes a purchase, Talon.One calculates earned points (5% of total), updates the loyalty ledger, and sends webhook to Braze with both the points earned and new total balance for immediate customer notification</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Example 2: Braze Connected Content -->
+            <div class="flow-diagram" style="margin-top: 2rem;">
+                <div class="flow-title">Example 2: Braze Email with Connected Content from Talon.One</div>
+                <p style="margin-bottom: 1rem; color: #4a5568;">These screenshots show a Braze email template using Connected Content to fetch personalized coupon codes from Talon.One in real-time during message send.</p>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <img src="braze-connected-content-email.png" alt="Braze Email with Connected Content Coupon" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #e2e8f0;">
+                </div>
+                
+                <div style="margin-top: 1rem; padding: 1rem; background: #f7fafc; border-radius: 4px; margin-bottom: 1.5rem;">
+                    <p style="font-size: 0.9rem; color: #4a5568;"><strong>Screenshot 1 - Email Preview with Dynamic Coupon:</strong></p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem; color: #718096; font-size: 0.9rem;">
+                        <li><strong>Email Context:</strong> KFC registration welcome email titled "Thanks For Registering!"</li>
+                        <li><strong>Personalization:</strong> <code>HELLO {{${FIRST_NAME} | DEFAULT: NEW USER}}</code> - displays customer's first name with fallback</li>
+                        <li><strong>Dynamic Coupon Code:</strong> "Here's a coupon code on us <code>{{result.Value}}</code>" - fetches unique coupon from Talon.One via Connected Content</li>
+                        <li><strong>Offer Details:</strong> 10% off first order, valid for next 7 days - creates urgency and drives immediate conversion</li>
+                        <li><strong>Call-to-Action:</strong> "BUY NOW!" button to redeem the personalized offer</li>
+                        <li><strong>Additional Incentive:</strong> Bonus 25 loyalty points awarded for purchasing within 24 hours - stacks incentives for maximum engagement</li>
+                        <li><strong>Use Case:</strong> New customer onboarding flow where each registrant receives a unique, trackable coupon code that can only be used once, preventing code sharing and ensuring proper attribution</li>
+                    </ul>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <img src="braze-connected-content-code.png" alt="Braze Connected Content Liquid Code" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #e2e8f0;">
+                </div>
+
+                <div style="margin-top: 1rem; padding: 1rem; background: #f7fafc; border-radius: 4px;">
+                    <p style="font-size: 0.9rem; color: #4a5568;"><strong>Screenshot 2 - Connected Content Liquid Code:</strong></p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem; color: #718096; font-size: 0.9rem;">
+                        <li><strong>Line 1-6: Request Configuration</strong>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.25rem;">
+                                <li><code>{% capture postbody %}</code> - Builds JSON payload for POST request to Talon.One</li>
+                                <li><code>"deploymentURL": "promit.asia-southeast1.talon.one"</code> - Talon.One deployment endpoint</li>
+                                <li><code>"applicationID": 3</code> - Talon.One application identifier</li>
+                                <li><code>"campaignID": 453</code> - Specific campaign generating coupons</li>
+                                <li><code>"identifier": "{{campaign.${dispatch_id}}}"</code> - Uses Braze dispatch ID for unique coupon tracking</li>
+                                <li><code>"integrationID": "{{${user_id}}}"</code> - Maps to Braze external_id for customer association</li>
+                            </ul>
+                        </li>
+                        <li><strong>Line 7: Connected Content API Call</strong>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.25rem;">
+                                <li><code>{% connected_content https://integration.talon.one/braze/coupon</code> - Talon.One coupon generation endpoint</li>
+                                <li><code>:headers { "Authorization": "ApiKey-v1 d7c7e6b9870dcf283369..."}</code> - Secure API authentication</li>
+                                <li><code>:method post</code> - POST request to create new coupon</li>
+                                <li><code>:body {{postbody}}</code> - Sends constructed JSON payload</li>
+                                <li><code>:content_type application/json</code> - Specifies JSON content type</li>
+                                <li><code>:save result %}</code> - Stores API response in <code>result</code> variable for use in email body</li>
+                            </ul>
+                        </li>
+                        <li><strong>Real-Time Execution:</strong> This code executes during email send time (not batch pre-generation), ensuring each customer receives a fresh, unique coupon code that's immediately associated with their profile in Talon.One</li>
+                    </ul>
+                </div>
+
+                <div class="info-box" style="margin-top: 1.5rem; background: #ebf8ff; border-left-color: #4299e1;">
+                    <strong>💡 Integration Pattern:</strong> This demonstrates Braze pulling data FROM Talon.One via Connected Content. When Braze sends the email, it makes a real-time API call to Talon.One requesting a coupon code. Talon.One generates a unique code, associates it with the customer's integrationID, and returns it instantly. The <code>{{result.Value}}</code> tag displays the coupon code in the email. This ensures one-time-use codes that prevent fraud, enable precise redemption tracking, and maintain coupon inventory control—all without manual coupon list uploads or batch processes.
+                </div>
+            </div>
+
+            <!-- Example 3: Braze Canvas with Webhook Step -->
+            <div class="flow-diagram" style="margin-top: 2rem;">
+                <div class="flow-title">Example 3: Braze Canvas Webhook Syncing Segment to Talon.One</div>
+                <p style="margin-bottom: 1rem; color: #4a5568;">These screenshots show a Braze Canvas configured with webhook steps that sync audience segments to Talon.One and trigger personalized messaging based on segment membership.</p>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <img src="braze-webhook-config.png" alt="Braze Webhook Configuration to Talon.One" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #e2e8f0;">
+                </div>
+                
+                <div style="margin-top: 1rem; padding: 1rem; background: #f7fafc; border-radius: 4px; margin-bottom: 1.5rem;">
+                    <p style="font-size: 0.9rem; color: #4a5568;"><strong>Screenshot 1 - Webhook Configuration Details:</strong></p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem; color: #718096; font-size: 0.9rem;">
+                        <li><strong>Channel:</strong> Webhook configured in Braze Messages step</li>
+                        <li><strong>Webhook URL:</strong> <code>https://integration.talon.one/cdp/customer_profile/{{$&#123;user_id&#125;}}</code> - syncs customer profile to Talon.One</li>
+                        <li><strong>HTTP Method:</strong> PUT request to update customer profile in Talon.One</li>
+                        <li><strong>Request Body:</strong> JSON payload with attributes, runRuleEngine flag, and audiencesChanges (adds/deletes audience membership)</li>
+                        <li><strong>Request Headers:</strong> 
+                            <ul style="margin-left: 1.5rem; margin-top: 0.25rem;">
+                                <li><code>customer-data-platform: Braze</code> - identifies source system</li>
+                                <li><code>destination-hostname: [your Talon.One deployment endpoint]</code> - e.g., tam.europe-west1.talon.one or integration.talon.one</li>
+                                <li><code>Content-Type: application/json</code></li>
+                                <li><code>Authorization: ApiKey-v1 [API key created from Talon.One dashboard]</code> - secure API authentication token</li>
+                            </ul>
+                        </li>
+                        <li><strong>Preview Panel:</strong> Shows exact payload that will be sent to Talon.One with customer attributes and audience changes</li>
+                    </ul>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <img src="braze-canvas-audience-sync.png" alt="Braze Canvas Flow with Audience Sync" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #e2e8f0;">
+                </div>
+
+                <div style="margin-top: 1rem; padding: 1rem; background: #f7fafc; border-radius: 4px;">
+                    <p style="font-size: 0.9rem; color: #4a5568;"><strong>Screenshot 2 - Canvas Flow Configuration:</strong></p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem; color: #718096; font-size: 0.9rem;">
+                        <li><strong>Entry Rules:</strong> 
+                            <ul style="margin-left: 1.5rem; margin-top: 0.25rem;">
+                                <li><strong>Schedule:</strong> Immediately after trigger criteria met, Canvas start date March 1, 2026</li>
+                                <li><strong>Audience:</strong> "fixed_Braze_Import.csv" imported segment with no additional filters</li>
+                                <li><strong>Exit Criteria:</strong> None - users progress through entire flow</li>
+                                <li><strong>Controls:</strong> Users can re-enter after 0 seconds</li>
+                            </ul>
+                        </li>
+                        <li><strong>Variant Split:</strong> 100% Variant 1 - single path configuration</li>
+                        <li><strong>Step 1 - Webhook to Talon.One:</strong> Active step sending webhook (<code>https://integration.t...</code>) to sync user to Talon.One audience</li>
+                        <li><strong>Flow Logic:</strong> All users entering this Canvas immediately trigger webhook to add them to Talon.One audience. The webhook passes the customer's integration ID and updates their audience membership in Talon.One, enabling targeted promotions based on segment criteria. This creates a seamless sync where Braze segment changes automatically reflect in Talon.One's promotion eligibility rules.</li>
+                    </ul>
+                </div>
+
+                <div class="info-box" style="margin-top: 1.5rem; background: #ebf8ff; border-left-color: #4299e1;">
+                    <strong>💡 Integration Pattern:</strong> This Canvas demonstrates Braze → Talon.One audience sync. When customers enter a Braze segment (e.g., imported from CSV, behavioral trigger, or manual upload), the webhook immediately adds them to the corresponding Talon.One Audience. Talon.One can then apply exclusive promotional rules like "If customer is in Churn_Risk audience, offer 20% off next purchase." The bidirectional integration ensures both systems maintain consistent customer segmentation for personalized incentives.
+                </div>
+            </div>
+
+            <!-- Example 4: Braze Multivariate Experiment -->
+            <div class="flow-diagram" style="margin-top: 2rem;">
+                <div class="flow-title">Example 4: Braze Canvas with Multivariate Experiment Paths</div>
+                <p style="margin-bottom: 1rem; color: #4a5568;">This screenshot shows a Braze Canvas configured with a multivariate experiment splitting users across different offer variants ($5 OFF, Save 5%, Coupon) with messages fetching personalized offers from Talon.One via Connected Content.</p>
+                
+                <img src="braze-multivariate-experiment.png" alt="Braze Canvas Multivariate Experiment with Talon.One Integration" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #e2e8f0;">
+                
+                <div style="margin-top: 1rem; padding: 1rem; background: #f7fafc; border-radius: 4px;">
+                    <p style="font-size: 0.9rem; color: #4a5568;"><strong>Key Elements in This Configuration:</strong></p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem; color: #718096; font-size: 0.9rem;">
+                        <li><strong>Experiment Setup:</strong> "Split for experiment" with "Winning Path" configuration for 1-hour experiment window</li>
+                        <li><strong>Test Paths:</strong> Path 1 (5% - $5OFF), Path 2 (5% - Save 5%), Path 3 (5% - Coupon), Path 4 (80% - Step with delay)</li>
+                        <li><strong>Control Group:</strong> 5% control group that exits after experiment window to measure incremental lift</li>
+                        <li><strong>Message Steps:</strong> Each path contains a "Messages" step with Connected Content calling Talon.One (https://demo-apac.a...)</li>
+                        <li><strong>Convergence:</strong> All test paths converge to "Send Offer by Email" step with final message delivery</li>
+                        <li><strong>Winner Selection:</strong> Braze automatically determines winning path based on conversion metrics after experiment completes</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-box" style="margin-top: 2rem;">
+                <strong>💡 Implementation Note:</strong> To add actual screenshots to this document, replace the placeholder divs above with <code>&lt;img src="path/to/screenshot.png" alt="Description" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"&gt;</code> tags. Ensure screenshots are high-resolution (at least 1920x1080) and annotated with arrows/highlights to draw attention to key configuration fields.
+            </div>
+        </section>
+
+        <!-- Section 4: Braze Dashboard Configuration -->
+        <section class="section" id="section4">
+            <h2 class="section-title">4. Guidelines for Braze Dashboard Configuration</h2>
+            <p>Proper configuration in the Braze dashboard ensures secure, reliable integration with Talon.One. Follow these best practices to avoid common pitfalls and ensure smooth operation.</p>
+
+            <div class="outcome-card" style="margin-bottom: 1.5rem;">
+                <h3>Manage Settings: API Key Security</h3>
+                <p>Ensure your Talon.One API Key is stored in <strong>Global Settings</strong> or <strong>Content Blocks</strong> in Braze for security. This prevents hardcoding sensitive credentials directly in individual campaigns.</p>
+                <div style="margin-top: 1rem;">
+                    <p><strong>Best Practice:</strong></p>
+                    <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                        <li>Navigate to <strong>Settings → Manage Settings → Connected Content</strong></li>
+                        <li>Add your Talon.One API key as a credential with a descriptive name (e.g., <code>talon_api_key</code>)</li>
+                        <li>Reference it in webhooks using Liquid: <code>{{connected_content.talon_api_key}}</code></li>
+                        <li>This approach enables centralized key rotation without updating individual campaigns</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="outcome-card" style="margin-bottom: 1.5rem;">
+                <h3>IP Whitelisting: Network Access Control</h3>
+                <p>If your Talon.One deployment is behind a firewall, whitelist Braze's Production IP ranges to ensure Webhooks and Connected Content calls are not blocked.</p>
+                <div style="margin-top: 1rem;">
+                    <p><strong>Configuration Steps:</strong></p>
+                    <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                        <li>Obtain Braze's current IP ranges from their <a href="https://www.braze.com/docs/api/basics/#company-secret-explanation" target="_blank" style="color: #667eea;">documentation</a> (varies by instance: US-01, US-02, EU-01, etc.)</li>
+                        <li>Add these IP ranges to your Talon.One deployment's firewall allowlist</li>
+                        <li>Test connectivity after whitelisting to confirm requests are no longer blocked</li>
+                        <li>Set up monitoring alerts for any failed connection attempts from Braze IPs</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="outcome-card">
+                <h3>Testing: Validate Before Launch</h3>
+                <p>Always use the <strong>"Test"</strong> tab in the Braze Webhook composer to verify that Talon.One returns a <code>201 Created</code> or <code>200 OK</code> response before activating a Canvas.</p>
+                <div style="margin-top: 1rem;">
+                    <p><strong>Testing Checklist:</strong></p>
+                    <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                        <li><strong>Webhook Test:</strong> Send a test payload with sample user data and verify the response status code and body</li>
+                        <li><strong>Connected Content Test:</strong> Preview an email/push with Connected Content tags to ensure coupon codes or loyalty balances are fetched correctly</li>
+                        <li><strong>Error Handling:</strong> Test failure scenarios (invalid API key, non-existent user) to confirm graceful degradation</li>
+                        <li><strong>Rate Limit Configuration:</strong> Set appropriate rate limits for your campaigns to prevent overwhelming the API during large sends</li>
+                        <li><strong>Canvas Test User:</strong> Run a full Canvas journey with a test user profile to validate end-to-end integration before production launch</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-box" style="margin-top: 2rem;">
+                <strong>Pro Tip:</strong> Create a dedicated "Talon.One Integration Testing" segment in Braze with internal team email addresses. Use this segment for all integration testing to avoid impacting real customers during configuration and troubleshooting.
+            </div>
+        </section>
+
+        <!-- Section 5: Infrastructure -->
+        <section class="section" id="section5">
+            <h2 class="section-title">5. Infrastructure: Performance & Reliability</h2>
+            
+            <div class="outcome-card" style="margin-bottom: 2rem; background: #fed7aa; border-left: 4px solid #ea580c;">
+                <h3 style="color: #9a3412; font-size: 1.1rem; margin-bottom: 0.5rem;">⚡ Critical Performance Requirement: Connected Content Timeout</h3>
+                <p style="color: #000000; margin-bottom: 0.5rem;">Braze's Connected Content has a <strong>2-second timeout</strong> for API calls. If the external API (like Talon.One) doesn't respond within 2 seconds, the Connected Content call fails and the message sends without the dynamic content—resulting in emails with missing coupon codes or broken personalization.</p>
+                <p style="color: #000000; font-weight: 600;">Talon.One's sub-100ms latency is purpose-built for this requirement. With response times 20x faster than Braze's timeout threshold, Connected Content calls succeed reliably even during peak traffic, ensuring every email includes the personalized offer or loyalty balance without risk of timeouts.</p>
+            </div>
+
+            <div class="outcome-card" style="margin-bottom: 2rem; background: #fed7aa; border-left: 4px solid #ea580c;">
+                <h3 style="color: #9a3412; font-size: 1.1rem; margin-bottom: 0.5rem;">🔑 Simple API Key Integration vs Complex Tokenization</h3>
+                <p style="color: #000000; margin-bottom: 0.5rem;">Talon.One uses <strong>API key-based authentication</strong>, where a single API key provides access to multiple endpoints (customer profiles, coupons, loyalty ledger, audiences, campaigns). This simplifies integration: configure the API key once in Braze's Global Settings, then reference it across all webhooks and Connected Content calls.</p>
+                <p style="color: #000000; margin-bottom: 0.5rem;"><strong>Legacy platforms often use OAuth tokenization</strong>, requiring:</p>
+                <ul style="margin-left: 2rem; color: #000000; font-size: 0.95rem;">
+                    <li>Multi-step token exchange flows (client_id, client_secret, authorization endpoints)</li>
+                    <li>Token expiration and refresh logic (tokens expire every 1-24 hours, requiring automated refresh)</li>
+                    <li>Separate tokens for different API scopes or environments</li>
+                    <li>Complex error handling for expired/invalid tokens mid-campaign</li>
+                </ul>
+                <p style="color: #000000; font-weight: 600; margin-top: 0.5rem;">Result: Talon.One's API key approach enables marketers to configure integrations directly in Braze without engineering support. Legacy tokenization systems require dedicated backend services to manage token lifecycle, adding operational complexity and points of failure.</p>
+            </div>
+            
+            <h3 class="section-subtitle">Sub-100ms Latency</h3>
+            <p>Talon.One is engineered for high-velocity environments with a globally distributed infrastructure that ensures lightning-fast response times. This ensures that when Braze makes a Connected Content call to fetch a coupon during a message send, the response is near-instant, preventing timeouts and ensuring a smooth user experience.</p>
+            
+            <div class="info-box">
+                <strong>Technical Details:</strong>
+                <ul>
+                    <li><strong>Global Edge Network:</strong> API requests are routed to the nearest data center, minimizing network latency across geographies</li>
+                    <li><strong>In-Memory Caching:</strong> Frequently accessed data (customer profiles, campaign rules) are cached in-memory for instant retrieval</li>
+                    <li><strong>Optimized Rule Engine:</strong> Rule evaluation happens in microseconds, even with complex conditional logic and multiple data points</li>
+                    <li><strong>Real-World Impact:</strong> During peak promotional periods (Black Friday, flash sales), sub-100ms latency ensures millions of concurrent coupon requests are processed without degradation</li>
+                </ul>
+            </div>
+
+            <div class="outcome-card" style="margin-top: 2rem; background: #fecaca; border-left-color: #dc2626;">
+                <h3 style="color: #991b1b; font-size: 1.1rem; margin-bottom: 0.5rem;">⚠️ What Happens When Systems Are Too Slow (Braze Context)</h3>
+                <p><strong>Scenario:</strong> Braze sends 500,000 promotional emails with Connected Content calls to fetch personalized discount codes from a legacy promotion system.</p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: #000000;">
+                    <li><strong>If API response time >2 seconds:</strong> Braze's Connected Content timeout triggers. Emails send <strong>without discount codes</strong>, or worse, with error messages displayed to customers.</li>
+                    <li><strong>Customer Impact:</strong> "Your exclusive offer: [ERROR: TIMEOUT]" appears in emails. Brand trust erodes. Campaign fails to drive conversions.</li>
+                    <li><strong>Marketing Team Impact:</strong> Emergency manual fix required. Support tickets flood in. Next campaign delayed pending "infrastructure improvements."</li>
+                    <li><strong>With Talon.One:</strong> Sub-100ms responses mean all 500,000 emails send successfully with personalized codes. No timeouts. No errors. Campaign delivers full ROI.</li>
+                </ul>
+            </div>
+
+            <h3 class="section-subtitle">Resilient Webhook Retry Logic</h3>
+            <p>Talon.One implements industry-leading webhook reliability to ensure no promotional event is lost due to temporary network issues or downstream system failures.</p>
+            
+            <div class="info-box">
+                <strong>Retry Mechanism Details:</strong>
+                <ul>
+                    <li><strong>Retry Policy:</strong> Talon.One attempts to resend a failed webhook up to 10 times or until a 2xx success response is received. Each attempt is logged for full audit trail visibility.</li>
+                    <li><strong>Exponential Backoff Strategy:</strong> Initial retry after 5 minutes, then exponentially increasing intervals (10m, 20m, 40m, 80m, etc.). This prevents overwhelming the receiving system during recovery.</li>
+                </ul>
+            </div>
+
+            <div class="outcome-card" style="margin-top: 2rem; background: #fecaca; border-left-color: #dc2626;">
+                <h3 style="color: #991b1b; font-size: 1.1rem; margin-bottom: 0.5rem;">⚠️ What Happens When Webhooks Fail (Enterprise Marketing Platforms vs Talon.One)</h3>
+                <p><strong>Scenario:</strong> A customer completes a $200 purchase. The promotion system awards 200 loyalty points and attempts to send a webhook to Braze to trigger a "Points Earned!" push notification.</p>
+                
+                <div style="margin-top: 1rem; padding: 1rem; background: white; border-radius: 8px; border-left: 4px solid #dc2626;">
+                    <p style="color: #991b1b; font-weight: 600; margin-bottom: 0.5rem;">❌ Enterprise Marketing Platforms (Limited Retry Windows):</p>
+                    <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: #000000;">
+                        <li><strong>Retry Configuration:</strong> 5 attempts maximum with 24-hour TTL, completing all attempts in ~3 minutes</li>
+                        <li><strong>The Problem:</strong> Systems recover in 10-30 minutes, but retries (1s, 2s, 4s, 8s) exhaust before recovery completes</li>
+                        <li><strong>Result:</strong> System gives up before Braze comes back online. Customer earns points but receives no notification. Systems fall out of sync</li>
+                        <li><strong>Business Impact:</strong> 3-5% silent failure rate during incidents. Thousands of missed notifications. Loyalty programs appear broken to customers</li>
+                    </ul>
+                </div>
+
+                <div style="margin-top: 1rem; padding: 1rem; background: white; border-radius: 8px; border-left: 4px solid #16a34a;">
+                    <p style="color: #15803d; font-weight: 600; margin-bottom: 0.5rem;">✅ Talon.One (Extended Retry Logic - 10 Attempts Over Hours):</p>
+                    <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: #000000;">
+                        <li><strong>Retry Configuration:</strong> 10 attempts with exponential backoff (5m, 10m, 20m, 40m, 80m intervals). No TTL cap</li>
+                        <li><strong>The Advantage:</strong> Patient retry strategy gives systems adequate recovery time. Succeeds on attempt #4 (35 minutes total)</li>
+                        <li><strong>Result:</strong> Customer receives notification within 35 minutes. Data consistency maintained across both systems. No manual intervention needed</li>
+                        <li><strong>Business Impact:</strong> 99.9%+ automatic recovery. Near-zero silent failures. Marketing campaigns deliver expected ROI even during infrastructure incidents</li>
+                    </ul>
+                </div>
+
+                <p style="margin-top: 1rem; color: #000000; font-weight: 600;">💡 Key Takeaway: Enterprise platforms inherit retry policies from email systems (optimized for seconds), not cross-system integration where 10-30 minute recovery is normal. Talon.One's approach matches distributed systems reality.</p>
+            </div>
+
+            <h3 class="section-subtitle">Scalability & Throughput</h3>
+            <div class="info-box">
+                <strong>Enterprise-Grade Performance:</strong>
+                <ul>
+                    <li><strong>Horizontal Scaling:</strong> Auto-scales to handle traffic spikes during promotional campaigns without manual intervention</li>
+                    <li><strong>Rate Limit Management:</strong> Configurable per-customer rate limits prevent individual campaigns from impacting overall system performance</li>
+                    <li><strong>99.99% Uptime SLA:</strong> Backed by redundant infrastructure</li>
+                    <li><strong>Batch Processing:</strong> Support for bulk operations (importing 1M+ coupons, updating customer profiles en masse) without blocking real-time traffic</li>
+                </ul>
+            </div>
+
+            <div class="outcome-card" style="margin-top: 2rem; background: #fecaca; border-left-color: #dc2626;">
+                <h3 style="color: #991b1b; font-size: 1.1rem; margin-bottom: 0.5rem;">⚠️ What Happens When Systems Don't Scale (Braze Context)</h3>
+                <p><strong>Scenario:</strong> Black Friday. Braze sends 2 million push notifications announcing a flash sale. Each notification includes a Connected Content call to Talon.One to fetch a unique 20% off code.</p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: #000000;">
+                    <li><strong>If legacy system lacks horizontal scaling:</strong> API rate limits hit. Requests queue. Response times spike from 100ms to 10+ seconds. Braze timeouts cascade.</li>
+                    <li><strong>Customer Impact:</strong> First 100,000 customers get codes. Next 1.9M receive error messages or blank spaces where codes should be. Social media explodes with complaints.</li>
+                    <li><strong>Business Impact:</strong> Lost revenue opportunity. Brand damage. Competitors capitalize on your failure. CFO questions entire martech stack investment.</li>
+                    <li><strong>With Talon.One Auto-Scaling:</strong> Traffic spike detected. Infrastructure automatically provisions additional capacity. All 2M requests processed in <100ms. Every customer receives a unique code. Flash sale succeeds. Revenue goals exceeded.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 6: Strategic Advantage -->
+        <section class="section" id="section6">
+            <h2 class="section-title">6. The Talon.One Advantage: Strategic Differentiation</h2>
+            
+            <p>While legacy "all-in-one" marketing suites often bundle promotion tools, Talon.One's headless, best-of-breed approach provides distinct advantages that have proven transformative for brands.</p>
+
+            <h3 class="section-subtitle">Comparative Analysis</h3>
+            
+            <div class="table-container">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Talon.One</th>
+                            <th>Legacy Suite Providers</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Architecture</td>
+                            <td><span class="advantage">API-First, Headless</span></td>
+                            <td>Monolithic, All-in-One Marketing Clouds</td>
+                        </tr>
+                        <tr>
+                            <td>Integration Approach</td>
+                            <td><span class="advantage">Specialized "brain" that plugs into existing stack</span></td>
+                            <td>Creates data silos and redundant features</td>
+                        </tr>
+                        <tr>
+                            <td>Rule Flexibility</td>
+                            <td><span class="advantage">Limitless - any data point can trigger rules</span></td>
+                            <td>Restricted to rigid templates</td>
+                        </tr>
+                        <tr>
+                            <td>Performance</td>
+                            <td><span class="advantage">Sub-100ms, handles 10,000+ req/sec</span></td>
+                            <td>Higher latency during peak traffic</td>
+                        </tr>
+                        <tr>
+                            <td>Scalability</td>
+                            <td><span class="advantage">Built for modern high-traffic events</span></td>
+                            <td>Often struggles during flash sales/campaigns</td>
+                        </tr>
+                        <tr>
+                            <td>API Limits</td>
+                            <td><span class="advantage">No hard limits - infrastructure autoscales as per traffic requirement</span></td>
+                            <td>Often limited by hard limits and higher response times during peak traffic</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="section-subtitle">Deep Dive: Why Talon.One Wins</h3>
+
+            <div class="outcome-card" style="margin-bottom: 1.5rem;">
+                <h3>1. API-First Architecture: No Data Silos</h3>
+                <p><strong>What it means:</strong> Unlike monolithic suites that create data silos and redundant features, Talon.One acts as a specialized "brain" that plugs directly into Braze, avoiding architectural bloat.</p>
+                <p><strong>Why it matters:</strong> You're not forced to adopt a vendor's entire ecosystem. KFC Thailand can evolve their tech stack for Engagement, Data Management and E-commerce over time, but having a headless system like Talon.One will keep the loyalty and offer logic decoupled from other systems.</p>
+            </div>
+
+            <div class="outcome-card" style="margin-bottom: 1.5rem;">
+                <h3>2. Limitless Rule Builder: Beyond Template Restrictions</h3>
+                <p><strong>What it means:</strong> Most traditional platforms are restricted to rigid templates. Talon.One allows any data point (weather, SKU, location, cart value, time of day, customer tier) to trigger a promotion rule.</p>
+                <p><strong>Why it matters:</strong> Campaign velocity and creativity increase dramatically. A "Buy 2 Zinger Burgers between 2-4 PM on rainy days in Bangkok and get free delivery" rule takes 5 minutes to build in Talon.One vs. being impossible or requiring months of custom development in template-based systems.</p>
+            </div>
+
+            <div class="outcome-card" style="margin-bottom: 1.5rem;">
+                <h3>3. Scalability: Built for Peak Performance</h3>
+                <p><strong>What it means:</strong> Talon.One handles tens of thousands of requests per second, whereas legacy systems often struggle with latency during high-traffic events like flash sales or national promotions.</p>
+                <p><strong>Why it matters:</strong> During KFC Thailand's "Flash Friday" campaigns (limited-time offers announced via Braze), hundreds of thousands of customers simultaneously request coupon codes. Talon.One processes these requests with sub-100ms latency while legacy systems would queue requests or timeout entirely.</p>
+                <p><strong>Real-world impact:</strong> Zero downtime during Thailand's peak dinner hours (6-8 PM) when promotion redemption volume spikes 300%. Competitors using all-in-one suites report 20-40% of customers abandoning checkout due to slow coupon validation.</p>
+            </div>
+
+            <div class="outcome-card" style="margin-bottom: 1.5rem;">
+                <h3>4. Context-Aware Promotions: Win-Back Previously Churned Users</h3>
+                <p><strong>KFC Thailand Use Case:</strong> A previously churned customer with a return order history places an order for a family meal during peak dinner hours (7-9 PM). Talon.One instantly evaluates multiple signals:</p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li><strong>Customer Status:</strong> Previously churned</li>
+                    <li><strong>Order Type:</strong> Family meal (high value, indicates dining occasion)</li>
+                    <li><strong>Time Context:</strong> Peak dinner hours (7-9 PM)</li>
+                    <li><strong>Order History:</strong> Return order detected</li>
+                </ul>
+                <p style="margin-top: 1rem;"><strong>Talon.One Action:</strong> Automatically awards <span class="highlight">bonus loyalty points (2x or 3x)</span> to encourage re-engagement and build habit formation during this critical win-back moment.</p>
+                <p style="margin-top: 0.5rem;"><strong>Braze Trigger:</strong> Customer immediately receives a push notification via Braze: "Welcome back! You've earned 150 bonus points on this order. Your next family meal is even more rewarding!"</p>
+                <p style="margin-top: 0.5rem;"><strong>Why it matters:</strong> Legacy systems can't combine multiple real-time signals (churn status + order type + time + behavior) into a single rule. They'd require separate batch jobs, manual segmentation, or miss the opportunity entirely. Talon.One makes this contextual intelligence instant and automatic.</p>
+            </div>
+
+            <div class="info-box" style="background: #dbeafe; border-left-color: #2563eb;">
+                <strong style="color: #1e40af; font-size: 1.1rem;">The Bottom Line:</strong>
+                <p style="color: #000000; margin-top: 0.5rem;">For brands looking to power real-time, data-driven incentives inside complex customer journeys, Talon.One provides the technical agility, sub-100ms speed, and resilient architecture that legacy suites cannot match. The combination of Braze's best-in-class engagement platform with Talon.One's promotion engine creates a competitive moat: personalized incentives delivered at precisely the right moment, through the right channel, with zero manual intervention.</p>
+                <p style="color: #000000; margin-top: 0.5rem; font-weight: 600;">This isn't just about technology—it's about enabling marketing teams to move at the speed of customer expectations.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Smooth scrolling to sections
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            const navHeight = document.querySelector('.nav-tabs').offsetHeight;
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - navHeight - 20;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+
+            // Update active tab
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Update active tab on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.section');
+            const navTabs = document.querySelectorAll('.nav-tab');
+            const navHeight = document.querySelector('.nav-tabs').offsetHeight;
+            
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - navHeight - 100;
+                const sectionHeight = section.offsetHeight;
+                
+                if (window.pageYOffset >= sectionTop && 
+                    window.pageYOffset < sectionTop + sectionHeight) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+
+            navTabs.forEach((tab, index) => {
+                tab.classList.remove('active');
+                if (currentSection === `section${index + 1}`) {
+                    tab.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
