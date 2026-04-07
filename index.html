@@ -3,111 +3,1525 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Presales Content Hub</title>
+  <title>Talon.One — Presales Hub</title>
   <style>
+    :root {
+      --blue: #0161ff;
+      --navy: #02043b;
+      --dark: #222;
+      --gray: #555;
+      --mid: #888;
+      --light-gray: #f0f4ff;
+      --white: #fff;
+      --border: #e4e4e7;
+      --client-color: #0161ff;
+      --comp-color: #7c3aed;
+      --partner-color: #0ea5e9;
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #f5f5f5;
-      color: #222;
-      padding: 40px 24px;
-    }
-    h1 { font-size: 1.8rem; margin-bottom: 4px; }
-    .subtitle { color: #666; margin-bottom: 36px; font-size: 0.95rem; }
-    .section { margin-bottom: 32px; }
-    .section h2 {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #999;
-      margin-bottom: 12px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid #e0e0e0;
-    }
-    .card {
-      display: flex;
-      align-items: center;
-      gap: 14px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 14px 18px;
-      text-decoration: none;
-      color: inherit;
-      transition: box-shadow 0.15s, border-color 0.15s;
-      margin-bottom: 8px;
+      color: var(--dark);
+      line-height: 1.5;
     }
-    .card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-color: #bbb; }
-    .card-icon { font-size: 1.4rem; flex-shrink: 0; }
-    .card-title { font-weight: 600; font-size: 0.95rem; }
-    .card-meta { font-size: 0.8rem; color: #888; margin-top: 2px; }
-    .badge {
-      margin-left: auto;
-      font-size: 0.7rem;
-      background: #eef2ff;
-      color: #4361ee;
-      padding: 3px 8px;
-      border-radius: 99px;
-      font-weight: 600;
+
+    /* ── NAV ───────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px;
+      padding: 0 clamp(16px, 2.5vw, 32px); height: 60px;
+      overflow: hidden;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .nav-logo-t1 { height: 22px; }
+    .nav-logo-divider { width: 1px; height: 20px; background: var(--border); }
+    .nav-logo-label { font-size: 13px; font-weight: 700; color: var(--navy); letter-spacing: -.2px; }
+    .nav-search-wrap { flex: 1; max-width: 360px; margin: 0 auto; position: relative; }
+    .nav-search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--mid); pointer-events: none; }
+    #global-search {
+      width: 100%; background: var(--light-gray); border: 1px solid var(--border);
+      border-radius: 8px; padding: 7px 12px 7px 36px;
+      font-size: 13.5px; color: var(--dark); outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    #global-search:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(1,97,255,.1); background: #fff; }
+    #global-search::placeholder { color: var(--mid); }
+    .nav-kbd { font-size: 10px; color: var(--mid); background: var(--border); border-radius: 4px; padding: 2px 5px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); user-select: none; }
+    .nav-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    /* hide search on medium screens — more room for 3-col grid */
+    @media (max-width: 1100px) { .nav-search-wrap { display: none; } }
+    /* icon-only nav buttons on small screens */
+    @media (max-width: 860px) {
+      .nav-btn-label { display: none; }
+      .btn-agent, .btn-new { padding: 7px 10px; }
+    }
+    .btn-new {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--blue); color: #fff;
+      border: none; border-radius: 8px; padding: 7px 16px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: background .15s, transform .1s;
+    }
+    .btn-new:hover { background: #004fd6; }
+    .btn-new:active { transform: scale(.97); }
+    .btn-agent {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--light-gray); color: var(--dark);
+      border: 1px solid var(--border); border-radius: 8px; padding: 7px 14px;
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      transition: background .15s;
+      text-decoration: none;
+    }
+    .btn-agent:hover { background: var(--border); }
+    .agent-dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; flex-shrink: 0; }
+    .agent-dot.offline { background: var(--mid); }
+
+    /* ── HERO ───────────────────────────────────────── */
+    .hero {
+      padding: clamp(80px, 10vw, 100px) clamp(16px, 3vw, 40px) 36px;
+      background: linear-gradient(160deg, #fff 50%, #f0f6ff 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-inner { max-width: 1400px; margin: 0 auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .hero-text h1 { font-size: clamp(26px, 4vw, 36px); font-weight: 800; color: var(--navy); letter-spacing: -.5px; }
+    .hero-text h1 em { font-style: normal; color: var(--blue); }
+    .hero-text p { margin-top: 6px; font-size: 15px; color: var(--gray); }
+    .hero-stats { display: flex; gap: 28px; flex-wrap: wrap; }
+    .stat { text-align: right; }
+    .stat-num { font-size: 28px; font-weight: 800; color: var(--navy); line-height: 1; }
+    .stat-label { font-size: 11px; color: var(--mid); text-transform: uppercase; letter-spacing: .5px; margin-top: 3px; }
+
+    /* ── FILTER PILLS ────────────────────────────────── */
+    .filters { max-width: 1400px; margin: 20px auto; padding: 0 clamp(16px, 3vw, 40px); display: flex; gap: 8px; flex-wrap: wrap; }
+    .pill {
+      padding: 5px 14px; border-radius: 99px; font-size: 12.5px; font-weight: 500;
+      border: 1.5px solid var(--border); background: #fff; cursor: pointer;
+      color: var(--gray); transition: all .15s;
+    }
+    .pill:hover { border-color: var(--navy); color: var(--navy); }
+    .pill.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+    .pill.client-pill.active { background: var(--client-color); border-color: var(--client-color); }
+    .pill.comp-pill.active { background: var(--comp-color); border-color: var(--comp-color); }
+    .pill.partner-pill.active { background: var(--partner-color); border-color: var(--partner-color); }
+
+    /* ── REPOSITORY GRID ─────────────────────────────── */
+    .repo-grid {
+      max-width: 1400px; margin: 0 auto 60px;
+      padding: 0 clamp(16px, 3vw, 40px);
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(12px, 1.5vw, 20px);
+    }
+    @media (max-width: 960px)  { .repo-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px)  { .repo-grid { grid-template-columns: 1fr; } }
+
+    .repo-col { display: flex; flex-direction: column; gap: 12px; }
+    .repo-col-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 18px; background: #fff;
+      border: 1.5px solid var(--border); border-radius: 12px;
+      position: sticky; top: 68px; z-index: 10; backdrop-filter: blur(8px);
+    }
+    .repo-col-icon { font-size: 18px; }
+    .repo-col-title { font-size: 14px; font-weight: 700; color: var(--navy); flex: 1; }
+    .repo-col-count { font-size: 11px; background: var(--light-gray); color: var(--mid); padding: 2px 8px; border-radius: 99px; font-weight: 500; }
+
+    /* ── FOLDER ──────────────────────────────────────── */
+    .folder { background: #fff; border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .folder-header {
+      display: flex; align-items: center; gap: 8px;
+      padding: 11px 16px; cursor: pointer; transition: background .15s;
+      user-select: none;
+    }
+    .folder-header:hover { background: var(--light-gray); }
+    .folder-chevron { color: var(--mid); transition: transform .2s; flex-shrink: 0; }
+    .folder-chevron.open { transform: rotate(90deg); }
+    .folder-name { font-size: 13px; font-weight: 600; color: var(--dark); flex: 1; }
+    .folder-badge { font-size: 10px; color: var(--mid); background: var(--light-gray); padding: 2px 7px; border-radius: 99px; }
+
+    .folder-body { border-top: 1px solid var(--border); }
+    .folder-body.collapsed { display: none; }
+
+    /* ── DOC ITEM ────────────────────────────────────── */
+    .doc-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px; text-decoration: none;
+      color: var(--dark); transition: background .12s;
+      border-bottom: 1px solid var(--border);
+    }
+    .doc-item:last-child { border-bottom: none; }
+    .doc-item:hover { background: #fafafa; }
+    .doc-icon { font-size: 15px; flex-shrink: 0; }
+    .doc-info { flex: 1; min-width: 0; }
+    .doc-title { font-size: 12.5px; font-weight: 600; color: var(--dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .doc-sub { font-size: 11px; color: var(--mid); margin-top: 1px; }
+    .doc-actions { display: flex; gap: 4px; flex-shrink: 0; }
+    .doc-action-btn {
+      font-size: 10.5px; font-weight: 600; padding: 3px 9px;
+      border-radius: 5px; border: none; cursor: pointer;
+      transition: opacity .15s; line-height: 1.4; color: #fff;
+    }
+    .doc-action-btn.modify { background: var(--blue); }
+    .doc-action-btn.modify:hover { opacity: .85; }
+    .doc-action-btn.read { background: #059669; }
+    .doc-action-btn.read:hover { opacity: .85; }
+    .doc-action-btn.delete { background: #c0392b; }
+    .doc-action-btn.delete:hover { opacity: .85; }
+
+    /* ── STATUS PILL ─────────────────────────────────── */
+    .status-pill {
+      font-size: 9px; font-weight: 700; padding: 1px 7px;
+      border-radius: 99px; letter-spacing: .04em; flex-shrink: 0;
       white-space: nowrap;
     }
+    .status-pill.draft { background: #fff3cd; color: #856404; border: 1px solid #ffc107; }
+    .status-pill.published { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+
+    /* ── FOLDER DELETE ───────────────────────────────── */
+    .folder-delete-btn {
+      display: none; align-items: center; justify-content: center;
+      background: none; border: none; cursor: pointer;
+      color: #c0392b; padding: 3px 6px; border-radius: 5px;
+      font-size: 13px; line-height: 1; flex-shrink: 0;
+      transition: background .1s;
+    }
+    .folder-delete-btn:hover { background: #fde8e8; }
+    .folder-header:hover .folder-delete-btn { display: flex; }
+
+    /* ── DRAG & DROP ─────────────────────────────────── */
+    .doc-item[draggable="true"] { cursor: grab; }
+    .doc-item[draggable="true"]:active { cursor: grabbing; }
+    .doc-item.dragging { opacity: .35; }
+    .folder-body.drag-over {
+      background: #eef4ff;
+      outline: 2px dashed var(--blue);
+      outline-offset: -3px;
+      border-radius: 0 0 10px 10px;
+    }
+
+    /* ── EMPTY STATE ─────────────────────────────────── */
+    .empty-slot {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 16px; color: var(--mid);
+    }
+    .empty-slot span { font-size: 12px; }
+    .btn-add-doc {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 600; color: var(--blue);
+      background: none; border: none; cursor: pointer;
+      padding: 3px 8px; border-radius: 6px; transition: background .12s;
+    }
+    .btn-add-doc:hover { background: #e8f0ff; }
+
+    /* ── NO RESULTS ──────────────────────────────────── */
+    .no-results {
+      text-align: center; padding: 28px 20px;
+      color: var(--mid); font-size: 13px;
+    }
+
+    /* ── RECENT SECTION ──────────────────────────────── */
+    .recent-section { max-width: 1400px; margin: 0 auto 60px; padding: 0 clamp(16px, 3vw, 40px); }
+    .section-title { font-size: 13px; font-weight: 700; color: var(--mid); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 14px; }
+    .recent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .recent-card {
+      background: #fff; border: 1.5px solid var(--border); border-radius: 12px;
+      padding: 16px; text-decoration: none; color: var(--dark);
+      display: flex; flex-direction: column; gap: 8px;
+      transition: box-shadow .15s, border-color .15s, transform .1s;
+    }
+    .recent-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); border-color: #bbb; transform: translateY(-1px); }
+    .recent-card-top { display: flex; align-items: center; justify-content: space-between; }
+    .recent-card-icon { font-size: 20px; }
+    .recent-card-badge { font-size: 10px; padding: 3px 8px; border-radius: 99px; font-weight: 500; }
+    .recent-card h3 { font-size: 13.5px; font-weight: 600; color: var(--navy); line-height: 1.35; }
+    .recent-card p { font-size: 11.5px; color: var(--mid); }
+    .doc-timestamps { font-size: 10px; color: var(--mid); margin-top: 3px; }
+    .recent-card-timestamps {
+      border-top: 1px solid var(--border);
+      padding-top: 8px; margin-top: 4px;
+      display: flex; gap: 14px;
+    }
+    .recent-card-ts { display: flex; flex-direction: column; gap: 2px; }
+    .recent-card-ts-label { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; color: var(--mid); opacity: .7; }
+    .recent-card-ts-value { font-size: 11px; color: var(--dark); font-weight: 500; }
+
+    /* ══════════════════════════════════════════════════
+       WIZARD MODAL
+    ══════════════════════════════════════════════════ */
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(2,4,59,.6); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity .2s;
+    }
+    .modal-backdrop.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: #fff; border-radius: 18px;
+      width: min(560px, calc(100vw - 40px));
+      box-shadow: 0 24px 80px rgba(0,0,0,.2);
+      overflow: hidden; transform: translateY(16px) scale(.97);
+      transition: transform .22s;
+    }
+    .modal-backdrop.open .modal { transform: translateY(0) scale(1); }
+    .modal-header {
+      padding: 24px 28px 0;
+      display: flex; align-items: flex-start; justify-content: space-between;
+    }
+    .modal-title { font-size: 18px; font-weight: 800; color: var(--navy); }
+    .modal-subtitle { font-size: 13px; color: var(--gray); margin-top: 4px; }
+    .modal-close {
+      background: var(--light-gray); border: none; border-radius: 8px;
+      width: 32px; height: 32px; cursor: pointer; font-size: 18px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--mid); transition: background .12s;
+    }
+    .modal-close:hover { background: var(--border); color: var(--dark); }
+
+    /* Step progress */
+    .modal-steps { display: flex; align-items: center; gap: 0; padding: 20px 28px 0; }
+    .modal-step-item { display: flex; align-items: center; gap: 6px; flex: 1; }
+    .modal-step-item:last-child { flex: 0; }
+    .step-bubble {
+      width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-size: 11px; font-weight: 700;
+      background: var(--border); color: var(--mid); flex-shrink: 0;
+      transition: background .2s, color .2s;
+    }
+    .step-bubble.active { background: var(--blue); color: #fff; }
+    .step-bubble.done { background: #22c55e; color: #fff; }
+    .step-label { font-size: 11px; color: var(--mid); font-weight: 500; flex: 1; transition: color .2s; }
+    .step-label.active { color: var(--dark); font-weight: 600; }
+    .step-line { height: 1px; width: 20px; background: var(--border); margin: 0 4px; flex-shrink: 0; }
+
+    .modal-body { padding: 24px 28px; }
+    .modal-step { display: none; }
+    .modal-step.active { display: block; }
+
+    .form-row { margin-bottom: 18px; }
+    .form-row label { display: block; font-size: 12px; font-weight: 600; color: var(--dark); margin-bottom: 6px; }
+    .form-row input, .form-row select, .form-row textarea {
+      width: 100%; padding: 9px 12px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 13.5px; color: var(--dark); outline: none;
+      transition: border-color .15s, box-shadow .15s;
+      font-family: inherit;
+    }
+    .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+      border-color: var(--blue); box-shadow: 0 0 0 3px rgba(1,97,255,.1);
+    }
+    .form-row textarea { resize: vertical; min-height: 80px; }
+    .form-row .hint { font-size: 11px; color: var(--mid); margin-top: 4px; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .modal-footer {
+      padding: 0 28px 24px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .btn-back {
+      background: none; border: 1.5px solid var(--border); border-radius: 8px;
+      padding: 9px 18px; font-size: 13px; font-weight: 600; color: var(--gray);
+      cursor: pointer; transition: background .12s;
+    }
+    .btn-back:hover { background: var(--light-gray); }
+    .btn-next {
+      background: var(--blue); color: #fff; border: none; border-radius: 8px;
+      padding: 9px 22px; font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: background .15s;
+    }
+    .btn-next:hover { background: #004fd6; }
+    .btn-next:disabled { background: var(--mid); cursor: not-allowed; }
+
+    /* Step 4: Running */
+    .agent-running { text-align: center; padding: 20px 0; }
+    .spinner {
+      width: 48px; height: 48px; margin: 0 auto 20px;
+      border: 4px solid var(--border); border-top-color: var(--blue);
+      border-radius: 50%; animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .agent-log {
+      background: var(--light-gray); border-radius: 8px;
+      padding: 12px 14px; margin-top: 16px; max-height: 160px;
+      overflow-y: auto; text-align: left;
+    }
+    .agent-log p { font-size: 11px; color: var(--gray); font-family: monospace; margin-bottom: 4px; }
+    .agent-log p:last-child { margin-bottom: 0; }
+    .agent-log p.success { color: #16a34a; }
+    .agent-log p.error { color: #dc2626; }
+
+    /* Result state */
+    .agent-result { text-align: center; padding: 10px 0; }
+    .result-icon { font-size: 48px; margin-bottom: 12px; }
+    .result-title { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .result-sub { font-size: 13px; color: var(--gray); margin-bottom: 20px; }
+    .btn-view-result {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--blue); color: #fff; border: none; border-radius: 8px;
+      padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer;
+      text-decoration: none; transition: background .15s;
+    }
+    .btn-view-result:hover { background: #004fd6; }
+
+    /* ── TOAST ───────────────────────────────────────── */
+    #toast {
+      position: fixed; bottom: 24px; right: 24px; z-index: 999;
+      background: var(--navy); color: #fff;
+      padding: 12px 18px; border-radius: 10px;
+      font-size: 13px; font-weight: 500;
+      transform: translateY(60px); opacity: 0;
+      transition: all .25s; pointer-events: none;
+      display: flex; align-items: center; gap: 8px;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+
+    /* ── HIDDEN ──────────────────────────────────────── */
+    .hidden { display: none !important; }
+    .col-hidden { opacity: .3; pointer-events: none; }
   </style>
 </head>
 <body>
-  <h1>Presales Content Hub</h1>
-  <p class="subtitle">Internal reports and competitive intelligence — last updated March 2026</p>
 
-  <div class="section">
-    <h2>Competitive Intelligence — Loyalty</h2>
-    <a class="card" href="COMPETITION/LOYALTY/Salesforce/talon-one-vs-salesforce-report.html" target="_blank">
-      <span class="card-icon">📊</span>
-      <div>
-        <div class="card-title">Talon.One vs Salesforce Loyalty</div>
-        <div class="card-meta">COMPETITION / LOYALTY / Salesforce</div>
-      </div>
-      <span class="badge">Report</span>
-    </a>
-    <a class="card" href="COMPETITION/LOYALTY/Eagle Eye/talon-one-vs-eagleeye-report.html" target="_blank">
-      <span class="card-icon">📊</span>
-      <div>
-        <div class="card-title">Talon.One vs Eagle Eye AIR</div>
-        <div class="card-meta">COMPETITION / LOYALTY / Eagle Eye</div>
-      </div>
-      <span class="badge">Report</span>
-    </a>
-    <a class="card" href="COMPETITION/LOYALTY/Yopto/talon-omnivy-vs-yotpo.html" target="_blank">
-      <span class="card-icon">📊</span>
-      <div>
-        <div class="card-title">Talon.One + Omnivy vs Yotpo</div>
-        <div class="card-meta">COMPETITION / LOYALTY / Yopto</div>
-      </div>
-      <span class="badge">Report</span>
-    </a>
+<!-- ── NAV ──────────────────────────────────────────────── -->
+<nav>
+  <a href="/" class="nav-logo">
+    <img class="nav-logo-t1" src="https://a.storyblok.com/f/140059/118x24/886a9d9fc3/rebrand-talon-one-logo-navy.svg" alt="Talon.One"
+         onerror="this.style.display='none';this.nextSibling.textContent='Talon.One'">
+    <span style="font-weight:800;color:var(--blue);font-size:15px;display:none"></span>
+    <div class="nav-logo-divider"></div>
+    <span class="nav-logo-label">Presales Hub</span>
+  </a>
+
+  <div class="nav-search-wrap">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="global-search" type="text" placeholder="Search presentations, clients, topics…" autocomplete="off">
+    <span class="nav-kbd">⌘K</span>
   </div>
 
-  <div class="section">
-    <h2>Client Opportunities</h2>
-    <a class="card" href="/my-muscle-chef" target="_blank">
-      <span class="card-icon">🍗</span>
-      <div>
-        <div class="card-title">My Muscle Chef — Talon.One Technical Integration</div>
-        <div class="card-meta">CLIENTS / OPPORTUNITIES / MY MUSCLE CHEF · Loyalty Cashback · Tiers · Customer.io</div>
-      </div>
-      <span class="badge">Presentation</span>
+  <div class="nav-actions">
+    <button class="btn-agent" id="agent-status-btn" title="Agent API status">
+      <span class="agent-dot offline" id="agent-dot"></span>
+      <span class="nav-btn-label" id="agent-status-label">Agent</span>
+    </button>
+    <a href="templates.html" class="btn-agent" style="text-decoration:none" title="Templates">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span class="nav-btn-label">Templates</span>
     </a>
+    <a href="kb.html" class="btn-agent" style="text-decoration:none" title="Knowledge Base">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
+      <span class="nav-btn-label">Knowledge Base</span>
+    </a>
+    <button class="btn-agent" style="text-decoration:none" title="Record feedback" onclick="promptUserInsight()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M2 12h20"/></svg>
+      <span class="nav-btn-label">Quick Insight</span>
+    </button>
+    <button class="btn-new" onclick="openWizard()" title="New Presentation">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span class="nav-btn-label">New Presentation</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────── -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1>Presales <em>Content Hub</em></h1>
+      <p>All client presentations, battle cards & partner templates — one place.</p>
+    </div>
+    <div class="hero-stats" id="hero-stats">
+      <div class="stat"><div class="stat-num" id="stat-docs">4</div><div class="stat-label">Documents</div></div>
+      <div class="stat"><div class="stat-num" id="stat-clients">1</div><div class="stat-label">Clients</div></div>
+      <div class="stat"><div class="stat-num" id="stat-comp">2</div><div class="stat-label">Battle Cards</div></div>
+      <div class="stat"><div class="stat-num" id="stat-partners">1</div><div class="stat-label">Partner Docs</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── FILTER PILLS ──────────────────────────────────────── -->
+<div class="filters">
+  <button class="pill active" data-filter="all" onclick="setFilter('all',this)">All</button>
+  <button class="pill client-pill" data-filter="client" onclick="setFilter('client',this)">🏢 Client Opportunities</button>
+  <button class="pill comp-pill" data-filter="competition" onclick="setFilter('competition',this)">⚔️ Competitive Intelligence</button>
+  <button class="pill partner-pill" data-filter="partner" onclick="setFilter('partner',this)">🤝 GTM Playbooks</button>
+</div>
+
+<!-- ── REPOSITORY GRID ───────────────────────────────────── -->
+<div class="repo-grid">
+
+  <!-- CLIENTS column -->
+  <div class="repo-col" id="col-client">
+    <div class="repo-col-header">
+      <span class="repo-col-icon">🏢</span>
+      <span class="repo-col-title">Client Opportunities</span>
+      <span class="repo-col-count" id="count-client">1 doc</span>
+    </div>
+
+    <div class="folder" data-folder="MY MUSCLE CHEF" data-folder-path="CLIENTS/MY MUSCLE CHEF">
+      <div class="folder-header" onclick="toggleFolder(this)">
+        <svg class="folder-chevron open" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        <span class="folder-name">MY MUSCLE CHEF</span>
+        <span class="folder-badge">1 doc</span>
+        <button class="folder-delete-btn" title="Delete folder" onclick="deleteFolderItem('CLIENTS/MY MUSCLE CHEF', event)">🗑</button>
+      </div>
+      <div class="folder-body">
+        <div class="doc-item" draggable="true"
+           data-doc-path="CLIENTS/MY MUSCLE CHEF/mmcTalonone.html"
+           data-category="client" data-keywords="my muscle chef mmc loyalty qsr meal delivery yotpo talon">
+          <span class="doc-icon">📄</span>
+          <div class="doc-info">
+            <div class="doc-title">MMC × Talon.One Technical Presentation</div>
+            <div class="doc-sub">QSR · Loyalty · Yotpo replacement</div>
+            <div class="doc-timestamps">Created Mar 15, 2026 · Updated Mar 26, 2026</div>
+          </div>
+          <span class="status-pill published">Published</span>
+          <div class="doc-actions">
+            <button class="doc-action-btn modify" onclick="openModify(this)">Modify</button>
+            <button class="doc-action-btn read" onclick="openRead(this)">Read</button>
+            <button class="doc-action-btn delete" onclick="deleteDocItem(this.closest('[data-doc-path]').dataset.docPath, event)">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="folder" data-folder="DALI" data-folder-path="CLIENTS/OPPORTUNITIES/DALI">
+      <div class="folder-header" onclick="toggleFolder(this)">
+        <svg class="folder-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        <span class="folder-name">DALI</span>
+        <span class="folder-badge">empty</span>
+        <button class="folder-delete-btn" title="Delete folder" onclick="deleteFolderItem('CLIENTS/OPPORTUNITIES/DALI', event)">🗑</button>
+      </div>
+      <div class="folder-body collapsed">
+        <div class="empty-slot">
+          <span>No documents yet</span>
+          <button class="btn-add-doc" onclick="openWizard('Dali')">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Create
+          </button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <div class="section">
-    <h2>GTM Playbooks — Partner Integrations</h2>
-    <a class="card" href="PARTNERS/CEP/talon-one-cep-gtm-template.html" target="_blank">
-      <span class="card-icon">🔗</span>
-      <div>
-        <div class="card-title">Talon.One × CEP — Go-To-Market Integration Blueprint</div>
-        <div class="card-meta">PARTNERS / CEP · Compatible: Braze · Bloomreach · MoEngage</div>
+  <!-- COMPETITION column -->
+  <div class="repo-col" id="col-competition">
+    <div class="repo-col-header">
+      <span class="repo-col-icon">⚔️</span>
+      <span class="repo-col-title">Competitive Intelligence — Loyalty</span>
+      <span class="repo-col-count" id="count-comp">2 docs</span>
+    </div>
+
+    <div class="folder" data-folder="LOYALTY" data-folder-path="COMPETITION/LOYALTY">
+      <div class="folder-header" onclick="toggleFolder(this)">
+        <svg class="folder-chevron open" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        <span class="folder-name">LOYALTY</span>
+        <span class="folder-badge">2 docs</span>
+        <button class="folder-delete-btn" title="Delete folder" onclick="deleteFolderItem('COMPETITION/LOYALTY', event)">🗑</button>
       </div>
-      <span class="badge">Template</span>
+      <div class="folder-body">
+        <div class="doc-item" draggable="true"
+           data-doc-path="COMPETITION/LOYALTY/Salesforce/talon-one-vs-salesforce-report.html"
+           data-category="competition" data-keywords="salesforce loyalty marketing cloud crm comparison battle card">
+          <span class="doc-icon">📋</span>
+          <div class="doc-info">
+            <div class="doc-title">Talon.One vs Salesforce</div>
+            <div class="doc-sub">Loyalty · Battle Card</div>
+            <div class="doc-timestamps">Created Feb 10, 2026 · Updated Feb 28, 2026</div>
+          </div>
+          <span class="status-pill published">Published</span>
+          <div class="doc-actions">
+            <button class="doc-action-btn modify" onclick="openModify(this)">Modify</button>
+            <button class="doc-action-btn read" onclick="openRead(this)">Read</button>
+            <button class="doc-action-btn delete" onclick="deleteDocItem(this.closest('[data-doc-path]').dataset.docPath, event)">Delete</button>
+          </div>
+        </div>
+        <div class="doc-item" draggable="true"
+           data-doc-path="COMPETITION/LOYALTY/Yopto/talon-omnivy-vs-yotpo.html"
+           data-category="competition" data-keywords="yotpo omnivy loyalty rewards ecommerce comparison">
+          <span class="doc-icon">📋</span>
+          <div class="doc-info">
+            <div class="doc-title">Talon.One &amp; Omnivy vs Yotpo</div>
+            <div class="doc-sub">Loyalty · eCommerce</div>
+            <div class="doc-timestamps">Created Feb 18, 2026 · Updated Mar 12, 2026</div>
+          </div>
+          <span class="status-pill published">Published</span>
+          <div class="doc-actions">
+            <button class="doc-action-btn modify" onclick="openModify(this)">Modify</button>
+            <button class="doc-action-btn read" onclick="openRead(this)">Read</button>
+            <button class="doc-action-btn delete" onclick="deleteDocItem(this.closest('[data-doc-path]').dataset.docPath, event)">Delete</button>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:0;">
+          <div class="doc-item" style="opacity:.5; cursor:default;"><span class="doc-icon">📁</span><div class="doc-info"><div class="doc-title">Capillary</div><div class="doc-sub">No docs yet</div></div><button class="btn-add-doc" onclick="openWizard('Capillary')">+ Add</button></div>
+          <div class="doc-item" style="opacity:.5; cursor:default;"><span class="doc-icon">📁</span><div class="doc-info"><div class="doc-title">Eagle Eye</div><div class="doc-sub">No docs yet</div></div><button class="btn-add-doc" onclick="openWizard('Eagle Eye')">+ Add</button></div>
+          <div class="doc-item" style="opacity:.5; cursor:default;"><span class="doc-icon">📁</span><div class="doc-info"><div class="doc-title">Epsilon Loyalty</div><div class="doc-sub">No docs yet</div></div><button class="btn-add-doc" onclick="openWizard('Epsilon Loyalty')">+ Add</button></div>
+          <div class="doc-item" style="opacity:.5; cursor:default;"><span class="doc-icon">📁</span><div class="doc-info"><div class="doc-title">Loyalty Lions</div><div class="doc-sub">No docs yet</div></div><button class="btn-add-doc" onclick="openWizard('Loyalty Lions')">+ Add</button></div>
+          <div class="doc-item" style="opacity:.5; cursor:default;"><span class="doc-icon">📁</span><div class="doc-info"><div class="doc-title">Marigold</div><div class="doc-sub">No docs yet</div></div><button class="btn-add-doc" onclick="openWizard('Marigold')">+ Add</button></div>
+          <div class="doc-item" style="opacity:.5; cursor:default;"><span class="doc-icon">📁</span><div class="doc-info"><div class="doc-title">OpenLoyalty</div><div class="doc-sub">No docs yet</div></div><button class="btn-add-doc" onclick="openWizard('OpenLoyalty')">+ Add</button></div>
+          <div class="doc-item" style="opacity:.5; cursor:default;"><span class="doc-icon">📁</span><div class="doc-info"><div class="doc-title">Perx</div><div class="doc-sub">No docs yet</div></div><button class="btn-add-doc" onclick="openWizard('Perx')">+ Add</button></div>
+          <div class="doc-item" style="opacity:.5; cursor:default;"><span class="doc-icon">📁</span><div class="doc-info"><div class="doc-title">SessionM</div><div class="doc-sub">No docs yet</div></div><button class="btn-add-doc" onclick="openWizard('SessionM')">+ Add</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="folder" data-folder="POS" data-folder-path="COMPETITION/POS">
+      <div class="folder-header" onclick="toggleFolder(this)">
+        <svg class="folder-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        <span class="folder-name">POS</span>
+        <span class="folder-badge">empty</span>
+        <button class="folder-delete-btn" title="Delete folder" onclick="deleteFolderItem('COMPETITION/POS', event)">🗑</button>
+      </div>
+      <div class="folder-body collapsed">
+        <div class="empty-slot"><span>No documents yet</span><button class="btn-add-doc" onclick="openWizard()">+ Create</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PARTNERS column -->
+  <div class="repo-col" id="col-partner">
+    <div class="repo-col-header">
+      <span class="repo-col-icon">🤝</span>
+      <span class="repo-col-title">GTM Playbooks — Partner Integrations</span>
+      <span class="repo-col-count" id="count-partner">1 doc</span>
+    </div>
+
+    <div class="folder" data-folder="CEP" data-folder-path="PARTNERS/CEP">
+      <div class="folder-header" onclick="toggleFolder(this)">
+        <svg class="folder-chevron open" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        <span class="folder-name">CEP (Customer Engagement)</span>
+        <span class="folder-badge">1 doc</span>
+        <button class="folder-delete-btn" title="Delete folder" onclick="deleteFolderItem('PARTNERS/CEP', event)">🗑</button>
+      </div>
+      <div class="folder-body">
+        <div class="doc-item" draggable="true"
+           data-doc-path="PARTNERS/CEP/talon-one-cep-gtm-template.html"
+           data-category="partner" data-keywords="cep customer engagement platform gtm go to market template">
+          <span class="doc-icon">📄</span>
+          <div class="doc-info">
+            <div class="doc-title">CEP GTM Template</div>
+            <div class="doc-sub">Go-to-Market · All CEP partners</div>
+            <div class="doc-timestamps">Created Jan 20, 2026 · Updated Feb 5, 2026</div>
+          </div>
+          <span class="status-pill published">Published</span>
+          <div class="doc-actions">
+            <button class="doc-action-btn modify" onclick="openModify(this)">Modify</button>
+            <button class="doc-action-btn read" onclick="openRead(this)">Read</button>
+            <button class="doc-action-btn delete" onclick="deleteDocItem(this.closest('[data-doc-path]').dataset.docPath, event)">Delete</button>
+          </div>
+        </div>
+        <a class="doc-item" href="PARTNERS/CEP/BLOOMREACH/" target="_blank" style="opacity:.5;"
+           data-category="partner" data-keywords="bloomreach cep">
+          <span class="doc-icon">📁</span>
+          <div class="doc-info"><div class="doc-title">Bloomreach</div><div class="doc-sub">No docs yet</div></div>
+          <button class="btn-add-doc" onclick="event.preventDefault();openWizard('Bloomreach')">+ Add</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="folder" data-folder="CDP" data-folder-path="PARTNERS/CDP">
+      <div class="folder-header" onclick="toggleFolder(this)">
+        <svg class="folder-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        <span class="folder-name">CDP (Customer Data Platform)</span>
+        <span class="folder-badge">empty</span>
+      </div>
+      <div class="folder-body collapsed">
+        <div class="empty-slot"><span>No documents yet</span><button class="btn-add-doc" onclick="openWizard()">+ Create</button></div>
+      </div>
+    </div>
+
+    <div class="folder" data-folder="ECOMMERCE" data-folder-path="PARTNERS/ECOMMERCE">
+      <div class="folder-header" onclick="toggleFolder(this)">
+        <svg class="folder-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        <span class="folder-name">eCommerce</span>
+        <span class="folder-badge">empty</span>
+      </div>
+      <div class="folder-body collapsed">
+        <div class="empty-slot"><span>No documents yet</span><button class="btn-add-doc" onclick="openWizard()">+ Create</button></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /repo-grid -->
+
+<!-- ── RECENT DOCS ────────────────────────────────────────── -->
+<div class="recent-section" id="recent-section">
+  <div class="section-title">Recently Added</div>
+  <div class="recent-grid">
+    <a class="recent-card" href="viewer.html?doc=CLIENTS/MY%20MUSCLE%20CHEF/mmcTalonone.html" target="_blank" data-category="client" data-keywords="my muscle chef mmc loyalty qsr meal delivery yotpo">
+      <div class="recent-card-top">
+        <span class="recent-card-icon">📄</span>
+        <span class="recent-card-badge doc-badge client">Client</span>
+      </div>
+      <h3>MMC × Talon.One Technical Presentation</h3>
+      <p>QSR · Loyalty program · Yotpo replacement · Braze + Segment + Shopify</p>
+      <div class="recent-card-timestamps">
+        <div class="recent-card-ts"><span class="recent-card-ts-label">Created</span><span class="recent-card-ts-value">Mar 15, 2026</span></div>
+        <div class="recent-card-ts"><span class="recent-card-ts-label">Updated</span><span class="recent-card-ts-value">Mar 26, 2026</span></div>
+      </div>
+    </a>
+    <a class="recent-card" href="viewer.html?doc=COMPETITION/LOYALTY/Salesforce/talon-one-vs-salesforce-report.html" target="_blank" data-category="competition" data-keywords="salesforce loyalty marketing cloud battle card">
+      <div class="recent-card-top">
+        <span class="recent-card-icon">📋</span>
+        <span class="recent-card-badge doc-badge competition">Battle Card</span>
+      </div>
+      <h3>Talon.One vs Salesforce</h3>
+      <p>Loyalty · Competitive comparison report</p>
+      <div class="recent-card-timestamps">
+        <div class="recent-card-ts"><span class="recent-card-ts-label">Created</span><span class="recent-card-ts-value">Feb 10, 2026</span></div>
+        <div class="recent-card-ts"><span class="recent-card-ts-label">Updated</span><span class="recent-card-ts-value">Feb 28, 2026</span></div>
+      </div>
+    </a>
+    <a class="recent-card" href="viewer.html?doc=COMPETITION/LOYALTY/Yopto/talon-omnivy-vs-yotpo.html" target="_blank" data-category="competition" data-keywords="yotpo omnivy loyalty rewards ecommerce">
+      <div class="recent-card-top">
+        <span class="recent-card-icon">📋</span>
+        <span class="recent-card-badge doc-badge competition">Battle Card</span>
+      </div>
+      <h3>Talon.One &amp; Omnivy vs Yotpo</h3>
+      <p>Loyalty · eCommerce · Rewards platform</p>
+      <div class="recent-card-timestamps">
+        <div class="recent-card-ts"><span class="recent-card-ts-label">Created</span><span class="recent-card-ts-value">Feb 18, 2026</span></div>
+        <div class="recent-card-ts"><span class="recent-card-ts-label">Updated</span><span class="recent-card-ts-value">Mar 12, 2026</span></div>
+      </div>
+    </a>
+    <a class="recent-card" href="viewer.html?doc=PARTNERS/CEP/talon-one-cep-gtm-template.html" target="_blank" data-category="partner" data-keywords="cep customer engagement platform gtm template">
+      <div class="recent-card-top">
+        <span class="recent-card-icon">📄</span>
+        <span class="recent-card-badge doc-badge gtm">GTM</span>
+      </div>
+      <h3>CEP GTM Template</h3>
+      <p>Partner · Customer Engagement Platform · Go-to-Market</p>
+      <div class="recent-card-timestamps">
+        <div class="recent-card-ts"><span class="recent-card-ts-label">Created</span><span class="recent-card-ts-value">Jan 20, 2026</span></div>
+        <div class="recent-card-ts"><span class="recent-card-ts-label">Updated</span><span class="recent-card-ts-value">Feb 5, 2026</span></div>
+      </div>
     </a>
   </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     NEW PRESENTATION WIZARD MODAL
+══════════════════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="wizard-backdrop" onclick="backdropClose(event)">
+  <div class="modal" role="dialog" aria-modal="true">
+
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modal-title">New Presentation</div>
+        <div class="modal-subtitle" id="modal-subtitle">Step 1 of 3 — Prospect basics</div>
+      </div>
+      <button class="modal-close" onclick="closeWizard()" aria-label="Close">✕</button>
+    </div>
+
+    <!-- Step progress bar -->
+    <div class="modal-steps">
+      <div class="modal-step-item">
+        <div class="step-bubble active" id="bubble-1">1</div>
+        <span class="step-label active" id="label-1">Prospect</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="modal-step-item">
+        <div class="step-bubble" id="bubble-2">2</div>
+        <span class="step-label" id="label-2">Competitive</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="modal-step-item">
+        <div class="step-bubble" id="bubble-3">3</div>
+        <span class="step-label" id="label-3">Sources</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="modal-step-item" style="flex:0;">
+        <div class="step-bubble" id="bubble-4">4</div>
+        <span class="step-label" id="label-4">Generate</span>
+      </div>
+    </div>
+
+    <div class="modal-body">
+
+      <!-- Step 1: Prospect info -->
+      <div class="modal-step active" id="step-1">
+        <div class="form-row-2">
+          <div class="form-row">
+            <label>Presentation type <span style="color:var(--blue)">*</span></label>
+            <select id="w-type" onchange="onTypeChange()">
+              <option value="client">Client</option>
+              <option value="competition">Competitive Battle Card</option>
+              <option value="partner">Partner</option>
+            </select>
+          </div>
+          <div class="form-row" id="w-category-row" style="display:none;">
+            <label>Category</label>
+            <select id="w-category">
+              <option value="">Select category…</option>
+              <option>LOYALTY</option>
+              <option>CEP</option>
+              <option>CDP</option>
+              <option>ECOMMERCE</option>
+              <option>POS</option>
+              <option>OTHER</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-row">
+            <label>Company name <span style="color:var(--blue)">*</span></label>
+            <input id="w-company" type="text" placeholder="e.g. My Muscle Chef" autocomplete="off">
+          </div>
+          <div class="form-row">
+            <label>Industry <span style="color:var(--blue)">*</span></label>
+            <select id="w-industry">
+              <option value="">Select industry…</option>
+              <option>Retail</option>
+              <option>QSR / Fast Casual</option>
+              <option>Meal Delivery</option>
+              <option>iGaming</option>
+              <option>Subscription / SaaS</option>
+              <option>Travel & Hospitality</option>
+              <option>Financial Services</option>
+              <option>eCommerce</option>
+              <option>Grocery</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Use case / Goal <span style="color:var(--blue)">*</span></label>
+          <input id="w-usecase" type="text" placeholder="e.g. Launch a tiered loyalty program with personalised promotions">
+        </div>
+      </div>
+
+      <!-- Step 2: Competitive context -->
+      <div class="modal-step" id="step-2">
+        <div class="form-row">
+          <label>Competitor to displace</label>
+          <input id="w-competitor" type="text" placeholder="e.g. Yotpo, Salesforce Marketing Cloud, Brierley…">
+          <div class="hint">Leave blank if no incumbent</div>
+        </div>
+        <div class="form-row">
+          <label>Key integrations in their stack</label>
+          <input id="w-integrations" type="text" placeholder="e.g. Braze, Segment, Shopify, Salesforce">
+          <div class="hint">Comma-separated — will be highlighted in the presentation</div>
+        </div>
+      </div>
+
+      <!-- Step 3: Sources -->
+      <div class="modal-step" id="step-3">
+        <div class="form-row">
+          <label>URLs to scrape</label>
+          <input id="w-urls" type="text" placeholder="https://prospect.com, https://news.item/url">
+          <div class="hint">Comma-separated — agent will scrape and ingest as context</div>
+        </div>
+        <div class="form-row">
+          <label>Additional notes / context</label>
+          <textarea id="w-notes" placeholder="Paste meeting notes, email threads, key requirements, pain points, deal context…"></textarea>
+        </div>
+      </div>
+
+      <!-- Step 4: Running -->
+      <div class="modal-step" id="step-4">
+        <div class="agent-running" id="agent-running-state">
+          <div class="spinner"></div>
+          <div style="font-size:15px; font-weight:700; color:var(--navy);">Agent is running…</div>
+          <div style="font-size:13px; color:var(--gray); margin-top:4px;">This takes 2–4 minutes</div>
+          <div class="agent-log" id="agent-log">
+            <p>⏳ Initialising agents…</p>
+          </div>
+        </div>
+        <div class="agent-result hidden" id="agent-result-state">
+          <div class="result-icon" id="result-icon">✅</div>
+          <div class="result-title" id="result-title">Presentation Generated!</div>
+          <div class="result-sub" id="result-sub">Your presentation is ready.</div>
+          <a class="btn-view-result" id="result-link" href="#" target="_blank">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Open Presentation
+          </a>
+        </div>
+      </div>
+
+    </div><!-- /modal-body -->
+
+    <div class="modal-footer" id="modal-footer">
+      <button class="btn-back hidden" id="btn-back" onclick="prevStep()">← Back</button>
+      <button class="btn-next" id="btn-next" onclick="nextStep()">Continue →</button>
+    </div>
+
+  </div><!-- /modal -->
+</div><!-- /backdrop -->
+
+<!-- ── TOAST ─────────────────────────────────────────────── -->
+<div id="toast">
+  <span id="toast-msg">Copied!</span>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// CONFIGURATION
+// ═══════════════════════════════════════════════════════════
+const AGENT_API = 'http://localhost:8000';
+
+// ═══════════════════════════════════════════════════════════
+// AGENT STATUS CHECK
+// ═══════════════════════════════════════════════════════════
+let agentOnline = false;
+
+async function checkAgentStatus() {
+  try {
+    const r = await fetch(`${AGENT_API}/health`, { signal: AbortSignal.timeout(2000) });
+    if (r.ok) {
+      agentOnline = true;
+      document.getElementById('agent-dot').classList.remove('offline');
+      document.getElementById('agent-status-label').textContent = 'Agent Online';
+    } else { setAgentOffline(); }
+  } catch { setAgentOffline(); }
+}
+function setAgentOffline() {
+  agentOnline = false;
+  document.getElementById('agent-dot').classList.add('offline');
+  document.getElementById('agent-status-label').textContent = 'Agent Offline';
+}
+checkAgentStatus();
+setInterval(checkAgentStatus, 15000);
+
+// Load dynamically generated docs once agent status is known
+setTimeout(loadGeneratedDocs, 500);
+// Load platform-published docs from manifest (independent of agent status)
+loadManifestDocs();
+
+// ═══════════════════════════════════════════════════════════
+// SEARCH
+// ═══════════════════════════════════════════════════════════
+const searchInput = document.getElementById('global-search');
+let currentFilter = 'all';
+
+searchInput.addEventListener('input', () => applySearch(searchInput.value.trim().toLowerCase()));
+
+// ⌘K shortcut
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.select();
+  }
+  if (e.key === 'Escape') {
+    if (document.getElementById('wizard-backdrop').classList.contains('open')) closeWizard();
+    else { searchInput.value = ''; applySearch(''); }
+  }
+});
+
+function applySearch(q) {
+  const items = document.querySelectorAll('.doc-item[data-category], .recent-card[data-category]');
+  items.forEach(el => {
+    const cat = el.dataset.category;
+    const kw = (el.dataset.keywords || '') + ' ' + (el.querySelector('.doc-title, h3')?.textContent || '');
+    const matchSearch = !q || kw.toLowerCase().includes(q);
+    const matchFilter = currentFilter === 'all' || cat === currentFilter;
+    el.style.display = (matchSearch && matchFilter) ? '' : 'none';
+  });
+  // Update column visibility
+  ['client','competition','partner'].forEach(cat => {
+    const col = document.getElementById('col-' + cat);
+    if (!col) return;
+    const visible = col.querySelectorAll('.doc-item[data-category]:not([style*="display: none"])');
+    col.classList.toggle('col-hidden', currentFilter !== 'all' && currentFilter !== cat);
+  });
+}
+
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  applySearch(searchInput.value.trim().toLowerCase());
+}
+
+// ═══════════════════════════════════════════════════════════
+// FOLDER TOGGLE
+// ═══════════════════════════════════════════════════════════
+function toggleFolder(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.folder-chevron');
+  const isOpen = !body.classList.contains('collapsed');
+  body.classList.toggle('collapsed', isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+
+// ═══════════════════════════════════════════════════════════
+// WIZARD
+// ═══════════════════════════════════════════════════════════
+let currentStep = 1;
+const TOTAL_STEPS = 4;
+
+function openWizard(prefillCompany = '') {
+  const params = new URLSearchParams();
+  if (prefillCompany) params.set('company', prefillCompany);
+  window.location.href = 'new.html' + (params.toString() ? '?' + params.toString() : '');
+}
+
+function closeWizard() {
+  document.getElementById('wizard-backdrop').classList.remove('open');
+  // Reset step 4 for next run
+  setTimeout(() => {
+    document.getElementById('agent-running-state').classList.remove('hidden');
+    document.getElementById('agent-result-state').classList.add('hidden');
+    document.getElementById('agent-log').innerHTML = '<p>⏳ Initialising agents…</p>';
+  }, 300);
+}
+
+function backdropClose(e) {
+  if (e.target === document.getElementById('wizard-backdrop')) closeWizard();
+}
+
+function updateStepUI() {
+  // Show/hide steps
+  for (let i = 1; i <= TOTAL_STEPS; i++) {
+    document.getElementById(`step-${i}`).classList.toggle('active', i === currentStep);
+  }
+  // Update bubbles
+  for (let i = 1; i <= TOTAL_STEPS; i++) {
+    const bubble = document.getElementById(`bubble-${i}`);
+    const label = document.getElementById(`label-${i}`);
+    bubble.classList.remove('active','done');
+    label.classList.remove('active');
+    if (i < currentStep) { bubble.classList.add('done'); bubble.textContent = '✓'; }
+    else { bubble.textContent = i; }
+    if (i === currentStep) { bubble.classList.add('active'); label.classList.add('active'); }
+  }
+  // Footer
+  const backBtn = document.getElementById('btn-back');
+  const nextBtn = document.getElementById('btn-next');
+  const footer = document.getElementById('modal-footer');
+  backBtn.classList.toggle('hidden', currentStep <= 1);
+  footer.style.display = currentStep === 4 ? 'none' : '';
+
+  const subtitles = ['Step 1 of 3 — Presentation type & prospect','Step 2 of 3 — Competitive context','Step 3 of 3 — Sources & notes','Generating your presentation…'];
+  document.getElementById('modal-subtitle').textContent = subtitles[currentStep - 1] || '';
+  if (currentStep === 3) nextBtn.textContent = agentOnline ? '🚀 Generate' : '⚠️ Start (agent offline)';
+  else nextBtn.textContent = 'Continue →';
+}
+
+function prevStep() {
+  if (currentStep > 1) { currentStep--; updateStepUI(); }
+}
+
+async function nextStep() {
+  if (currentStep === 1) {
+    const company = document.getElementById('w-company').value.trim();
+    const industry = document.getElementById('w-industry').value;
+    const usecase = document.getElementById('w-usecase').value.trim();
+    if (!company || !industry || !usecase) {
+      showToast('Please fill in Company, Industry and Use-case');
+      return;
+    }
+  }
+  if (currentStep < 3) { currentStep++; updateStepUI(); return; }
+  if (currentStep === 3) {
+    currentStep = 4;
+    updateStepUI();
+    await runAgent();
+  }
+}
+
+function addLog(msg, type = '') {
+  const log = document.getElementById('agent-log');
+  const p = document.createElement('p');
+  if (type) p.className = type;
+  p.textContent = msg;
+  log.appendChild(p);
+  log.scrollTop = log.scrollHeight;
+}
+
+function onTypeChange() {
+  const type = document.getElementById('w-type').value;
+  const catRow = document.getElementById('w-category-row');
+  catRow.style.display = (type === 'competition' || type === 'partner') ? '' : 'none';
+}
+
+async function runAgent() {
+  const company      = document.getElementById('w-company').value.trim();
+  const industry     = document.getElementById('w-industry').value;
+  const usecase      = document.getElementById('w-usecase').value.trim();
+  const competitor   = document.getElementById('w-competitor').value.trim();
+  const integrations = document.getElementById('w-integrations').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const urls         = document.getElementById('w-urls').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const notes        = document.getElementById('w-notes').value.trim();
+  const presType     = document.getElementById('w-type').value || 'client';
+  const presCat      = document.getElementById('w-category').value || '';
+
+  addLog(`📤 Sending prospect: ${company} (${industry}) — type: ${presType}`);
+  addLog('⏳ Starting coordinator agent…');
+
+  if (!agentOnline) {
+    showOfflineResult(company);
+    return;
+  }
+
+  try {
+    const startTime = Date.now();
+    const resp = await fetch(`${AGENT_API}/run`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        company_name: company, industry, use_case: usecase,
+        competitor: competitor || null, integrations,
+        urls_to_scrape: urls, raw_notes: notes,
+        presentation_type: presType,
+        presentation_category: presCat,
+      }),
+    });
+
+    addLog('🤖 Agent running — value selling & document generation…');
+
+    if (!resp.ok) {
+      const err = await resp.text();
+      throw new Error(`HTTP ${resp.status}: ${err}`);
+    }
+
+    const data = await resp.json();
+    const elapsed = Math.round((Date.now() - startTime) / 1000);
+    addLog(`✅ Done in ${elapsed}s`, 'success');
+
+    // Show result
+    document.getElementById('agent-running-state').classList.add('hidden');
+    document.getElementById('agent-result-state').classList.remove('hidden');
+
+    if (data.vercel_url) {
+      document.getElementById('result-icon').textContent = '🎉';
+      document.getElementById('result-title').textContent = 'Presentation Live!';
+      document.getElementById('result-sub').textContent = `Deployed to Vercel · ${data.output_filename || ''}`;
+      document.getElementById('result-link').href = data.vercel_url;
+    } else if (data.local_path) {
+      document.getElementById('result-icon').textContent = '✅';
+      document.getElementById('result-title').textContent = 'Presentation Generated (Draft)';
+      document.getElementById('result-sub').textContent = data.local_path + (data.error ? ' · Note: ' + data.error : '');
+      document.getElementById('result-link').href = `viewer.html?doc=${encodeURIComponent(data.local_path)}`;
+    } else {
+      throw new Error(data.error || 'No output path returned');
+    }
+
+  } catch (err) {
+    addLog(`❌ Error: ${err.message}`, 'error');
+    document.getElementById('agent-running-state').classList.add('hidden');
+    document.getElementById('agent-result-state').classList.remove('hidden');
+    document.getElementById('result-icon').textContent = '❌';
+    document.getElementById('result-title').textContent = 'Generation Failed';
+    document.getElementById('result-sub').textContent = err.message;
+    document.getElementById('result-link').style.display = 'none';
+  }
+}
+
+function showOfflineResult(company) {
+  addLog('⚠️ Agent API is offline. Start the server with:', 'error');
+  addLog('  cd presales_agent && python main.py --serve', 'error');
+  document.getElementById('agent-running-state').classList.add('hidden');
+  document.getElementById('agent-result-state').classList.remove('hidden');
+  document.getElementById('result-icon').textContent = '⚠️';
+  document.getElementById('result-title').textContent = 'Agent Offline';
+  document.getElementById('result-sub').textContent = 'Start the agent server then try again.';
+  const link = document.getElementById('result-link');
+  link.textContent = 'View Docs';
+  link.href = 'presales_agent/ARCHITECTURE.html';
+}
+
+// ═══════════════════════════════════════════════════════════
+// DELETE & DYNAMIC DOC LOADING
+// ═══════════════════════════════════════════════════════════
+function openModify(btn) {
+  const path = btn.closest('[data-doc-path]').dataset.docPath;
+  if (!path) return;
+  window.open('viewer.html?doc=' + encodeURIComponent(path), '_blank');
+}
+function openRead(btn) {
+  const path = btn.closest('[data-doc-path]').dataset.docPath;
+  if (!path) return;
+  // Open in the integrated viewer so doc is rendered in the app context
+  window.open('viewer.html?doc=' + encodeURIComponent(path), '_blank');
+}
+
+function attachDocRowClicks() {
+  document.querySelectorAll('.doc-item').forEach((item) => {
+    item.addEventListener('click', (e) => {
+      // Ignore clicks on specific action buttons, let their handlers run
+      if (e.target.closest('.doc-action-btn')) return;
+      openRead(item);
+    });
+  });
+}
+
+async function deleteDocItem(path, e) {
+  e.preventDefault();
+  e.stopPropagation();
+  const name = path.split('/').pop();
+  if (!confirm(`Delete "${name}"?\nThis cannot be undone.`)) return;
+  try {
+    const r = await fetch(`${AGENT_API}/api/delete`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ doc_path: path }),
+    });
+    if (r.ok) {
+      // Remove from repo browser
+      const el = document.querySelector(`[data-doc-path="${path}"]`);
+      if (el) el.remove();
+      // Remove from recent cards
+      const encoded = path.replace(/ /g, '%20');
+      document.querySelectorAll(`.recent-card[href="viewer.html?doc=${encoded}"]`).forEach(c => c.remove());
+      showToast('Document deleted.');
+    } else {
+      showToast('Delete failed — ' + (await r.text()));
+    }
+  } catch(err) {
+    showToast('Error: ' + err.message);
+  }
+}
+
+async function loadGeneratedDocs() {
+  if (!agentOnline) return;
+  try {
+    const r = await fetch(`${AGENT_API}/api/docs`, { signal: AbortSignal.timeout(3000) });
+    if (!r.ok) return;
+    const { docs } = await r.json();
+
+    // Build set of already-rendered paths (normalised)
+    const rendered = new Set(
+      [...document.querySelectorAll('[data-doc-path]')].map(el =>
+        decodeURIComponent(el.getAttribute('data-doc-path') || '')
+      )
+    );
+
+    const _SECTION_COL = { client: 'col-client', competition: 'col-competition', partner: 'col-partner' };
+    const _BADGE_LABEL = { client: 'Client', competition: 'Battle Card', partner: 'Partner' };
+    const _ICON = { client: '📄', competition: '📋', partner: '🤝' };
+
+    for (const doc of docs) {
+      const normPath = decodeURIComponent(doc.path);
+      if (rendered.has(normPath)) continue;
+
+      // Find or create the folder section
+      const colId = _SECTION_COL[doc.section] || 'col-client';
+      const col = document.getElementById(colId);
+      if (!col) continue;
+
+      // Find folder by category name (case-insensitive)
+      let folderDiv = [...col.querySelectorAll('.folder')].find(f =>
+        (f.dataset.folder || '').toUpperCase() === doc.category.toUpperCase()
+      );
+
+      if (!folderDiv) {
+        // Create new folder
+        folderDiv = document.createElement('div');
+        folderDiv.className = 'folder';
+        folderDiv.dataset.folder = doc.category;
+        const folderPath = `${doc.folder}`;
+        folderDiv.innerHTML = `
+          <div class="folder-header" onclick="toggleFolder(this)">
+            <svg class="folder-chevron open" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            <span class="folder-name">${doc.category}</span>
+            <span class="folder-badge">0 docs</span>
+            <button class="folder-delete-btn" title="Delete folder" onclick="deleteFolderItem('${folderPath}', event)">🗑</button>
+          </div>
+          <div class="folder-body"></div>`;
+        // Insert before the last child (the "Add new" button row)
+        const addBtn = col.querySelector('div[style]');
+        col.insertBefore(folderDiv, addBtn || null);
+        initDropZone(folderDiv.querySelector('.folder-body'));
+      }
+
+      const folderBody = folderDiv.querySelector('.folder-body');
+      const encodedPath = doc.path.replace(/ /g, '%20');
+      const item = document.createElement('div');
+      item.className = 'doc-item';
+      item.draggable = true;
+      item.dataset.docPath = normPath;
+      item.dataset.category = doc.section;
+      item.dataset.keywords = doc.name.toLowerCase();
+      const isDraft = doc.is_draft !== false; // default draft if field missing
+      const statusClass = isDraft ? 'draft' : 'published';
+      const statusLabel = isDraft ? 'Draft' : 'Published';
+      item.innerHTML = `
+        <span class="doc-icon">${_ICON[doc.section] || '📄'}</span>
+        <div class="doc-info">
+          <div class="doc-title">${doc.name}</div>
+          <div class="doc-sub">${doc.category}</div>
+          <div class="doc-timestamps">Updated ${doc.modified}</div>
+        </div>
+        <span class="status-pill ${statusClass}">${statusLabel}</span>
+        <div class="doc-actions">
+          <button class="doc-action-btn modify" onclick="openModify(this)">Modify</button>
+          <button class="doc-action-btn read" onclick="openRead(this)">Read</button>
+          <button class="doc-action-btn delete" onclick="deleteDocItem(this.closest('[data-doc-path]').dataset.docPath, event)">Delete</button>
+        </div>`;
+      initDragItem(item);
+      folderBody.appendChild(item);
+
+      // Update badge count
+      const badge = folderDiv.querySelector('.folder-badge');
+      const current = parseInt(badge.textContent) || 0;
+      badge.textContent = `${current + 1} doc${current + 1 !== 1 ? 's' : ''}`;
+
+      rendered.add(normPath);
+    }
+    attachDocRowClicks();
+  } catch { /* API offline or parse error — silent */ }
+}
+
+// ═══════════════════════════════════════════════════════════
+// DELETE FOLDER
+// ═══════════════════════════════════════════════════════════
+async function deleteFolderItem(folderPath, e) {
+  e.preventDefault();
+  e.stopPropagation();
+  const name = folderPath.split('/').pop();
+  if (!confirm(`Delete folder "${name}" and all its documents?\nThis cannot be undone.`)) return;
+  try {
+    const r = await fetch(`${AGENT_API}/api/delete-folder`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ folder_path: folderPath }),
+    });
+    if (r.ok) {
+      // Remove folder element from DOM
+      const folderEl = [...document.querySelectorAll('.folder')].find(f =>
+        f.dataset.folder && folderPath.toUpperCase().includes(f.dataset.folder.toUpperCase())
+      );
+      if (folderEl) folderEl.remove();
+      // Remove any recent cards for docs in this folder
+      const norm = folderPath.replace(/ /g, '%20');
+      document.querySelectorAll('.recent-card').forEach(c => {
+        if ((c.href || '').includes(norm)) c.remove();
+      });
+      showToast('Folder deleted.');
+    } else {
+      const txt = await r.text();
+      if (r.status === 404) {
+        // Folder doesn't exist on disk yet (static/empty folder in HTML) — just remove from UI
+        const folderEl = [...document.querySelectorAll('.folder')].find(f =>
+          f.dataset.folder && folderPath.toUpperCase().includes(f.dataset.folder.toUpperCase())
+        );
+        if (folderEl) folderEl.remove();
+        showToast('Folder removed from view.');
+      } else {
+        showToast('Delete failed — ' + txt);
+      }
+    }
+  } catch(err) {
+    showToast('Error: ' + err.message);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// DRAG & DROP — move docs between folders
+// ═══════════════════════════════════════════════════════════
+let _dragSrc = null;
+
+function initDragItem(el) {
+  el.addEventListener('dragstart', e => {
+    _dragSrc = el;
+    el.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', el.dataset.docPath || '');
+  });
+  el.addEventListener('dragend', () => {
+    el.classList.remove('dragging');
+    document.querySelectorAll('.folder-body.drag-over').forEach(b => b.classList.remove('drag-over'));
+    _dragSrc = null;
+  });
+}
+
+function initDropZone(folderBody) {
+  folderBody.addEventListener('dragover', e => {
+    if (!_dragSrc) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    document.querySelectorAll('.folder-body.drag-over').forEach(b => b.classList.remove('drag-over'));
+    folderBody.classList.add('drag-over');
+  });
+  folderBody.addEventListener('dragleave', e => {
+    if (!folderBody.contains(e.relatedTarget)) folderBody.classList.remove('drag-over');
+  });
+  folderBody.addEventListener('drop', async e => {
+    e.preventDefault();
+    folderBody.classList.remove('drag-over');
+    if (!_dragSrc || folderBody.contains(_dragSrc)) return;
+    const docPath = e.dataTransfer.getData('text/plain');
+    if (!docPath) return;
+    // Determine destination folder path from folder element
+    const folderEl = folderBody.closest('.folder');
+    const colEl = folderEl ? folderEl.closest('.repo-col') : null;
+    if (!folderEl || !colEl) return;
+    // Map column to section prefix
+    const sectionMap = { 'col-client': 'CLIENTS', 'col-competition': 'COMPETITION', 'col-partner': 'PARTNERS' };
+    const section = sectionMap[colEl.id] || 'CLIENTS';
+    const folderName = folderEl.dataset.folder || '';
+    const destFolder = folderName ? `${section}/${folderName}` : section;
+    try {
+      const r = await fetch(`${AGENT_API}/api/move`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ doc_path: docPath, dest_folder: destFolder }),
+      });
+      if (r.ok) {
+        const { new_path } = await r.json();
+        // Move the DOM element
+        _dragSrc.dataset.docPath = new_path;
+        folderBody.appendChild(_dragSrc);
+        // Update old folder badge
+        const oldFolder = _dragSrc.parentElement;
+        updateFolderBadge(_dragSrc.closest('.folder'));
+        showToast('Document moved.');
+      } else {
+        const txt = await r.text();
+        showToast('Move failed — ' + txt);
+      }
+    } catch(err) {
+      showToast('Error: ' + err.message);
+    }
+  });
+}
+
+function updateFolderBadge(folderEl) {
+  if (!folderEl) return;
+  const badge = folderEl.querySelector('.folder-badge');
+  if (!badge) return;
+  const count = folderEl.querySelectorAll('.doc-item[data-doc-path]').length;
+  badge.textContent = count === 0 ? 'empty' : `${count} doc${count !== 1 ? 's' : ''}`;
+}
+
+// Attach drag listeners to all static doc-items and drop zones on load
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.doc-item[draggable="true"]').forEach(initDragItem);
+  document.querySelectorAll('.folder-body').forEach(initDropZone);
+  attachDocRowClicks();
+  pruneDeletedFolders();
+});
+
+// Remove static folder elements whose directory no longer exists on disk
+async function pruneDeletedFolders() {
+  try {
+    const r = await fetch(`${AGENT_API}/api/folders`, { signal: AbortSignal.timeout(3000) });
+    if (!r.ok) return;
+    const { folders } = await r.json();
+    const existing = new Set(folders.map(f => f.toUpperCase()));
+    document.querySelectorAll('.folder[data-folder-path]').forEach(el => {
+      const fp = el.dataset.folderPath.toUpperCase();
+      if (!existing.has(fp)) el.remove();
+    });
+  } catch { /* agent offline — leave static HTML as-is */ }
+}
+
+// ═══════════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════════
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  el.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ═══════════════════════════════════════════════════════════
+// PLATFORM PUBLISHED DOCS — loaded from CLIENTS/manifest.json
+// ═══════════════════════════════════════════════════════════
+async function loadManifestDocs() {
+  try {
+    const r = await fetch('/CLIENTS/manifest.json?_=' + Date.now(), { signal: AbortSignal.timeout(5000) });
+    if (!r.ok) return;
+    const entries = await r.json();
+    if (!Array.isArray(entries) || !entries.length) return;
+
+    const col = document.getElementById('col-client');
+    if (!col) return;
+
+    // Build set of already-rendered paths
+    const rendered = new Set(
+      [...document.querySelectorAll('#col-client [data-doc-path]')].map(el =>
+        el.getAttribute('data-doc-path') || ''
+      )
+    );
+
+    for (const entry of entries) {
+      const path = entry.path || '';
+      if (!path || rendered.has(path)) continue;
+
+      const accountSlug = entry.account_slug || path.split('/')[1] || 'UNKNOWN';
+      const accountName = entry.account_name || accountSlug;
+
+      // Find or create folder for this account
+      let folderDiv = [...col.querySelectorAll('.folder')].find(f =>
+        (f.dataset.folder || '').toUpperCase() === accountSlug.toUpperCase()
+      );
+
+      if (!folderDiv) {
+        folderDiv = document.createElement('div');
+        folderDiv.className = 'folder';
+        folderDiv.dataset.folder = accountSlug;
+        folderDiv.dataset.folderPath = `CLIENTS/${accountSlug}`;
+        folderDiv.innerHTML = `
+          <div class="folder-header" onclick="toggleFolder(this)">
+            <svg class="folder-chevron open" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            <span class="folder-name">${accountName}</span>
+            <span class="folder-badge">0 docs</span>
+          </div>
+          <div class="folder-body"></div>`;
+        col.appendChild(folderDiv);
+        initDropZone(folderDiv.querySelector('.folder-body'));
+      }
+
+      const folderBody = folderDiv.querySelector('.folder-body');
+      const pubDate = entry.published_at ? new Date(entry.published_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+      const docTypeLabel = (entry.doc_type || 'document').replace(/_/g, ' ');
+      const item = document.createElement('a');
+      item.className = 'doc-item';
+      item.href = entry.vercel_url || ('/' + path);
+      item.target = '_blank';
+      item.rel = 'noopener noreferrer';
+      item.dataset.docPath = path;
+      item.dataset.category = 'client';
+      item.dataset.keywords = `${accountName} ${entry.title} ${docTypeLabel}`.toLowerCase();
+      item.innerHTML = `
+        <span class="doc-icon">📄</span>
+        <div class="doc-info">
+          <div class="doc-title">${entry.title}</div>
+          <div class="doc-sub">${docTypeLabel} · ${accountName}</div>
+          ${pubDate ? `<div class="doc-timestamps">Published ${pubDate}</div>` : ''}
+        </div>
+        <span class="status-pill published">Published</span>`;
+      folderBody.appendChild(item);
+
+      // Update folder badge
+      updateFolderBadge(folderDiv);
+      rendered.add(path);
+    }
+
+    // Update column doc count
+    const totalDocs = col.querySelectorAll('[data-doc-path]').length;
+    const countEl = document.getElementById('count-client');
+    if (countEl) countEl.textContent = `${totalDocs} doc${totalDocs !== 1 ? 's' : ''}`;
+  } catch { /* manifest not yet created or fetch failed — silent */ }
+}
+
+async function promptUserInsight() {
+  const insight = prompt('Share a coaching insight (e.g. "Focus more on Loyalty API for Tier 1"):');
+  if (!insight) return;
+  const userId = prompt('User ID for personalization (e.g. my-muscle-chef):', 'default');
+  if (!userId) return;
+
+  try {
+    const resp = await fetch('http://localhost:8000/api/insights', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: userId, namespace: 'sales_playbook', insight }),
+    });
+    if (!resp.ok) throw new Error(await resp.text());
+    showToast('Insight saved successfully.');
+  } catch (err) {
+    showToast('Save failed: ' + err.message);
+  }
+}
+</script>
 
 </body>
 </html>
