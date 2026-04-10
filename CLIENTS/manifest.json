@@ -1,5 +1,14 @@
 [
   {
+    "account_name": "My Muscle Chef",
+    "account_slug": "MY-MUSCLE-CHEF",
+    "title": "Talon.one - My Muscle Chef Technical Presentation",
+    "doc_type": "presentation",
+    "path": "CLIENTS/MY-MUSCLE-CHEF/talonone---my-muscle-chef-technical-presentation.html",
+    "vercel_url": "https://presales-content.vercel.app/CLIENTS/MY-MUSCLE-CHEF/talonone---my-muscle-chef-technical-presentation.html",
+    "published_at": "2026-04-10T02:56:24Z"
+  },
+  {
     "account_name": "KFC Thailand",
     "account_slug": "KFC-THAILAND",
     "title": "Talon.one and Braze for KFC Thailand",
