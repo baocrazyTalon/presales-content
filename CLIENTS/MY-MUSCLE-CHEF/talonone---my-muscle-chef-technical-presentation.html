@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)https://presales-content.vercel.app/my-muscle-chef -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Talon.One — My Muscle Chef Technical Presentation</title>
+  <style>
+    :root {
+      --red: #ff2146;
+      --navy: #1a1f36;
+      --dark: #222;
+      --gray: #555;
+      --light-gray: #f5f5f7;
+      --white: #fff;
+      --border: #e0e0e0;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--white);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 40px; height: 64px;
+    }
+    nav .logos { display: flex; align-items: center; gap: 18px; text-decoration: none; cursor: pointer; flex-shrink: 0; }
+    nav .logos img { height: 24px; }
+    nav .logos span { color: var(--red); font-weight: 700; font-size: 14px; }
+    nav .nav-links { display: flex; flex: 1; gap: 0; flex-wrap: nowrap; justify-content: space-evenly; align-items: center; margin-left: 24px; }
+    nav .nav-links a {
+      font-size: 11.5px; font-weight: 600; text-decoration: none; color: var(--gray);
+      padding: 4px 6px; border-radius: 6px; transition: .2s;
+      text-align: center; line-height: 1.25;
+    }
+    nav .nav-links a:hover { background: var(--light-gray); color: var(--red); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 100px 40px 60px;
+      background: linear-gradient(165deg, var(--white) 60%, #fff0f2 100%);
+    }
+    .hero .logos-hero { display: flex; align-items: center; gap: 28px; margin-bottom: 48px; }
+    .hero .logos-hero img:first-child { height: 36px; }
+    .hero .logos-hero img:last-child { height: 48px; }
+    .hero .logos-hero .sep { width: 2px; height: 40px; background: var(--border); }
+    .hero h1 { font-size: 48px; font-weight: 800; color: var(--navy); max-width: 800px; line-height: 1.15; }
+    .hero h1 em { font-style: normal; color: var(--red); }
+    .hero p.sub { margin-top: 20px; font-size: 20px; color: var(--gray); max-width: 640px; }
+    .hero .tags { margin-top: 32px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .hero .tags span {
+      background: var(--light-gray); padding: 6px 16px; border-radius: 20px;
+      font-size: 13px; color: var(--dark); font-weight: 500;
+    }
+
+    /* SECTIONS */
+    section { padding: 80px 40px; max-width: 100%; margin: 0 auto; }
+    section > .inner { max-width: 1100px; margin: 0 auto; }
+    section.bg-gray { background: var(--light-gray); }
+    .section-label {
+      font-size: 12px; text-transform: uppercase; letter-spacing: 2px;
+      color: var(--red); font-weight: 700; margin-bottom: 8px;
+    }
+    section h2 { font-size: 32px; font-weight: 700; color: var(--navy); margin-bottom: 24px; }
+    section h3 { font-size: 20px; font-weight: 600; color: var(--dark); margin: 24px 0 12px; }
+    section p { color: var(--gray); font-size: 16px; max-width: 800px; margin-bottom: 16px; }
+
+    /* CARDS GRID */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 24px; }
+    .card {
+      background: var(--white); border: 1px solid var(--border); border-radius: 12px;
+      padding: 28px; transition: .25s;
+    }
+    .card:hover { border-color: var(--red); box-shadow: 0 4px 24px rgba(255,33,70,.08); transform: translateY(-2px); }
+    .card .card-icon { font-size: 28px; margin-bottom: 12px; }
+    .card h4 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .card p { font-size: 14px; color: var(--gray); margin-bottom: 0; }
+    .card code {
+      display: inline-block; background: #f0f0f0; padding: 1px 6px;
+      border-radius: 4px; font-size: 13px; color: var(--red);
+    }
+
+    /* STATUS BADGES */
+    .badge {
+      display: inline-block; padding: 3px 10px; border-radius: 6px;
+      font-size: 12px; font-weight: 600; margin-right: 4px;
+    }
+    .badge-green { background: #e6f9ed; color: #1a7f37; }
+    .badge-blue { background: #e6f0ff; color: #1a56db; }
+    .badge-orange { background: #fff4e6; color: #c05600; }
+    .badge-red { background: #ffe6ea; color: #c41a3a; }
+
+    /* DIAGRAM BOX */
+    .diagram {
+      background: var(--navy); border-radius: 12px; padding: 36px;
+      color: var(--white); margin: 24px 0; overflow-x: auto;
+    }
+    .diagram pre {
+      font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px;
+      line-height: 1.7; white-space: pre; color: #c8d1e0;
+    }
+    .diagram .hl { color: var(--red); font-weight: 700; }
+    .diagram .hl2 { color: #6dd5ed; font-weight: 600; }
+    .diagram .hl3 { color: #ffd166; }
+
+    /* CODE BLOCK */
+    .code-block {
+      background: #1e1e2e; border-radius: 10px; padding: 24px 28px;
+      margin: 16px 0; overflow-x: auto;
+    }
+    .code-block code {
+      font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px;
+      line-height: 1.7; color: #cdd6f4; display: block; white-space: pre;
+    }
+    .code-block .kw { color: #cba6f7; }
+    .code-block .str { color: #a6e3a1; }
+    .code-block .num { color: #fab387; }
+    .code-block .cm { color: #6c7086; }
+    .code-block .fn { color: #89b4fa; }
+    .code-block .key { color: #89dceb; }
+
+    /* FLOW  */
+    .flow { display: flex; align-items: center; gap: 0; margin: 24px 0; flex-wrap: wrap; }
+    .flow-step {
+      background: var(--white); border: 2px solid var(--border); border-radius: 10px;
+      padding: 16px 22px; text-align: center; min-width: 140px;
+    }
+    .flow-step strong { display: block; font-size: 14px; color: var(--navy); }
+    .flow-step span { font-size: 12px; color: var(--gray); }
+    .flow-arrow { font-size: 22px; color: var(--red); padding: 0 6px; font-weight: 700; }
+
+    /* TABLE */
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 14px; }
+    th { background: var(--light-gray); font-weight: 600; color: var(--navy); font-size: 13px; text-transform: uppercase; letter-spacing: .5px; }
+    td { color: var(--gray); }
+    td code {
+      background: #f0f0f0; padding: 1px 6px; border-radius: 4px; font-size: 13px; color: var(--red);
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center; padding: 48px 40px; border-top: 1px solid var(--border);
+      color: var(--gray); font-size: 13px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 10px 16px; }
+      nav .nav-links { display: none; }
+      .hero h1 { font-size: 32px; }
+      section { padding: 48px 20px; }
+      .flow { flex-direction: column; align-items: stretch; }
+      .flow-arrow { transform: rotate(90deg); text-align: center; }
+    }
+
+    /* SLIDE COUNTER & PRINT */
+    @media print {
+      nav { display: none; }
+      section { break-inside: avoid; }
+    }
+
+    .env-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 16px; }
+    .env-box {
+      border-radius: 10px; padding: 20px; text-align: center;
+      font-weight: 600; font-size: 14px; color: var(--white);
+    }
+    .env-box span { display: block; font-weight: 400; font-size: 12px; opacity: .85; margin-top: 4px; }
+    .env-dev { background: #6366f1; }
+    .env-qa { background: #f59e0b; }
+    .env-staging { background: #22c55e; }
+    .env-prod { background: var(--red); }
+
+    .highlight-box {
+      border-left: 4px solid var(--red); background: #fff5f7;
+      padding: 20px 24px; border-radius: 0 10px 10px 0; margin: 20px 0;
+    }
+    .highlight-box p { margin-bottom: 0; color: var(--dark); }
+
+    ul.check-list { list-style: none; padding: 0; margin: 12px 0; }
+    ul.check-list li { padding: 6px 0; font-size: 15px; color: var(--dark); }
+    ul.check-list li::before { content: "✓ "; color: var(--red); font-weight: 700; }
+  </style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <a href="https://presales-content.vercel.app/my-muscle-chef#" class="logos" onclick="window.scrollTo({top:0,behavior:&#39;smooth&#39;});return false;">
+    <img src="./Talon.One — My Muscle Chef Technical Presentation_files/rebrand-talon-one-logo-navy.svg" alt="Talon.One Logo">
+    <span>and</span>
+    <img src="./Talon.One — My Muscle Chef Technical Presentation_files/1666837322-01_mymc_blk.svg" alt="My Muscle Chef Logo">
+  </a>
+  <div class="nav-links">
+    <a href="https://presales-content.vercel.app/my-muscle-chef#mach">MACH</a>
+    <a href="https://presales-content.vercel.app/my-muscle-chef#environments">Environments</a>
+    <a href="https://presales-content.vercel.app/my-muscle-chef#apis">APIs</a>
+    <a href="https://presales-content.vercel.app/my-muscle-chef#integration-id">IntegrationID</a>
+    <a href="https://presales-content.vercel.app/my-muscle-chef#customer-profile">Profiles<br>API</a>
+    <a href="https://presales-content.vercel.app/my-muscle-chef#session-api">Session<br>API</a>
+    <a href="https://presales-content.vercel.app/my-muscle-chef#event-api">Event<br>API</a>
+    <a href="https://presales-content.vercel.app/my-muscle-chef#customer-inventory">Inventory<br>API</a>
+    <a href="https://presales-content.vercel.app/my-muscle-chef#catalog">Catalog<br>Sync</a>
+    <a href="https://presales-content.vercel.app/my-muscle-chef#customerio">Customer.io</a>
+    <a href="https://presales-content.vercel.app/my-muscle-chef#segmentation-api">Segmentation</a>
+    <a href="https://presales-content.vercel.app/my-muscle-chef#dashboard">Dashboard</a>
+    <a href="https://presales-content.vercel.app/my-muscle-chef#etl">ETL</a>
+    <a href="https://presales-content.vercel.app/my-muscle-chef#security">Security</a>
+    <a href="https://presales-content.vercel.app/my-muscle-chef#hosting">Hosting</a>
+    <a href="https://presales-content.vercel.app/my-muscle-chef#summary">Summary</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="logos-hero">
+    <img src="./Talon.One — My Muscle Chef Technical Presentation_files/rebrand-talon-one-logo-navy.svg" alt="Talon.One">
+    <div class="sep"></div>
+    <img src="./Talon.One — My Muscle Chef Technical Presentation_files/1666837322-01_mymc_blk.svg" alt="My Muscle Chef">
+  </div>
+  <h1>Technical Integration <em>Deep Dive</em></h1>
+  <p class="sub">Incentives program powered by Cashback — Tier-based spending, flexible earn &amp; redemption, and tailored discounts, seamlessly integrated with My Muscle Chef's headless platform on GCP.</p>
+  <div class="tags">
+    <span>Cashback Loyalty</span>
+    <span>Tier by Spend</span>
+    <span>Discounts &amp; Promotions</span>
+    <span>Headless Commerce</span>
+    <span>GCP Infrastructure</span>
+    <span>API-First</span>
+    <span>Customer.io</span>
+  </div>
+</div>
+
+<!-- 1. MACH ARCHITECTURE -->
+<section id="mach">
+  <div class="inner">
+  <div class="section-label">01 — Architecture</div>
+  <h2>MACH Architecture &amp; API-First Approach</h2>
+  <p>Talon.One is built as a <strong>MACH-compliant</strong> promotion engine — Microservices, API-first, Cloud-native, and Headless. It will power both the <strong>loyalty program</strong> (cashback, tiers) and <strong>all discounts &amp; promotions</strong>, consolidating and replacing MMC's existing discount solution into a single, unified engine. Talon.One is hosted on <strong>Google Cloud Platform (GCP)</strong>, while My Muscle Chef's in-house headless ecommerce stack runs on GCP — both connected seamlessly via API.</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">🔲</div>
+      <h4>Microservices</h4>
+      <p>Independent, loosely-coupled services that scale individually. Each domain (rules, sessions, profiles, loyalty) operates autonomously.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <h4>API-First</h4>
+      <p>Every feature is exposed via a REST API. No UI dependency — your backend calls Talon.One directly. Full control, full flexibility.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">☁️</div>
+      <h4>Cloud-Native</h4>
+      <p>SaaS platform deployed on <strong>Google Cloud Platform (GCP)</strong>. Auto-scaling, high availability, managed infrastructure. GCP Australia data center for low latency.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔗</div>
+      <h4>Headless</h4>
+      <p>No frontend imposed. Talon.One is a pure backend engine — your website, app, or POS calls the API and renders the experience your way.</p>
+    </div>
+  </div>
+
+  <div class="highlight-box" style="margin-top: 32px;">
+    <p><strong>Why this matters for My Muscle Chef:</strong> Your team already builds and maintains a custom headless ecommerce platform. Talon.One slots in as a backend API service — no iframes, no widgets, no frontend lock-in. Your developers call the Integration API from your existing services and control every aspect of the user experience.</p>
+  </div>
+
+  <!-- ARCHITECTURE DIAGRAM — CSS-based -->
+  <div class="arch-diagram" style="margin-top: 32px;">
+
+    <!-- Main row: Customer → GCP (MMC) → Flows → GCP (Talon.One) -->
+    <div class="arch-main">
+
+      <!-- Customer -->
+      <div class="arch-customer">
+        <div class="arch-customer-icon">👤</div>
+        <div class="arch-customer-label">Customer</div>
+      </div>
+
+      <!-- Arrow: Customer → GCP -->
+      <div class="arch-arrow-col">
+        <svg width="32" height="24"><line x1="0" y1="12" x2="24" y2="12" stroke="#1a1f36" stroke-width="2"></line><polygon points="24,6 32,12 24,18" fill="#1a1f36"></polygon></svg>
+      </div>
+
+      <!-- ============ GCP / MMC BOX ============ -->
+      <div class="arch-cloud arch-mmc-box">
+        <div class="arch-cloud-hdr" style="justify-content: center; flex-direction: column; align-items: center; gap: 4px;">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="#4285F4" opacity="0.15"></path>
+            <path d="M15.5 9.88l1.85-1.85.12-.76A8.99 8.99 0 0 0 3.28 9.9l.65-.05 3.7-.6s.19-.32.29-.3a5.29 5.29 0 0 1 7.58.93z" fill="#EA4335"></path>
+            <path d="M19.27 9.9a9.05 9.05 0 0 0-2.73-4.37l-2.54 2.54a5.26 5.26 0 0 1 1.93 4.18v.53a2.64 2.64 0 0 1 0 5.27h-3.7l-.52.54v3.16l.52.53h3.7a6.34 6.34 0 0 0 3.34-11.38z" fill="#4285F4"></path>
+            <path d="M8.23 22.28h3.7v-4.23h-3.7a2.62 2.62 0 0 1-1.1-.24l-.74.23-2.13 2.13-.19.73a6.3 6.3 0 0 0 4.16 1.38z" fill="#34A853"></path>
+            <path d="M8.23 9.6a6.34 6.34 0 0 0-4.16 11.17l3.06-3.06a2.64 2.64 0 1 1 3.5-3.5l3.06-3.06A6.32 6.32 0 0 0 8.23 9.6z" fill="#FBBC05"></path>
+          </svg>
+          <span>My Muscle Chef</span>
+        </div>
+        <div class="arch-mmc-inner">
+          <!-- Left column: Channels + Backend -->
+          <div class="arch-mmc-left">
+            <div class="arch-mmc-channels">
+              <div class="arch-tile arch-tile-navy">🌐 Website<small>React</small></div>
+              <div class="arch-tile arch-tile-navy">📱 Mobile App</div>
+              <div class="arch-tile arch-tile-navy">🎧 Zendesk</div>
+            </div>
+            <div class="arch-tile arch-tile-dark" style="margin-top: 8px;">⚙️ Backend Services<small>Order Mgmt · ERP · CRM</small></div>
+            <div class="arch-mmc-data-row">
+              <div class="arch-tile arch-tile-outline">👤 Customer Profiles</div>
+              <div class="arch-tile arch-tile-outline">📦 Product Catalog</div>
+            </div>
+          </div>
+          <!-- Right column: Middleware (full height) -->
+          <div class="arch-mmc-mw">
+            <div class="arch-mw-bar">
+              <div class="arch-mw-title">🔗 API Middleware</div>
+              <div class="arch-mw-desc">Orchestrates all data flow with Talon.One</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ CENTER FLOW ZONE ============ -->
+      <div class="arch-center-flows">
+        <!-- Real-time: Sessions & Events → with Incentives return -->
+        <div class="arch-flow-group">
+          <div class="arch-flow-group-title">Real-time</div>
+          <div class="arch-flow-pair">
+            <div class="arch-flow-fwd">
+              <div class="arch-flow-fwd-tags">
+                <span class="arch-tag arch-tag-green">🛒 Sessions</span>
+                <span class="arch-tag arch-tag-green">⚡ Events</span>
+              </div>
+              <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="arch-flow-svg"><line x1="0" y1="11" x2="188" y2="11" stroke="#0891b2" stroke-width="2.5"></line><polygon points="188,5 200,11 188,17" fill="#0891b2"></polygon></svg>
+              <div class="arch-flow-method">REST API</div>
+            </div>
+            <div class="arch-flow-ret">
+              <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="arch-flow-svg"><line x1="12" y1="11" x2="200" y2="11" stroke="#ff2146" stroke-width="2.5"></line><polygon points="12,5 0,11 12,17" fill="#ff2146"></polygon></svg>
+              <div class="arch-flow-ret-label">Incentives (Effects)</div>
+              <div class="arch-effect-tags">
+                <span>💰 Cashback</span><span>🎟️ Coupons</span><span>🏆 Tier</span><span>🎁 Rewards</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Async: Customer + Catalog → (one-way) -->
+        <div class="arch-flow-group arch-flow-async">
+          <div class="arch-flow-group-title" style="color: #0e7490;">Asynchronous</div>
+          <div class="arch-flow-fwd">
+            <div class="arch-flow-fwd-tags">
+              <span class="arch-tag arch-tag-cyan">👤 Customer Profiles</span>
+              <span class="arch-tag arch-tag-cyan">📦 Product Catalog</span>
+            </div>
+            <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="arch-flow-svg"><line x1="0" y1="11" x2="188" y2="11" stroke="#0e7490" stroke-width="2" stroke-dasharray="6,4"></line><polygon points="188,5 200,11 188,17" fill="#0e7490"></polygon></svg>
+            <div class="arch-flow-method">REST API · Batch sync</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ GCP / TALON.ONE BOX ============ -->
+      <div class="arch-cloud arch-gcp-box">
+        <div class="arch-cloud-hdr">
+          <svg class="arch-gcp-logo" viewBox="0 0 24 24" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="#4285F4" opacity="0.15"></path>
+            <path d="M15.5 9.88l1.85-1.85.12-.76A8.99 8.99 0 0 0 3.28 9.9l.65-.05 3.7-.6s.19-.32.29-.3a5.29 5.29 0 0 1 7.58.93z" fill="#EA4335"></path>
+            <path d="M19.27 9.9a9.05 9.05 0 0 0-2.73-4.37l-2.54 2.54a5.26 5.26 0 0 1 1.93 4.18v.53a2.64 2.64 0 0 1 0 5.27h-3.7l-.52.54v3.16l.52.53h3.7a6.34 6.34 0 0 0 3.34-11.38z" fill="#4285F4"></path>
+            <path d="M8.23 22.28h3.7v-4.23h-3.7a2.62 2.62 0 0 1-1.1-.24l-.74.23-2.13 2.13-.19.73a6.3 6.3 0 0 0 4.16 1.38z" fill="#34A853"></path>
+            <path d="M8.23 9.6a6.34 6.34 0 0 0-4.16 11.17l3.06-3.06a2.64 2.64 0 1 1 3.5-3.5l3.06-3.06A6.32 6.32 0 0 0 8.23 9.6z" fill="#FBBC05"></path>
+          </svg>
+          <span>Talon.One — GCP Australia</span>
+        </div>
+        <div class="arch-t1-content">
+          <div class="arch-tile arch-tile-t1 arch-rule-engine">
+            <strong>📋 Rule Engine</strong>
+            <small>Evaluates campaign rules in real-time</small>
+            <div class="arch-re-inputs">
+              <span>🛒 Cart data</span>
+              <span>📦 Catalog</span>
+              <span>👤 Customer</span>
+              <span>🎯 Segments</span>
+            </div>
+          </div>
+          <div class="arch-tile arch-tile-t1" style="margin-top: 8px;">
+            <strong>📊 Campaign Manager</strong>
+            <small>Build, deploy &amp; monitor campaigns</small>
+          </div>
+          <div class="arch-tile arch-tile-t1" style="margin-top: 8px;">
+            <strong>📈 Dashboard &amp; Reporting</strong>
+            <small>Out-of-the-box Dashboards · Custom Reports</small>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============ BOTTOM ROW: Customer.io aligned with flow zone ============ -->
+    <div class="arch-cio-row">
+      <!-- Spacer to push content under the flow zone -->
+      <div class="arch-cio-spacer"></div>
+      <!-- Left arrows: GCP (MMC) ↔ Customer.io -->
+      <div class="arch-cio-side arch-cio-left">
+        <div class="arch-cio-side-label">MMC (GCP)</div>
+        <div class="arch-cio-side-sub">Customer data · Triggers</div>
+        <svg width="120" height="36">
+          <line x1="0" y1="12" x2="110" y2="12" stroke="#232f3e" stroke-width="2"></line>
+          <polygon points="110,7 120,12 110,17" fill="#232f3e"></polygon>
+          <line x1="120" y1="24" x2="10" y2="24" stroke="#232f3e" stroke-width="2"></line>
+          <polygon points="10,19 0,24 10,29" fill="#232f3e"></polygon>
+        </svg>
+      </div>
+      <!-- Center: Customer.io box -->
+      <div class="arch-cio-box">
+        <div class="arch-cio-header">📧 Customer.io</div>
+        <div class="arch-cio-desc">Email · Push · SMS · Segments</div>
+      </div>
+      <!-- Right arrows: Customer.io ↔ Talon.One -->
+      <div class="arch-cio-side arch-cio-right">
+        <div class="arch-cio-side-label">Talon.One (GCP)</div>
+        <div class="arch-cio-side-sub">Webhooks · Loyalty · Broadcast</div>
+        <svg width="120" height="36">
+          <line x1="0" y1="12" x2="110" y2="12" stroke="#0891b2" stroke-width="2"></line>
+          <polygon points="110,7 120,12 110,17" fill="#0891b2"></polygon>
+          <line x1="120" y1="24" x2="10" y2="24" stroke="#0891b2" stroke-width="2"></line>
+          <polygon points="10,19 0,24 10,29" fill="#0891b2"></polygon>
+        </svg>
+      </div>
+    </div>
+
+  </div>
+
+  <style>
+    .arch-diagram { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 28px 20px 20px; overflow-x: auto; }
+
+    /* Main row */
+    .arch-main { display: flex; align-items: stretch; gap: 12px; min-width: 960px; }
+    .arch-customer { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 54px; flex-shrink: 0; }
+    .arch-customer-icon { font-size: 36px; }
+    .arch-customer-label { font-size: 11px; font-weight: 600; color: var(--navy); margin-top: 4px; }
+    .arch-arrow-col { display: flex; align-items: center; flex-shrink: 0; }
+
+    /* Cloud boxes */
+    .arch-cloud { border-radius: 14px; padding: 16px; position: relative; flex-shrink: 0; }
+    .arch-mmc-box { background: #fafbfe; border: 2px solid #4285F4; width: 300px; }
+    .arch-gcp-box { background: #f0fafb; border: 2px solid #0891b2; width: 220px; }
+    .arch-cloud-hdr { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .arch-cloud-hdr span { font-weight: 700; font-size: 13px; color: var(--navy); }
+
+    /* MMC inner layout */
+    .arch-mmc-inner { display: flex; gap: 8px; }
+    .arch-mmc-left { flex: 1; display: flex; flex-direction: column; }
+    .arch-mmc-channels { display: flex; gap: 6px; }
+    .arch-mmc-data-row { display: flex; gap: 6px; margin-top: 8px; }
+    .arch-mmc-mw { display: flex; }
+    .arch-mw-bar {
+      background: linear-gradient(180deg, #1a1f36 0%, #2d3352 100%);
+      color: var(--white); border-radius: 10px; padding: 8px 8px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-width: 60px; text-align: center;
+    }
+    .arch-mw-title { font-size: 10px; font-weight: 700; }
+    .arch-mw-desc { font-size: 8px; opacity: .7; margin-top: 4px; line-height: 1.3; }
+
+    /* Tiles */
+    .arch-tile { padding: 7px 9px; border-radius: 8px; font-size: 11px; font-weight: 600; color: var(--white); flex: 1; }
+    .arch-tile small { display: block; font-weight: 400; font-size: 10px; opacity: .8; margin-top: 2px; }
+    .arch-tile-navy { background: #1a1f36; }
+    .arch-tile-dark { background: #2d3352; color: var(--white); }
+    .arch-tile-outline { background: var(--white); color: var(--navy); border: 1.5px dashed #0e7490; font-size: 10px; text-align: center; padding: 5px 6px; }
+    .arch-tile-t1 { background: #0891b2; }
+
+    /* Rule Engine inputs inside card */
+    .arch-rule-engine { padding-bottom: 10px; }
+    .arch-re-inputs { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+    .arch-re-inputs span { background: rgba(255,255,255,.2); padding: 2px 7px; border-radius: 4px; font-size: 9px; font-weight: 500; color: var(--white); }
+
+    /* Talon.One content */
+    .arch-t1-content { display: flex; flex-direction: column; gap: 0; }
+
+    /* Center flow zone */
+    .arch-center-flows { display: flex; flex-direction: column; gap: 14px; justify-content: center; flex: 1; min-width: 180px; max-width: 260px; }
+    .arch-flow-group { background: var(--light-gray); border-radius: 10px; padding: 10px 14px; }
+    .arch-flow-async { background: #f0fafb; border: 1px dashed #0e7490; }
+    .arch-flow-group-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--navy); margin-bottom: 6px; text-align: center; }
+    .arch-flow-pair { display: flex; flex-direction: column; gap: 6px; }
+    .arch-flow-fwd, .arch-flow-ret { text-align: center; }
+    .arch-flow-fwd-tags { display: flex; gap: 4px; justify-content: center; margin-bottom: 4px; }
+    .arch-flow-method { font-size: 9px; color: var(--gray); margin-top: 2px; }
+    .arch-flow-ret-label { font-size: 10px; font-weight: 700; color: #ff2146; margin-top: 2px; }
+    .arch-flow-svg { display: block; width: 100%; height: 22px; }
+    .arch-effect-tags { display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; margin-top: 3px; }
+    .arch-effect-tags span { background: #ffe6ea; color: #c41a3a; padding: 2px 5px; border-radius: 4px; font-size: 8px; font-weight: 600; }
+    .arch-tag { display: inline-block; padding: 3px 7px; border-radius: 6px; font-size: 10px; font-weight: 600; }
+    .arch-tag-green { background: #d1fae5; color: #065f46; }
+    .arch-tag-cyan { background: #cffafe; color: #0e7490; }
+    .arch-tag-purple { background: #ede9fe; color: #6d28d9; }
+
+    /* Bottom: Customer.io aligned with flow zone */
+    .arch-cio-row { display: flex; align-items: center; gap: 16px; margin-top: 24px; padding-top: 20px; border-top: 1px dashed var(--border); min-width: 960px; }
+    .arch-cio-spacer { width: 300px; flex-shrink: 0; }
+    .arch-cio-box { background: #6366f1; color: var(--white); border-radius: 12px; padding: 14px 22px; text-align: center; flex-shrink: 0; }
+    .arch-cio-header { font-size: 15px; font-weight: 700; }
+    .arch-cio-desc { font-size: 11px; opacity: .8; margin-top: 4px; }
+    .arch-cio-side { text-align: center; flex-shrink: 0; }
+    .arch-cio-side-label { font-size: 11px; font-weight: 700; color: var(--navy); }
+    .arch-cio-side-sub { font-size: 9px; color: var(--gray); margin-bottom: 4px; }
+    .arch-cio-left { /* arrow points right → to Customer.io */ }
+    .arch-cio-right { /* arrow points right → to Talon.One */ }
+
+    .arch-gcp-logo { flex-shrink: 0; }
+
+    /* Version toggle buttons */
+    .version-toggle { display: inline-block; padding: 8px 18px; font-size: 13px; font-weight: 600; border: 2px solid var(--border); background: var(--white); color: var(--navy); border-radius: 8px; cursor: pointer; margin-right: 6px; transition: all .15s; }
+    .version-toggle:hover { border-color: var(--navy); }
+    .version-toggle.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+    /* Catalog tabs */
+    .catalog-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .catalog-tab { padding: 7px 14px; font-size: 12px; font-weight: 600; border: 2px solid var(--border); background: var(--white); color: var(--navy); border-radius: 8px; cursor: pointer; transition: all .15s; }
+    .catalog-tab:hover { border-color: var(--navy); }
+    .catalog-tab.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+  </style>
+  </div>
+</section>
+
+<!-- 2. ENVIRONMENTS -->
+<section id="environments" class="bg-gray">
+  <div class="inner">
+    <div class="section-label">02 — Environments</div>
+    <h2>Sandboxes &amp; Production Applications</h2>
+    <p>Talon.One will provide isolated <strong>Applications</strong> (sandbox and production type) that map to your development lifecycle. Each Application has its own campaigns, rules, API keys, and data — completely independent.</p>
+
+    <div class="env-grid">
+      <div class="env-box env-dev">
+        🛠 Development
+        <span>Sandbox for dev team exploration &amp; unit testing</span>
+      </div>
+      <div class="env-box env-qa">
+        🧪 QA / Test
+        <span>Dedicated app for QA validation &amp; automated tests</span>
+      </div>
+      <div class="env-box env-staging">
+        🚀 Staging
+        <span>Pre-production mirror for final integration checks</span>
+      </div>
+      <div class="env-box env-prod">
+        🔴 Production
+        <span>Live environment serving real customers</span>
+      </div>
+    </div>
+
+    <h3>Key Benefits</h3>
+    <ul class="check-list">
+      <li>Each application has <strong>separate API keys</strong> — no risk of dev changes hitting production</li>
+      <li>Campaign rules can be built and tested in sandbox before promoting to production</li>
+      <li>Sandbox applications are included in your Talon.One license at no extra cost</li>
+      <li>Each environment can be mapped to your existing <strong>GCP dev / staging / prod</strong> infrastructure</li>
+      <li>Data is fully isolated between applications</li>
+    </ul>
+
+    <div class="highlight-box" style="margin-top: 24px;">
+      <p><strong>⚡ Configuration Propagation:</strong> Any configuration done in one Application — such as creating custom attributes, effects, webhooks, or catalog schemas — does <strong>not need to be repeated</strong> in other Applications. Account-level settings can be propagated to other apps in a couple of seconds. Build once in Development, then instantly share across QA, Staging, and Production.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3. APIs -->
+<section id="apis">
+  <div class="inner">
+  <div class="section-label">03 — APIs</div>
+  <h2>Talon.One API Types</h2>
+  <p>Talon.One exposes three distinct APIs, each designed for a specific use case. Understanding which API to use is key to a successful integration.</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <h4>Integration API</h4>
+      <p>Use the Integration API to push data to and retrieve data from Talon.One in <strong>real time</strong>.</p>
+      <p>For example, use it to apply promotional offers or loyalty rewards during customer interactions, track customer behaviour, or deliver personalised incentives based on customer activity.</p>
+      <div class="highlight-box" style="margin-top: 12px;">
+        <p><strong>Key for MMC:</strong></p>
+        <ul style="margin: 6px 0 0 20px;">
+          <li>This API is meant to be used in <strong>real-time integrations</strong> that directly serve your end users.</li>
+          <li>Supports a maximum of <strong>100 requests per second</strong>* across your environments.</li>
+        </ul>
+        <p style="font-size: 11px; color: var(--gray); margin-top: 8px;">* This is an average of API usage. We do not enforce hard limits on the API. If you suddenly have a peak of traffic, our system will scale up automatically to guarantee performance.</p>
+      </div>
+      <p style="margin-top: 10px;"><a href="https://docs.talon.one/integration-api" target="_blank" style="color: var(--red); font-weight: 600;">Integration API Reference →</a></p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔧</div>
+      <h4>Management API</h4>
+      <p>The Management API allows you to programmatically do what the <strong>Campaign Manager</strong> does.</p>
+      <p>For example, use it for management purposes and backoffice systems or exporting data.</p>
+      <div class="highlight-box" style="margin-top: 12px;">
+        <p><strong>Key for MMC:</strong></p>
+        <ul style="margin: 6px 0 0 20px;">
+          <li>This API is <strong>not</strong> meant to be used in real-time integrations.</li>
+          <li>Supports a maximum of <strong>3 requests per second</strong> for each endpoint.</li>
+        </ul>
+      </div>
+      <p style="margin-top: 10px;"><a href="https://docs.talon.one/management-api" target="_blank" style="color: var(--red); font-weight: 600;">Management API Reference →</a></p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔗</div>
+      <h4>Third-Party API</h4>
+      <p>Use the Third-party API to exchange data between Talon.One and one of the <strong>supported technology partners</strong>.</p>
+      <p>For example, use generic Customer Data Platforms and Customer Engagement Platform endpoints for integrating with <strong>Customer.io</strong>.</p>
+      <div class="highlight-box" style="margin-top: 12px;">
+        <p><strong>Key for MMC:</strong></p>
+        <ul style="margin: 6px 0 0 20px;">
+          <li>This API is meant to be used in <strong>real-time integrations</strong>.</li>
+          <li>Supports a maximum of <strong>90 requests per second</strong> for each endpoint.</li>
+        </ul>
+      </div>
+      <p style="margin-top: 10px;"><a href="https://docs.talon.one/third-party-api" target="_blank" style="color: var(--red); font-weight: 600;">Third-Party API Reference →</a></p>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- 4. INTEGRATION ID -->
+<section id="integration-id">
+  <div class="inner">
+  <div class="section-label">04 — Unique Identifiers</div>
+  <h2>IntegrationID — Your System of Record</h2>
+  <p>Customer profiles and sessions are identified by an <code>IntegrationID</code> — a unique string <strong>provided by you</strong>, not generated by Talon.One.</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">👤</div>
+      <h4>Customer Profile IntegrationID</h4>
+      <p>Use your existing customer ID from your database. Example: <code>MMC-CUST-98421</code></p>
+      <p>This becomes the key to link loyalty points, tiers, and cashback to the right person.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🛒</div>
+      <h4>Session IntegrationID</h4>
+      <p>Use your order/cart ID. Example: <code>ORDER-2026-03-8842</code></p>
+      <p>Ensures idempotency — same session ID always returns the same result.</p>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <p><strong>Why this matters:</strong> My Muscle Chef retains full ownership of identifiers. No vendor lock-in on IDs. Your customer ID in your database is the same ID used in Talon.One — making reconciliation, debugging, and data exports straightforward.</p>
+  </div>
+  </div>
+</section>
+
+<!-- 4. CUSTOMER PROFILE -->
+<section id="customer-profile" class="bg-gray">
+  <div class="inner">
+    <div class="section-label">05 — Customer Data</div>
+    <h2>Customer Profile API</h2>
+    <p>Update customer attributes in Talon.One to power <strong>segmentation and targeting</strong> within campaign rules. Profiles can be updated via the Session API (automatically) or the dedicated Profile endpoint.</p>
+    <p>You can also sync <strong>audience memberships</strong> in real-time — push your segment/audience IDs alongside profile attributes so Talon.One campaign rules can target customers based on your own segmentation logic (e.g. from your CDP, CRM, or Customer.io).</p>
+
+    <h3>Endpoint</h3>
+    <div class="code-block">
+      <code><span class="kw">PUT</span> /v2/customer_profiles/{<span class="key">integrationId</span>}</code>
+    </div>
+
+    <h3>Example — Updating Customer Attributes</h3>
+
+    <!-- Version toggle -->
+    <div style="margin-bottom: 12px;">
+      <button class="version-toggle active" onclick="toggleProfileVersion(&#39;standard&#39;)">Standard</button>
+      <button class="version-toggle" onclick="toggleProfileVersion(&#39;audience&#39;)">With Audience Sync</button>
+    </div>
+
+    <!-- Standard version -->
+    <div id="profile-standard" class="profile-version">
+      <div class="code-block">
+        <code><span class="cm">// PUT /v2/customer_profiles/MMC-CUST-98421</span>
+{
+  <span class="key">"attributes"</span>: {
+    <span class="key">"dietary_preference"</span>: <span class="str">"high_protein"</span>,
+    <span class="key">"subscription_plan"</span>: <span class="str">"weekly_10"</span>,
+    <span class="key">"city"</span>: <span class="str">"Sydney"</span>,
+    <span class="key">"state"</span>: <span class="str">"NSW"</span>,
+    <span class="key">"lifetime_orders"</span>: <span class="num">47</span>,
+    <span class="key">"last_order_date"</span>: <span class="str">"2026-03-20T10:30:00Z"</span>,
+    <span class="key">"preferred_meals"</span>: [<span class="str">"chicken"</span>, <span class="str">"fish"</span>]
+  }
+}</code>
+      </div>
+    </div>
+
+    <!-- Audience sync version -->
+    <div id="profile-audience" class="profile-version" style="display:none;">
+      <div class="highlight-box" style="margin-bottom: 12px; background: #f0fafb; border-color: #0891b2;">
+        <p><strong>With Audience Sync:</strong> Include the <code>audiencesChanges</code> object to add or remove audience memberships in real-time. Talon.One will evaluate campaign rules based on these audience IDs — enabling targeted promotions for specific customer segments from your CDP, CRM, or Customer.io.</p>
+      </div>
+      <div class="code-block">
+        <code><span class="cm">// PUT /v2/customer_profiles/MMC-CUST-98421</span>
+{
+  <span class="key">"attributes"</span>: {
+    <span class="key">"dietary_preference"</span>: <span class="str">"high_protein"</span>,
+    <span class="key">"subscription_plan"</span>: <span class="str">"weekly_10"</span>,
+    <span class="key">"city"</span>: <span class="str">"Sydney"</span>,
+    <span class="key">"state"</span>: <span class="str">"NSW"</span>,
+    <span class="key">"lifetime_orders"</span>: <span class="num">47</span>,
+    <span class="key">"last_order_date"</span>: <span class="str">"2026-03-20T10:30:00Z"</span>,
+    <span class="key">"preferred_meals"</span>: [<span class="str">"chicken"</span>, <span class="str">"fish"</span>]
+  },
+  <span class="key">"audiencesChanges"</span>: {
+    <span class="key">"adds"</span>: [
+      <span class="num">14</span>        <span class="cm">// Add to audience ID 14</span>
+    ],
+    <span class="key">"deletes"</span>: [
+      <span class="num">8</span>         <span class="cm">// Remove from audience ID 8</span>
+    ]
+  }
+}</code>
+      </div>
+    </div>
+
+    <script>
+    function toggleProfileVersion(version) {
+      document.getElementById('profile-standard').style.display = version === 'standard' ? 'block' : 'none';
+      document.getElementById('profile-audience').style.display = version === 'audience' ? 'block' : 'none';
+      var btns = event.target.parentElement.querySelectorAll('.version-toggle');
+      btns.forEach(function(btn) { btn.classList.remove('active'); });
+      event.target.classList.add('active');
+    }
+    </script>
+
+    <h3>Attributes Power Campaign Rules</h3>
+    <p>Once attributes are synced, the marketing team can create rules such as:</p>
+    <ul class="check-list">
+      <li><strong>"If dietary_preference = high_protein"</strong> → 2x cashback on new Protein range</li>
+      <li><strong>"If city = Melbourne"</strong> → Free delivery cashback for Melbourne launch</li>
+      <li><strong>"If lifetime_orders &gt; 50"</strong> → VIP bonus cashback tier</li>
+      <li><strong>"If subscription_plan = weekly_10"</strong> → Subscriber-only exclusive offers</li>
+    </ul>
+
+    <h3>Bulk Update — Multiple Customer Profiles</h3>
+    <p>Update (or create) up to <strong>1,000 customer profiles in a single request</strong> using the batch endpoint. This is ideal for initial data migration, nightly syncs, or bulk attribute updates from your CRM or data warehouse.</p>
+    <p>The <code>integrationId</code> must be any identifier that remains stable for the customer. Do not use an ID that the customer can update themselves — for example, use a database ID.</p>
+
+    <div class="code-block">
+      <code><span class="kw">PUT</span> /v2/customer_profiles</code>
+    </div>
+
+    <div class="code-block">
+      <code><span class="cm">// PUT /v2/customer_profiles — batch update up to 1,000 profiles</span>
+{
+  <span class="key">"customerProfiles"</span>: [
+    {
+      <span class="key">"integrationId"</span>: <span class="str">"MMC-CUST-98421"</span>,
+      <span class="key">"attributes"</span>: {
+        <span class="key">"dietary_preference"</span>: <span class="str">"high_protein"</span>,
+        <span class="key">"city"</span>: <span class="str">"Sydney"</span>
+      }
+    },
+    {
+      <span class="key">"integrationId"</span>: <span class="str">"MMC-CUST-10234"</span>,
+      <span class="key">"attributes"</span>: {
+        <span class="key">"dietary_preference"</span>: <span class="str">"vegan"</span>,
+        <span class="key">"city"</span>: <span class="str">"Melbourne"</span>
+      }
+    }
+    <span class="cm">// ... up to 1,000 profiles per request</span>
+  ]
+}</code>
+    </div>
+  </div>
+</section>
+
+<!-- 5. SESSION API -->
+<section id="session-api" class="bg-gray">
+  <div class="inner">
+    <div class="section-label">06 — Core Integration</div>
+    <h2>Customer Session</h2>
+    <p>The Session API is the heart of Talon.One integration. It represents a <strong>shopping session / cart / order</strong> and evaluates all active campaign rules in real-time.</p>
+
+    <h3>Endpoint</h3>
+    <div class="code-block">
+      <code><span class="kw">PUT</span> /v2/customer_sessions/<span class="str" style="color:#ff2146;font-weight:700;">{customerSessionId}</span></code>
+    </div>
+
+    <h3>Session States</h3>
+    <div class="flow">
+      <div class="flow-step" style="border-color: #22c55e;">
+        <strong>🟢 Open</strong>
+        <span>Cart is active, customer is shopping</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="border-color: #3b82f6;">
+        <strong>🔵 Closed</strong>
+        <span>Order confirmed / paid</span>
+      </div>
+      <div class="flow-arrow" style="margin-left: 20px;">or →</div>
+      <div class="flow-step" style="border-color: var(--red);">
+        <strong>🔴 Cancelled</strong>
+        <span>Order cancelled / refunded</span>
+      </div>
+    </div>
+
+    <table style="margin-top: 24px;">
+      <thead>
+        <tr><th>State</th><th>When to use</th><th>What happens in Talon.One</th><th>Loyalty Impact (Cashback)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-green">open</span></td>
+          <td>Cart updated, item added/removed, coupon applied</td>
+          <td>Campaigns evaluated, effects returned (discounts, cashback preview, tier check)</td>
+          <td>Cashback is <strong>pending</strong> — shown to customer but not yet credited</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-blue">closed</span></td>
+          <td>Order placed &amp; payment confirmed</td>
+          <td>Session locked, effects finalized, loyalty balance updated</td>
+          <td>Cashback is <strong>credited</strong> to customer's loyalty balance. Spend counted toward tier progression.</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-red">cancelled</span></td>
+          <td>Order cancelled or fully refunded</td>
+          <td>All effects rolled back automatically</td>
+          <td>Cashback is <strong>reversed</strong>. Spend removed from tier calculation.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Example — Open Session (Cart Update)</h3>
+
+    <!-- Version toggle -->
+    <div style="margin-bottom: 12px;">
+      <button class="version-toggle active" onclick="toggleSessionVersion(&#39;standard&#39;)">Standard</button>
+      <button class="version-toggle" onclick="toggleSessionVersion(&#39;catalog&#39;)">With Product Catalog Sync</button>
+    </div>
+
+    <!-- Standard version -->
+    <div id="session-standard" class="session-version">
+      <div class="code-block">
+        <code><span class="cm">// PUT /v2/customer_sessions/<span style="color:#ff2146;font-weight:700;">ORDER-2026-03-8842</span></span>
+{
+  <span class="key">"customerSession"</span>: {
+    <span class="key">"profileId"</span>: <span class="str">"MMC-CUST-98421"</span>,
+    <span class="key">"state"</span>: <span class="str">"open"</span>,
+    <span class="key">"cartItems"</span>: [
+      {
+        <span class="key">"name"</span>: <span class="str">"Grilled Chicken &amp; Brown Rice"</span>,
+        <span class="key">"sku"</span>: <span class="str">"MEAL-GCR-001"</span>,
+        <span class="key">"quantity"</span>: <span class="num">3</span>,
+        <span class="key">"price"</span>: <span class="num">12.95</span>,
+        <span class="key">"position"</span>: <span class="num">0</span>,
+        <span class="key">"category"</span>: <span class="str">"Ready Meals"</span>
+      },
+      {
+        <span class="key">"name"</span>: <span class="str">"Protein Pancakes"</span>,
+        <span class="key">"sku"</span>: <span class="str">"MEAL-PP-042"</span>,
+        <span class="key">"quantity"</span>: <span class="num">2</span>,
+        <span class="key">"price"</span>: <span class="num">9.95</span>,
+        <span class="key">"position"</span>: <span class="num">1</span>,
+        <span class="key">"category"</span>: <span class="str">"Breakfast"</span>
+      }
+    ],
+    <span class="key">"couponCodes"</span>: [<span class="str">"WELCOME10"</span>],
+    <span class="key">"total"</span>: <span class="num">58.75</span>
+  }
+}</code>
+      </div>
+    </div>
+
+    <!-- Catalog sync version -->
+    <div id="session-catalog" class="session-version" style="display:none;">
+      <div class="highlight-box" style="margin-bottom: 12px; background: #f0fafb; border-color: #0891b2;">
+        <p><strong>With Product Catalog Sync:</strong> When your product catalog is synced to Talon.One, cart items only need the <code>sku</code>, <code>quantity</code>, and <code>position</code>. Price, name, and other attributes are automatically read from the catalog.</p>
+      </div>
+      <div class="code-block">
+        <code><span class="cm">// PUT /v2/customer_sessions/<span style="color:#ff2146;font-weight:700;">ORDER-2026-03-8842</span></span>
+{
+  <span class="key">"customerSession"</span>: {
+    <span class="key">"profileId"</span>: <span class="str">"MMC-CUST-98421"</span>,
+    <span class="key">"state"</span>: <span class="str">"open"</span>,
+    <span class="key">"cartItems"</span>: [
+      {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-GCR-001"</span>,
+        <span class="key">"quantity"</span>: <span class="num">3</span>,
+        <span class="key">"position"</span>: <span class="num">0</span>
+      },
+      {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-PP-042"</span>,
+        <span class="key">"quantity"</span>: <span class="num">2</span>,
+        <span class="key">"position"</span>: <span class="num">1</span>
+      }
+    ],
+    <span class="key">"couponCodes"</span>: [<span class="str">"WELCOME10"</span>],
+    <span class="key">"total"</span>: <span class="num">58.75</span>
+  }
+}</code>
+      </div>
+    </div>
+
+    <h3>Response — Effects for MMC to Render</h3>
+    <div class="code-block">
+      <code><span class="cm">// Talon.One returns effects to apply</span>
+{
+  <span class="key">"effects"</span>: [
+    {
+      <span class="key">"effectType"</span>: <span class="str">"setDiscount"</span>,
+      <span class="key">"props"</span>: {
+        <span class="key">"name"</span>: <span class="str">"Coupon Discount"</span>,
+        <span class="key">"value"</span>: <span class="num">5.87</span>,
+        <span class="key">"position"</span>: <span class="num">0</span>
+      }
+    },
+    {
+      <span class="key">"effectType"</span>: <span class="str">"setDiscountPerItem"</span>,
+      <span class="key">"props"</span>: {
+        <span class="key">"name"</span>: <span class="str">"10% off Ready Meals"</span>,
+        <span class="key">"value"</span>: <span class="num">1.30</span>,
+        <span class="key">"position"</span>: <span class="num">0</span>
+      }
+    },
+    {
+      <span class="key">"effectType"</span>: <span class="str">"addLoyaltyPoints"</span>,
+      <span class="key">"props"</span>: {
+        <span class="key">"name"</span>: <span class="str">"Cashback Earned"</span>,
+        <span class="key">"programId"</span>: <span class="num">12</span>,
+        <span class="key">"value"</span>: <span class="num">2.64</span>,
+        <span class="key">"subLedgerId"</span>: <span class="str">"main"</span>
+      }
+    }
+  ]
+}</code>
+    </div>
+
+    <script>
+    function toggleSessionVersion(version) {
+      document.getElementById('session-standard').style.display = version === 'standard' ? 'block' : 'none';
+      document.getElementById('session-catalog').style.display = version === 'catalog' ? 'block' : 'none';
+      document.querySelectorAll('.version-toggle').forEach(function(btn) { btn.classList.remove('active'); });
+      event.target.classList.add('active');
+    }
+    </script>
+
+    <div class="highlight-box">
+      <p><strong>Cashback Loyalty Flow:</strong> When a session is <strong>open</strong>, Talon.One returns a cashback preview (e.g., "$2.64 cashback on this order"). When the session is <strong>closed</strong>, the cashback is credited to the customer's loyalty ledger. If the session is <strong>cancelled</strong>, the cashback is automatically reversed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6. EVENT API -->
+<section id="event-api">
+  <div class="inner">
+  <div class="section-label">07 — Custom Events</div>
+  <h2>Event API — Non-Transactional Triggers</h2>
+  <p>Use the Event API to send <strong>non-cart events</strong> into Talon.One. These can trigger campaigns, award loyalty points, or track engagement — without a session/order context.</p>
+  <p>The data model is fully open: each event type can carry its own set of custom attributes, defined by you. There is no fixed schema — you decide what data to send with each event, and Talon.One campaign rules can evaluate any of those attributes in real-time.</p>
+
+  <h3>Endpoint</h3>
+  <div class="code-block">
+    <code><span class="kw">POST</span> /v2/events</code>
+  </div>
+
+  <h3>Use Cases for My Muscle Chef</h3>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">⭐</div>
+      <h4>Product Review</h4>
+      <p>Reward customers for leaving meal reviews. Event: <code>review_submitted</code></p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📱</div>
+      <h4>App Download</h4>
+      <p>Bonus cashback for downloading the MMC app. Event: <code>app_installed</code></p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📣</div>
+      <h4>Share on Social Network</h4>
+      <p>Reward customers for sharing on social media. Event: <code>social_share</code></p>
+    </div>
+  </div>
+
+  <h3>Example Request</h3>
+  <div class="code-block">
+    <code><span class="cm">// POST /v2/events</span>
+{
+  <span class="key">"profileId"</span>: <span class="str">"MMC-CUST-98421"</span>,
+  <span class="key">"type"</span>: <span class="str">"review_submitted"</span>,
+  <span class="key">"attributes"</span>: {
+    <span class="key">"product_sku"</span>: <span class="str">"MEAL-GCR-001"</span>,
+    <span class="key">"rating"</span>: <span class="num">5</span>,
+    <span class="key">"channel"</span>: <span class="str">"website"</span>
+  }
+}</code>
+  </div>
+  </div>
+</section>
+
+
+<!-- 7. CUSTOMER INVENTORY -->
+<section id="customer-inventory">
+  <div class="inner">
+  <div class="section-label">08 — Customer Inventory</div>
+  <h2>Customer Inventory Endpoint</h2>
+  <p>Retrieve the <strong>latest customer loyalty data</strong> from Talon.One — including cashback balance, active coupons, tier status, and referral data. Use this to render your loyalty dashboard.</p>
+
+  <h3>Endpoint</h3>
+  <div class="code-block">
+    <code><span class="kw">GET</span> /v1/customer_profiles/{<span class="key">integrationId</span>}/inventory?<span class="str">profile=true</span>&amp;<span class="str">referrals=true</span>&amp;<span class="str">coupons=true</span>&amp;<span class="str">loyalty=true</span>&amp;<span class="str">giveaways=false</span>&amp;<span class="str">achievements=true</span></code>
+  </div>
+
+  <h3>What You Get Back</h3>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">👤</div>
+      <h4>Customer Profile</h4>
+      <p>Full profile attributes, audience memberships, and account metadata for the customer.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">💰</div>
+      <h4>Loyalty / Cashback Balance</h4>
+      <p>Current cashback balance, pending cashback, tier name, tier expiry, and points history per sub-ledger.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🎟️</div>
+      <h4>Active Coupons</h4>
+      <p>All personal coupons allocated to this customer — including status, expiry, and usage count.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔗</div>
+      <h4>Referral Code</h4>
+      <p>The customer's personal referral code, usage count, and referral campaign details.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏆</div>
+      <h4>Achievements</h4>
+      <p>Unlocked achievements and progress toward achievement goals (e.g. "10 Orders Milestone", "First Review").</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🥇</div>
+      <h4>Tier Information</h4>
+      <p>Current tier, tier progress, spend needed for next tier, tier upgrade/downgrade dates.</p>
+    </div>
+  </div>
+
+  <h3>Example Response (Simplified)</h3>
+  <div class="code-block">
+    <code>{
+  <span class="key">"profile"</span>: {
+    <span class="key">"integrationId"</span>: <span class="str">"MMC-CUST-98421"</span>,
+    <span class="key">"attributes"</span>: {
+      <span class="key">"dietary_preference"</span>: <span class="str">"high_protein"</span>,
+      <span class="key">"city"</span>: <span class="str">"Sydney"</span>,
+      <span class="key">"lifetime_orders"</span>: <span class="num">47</span>
+    }
+  },
+  <span class="key">"loyalty"</span>: {
+    <span class="key">"programId"</span>: <span class="num">12</span>,
+    <span class="key">"programName"</span>: <span class="str">"MMC Rewards"</span>,
+    <span class="key">"currentTier"</span>: <span class="str">"Silver"</span>,
+    <span class="key">"ledger"</span>: {
+      <span class="key">"currentBalance"</span>: <span class="num">142.50</span>,    <span class="cm">// Available cashback ($)</span>
+      <span class="key">"pendingBalance"</span>: <span class="num">12.30</span>,     <span class="cm">// From open sessions</span>
+      <span class="key">"totalEarned"</span>: <span class="num">385.00</span>,       <span class="cm">// Lifetime earnings</span>
+      <span class="key">"totalSpent"</span>: <span class="num">242.50</span>         <span class="cm">// Redeemed cashback</span>
+    }
+  },
+  <span class="key">"coupons"</span>: [
+    { <span class="key">"code"</span>: <span class="str">"SILVER-BIRTHDAY-2026"</span>, <span class="key">"expiryDate"</span>: <span class="str">"2026-04-15"</span> }
+  ],
+  <span class="key">"referrals"</span>: [
+    {
+      <span class="key">"code"</span>: <span class="str">"MMC-REF-98421"</span>,
+      <span class="key">"timesUsed"</span>: <span class="num">3</span>,
+      <span class="key">"campaignId"</span>: <span class="num">45</span>
+    }
+  ],
+  <span class="key">"achievements"</span>: [
+    {
+      <span class="key">"name"</span>: <span class="str">"10 Orders Milestone"</span>,
+      <span class="key">"status"</span>: <span class="str">"completed"</span>,
+      <span class="key">"completionDate"</span>: <span class="str">"2026-02-10T08:15:00Z"</span>
+    },
+    {
+      <span class="key">"name"</span>: <span class="str">"First Social Share"</span>,
+      <span class="key">"status"</span>: <span class="str">"in_progress"</span>,
+      <span class="key">"progress"</span>: <span class="num">0</span>,
+      <span class="key">"target"</span>: <span class="num">1</span>
+    }
+  ]
+}</code>
+  </div>
+
+  <div class="highlight-box">
+    <p><strong>Rendering the loyalty dashboard:</strong> MMC front-end calls the inventory endpoint on page load to display the customer's cashback wallet, current tier, and any available coupons. This is fully real-time.</p>
+  </div>
+  </div>
+</section>
+
+<!-- 8. PRODUCT CATALOG -->
+<section id="catalog" class="bg-gray">
+  <div class="inner">
+    <div class="section-label">09 — Product Catalog</div>
+    <h2>Product Catalog Synchronization</h2>
+    <p>Sync your product catalog to Talon.One so campaign rules can reference product attributes like category, nutritional info, brand, or any custom attribute. It also enables <strong>strikethrough pricing</strong> on product listing pages.</p>
+
+    <h3>Endpoint</h3>
+    <div class="code-block">
+      <code><span class="kw">PUT</span> /v1/catalogs/{<span class="key">catalogId</span>}/sync</code>
+    </div>
+
+    <p>Perform the following actions for a given cart item catalog:</p>
+    <ul>
+      <li>Add an item to the catalog</li>
+      <li>Add multiple items to the catalog</li>
+      <li>Update the attributes of an item in the catalog</li>
+      <li>Update the attributes of multiple items in the catalog</li>
+      <li>Remove an item from the catalog</li>
+      <li>Remove multiple items from the catalog</li>
+    </ul>
+    <p>You can either add, update, or delete up to <strong>1,000 cart items in a single request</strong>. Each item synced to a catalog must have a <strong>unique SKU</strong>.</p>
+
+    <h3>Request Payload Examples</h3>
+
+    <!-- Catalog tabs -->
+    <div class="catalog-tabs">
+      <button class="catalog-tab active" onclick="showCatalogTab(&#39;cat-add-one&#39;)">Add Item</button>
+      <button class="catalog-tab" onclick="showCatalogTab(&#39;cat-add-multi&#39;)">Add Multiple</button>
+      <button class="catalog-tab" onclick="showCatalogTab(&#39;cat-update-one&#39;)">Update Item</button>
+      <button class="catalog-tab" onclick="showCatalogTab(&#39;cat-update-multi&#39;)">Update Multiple</button>
+      <button class="catalog-tab" onclick="showCatalogTab(&#39;cat-remove-one&#39;)">Remove Item</button>
+      <button class="catalog-tab" onclick="showCatalogTab(&#39;cat-remove-multi&#39;)">Remove Multiple</button>
+    </div>
+
+    <!-- Add one item -->
+    <div id="cat-add-one" class="catalog-panel">
+      <div class="code-block">
+        <code><span class="cm">// PUT /v1/catalogs/{catalogId}/sync — Add one item</span>
+{
+  <span class="key">"actions"</span>: [
+    {
+      <span class="key">"type"</span>: <span class="str">"ADD"</span>,
+      <span class="key">"payload"</span>: {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-GCR-001"</span>,
+        <span class="key">"price"</span>: <span class="num">12.95</span>,
+        <span class="key">"attributes"</span>: {
+          <span class="key">"name"</span>: <span class="str">"Grilled Chicken &amp; Brown Rice"</span>,
+          <span class="key">"category"</span>: <span class="str">"Ready Meals"</span>,
+          <span class="key">"protein_grams"</span>: <span class="num">42</span>,
+          <span class="key">"calories"</span>: <span class="num">450</span>,
+          <span class="key">"dietary_tags"</span>: [<span class="str">"high-protein"</span>, <span class="str">"gluten-free"</span>],
+          <span class="key">"brand"</span>: <span class="str">"My Muscle Chef"</span>,
+          <span class="key">"range"</span>: <span class="str">"Classics"</span>
+        }
+      }
+    }
+  ]
+}</code>
+      </div>
+    </div>
+
+    <!-- Add multiple items -->
+    <div id="cat-add-multi" class="catalog-panel" style="display:none;">
+      <div class="code-block">
+        <code><span class="cm">// PUT /v1/catalogs/{catalogId}/sync — Add multiple items</span>
+{
+  <span class="key">"actions"</span>: [
+    {
+      <span class="key">"type"</span>: <span class="str">"ADD"</span>,
+      <span class="key">"payload"</span>: {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-GCR-001"</span>,
+        <span class="key">"price"</span>: <span class="num">12.95</span>,
+        <span class="key">"attributes"</span>: {
+          <span class="key">"name"</span>: <span class="str">"Grilled Chicken &amp; Brown Rice"</span>,
+          <span class="key">"category"</span>: <span class="str">"Ready Meals"</span>,
+          <span class="key">"protein_grams"</span>: <span class="num">42</span>
+        }
+      }
+    },
+    {
+      <span class="key">"type"</span>: <span class="str">"ADD"</span>,
+      <span class="key">"payload"</span>: {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-PP-042"</span>,
+        <span class="key">"price"</span>: <span class="num">9.95</span>,
+        <span class="key">"attributes"</span>: {
+          <span class="key">"name"</span>: <span class="str">"Protein Pancakes"</span>,
+          <span class="key">"category"</span>: <span class="str">"Breakfast"</span>,
+          <span class="key">"protein_grams"</span>: <span class="num">35</span>
+        }
+      }
+    }
+    <span class="cm">// ... up to 1,000 items per request</span>
+  ]
+}</code>
+      </div>
+    </div>
+
+    <!-- Update one item -->
+    <div id="cat-update-one" class="catalog-panel" style="display:none;">
+      <div class="code-block">
+        <code><span class="cm">// PUT /v1/catalogs/{catalogId}/sync — Update one item's attributes</span>
+{
+  <span class="key">"actions"</span>: [
+    {
+      <span class="key">"type"</span>: <span class="str">"PATCH"</span>,
+      <span class="key">"payload"</span>: {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-GCR-001"</span>,
+        <span class="key">"price"</span>: <span class="num">13.95</span>,
+        <span class="key">"attributes"</span>: {
+          <span class="key">"calories"</span>: <span class="num">460</span>,
+          <span class="key">"range"</span>: <span class="str">"Premium Classics"</span>
+        }
+      }
+    }
+  ]
+}</code>
+      </div>
+    </div>
+
+    <!-- Update multiple items -->
+    <div id="cat-update-multi" class="catalog-panel" style="display:none;">
+      <div class="code-block">
+        <code><span class="cm">// PUT /v1/catalogs/{catalogId}/sync — Update multiple items</span>
+{
+  <span class="key">"actions"</span>: [
+    {
+      <span class="key">"type"</span>: <span class="str">"PATCH"</span>,
+      <span class="key">"payload"</span>: {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-GCR-001"</span>,
+        <span class="key">"price"</span>: <span class="num">13.95</span>,
+        <span class="key">"attributes"</span>: {
+          <span class="key">"range"</span>: <span class="str">"Premium Classics"</span>
+        }
+      }
+    },
+    {
+      <span class="key">"type"</span>: <span class="str">"PATCH"</span>,
+      <span class="key">"payload"</span>: {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-PP-042"</span>,
+        <span class="key">"price"</span>: <span class="num">10.95</span>,
+        <span class="key">"attributes"</span>: {
+          <span class="key">"category"</span>: <span class="str">"Premium Breakfast"</span>
+        }
+      }
+    }
+  ]
+}</code>
+      </div>
+    </div>
+
+    <!-- Remove one item -->
+    <div id="cat-remove-one" class="catalog-panel" style="display:none;">
+      <div class="code-block">
+        <code><span class="cm">// PUT /v1/catalogs/{catalogId}/sync — Remove one item</span>
+{
+  <span class="key">"actions"</span>: [
+    {
+      <span class="key">"type"</span>: <span class="str">"REMOVE"</span>,
+      <span class="key">"payload"</span>: {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-GCR-001"</span>
+      }
+    }
+  ]
+}</code>
+      </div>
+    </div>
+
+    <!-- Remove multiple items -->
+    <div id="cat-remove-multi" class="catalog-panel" style="display:none;">
+      <div class="code-block">
+        <code><span class="cm">// PUT /v1/catalogs/{catalogId}/sync — Remove multiple items</span>
+{
+  <span class="key">"actions"</span>: [
+    {
+      <span class="key">"type"</span>: <span class="str">"REMOVE"</span>,
+      <span class="key">"payload"</span>: {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-GCR-001"</span>
+      }
+    },
+    {
+      <span class="key">"type"</span>: <span class="str">"REMOVE"</span>,
+      <span class="key">"payload"</span>: {
+        <span class="key">"sku"</span>: <span class="str">"MEAL-PP-042"</span>
+      }
+    }
+  ]
+}</code>
+      </div>
+    </div>
+
+    <script>
+    function showCatalogTab(tabId) {
+      document.querySelectorAll('.catalog-panel').forEach(function(p) { p.style.display = 'none'; });
+      document.getElementById(tabId).style.display = 'block';
+      document.querySelectorAll('.catalog-tab').forEach(function(t) { t.classList.remove('active'); });
+      event.target.classList.add('active');
+    }
+    </script>
+
+    <p style="margin-top: 16px;">This enables rules like <em>"3x cashback on meals with more than 40g protein"</em> or <em>"Bonus cashback on the new Breakfast range"</em>.</p>
+  </div>
+</section>
+
+<!-- 9. CUSTOMER.IO INTEGRATION -->
+<section id="customerio">
+  <div class="inner">
+  <div class="section-label">10 — Customer.io Integration</div>
+  <h2>Integration with Customer.io</h2>
+  <p>Talon.One integrates with Customer.io through <strong>webhooks</strong> and <strong>broadcast API</strong>. This creates a powerful loop: Talon.One triggers messaging via Customer.io, and Customer.io pushes audience segments back into Talon.One.</p>
+
+  <!-- CSS-based Customer.io diagram -->
+  <div class="cio-diagram" style="margin-top: 32px;">
+    <div class="cio-diagram-main">
+
+      <!-- Talon.One box -->
+      <div class="cio-diagram-box cio-box-talon">
+        <div class="cio-diagram-box-hdr">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="#0891b2" opacity="0.2"></path>
+            <path d="M12 2L2 7v10l10 5 10-5V7L12 2z" stroke="#0891b2" stroke-width="1.5" fill="none"></path>
+          </svg>
+          <span>Talon.One</span>
+        </div>
+        <div class="cio-diagram-box-items">
+          <div class="cio-diagram-chip">📋 Rule Engine</div>
+          <div class="cio-diagram-chip">📊 Campaign Manager</div>
+          <div class="cio-diagram-chip">💰 Loyalty Program</div>
+        </div>
+      </div>
+
+      <!-- Center arrows -->
+      <div class="cio-diagram-arrows">
+        <div class="cio-diagram-arrow-block">
+          <div class="cio-diagram-arrow-label">Webhooks</div>
+          <div class="cio-diagram-arrow-sub">Loyalty events · Coupon delivery · Tier changes</div>
+          <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="cio-arrow-svg">
+            <line x1="0" y1="11" x2="188" y2="11" stroke="#0891b2" stroke-width="2.5"></line>
+            <polygon points="188,5 200,11 188,17" fill="#0891b2"></polygon>
+          </svg>
+        </div>
+        <div class="cio-diagram-arrow-block">
+          <div class="cio-diagram-arrow-label">Profile Updates</div>
+          <div class="cio-diagram-arrow-sub">Tier · Cashback balance · Spend data</div>
+          <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="cio-arrow-svg">
+            <line x1="0" y1="11" x2="188" y2="11" stroke="#0891b2" stroke-width="2"></line>
+            <polygon points="188,5 200,11 188,17" fill="#0891b2"></polygon>
+          </svg>
+        </div>
+        <div class="cio-diagram-arrow-block" style="margin-top: 8px;">
+          <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="cio-arrow-svg">
+            <line x1="12" y1="11" x2="200" y2="11" stroke="#6366f1" stroke-width="2.5"></line>
+            <polygon points="12,5 0,11 12,17" fill="#6366f1"></polygon>
+          </svg>
+          <div class="cio-diagram-arrow-label" style="color: #6366f1;">Broadcast API</div>
+          <div class="cio-diagram-arrow-sub">Segment sync · Audience import</div>
+        </div>
+      </div>
+
+      <!-- Customer.io box -->
+      <div class="cio-diagram-box cio-box-cio">
+        <div class="cio-diagram-box-hdr">
+          <span style="font-size: 18px;">📧</span>
+          <span>Customer.io</span>
+        </div>
+        <div class="cio-diagram-box-items">
+          <div class="cio-diagram-chip cio-chip-purple">✉️ Email Campaigns</div>
+          <div class="cio-diagram-chip cio-chip-purple">📱 Push Notifications</div>
+          <div class="cio-diagram-chip cio-chip-purple">💬 SMS</div>
+          <div class="cio-diagram-chip cio-chip-purple">🎯 Segments</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <style>
+    .cio-diagram { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 28px 20px 20px; overflow-x: auto; }
+    .cio-diagram-main { display: flex; align-items: stretch; gap: 16px; min-width: 700px; }
+    .cio-diagram-box { border-radius: 14px; padding: 18px; flex-shrink: 0; width: 200px; }
+    .cio-box-talon { background: #f0fafb; border: 2px solid #0891b2; }
+    .cio-box-cio { background: #f5f3ff; border: 2px solid #6366f1; }
+    .cio-diagram-box-hdr { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .cio-diagram-box-hdr span { font-weight: 700; font-size: 14px; color: var(--navy); }
+    .cio-diagram-box-items { display: flex; flex-direction: column; gap: 6px; }
+    .cio-diagram-chip { background: #0891b2; color: var(--white); padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: 600; }
+    .cio-chip-purple { background: #6366f1; }
+    .cio-diagram-arrows { display: flex; flex-direction: column; gap: 6px; justify-content: center; flex: 1; min-width: 200px; max-width: 300px; }
+    .cio-diagram-arrow-block { text-align: center; }
+    .cio-diagram-arrow-label { font-size: 11px; font-weight: 700; color: var(--navy); }
+    .cio-diagram-arrow-sub { font-size: 9px; color: var(--gray); margin-bottom: 2px; }
+    .cio-arrow-svg { display: block; width: 100%; height: 22px; }
+  </style>
+
+  <h3>1. Webhooks: Talon.One → Customer.io (Event Triggers)</h3>
+  <p>When a campaign rule fires in Talon.One, it can send a <strong>webhook to Customer.io</strong> to trigger automated messaging workflows.</p>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">📩</div>
+      <h4>Campaign Event Trigger</h4>
+      <p>Send events to Customer.io when loyalty milestones are reached. Example: <em>"Customer reached Gold tier → trigger congratulations email + push notification."</em></p>
+    </div>
+    <div class="card">
+      <div class="card-icon">💸</div>
+      <h4>Cashback Notification</h4>
+      <p>Notify customers when cashback is credited. Example: <em>"$5.20 cashback earned on your order → send email with balance update."</em></p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🎟️</div>
+      <h4>Coupon Delivery</h4>
+      <p>When Talon.One generates a personal coupon, webhook to Customer.io to deliver it via email/SMS/push.</p>
+    </div>
+  </div>
+
+  <h3>2. Webhooks: Talon.One → Customer.io (Profile Updates)</h3>
+  <p>Keep Customer.io people profiles enriched with real-time loyalty data for targeting.</p>
+  <div class="code-block">
+    <code><span class="cm">// Webhook payload from Talon.One to Customer.io</span>
+<span class="cm">// Endpoint: https://track.customer.io/api/v1/customers/{profileId}</span>
+{
+  <span class="key">"loyalty_tier"</span>: <span class="str">"Silver"</span>,
+  <span class="key">"cashback_balance"</span>: <span class="num">142.50</span>,
+  <span class="key">"lifetime_cashback_earned"</span>: <span class="num">385.00</span>,
+  <span class="key">"last_purchase_date"</span>: <span class="str">"2026-03-20"</span>,
+  <span class="key">"next_tier"</span>: <span class="str">"Gold"</span>,
+  <span class="key">"spend_to_next_tier"</span>: <span class="num">250.00</span>
+}</code>
+  </div>
+  <p>This allows Customer.io to build segments like <em>"Silver members within $50 of Gold"</em> for tier upgrade nudge campaigns.</p>
+
+  <h3>3. Customer.io → Talon.One (Segment Broadcast)</h3>
+  <p>Customer.io can push audience segments into Talon.One via the <strong>Broadcast API</strong>. This allows Talon.One campaigns to target customers based on Customer.io segments.</p>
+
+  <div class="flow">
+    <div class="flow-step">
+      <strong>Customer.io</strong>
+      <span>Build segment (e.g., "Churning customers")</span>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <strong>Broadcast API</strong>
+      <span>Push segment members to Talon.One</span>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" style="border-color: var(--red);">
+      <strong>Talon.One Campaign</strong>
+      <span>Target "Churning" segment with win-back cashback</span>
+    </div>
+  </div>
+
+  <div class="highlight-box" style="margin-top: 24px;">
+    <p><strong>Powerful Loop:</strong> Talon.One runs promotions &amp; loyalty → sends data to Customer.io → Customer.io sends communications &amp; builds segments → segments flow back to Talon.One for targeting. This eliminates data silos between your promotion and messaging platforms.</p>
+  </div>
+  </div>
+</section>
+
+<!-- 10. SEGMENTATION API -->
+<section id="segmentation-api" class="bg-gray">
+  <div class="inner">
+    <div class="section-label">11 — Segmentation Without Customer.io</div>
+    <h2>API-Based Audience Import</h2>
+    <p>If Customer.io is not available or preferred for segment sync, Talon.One offers direct APIs to import and manage audiences programmatically.</p>
+
+    <h3>Option A: Update Customer Profile — Audience Changes</h3>
+    <p>Use the same <strong>Update Customer Profile</strong> endpoint with the <code>audiencesChanges</code> payload to add or remove a customer from audiences (see <a href="https://presales-content.vercel.app/my-muscle-chef#customer-profile" style="color: var(--red); font-weight: 600;">Section 6</a>):</p>
+    <div class="code-block">
+      <code><span class="kw">PUT</span> /v2/customer_profiles/{integrationId}
+{
+  <span class="key">"audiencesChanges"</span>: {
+    <span class="key">"adds"</span>: [
+      <span class="kw">14</span>        <span class="cm">// Add to audience ID 14</span>
+    ],
+    <span class="key">"deletes"</span>: [
+      <span class="kw">8</span>         <span class="cm">// Remove from audience ID 8</span>
+    ]
+  }
+}</code>
+    </div>
+    <p>Campaign rules then target audiences directly: <em>"If customer is in audience 14 (Churn Risk) → 15% bonus cashback"</em>.</p>
+
+    <h3>Option B: Update Multiple Customer Profiles' Audiences</h3>
+    <p>Use the <strong>Integration API</strong> to add or remove customer profiles from an audience in bulk. This endpoint supports up to <strong>1,000 audience actions</strong> (<code>add</code> or <code>remove</code>) per request.</p>
+    <div class="code-block">
+      <code><span class="kw">POST</span> /v2/customer_audiences
+Authorization: ApiKey-v1 &lt;your_api_key&gt;
+
+{
+  <span class="key">"data"</span>: [
+    {
+      <span class="key">"action"</span>: <span class="str">"add"</span>,
+      <span class="key">"profileIntegrationId"</span>: <span class="str">"MMC-CUST-98421"</span>,
+      <span class="key">"audienceId"</span>: <span class="kw">14</span>
+    },
+    {
+      <span class="key">"action"</span>: <span class="str">"add"</span>,
+      <span class="key">"profileIntegrationId"</span>: <span class="str">"MMC-CUST-12045"</span>,
+      <span class="key">"audienceId"</span>: <span class="kw">14</span>
+    },
+    {
+      <span class="key">"action"</span>: <span class="str">"remove"</span>,
+      <span class="key">"profileIntegrationId"</span>: <span class="str">"MMC-CUST-30872"</span>,
+      <span class="key">"audienceId"</span>: <span class="kw">8</span>
+    }
+  ]
+}</code>
+    </div>
+    <p>This allows your backend to programmatically sync audience memberships in near real-time — for example, adding customers to a "Churn Risk" audience as soon as a scoring model flags them.</p>
+
+    <h3>Option C: Import Audience Memberships via CSV</h3>
+    <p>Upload a CSV file containing the integration IDs of the members you want to add to an audience.</p>
+    <p>The file should be sent as <strong>multipart data</strong> and should contain only the following column (required):</p>
+    <ul style="margin: 10px 0 10px 24px; color: var(--navy);">
+      <li><code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-weight: 700;">profileintegrationid</code> — The integration ID of the customer profile.</li>
+    </ul>
+    <div class="highlight-box" style="margin-bottom: 16px;">
+      <strong>⚠️ Important:</strong> The import <strong>replaces</strong> the previous list of audience members. We recommend limiting your file size to <strong>500 MB</strong>.
+    </div>
+    <div class="code-block">
+      <code><span class="kw">POST</span> /v1/audiences/{audienceId}/memberships/import
+Content-Type: multipart/form-data
+Authorization: ManagementKey-v1 &lt;your_api_key&gt;
+
+<span class="cm">// Example (cURL via PHP)</span>
+$ch = curl_init(<span class="str">"https://yourbaseurl.talon.one/v1/audiences/10/memberships/import"</span>);
+
+curl_setopt($ch, CURLOPT_POST, <span class="kw">true</span>);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+  <span class="str">'Content-Type: multipart/form-data'</span>,
+  <span class="str">'Authorization: ManagementKey-v1 &lt;your_api_key&gt;'</span>
+]);
+curl_setopt($ch, CURLOPT_POSTFIELDS, [
+  <span class="str">'upFile'</span> =&gt; <span class="str">''</span>
+]);
+
+curl_exec($ch);
+curl_close($ch);</code>
+    </div>
+
+    <p style="margin-top: 16px;"><strong>CSV File Format:</strong> The file should contain only the <code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-weight: 700;">profileintegrationid</code> column — the integration ID of the customer profile.</p>
+    <div class="code-block" style="margin-top: 8px;">
+      <code>profileintegrationid
+MMC-CUST-98421
+MMC-CUST-12045</code>
+    </div>
+
+    <p>This allows your data team to run batch jobs (e.g., nightly ETL) that compute segments in your data warehouse and push them into Talon.One via a simple CSV upload.</p>
+  </div>
+</section>
+
+<!-- 11. DASHBOARD -->
+<section id="dashboard">
+  <div class="inner">
+  <div class="section-label">12 — Analytics</div>
+  <h2>Dashboard and Reporting</h2>
+  <p>Talon.One's new analytics dashboard is providing rich, customizable reporting for your loyalty and promotion programs.</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <h4>Campaign Performance</h4>
+      <p>Revenue impact, redemption rates, discount distribution, coupon usage, and ROI per campaign — all in real-time.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">💰</div>
+      <h4>Loyalty Analytics</h4>
+      <p>Cashback earned vs. redeemed, tier distribution, tier migration trends, program cost analysis.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🎯</div>
+      <h4>Custom Dashboards</h4>
+      <p>Build tailored views for different stakeholders — Marketing, Finance, Product. Drag-and-drop report builder.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📤</div>
+      <h4>Export &amp; Schedule</h4>
+      <p>Schedule automated report delivery via email. Export to PDF, CSV, or connect directly to BI tools.</p>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- 12. ETL / DATA EXTRACTION -->
+<section id="etl" class="bg-gray">
+  <div class="inner">
+    <div class="section-label">13 — Data Extraction</div>
+    <h2>Management API — ETL into Your Data Warehouse</h2>
+    <p>Talon.One's <strong>Management API</strong> allows you to extract all promotion and loyalty data for ingestion into your own data warehouse — enabling custom analytics, BI reporting, and cross-platform data joins.</p>
+
+    <p style="margin-bottom: 20px; color: var(--gray); font-style: italic;">Below are examples of commonly used export endpoints. Many more are available in the <a href="https://docs.talon.one/management-api" target="_blank" style="color: var(--red); font-weight: 600;">full Management API reference</a>.</p>
+
+    <h3>Analytics</h3>
+    <table>
+      <thead>
+        <tr><th>Endpoint</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>GET /v1/applications/{applicationId}/export_effects</code></td>
+          <td>Download a CSV of all triggered effects (discounts, coupons, loyalty points, etc.) with campaign ID, rule, session, and revenue data. Filterable by campaign, date range, and date format.</td>
+        </tr>
+        <tr>
+          <td><code>GET /v1/applications/{applicationId}/export_customer_sessions</code></td>
+          <td>Download a CSV of customer sessions including cart items, discounts, totals, attributes, state, coupons, and referral data. Filter by date, profile, or session state.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Loyalty</h3>
+    <table>
+      <thead>
+        <tr><th>Endpoint</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>GET /v1/loyalty_programs/{loyaltyProgramId}/profile/{integrationId}/ledger_transactions</code></td>
+          <td>Paginated list of a customer's loyalty transactions — additions, subtractions, imports. Filter by date, subledger, transaction type, or session IDs.</td>
+        </tr>
+        <tr>
+          <td><code>GET /v1/loyalty_programs/{loyaltyProgramId}/profile/{integrationId}/export_log</code></td>
+          <td>Download a CSV of a customer's full loyalty ledger history including rule name, campaign ID, amount, expiry date, and transaction UUID.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Customer Data</h3>
+    <table>
+      <thead>
+        <tr><th>Endpoint</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>GET /v1/customers/no_total</code></td>
+          <td>List all customer profiles with their integration IDs, total sales, closed sessions, loyalty memberships, audience memberships, and last activity timestamp.</td>
+        </tr>
+        <tr>
+          <td><code>GET /v1/applications/{applicationId}/customer_activity_reports/no_total</code></td>
+          <td>Summary activity reports for all customers in an application — coupon redemptions, failed attempts, accrued discounts, accrued revenue, and total orders within a time range.</td>
+        </tr>
+        <tr>
+          <td><code>GET /v1/applications/{applicationId}/customers/{customerId}/analytics</code></td>
+          <td>Analytics for a specific customer: accepted coupons, created coupons, free items, total orders, total revenue, total discounts, and discounted orders.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Logs</h3>
+    <table>
+      <thead>
+        <tr><th>Endpoint</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>GET /v1/applications/{applicationId}/access_logs/no_total</code></td>
+          <td>Retrieve API access logs with full request/response payloads, HTTP method, URI, status code, and timestamps. Filter by path, method, status, and date range.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- CSS-based ETL diagram -->
+    <div class="cio-diagram" style="margin-top: 32px;">
+      <div class="cio-diagram-main">
+
+        <!-- Talon.One box -->
+        <div class="cio-diagram-box cio-box-talon">
+          <div class="cio-diagram-box-hdr">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="#0891b2" opacity="0.2"></path>
+              <path d="M12 2L2 7v10l10 5 10-5V7L12 2z" stroke="#0891b2" stroke-width="1.5" fill="none"></path>
+            </svg>
+            <span>Talon.One</span>
+          </div>
+          <div class="cio-diagram-box-items">
+            <div class="cio-diagram-chip">📊 Management API</div>
+            <div class="cio-diagram-chip">📋 CSV Exports</div>
+            <div class="cio-diagram-chip">📄 Paginated JSON</div>
+          </div>
+        </div>
+
+        <!-- Center arrow -->
+        <div class="cio-diagram-arrows">
+          <div class="cio-diagram-arrow-block">
+            <div class="cio-diagram-arrow-label">Nightly / Hourly</div>
+            <div class="cio-diagram-arrow-sub">Scheduled data extraction</div>
+            <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="cio-arrow-svg">
+              <line x1="0" y1="11" x2="188" y2="11" stroke="#0891b2" stroke-width="2.5"></line>
+              <polygon points="188,5 200,11 188,17" fill="#0891b2"></polygon>
+            </svg>
+          </div>
+        </div>
+
+        <!-- ETL Job box -->
+        <div class="cio-diagram-box" style="background: #fef3c7; border: 2px solid #f59e0b; width: 160px;">
+          <div class="cio-diagram-box-hdr" style="border-bottom-color: #fde68a;">
+            <span style="font-size: 18px;">⚙️</span>
+            <span>ETL Job</span>
+          </div>
+          <div class="cio-diagram-box-items">
+            <div class="cio-diagram-chip" style="background: #f59e0b;">Cloud Dataflow</div>
+            <div class="cio-diagram-chip" style="background: #f59e0b;">Cloud Functions</div>
+            <div class="cio-diagram-chip" style="background: #f59e0b;">Airflow</div>
+          </div>
+        </div>
+
+        <!-- Arrow to warehouse -->
+        <div class="cio-diagram-arrows" style="min-width: 100px; max-width: 140px;">
+          <div class="cio-diagram-arrow-block">
+            <div class="cio-diagram-arrow-label">Load</div>
+            <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="cio-arrow-svg">
+              <line x1="0" y1="11" x2="188" y2="11" stroke="#f59e0b" stroke-width="2.5"></line>
+              <polygon points="188,5 200,11 188,17" fill="#f59e0b"></polygon>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Data Warehouse box -->
+        <div class="cio-diagram-box cio-box-cio" style="background: #fef2f2; border-color: #ef4444;">
+          <div class="cio-diagram-box-hdr">
+            <span style="font-size: 18px;">🗄️</span>
+            <span>Data Warehouse</span>
+          </div>
+          <div class="cio-diagram-box-items">
+            <div class="cio-diagram-chip cio-chip-purple" style="background: #ef4444;">BigQuery</div>
+            <div class="cio-diagram-chip cio-chip-purple" style="background: #ef4444;">BigQuery</div>
+            <div class="cio-diagram-chip cio-chip-purple" style="background: #ef4444;">Cloud Storage / BI</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top: 20px;">
+      <p><strong>For MMC:</strong> Since your stack runs on GCP, a typical pattern is Cloud Functions or Dataflow jobs calling the Management API on a schedule, transforming the data, and loading it into BigQuery or Cloud Storage for your BI team.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 13. SECURITY -->
+<section id="security">
+  <div class="inner">
+  <div class="section-label">14 — Security</div>
+  <h2>Security Concepts</h2>
+  <p>Talon.One implements industry-standard security practices to protect your data and API interactions.</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">🔑</div>
+      <h4>API Key Authentication</h4>
+      <p>Each Application has a unique API key. Integration API uses <code>Api-Key</code> header. Management API uses session tokens or API keys with scoped permissions.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔒</div>
+      <h4>TLS / HTTPS Only</h4>
+      <p>All API communication is encrypted in transit via TLS 1.2+. No plaintext connections accepted.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🛡️</div>
+      <h4>Role-Based Access Control</h4>
+      <p>Granular roles for Campaign Manager UI — Marketing can manage campaigns, Finance views reports, Admins control configuration.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📋</div>
+      <h4>Audit Logs</h4>
+      <p>Full audit trail of all actions taken in the Campaign Manager and via API — who changed what and when.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🗄️</div>
+      <h4>Data Encryption at Rest</h4>
+      <p>All data stored in Talon.One is encrypted at rest using AES-256. Database backups are also encrypted.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌏</div>
+      <h4>Data Residency</h4>
+      <p>Talon.One runs on GCP with regional deployments. For MMC, data will be hosted on <strong>GCP Australia (Sydney)</strong>, meeting Australian privacy and data residency requirements.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📜</div>
+      <h4>Compliance</h4>
+      <p>SOC 2 Type II certified. GDPR compliant. Regular penetration testing and vulnerability assessments.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⏱️</div>
+      <h4>Rate Limiting &amp; DDoS Protection</h4>
+      <p>Built-in rate limiting per API key. Infrastructure-level DDoS mitigation. High-throughput plans available for peak events (e.g., MMC sales).</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌐</div>
+      <h4>IP Whitelisting</h4>
+      <p>Restrict API access to specific IP addresses or CIDR ranges. Only requests originating from your whitelisted IPs (e.g., your GCP infrastructure) will be accepted, adding an extra layer of network-level security.</p>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- 14. HOSTING & ARCHITECTURE -->
+<section id="hosting" class="bg-gray">
+  <div class="inner">
+    <div class="section-label">15 — Infrastructure</div>
+    <h2>Hosting &amp; Architecture</h2>
+    <p>Talon.One is a fully managed <strong>SaaS platform</strong> hosted on <strong>Google Cloud Platform (GCP)</strong> — with a dedicated <strong>Australia region</strong> deployment ensuring low latency for MMC customers. Your infrastructure runs on GCP, connected to Talon.One via REST APIs. No servers to manage, no scaling to worry about.</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">☁️</div>
+        <h4>GCP Hosted — Australia Region</h4>
+        <p>Runs on Google Cloud Platform with multi-zone deployments for high availability. <strong>GCP Australia (sydney)</strong> data center ensures low latency for MMC's Australian customers.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📈</div>
+        <h4>Auto-Scaling</h4>
+        <p>Talon.One automatically scales compute and database resources to handle traffic spikes — Black Friday, EOFY sales, new product launches.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚡</div>
+        <h4>Low-Latency Rule Engine</h4>
+        <p>Campaign rules evaluated in <strong>&lt;50ms p95</strong>. Critical for checkout performance — no noticeable delay for customers.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔄</div>
+        <h4>99.99% SLA</h4>
+        <p>Enterprise SLA with 99.99% uptime commitment. Redundant infrastructure with automated failover.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌏</div>
+        <h4>Regional Deployment</h4>
+        <p>Talon.One deployed on <strong>GCP Australia (Sydney)</strong> for Australian compliance and lowest latency to MMC's users and GCP infrastructure.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔧</div>
+        <h4>Zero-Downtime Updates</h4>
+        <p>Platform updates are rolling deployments with no service interruption. You always run the latest version automatically.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUMMARY / NEXT STEPS -->
+<section id="summary">
+  <div class="inner">
+  <div class="section-label">Summary</div>
+  <h2>Integration Overview for My Muscle Chef</h2>
+
+  <table>
+    <thead>
+      <tr><th>Area</th><th>Action Required</th><th>Owner</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Data Mapping</strong></td>
+        <td>Extend Talon.One data model — define custom attributes, session fields, and event schemas</td>
+        <td>MMC Backend Team + Talon.One</td>
+      </tr>
+      <tr>
+        <td><strong>Session API Integration</strong></td>
+        <td>Integrate PUT /v2/customer_sessions into checkout flow (open, close, cancel)</td>
+        <td>MMC Backend Team</td>
+      </tr>
+      <tr>
+        <td><strong>Customer Profiles</strong></td>
+        <td>Sync customer attributes to Talon.One — map existing customer IDs as IntegrationIDs</td>
+        <td>MMC Backend Team</td>
+      </tr>
+      <tr>
+        <td><strong>Event Data</strong></td>
+        <td>Integrate custom events via the Track Event endpoint to capture customer actions</td>
+        <td>MMC Backend Team</td>
+      </tr>
+      <tr>
+        <td><strong>Product Catalog</strong></td>
+        <td>Initial catalog load + real-time sync for product changes</td>
+        <td>MMC Backend Team</td>
+      </tr>
+      <tr>
+        <td><strong>Loyalty Program Setup</strong></td>
+        <td>Configure tiers (by spending), cashback earn/redeem rules in Campaign Manager</td>
+        <td>MMC Marketing + Talon.One</td>
+      </tr>
+      <tr>
+        <td><strong>Loyalty Campaign Setup</strong></td>
+        <td>Configure rule-based campaigns for loyalty program and discounts</td>
+        <td>MMC Marketing + Talon.One</td>
+      </tr>
+      <tr>
+        <td><strong>Customer Service Campaign Setup</strong></td>
+        <td>Configure campaigns to manage customer service use cases in Zendesk</td>
+        <td>MMC Marketing and Service Team + Talon.One</td>
+      </tr>
+      <tr>
+        <td><strong>Customer.io Webhooks</strong></td>
+        <td>Set up webhook effects in campaigns → Customer.io endpoints</td>
+        <td>MMC Marketing + Talon.One</td>
+      </tr>
+      <tr>
+        <td><strong>Segment Sync</strong></td>
+        <td>Configure Customer.io Broadcast or API-based segment import</td>
+        <td>MMC Data / Marketing</td>
+      </tr>
+      <tr>
+        <td><strong>ETL / Data Warehouse</strong></td>
+        <td>Build ETL jobs (Cloud Functions/Dataflow) using Management API</td>
+        <td>MMC Data Team</td>
+      </tr>
+      <tr>
+        <td><strong>Frontend — Loyalty Dashboard</strong></td>
+        <td>Use Customer Inventory endpoint to render cashback balance, tier, coupons</td>
+        <td>MMC Frontend Team</td>
+      </tr>
+      <tr>
+        <td><strong>Frontend — Cart Experience</strong></td>
+        <td>Use Effects returned by Talon.One to update cart with offers, cashback simulation, and applied discounts</td>
+        <td>MMC Frontend Team</td>
+      </tr>
+      <tr>
+        <td><strong>Zendesk — Backend Integration</strong></td>
+        <td>Develop scripts or webhooks in Zendesk to trigger Talon.One APIs based on service events</td>
+        <td>MMC Team + Zendesk Team</td>
+      </tr>
+      <tr>
+        <td><strong>Zendesk — UX</strong></td>
+        <td>Setup Zendesk interface to manage service use cases such as "award coupon"</td>
+        <td>MMC Team + Zendesk Team</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p style="margin-bottom: 8px;">
+    <img src="./Talon.One — My Muscle Chef Technical Presentation_files/rebrand-talon-one-logo-navy.svg" alt="Talon.One" style="height: 18px; vertical-align: middle;">
+    &nbsp;&nbsp;×&nbsp;&nbsp;
+    <img src="./Talon.One — My Muscle Chef Technical Presentation_files/1666837322-01_mymc_blk.svg" alt="My Muscle Chef" style="height: 28px; vertical-align: middle;">
+  </p>
+  <p>Technical Integration Presentation — Confidential</p>
+  <p>March 2026</p>
+</footer>
+
+
+</body></html>
