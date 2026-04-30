@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document Templates — Talon.One Presales Hub</title>
+  <style>
+    :root {
+      --blue:   #0161ff;
+      --navy:   #02043b;
+      --dark:   #222;
+      --gray:   #555;
+      --mid:    #888;
+      --light:  #f0f4ff;
+      --white:  #fff;
+      --border: #e4e4e7;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #fff;
+      color: var(--dark);
+      line-height: 1.5;
+    }
+
+    /* ── NAV ─────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px;
+      padding: 0 clamp(16px, 2.5vw, 32px); height: 60px;
+      overflow: hidden;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .nav-logo-t1 { height: 22px; }
+    .nav-logo-divider { width: 1px; height: 20px; background: var(--border); }
+    .nav-logo-label { font-size: 13px; font-weight: 700; color: var(--navy); letter-spacing: -.2px; }
+    .nav-spacer { flex: 1; }
+    .nav-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .btn-agent {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--light-gray); color: var(--dark);
+      border: 1px solid var(--border); border-radius: 8px; padding: 7px 14px;
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      transition: background .15s; text-decoration: none;
+    }
+    .btn-agent:hover { background: var(--border); }
+    .btn-agent.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+    .btn-new {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--blue); color: #fff;
+      border: none; border-radius: 8px; padding: 7px 16px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: background .15s; text-decoration: none;
+    }
+    .btn-new:hover { background: #004fd6; }
+    @media (max-width: 860px) {
+      .nav-btn-label { display: none; }
+      .btn-agent, .btn-new { padding: 7px 10px; }
+    }
+
+    /* ── HERO ────────────────────────────────────────── */
+    .hero {
+      padding: clamp(80px,10vw,100px) clamp(16px,3vw,40px) 36px;
+      background: linear-gradient(160deg, #fff 50%, #f0f6ff 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-inner { max-width: 1400px; margin: 0 auto; }
+    .crumb { font-size: 12px; color: var(--mid); margin-bottom: 14px; }
+    .crumb a { color: var(--mid); text-decoration: none; }
+    .crumb a:hover { color: var(--blue); }
+    .hero-inner h1 { font-size: 34px; font-weight: 800; color: var(--navy); letter-spacing: -.5px; }
+    .hero-inner h1 em { font-style: normal; color: var(--blue); }
+    .hero-inner p { margin-top: 7px; font-size: 14.5px; color: var(--gray); max-width: 620px; }
+    .hero-meta {
+      margin-top: 20px; display: flex; gap: 20px; flex-wrap: wrap;
+      font-size: 12px; color: var(--mid);
+    }
+    .hero-meta span { display: flex; align-items: center; gap: 5px; }
+
+    /* ── FILTER BAR ──────────────────────────────────── */
+    .filter-bar {
+      max-width: 1400px; margin: 24px auto 0; padding: 0 clamp(16px,3vw,40px);
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .pill {
+      padding: 5px 14px; border-radius: 99px; font-size: 12.5px; font-weight: 500;
+      border: 1.5px solid var(--border); background: #fff; cursor: pointer;
+      color: var(--gray); transition: all .15s;
+    }
+    .pill:hover { border-color: var(--navy); color: var(--navy); }
+    .pill.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+    .pill.client.active   { background: #0161ff; border-color: #0161ff; }
+    .pill.comp.active     { background: #7c3aed; border-color: #7c3aed; }
+    .pill.partner.active  { background: #0ea5e9; border-color: #0ea5e9; }
+
+    /* ── GRID ────────────────────────────────────────── */
+    .templates-grid {
+      max-width: 1400px; margin: 28px auto 80px; padding: 0 clamp(16px,3vw,40px);
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 18px;
+    }
+
+    /* ── TEMPLATE CARD ───────────────────────────────── */
+    .tpl-card {
+      background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius);
+      padding: 22px; cursor: default;
+      display: flex; flex-direction: column; gap: 0;
+      transition: box-shadow .15s, border-color .15s, transform .1s;
+    }
+    .tpl-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.07); border-color: #ccc; transform: translateY(-2px); }
+
+    .tpl-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+    .tpl-icon-wrap {
+      width: 52px; height: 52px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0;
+    }
+    .tpl-icon-wrap.client  { background: #e8f0ff; }
+    .tpl-icon-wrap.competition { background: #f3eeff; }
+    .tpl-icon-wrap.partner { background: #e0f4ff; }
+
+    .tpl-badge {
+      font-size: 10px; font-weight: 700; padding: 3px 9px;
+      border-radius: 99px; letter-spacing: .04em; white-space: nowrap;
+      align-self: flex-start;
+    }
+    .tpl-badge.client     { background: #e8f0ff; color: #0161ff; }
+    .tpl-badge.competition{ background: #f3eeff; color: #7c3aed; }
+    .tpl-badge.partner    { background: #e0f4ff; color: #0284c7; }
+
+    .tpl-name { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
+    .tpl-desc { font-size: 12.5px; color: var(--gray); line-height: 1.55; margin-bottom: 16px; flex: 1; }
+
+    .tpl-sections-preview {
+      display: flex; flex-direction: column; gap: 4px; margin-bottom: 18px;
+    }
+    .tpl-section-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11.5px; color: var(--dark); font-weight: 500;
+    }
+    .tpl-section-tag::before {
+      content: ''; width: 5px; height: 5px; border-radius: 50%;
+      background: var(--border); flex-shrink: 0;
+    }
+    .tpl-section-more { font-size: 11px; color: var(--mid); margin-top: 2px; padding-left: 11px; }
+
+    .tpl-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--border); padding-top: 14px; margin-top: auto;
+    }
+    .tpl-count { font-size: 11px; color: var(--mid); }
+    .btn-view {
+      padding: 7px 16px; background: var(--blue); color: #fff;
+      border: none; border-radius: 8px; font-size: 12.5px; font-weight: 600;
+      cursor: pointer; transition: opacity .15s;
+    }
+    .btn-view:hover { opacity: .85; }
+
+    /* ── DETAIL PANEL ────────────────────────────────── */
+    .panel-backdrop {
+      position: fixed; inset: 0; z-index: 400;
+      background: rgba(2,4,59,.45); backdrop-filter: blur(4px);
+      opacity: 0; pointer-events: none; transition: opacity .2s;
+    }
+    .panel-backdrop.open { opacity: 1; pointer-events: all; }
+
+    .detail-panel {
+      position: fixed; top: 0; right: 0; bottom: 0; z-index: 500;
+      width: min(640px, 100vw); background: #fff;
+      box-shadow: -8px 0 48px rgba(0,0,0,.15);
+      display: flex; flex-direction: column;
+      transform: translateX(100%); transition: transform .28s cubic-bezier(.4,0,.2,1);
+      overflow: hidden;
+    }
+    .detail-panel.open { transform: translateX(0); }
+
+    .panel-header {
+      padding: 24px 28px 20px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; gap: 16px; flex-shrink: 0;
+    }
+    .panel-icon-wrap {
+      width: 56px; height: 56px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; flex-shrink: 0;
+    }
+    .panel-header-text { flex: 1; }
+    .panel-title { font-size: 20px; font-weight: 800; color: var(--navy); line-height: 1.2; }
+    .panel-subtitle { font-size: 13px; color: var(--gray); margin-top: 4px; line-height: 1.5; }
+    .panel-close {
+      background: none; border: none; cursor: pointer; color: var(--mid);
+      font-size: 20px; padding: 4px; border-radius: 6px;
+      transition: background .12s; flex-shrink: 0; line-height: 1;
+    }
+    .panel-close:hover { background: var(--light); color: var(--dark); }
+
+    .panel-body { flex: 1; overflow-y: auto; padding: 24px 28px; }
+
+    .panel-section-label {
+      font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--mid); margin-bottom: 14px;
+    }
+
+    .panel-note {
+      display: flex; gap: 10px; align-items: flex-start;
+      background: #f0f5ff; border: 1px solid #c7d9ff;
+      border-radius: 9px; padding: 12px 14px; margin-bottom: 24px;
+      font-size: 12px; color: #1a3a8a; line-height: 1.55;
+    }
+    .panel-note-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    .toc-list { display: flex; flex-direction: column; gap: 0; }
+    .toc-item {
+      display: flex; align-items: stretch; gap: 0;
+    }
+    .toc-gutter {
+      display: flex; flex-direction: column; align-items: center;
+      width: 32px; flex-shrink: 0;
+    }
+    .toc-num {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--light); border: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: var(--navy);
+      flex-shrink: 0; margin-top: 12px;
+    }
+    .toc-line {
+      flex: 1; width: 1.5px; background: var(--border); margin: 0 auto;
+    }
+    .toc-item:last-child .toc-line { display: none; }
+    .toc-content {
+      flex: 1; padding: 10px 0 18px 10px;
+    }
+    .toc-title {
+      font-size: 14px; font-weight: 600; color: var(--dark); line-height: 1.3;
+    }
+    .toc-body { font-size: 12px; color: var(--gray); margin-top: 3px; line-height: 1.55; }
+    .toc-bullets { margin-top: 6px; padding-left: 14px; }
+    .toc-bullets li { font-size: 11.5px; color: var(--gray); margin-bottom: 2px; }
+
+    .panel-meta-row {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      padding: 14px 0; border-top: 1px solid var(--border); margin-top: 24px;
+    }
+    .panel-meta { display: flex; flex-direction: column; gap: 2px; }
+    .panel-meta-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--mid); }
+    .panel-meta-value { font-size: 13px; font-weight: 600; color: var(--dark); }
+
+    /* ── EMPTY ───────────────────────────────────────── */
+    .empty-msg { text-align: center; padding: 60px 20px; color: var(--mid); font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────── -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img class="nav-logo-t1" src="https://a.storyblok.com/f/140059/118x24/886a9d9fc3/rebrand-talon-one-logo-navy.svg" alt="Talon.One" />
+    <div class="nav-logo-divider"></div>
+    <span class="nav-logo-label">Presales Hub</span>
+  </a>
+  <div class="nav-spacer"></div>
+  <div class="nav-actions">
+    <a href="templates.html" class="btn-agent active">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span class="nav-btn-label">Templates</span>
+    </a>
+    <a href="kb.html" class="btn-agent">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
+      <span class="nav-btn-label">Knowledge Base</span>
+    </a>
+    <a href="new.html" class="btn-new">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span class="nav-btn-label">New Presentation</span>
+    </a>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────── -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="crumb"><a href="index.html">Hub</a> / Templates</div>
+    <h1>Document <em>Templates</em></h1>
+    <p>Six standardised document structures the AI agents follow when generating presales content. Each template defines a fixed table of contents — agents use the full list or a curated subset based on your instructions.</p>
+    <div class="hero-meta">
+      <span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        7 templates
+      </span>
+      <span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Maintained by Solutions Engineering
+      </span>
+      <span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Used by all AI-generated documents
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- ── FILTER BAR ────────────────────────────────────────── -->
+<div class="filter-bar" id="filterBar">
+  <button class="pill active" data-filter="all" onclick="filterCards(this)">All templates</button>
+  <button class="pill client" data-filter="client" onclick="filterCards(this)">Client</button>
+  <button class="pill comp" data-filter="competition" onclick="filterCards(this)">Competitive</button>
+  <button class="pill partner" data-filter="partner" onclick="filterCards(this)">Partner</button>
+</div>
+
+<!-- ── TEMPLATES GRID ────────────────────────────────────── -->
+<div class="templates-grid" id="templatesGrid"></div>
+
+<!-- ── DETAIL PANEL ──────────────────────────────────────── -->
+<div class="panel-backdrop" id="panelBackdrop" onclick="closePanel()"></div>
+<div class="detail-panel" id="detailPanel">
+  <div class="panel-header" id="panelHeader"></div>
+  <div class="panel-body" id="panelBody"></div>
+</div>
+
+<script>
+// ── Template registry ──────────────────────────────────────
+const TEMPLATES = [
+  {
+    key: 'sales-pitch',
+    icon: '🎯',
+    name: 'Sales Pitch',
+    type: 'client',
+    typeLabel: 'Client',
+    audience: 'C-Suite, Marketing / Loyalty, Commercial Leadership',
+    duration: '30–60 min presentation',
+    desc: 'Executive discovery deck — business context, value narrative, ROI preview and clear next steps. The most common document type.',
+    sections: [
+      {
+        title: 'Cover & Agenda',
+        body: 'Prospect company, presenter details, meeting date and agenda overview.',
+        bullets: ['Company logo + Talon.One logo', 'Presenter name & title', 'Agenda run-of-show'],
+      },
+      {
+        title: 'Executive Summary',
+        body: 'One-page snapshot of why Talon.One is the right fit — written for a time-pressed executive.',
+        bullets: ['3 key reasons T1 fits this prospect', 'Expected business impact headline', 'Recommended next step'],
+      },
+      {
+        title: 'Business Context',
+        body: "Prospect's market position, growth goals, and loyalty/promotions maturity.",
+        bullets: ['Market context & competitive landscape', 'Current loyalty / promo setup', 'Growth ambitions & KPIs'],
+      },
+      {
+        title: 'Key Challenges',
+        body: '3–5 pain points surfaced in discovery, mapped to business impact.',
+        bullets: ['Discovery-backed pain points', 'Business impact of each challenge', 'Urgency / timeline signal'],
+      },
+      {
+        title: 'The Talon.One Solution',
+        body: 'How Talon.One addresses each challenge — feature ↔ pain point mapping.',
+        bullets: ['Rule engine capabilities relevant to their use case', 'Architecture fit (MACH / composable stack)', 'Relevant API capabilities'],
+      },
+      {
+        title: 'Why Talon.One Wins',
+        body: 'Differentiators vs alternatives: API-first, rule engine flexibility, MACH composability, real-time performance.',
+        bullets: ['vs custom-built', 'vs competitor (if identified)', 'Technical moat: sub-50ms evaluation, 10k RPM'],
+      },
+      {
+        title: 'Customer Proof',
+        body: '2–3 relevant case studies from similar industries — hard metrics preferred.',
+        bullets: ['Company name, industry, use case summary', 'Measurable outcome (e.g. +18% redemption rate)', 'Quote if available'],
+      },
+      {
+        title: 'ROI Preview',
+        body: 'Back-of-envelope model: licence cost savings, engineering time freed, revenue uplift estimate.',
+        bullets: ['Assumptions clearly stated', '12-month and 24-month projections', 'Sensitivity note'],
+      },
+      {
+        title: 'Implementation Overview',
+        body: 'High-level timeline, phases, and effort estimate — no surprises.',
+        bullets: ['Phase 1: Integration (weeks 1–6)', 'Phase 2: Configuration & UAT (weeks 7–10)', 'Phase 3: Go-live & hypercare'],
+      },
+      {
+        title: 'Next Steps',
+        body: 'Recommended actions with owners and proposed dates.',
+        bullets: ['Technical discovery call or demo', 'Sandbox / POC scope', 'Commercial discussion date'],
+      },
+    ],
+  },
+  {
+    key: 'technical-integration',
+    icon: '⚙️',
+    name: 'Technical Integration',
+    type: 'client',
+    typeLabel: 'Client',
+    audience: 'Engineering Teams, Solution Architects, CTOs',
+    duration: '60–90 min deep-dive',
+    desc: 'MACH architecture deep-dive, API flow diagrams, data model, environments & implementation sprint plan.',
+    sections: [
+      {
+        title: 'Cover & Agenda',
+        body: 'Prospect engineering team details, session agenda and pre-read links.',
+        bullets: ['Attendee list + roles', 'Sandbox credentials (if applicable)', 'API docs link'],
+      },
+      {
+        title: 'Architecture Overview',
+        body: "Where Talon.One sits in the prospect's stack — MACH composable diagram.",
+        bullets: ['Current stack diagram', 'Talon.One insertion point', 'Data flow across systems'],
+      },
+      {
+        title: 'Integration Patterns',
+        body: 'Integration API v2 vs Loyalty API — when to use each, sync vs async flows.',
+        bullets: ['Session-based tracking (Integration API v2)', 'Loyalty API for ledger operations', 'Batch vs real-time event flow'],
+      },
+      {
+        title: 'API Reference Highlights',
+        body: 'Key endpoints they will call — sessions, effects, customer profiles, loyalty.',
+        bullets: ['/v2/customer_sessions/{id}', '/v1/loyalty_programs/{id}/members', 'Effect types: setDiscount, addLoyaltyPoints, giveGift'],
+      },
+      {
+        title: 'Data Model',
+        body: 'Core entities and how they relate — customers, sessions, cart items, effects, loyalty ledger.',
+        bullets: ['CustomerProfile schema', 'Session + CartItem payload', 'LoyaltyLedger entry structure'],
+      },
+      {
+        title: 'Real-Time Rule Evaluation',
+        body: 'How the rule engine processes a session request — latency, throughput, decision model.',
+        bullets: ['<50ms p95 rule evaluation', 'Up to 10,000 RPM per integration', 'Deterministic, auditable effects'],
+      },
+      {
+        title: 'Webhook & Event System',
+        body: 'Outbound webhooks — event types, payload schema, retry logic, security headers.',
+        bullets: ['session.updated, loyalty.earned, coupon.redeemed events', 'HMAC-SHA256 signature verification', 'Exponential back-off retry'],
+      },
+      {
+        title: 'Environments & Access',
+        body: 'Sandbox vs Production topology, IAM roles, API key management, SSO configuration.',
+        bullets: ['Sandbox always free, persistent 6 months', 'API key scopes: read-only / full-access', 'SAML 2.0 SSO with Okta / Azure AD'],
+      },
+      {
+        title: 'Security & Compliance',
+        body: 'Encryption in transit and at rest, GDPR controls, SOC 2 Type II, data residency options.',
+        bullets: ['TLS 1.2+ everywhere', 'EU + US data residency', 'SOC 2 Type II — available under NDA'],
+      },
+      {
+        title: 'Implementation Timeline',
+        body: 'Sprint-by-sprint plan from integration kick-off to go-live.',
+        bullets: ['Week 1–2: Sandbox setup, API key provisioning', 'Week 3–6: Session integration + rule testing', 'Week 7–10: UAT, load test, go-live'],
+      },
+      {
+        title: 'Next Steps',
+        body: 'Technical actions: sandbox access, architecture review, first API call walkthrough.',
+        bullets: [],
+      },
+    ],
+  },
+  {
+    key: 'business-case',
+    icon: '📊',
+    name: 'Business Case / ROI',
+    type: 'client',
+    typeLabel: 'Client',
+    audience: 'CFO, CMO, VP Finance, Executive Sponsors',
+    duration: '45–60 min executive review',
+    desc: 'Current-state cost analysis, financial impact modelling, ROI projections and investment summary — built for sign-off.',
+    sections: [
+      {
+        title: 'Cover & Executive Summary',
+        body: 'Investment ask, expected return headline, and payback period — on one page.',
+        bullets: ['Total investment range', 'Projected ROI at 12 / 24 months', 'Recommended decision timeline'],
+      },
+      {
+        title: 'Current State Assessment',
+        body: 'True cost of current system: licence fees, engineering maintenance, manual campaign ops, and missed revenue.',
+        bullets: ['Annual licence / SaaS cost', 'Engineering FTE hours per month', 'Campaign ops manual effort cost', 'Estimated revenue leakage'],
+      },
+      {
+        title: 'Proposed Solution',
+        body: 'What Talon.One delivers: capabilities unlocked, constraints removed, team hours freed.',
+        bullets: ['Use cases enabled (loyalty, promotions, referral)', 'Engineering effort reduction estimate', 'Marketing agility improvement'],
+      },
+      {
+        title: 'ROI Model',
+        body: 'Structured model with clearly stated assumptions, inputs, and 12/24/36-month projections.',
+        bullets: ['Inputs: current spend, campaign volume, customer base', 'Savings: licence delta + engineering hours + ops hours', 'Revenue uplift: retention improvement, redemption uplift, basket size'],
+      },
+      {
+        title: 'Savings Analysis',
+        body: 'Line-by-line breakdown of cost savings across licence, engineering, and operations.',
+        bullets: ['Licence cost delta (current vs T1)', 'Engineering FTE freed (estimated hours/year)', 'Campaign ops automation savings'],
+      },
+      {
+        title: 'Revenue Uplift Potential',
+        body: 'Incremental revenue enabled by improved personalisation, loyalty tiers, and campaign speed.',
+        bullets: ['Loyalty retention rate improvement (+X pp)', 'Redemption rate uplift benchmark', 'Average basket size uplift evidence'],
+      },
+      {
+        title: 'Risk Mitigation',
+        body: 'Platform risk, implementation risk, migration risk — and how each is addressed.',
+        bullets: ['Parallel running during migration window', 'Rollback capability via feature flags', 'T1 implementation support model'],
+      },
+      {
+        title: 'Investment Summary',
+        body: 'Licensing tiers, implementation estimate, and total cost of ownership over 3 years.',
+        bullets: ['Annual licence (indicative range)', 'One-time implementation cost estimate', '3-year TCO vs current state'],
+      },
+      {
+        title: 'Next Steps',
+        body: 'Commercial discussion, legal review timeline, proposed start date.',
+        bullets: [],
+      },
+    ],
+  },
+  {
+    key: 'battle-card',
+    icon: '⚔️',
+    name: 'Competitive Battle Card',
+    type: 'competition',
+    typeLabel: 'Competition',
+    audience: 'Sales Team, Presales, Internal Enablement',
+    duration: 'Reference doc — no set duration',
+    desc: 'Head-to-head comparison, kill shots, objection handlers and proof points. Built to be used in competitive deals and for team enablement.',
+    sections: [
+      {
+        title: 'Cover — At a Glance',
+        body: 'Competitor name, one-line positioning, and when Talon.One wins.',
+        bullets: ['Competitor one-liner', 'T1 one-liner', 'Win condition summary (2–3 sentences)'],
+      },
+      {
+        title: 'Executive Summary',
+        body: 'Why prospects choose Talon.One over this competitor — the short version.',
+        bullets: ['Top 3 reasons T1 wins', 'Top 3 scenarios where competitor is stronger', 'Recommended talk track'],
+      },
+      {
+        title: 'Head-to-Head Comparison',
+        body: 'Feature comparison table across 15+ dimensions — objective, sourced where possible.',
+        bullets: ['Rule engine flexibility', 'API-first architecture', 'Loyalty + promotions in one', 'Pricing model', 'Implementation speed', 'Support & SLAs'],
+      },
+      {
+        title: 'Talon.One Differentiators',
+        body: "The features and qualities that genuinely set Talon.One apart — not just marketing copy.",
+        bullets: ['Rule engine: unlimited conditions, no code required', 'Single API for loyalty + promotions + referral', 'Composable / MACH certified', 'Real-time: <50ms evaluation'],
+      },
+      {
+        title: 'Kill Shots',
+        body: '5 one-liners to neutralise the competitor\'s strongest talking points.',
+        bullets: ['Structure: "When [competitor] says X, say Y"', 'Evidence-backed where possible', 'Keep to 1–2 sentences each'],
+      },
+      {
+        title: 'Objection Handlers',
+        body: 'The 5 most common objections when selling against this competitor — with recommended responses.',
+        bullets: ['"They already have it built in to their CRM"', '"Switching cost is too high"', '"We need the ecosystem they offer"'],
+      },
+      {
+        title: 'Technical Advantages',
+        body: 'Latency, flexibility, developer experience, and architectural superiority.',
+        bullets: ['API response times benchmark', 'Rule engine expression power', 'No-code campaign manager for marketing'],
+      },
+      {
+        title: 'Pricing Comparison',
+        body: 'Model vs model, typical deal size comparison, and TCO analysis.',
+        bullets: ['Per-seat vs usage-based', 'Module packaging differences', 'Hidden costs (implementation, add-ons)'],
+      },
+      {
+        title: 'Customer Migration Stories',
+        body: 'Prospects or customers who switched from this competitor — why and what happened.',
+        bullets: ['Anonymised if required', 'Include before/after metric', 'Source: CS team or case studies'],
+      },
+      {
+        title: 'References & Proof Points',
+        body: 'Analyst quotes, G2 data, customer logos and performance benchmarks.',
+        bullets: ['G2 category ratings', 'Gartner / Forrester mentions', 'Customer quote (name + company)'],
+      },
+    ],
+  },
+  {
+    key: 'poc-scope',
+    icon: '🔬',
+    name: 'POC / Pilot Scope',
+    type: 'client',
+    typeLabel: 'Client',
+    audience: 'Engineering Teams, Project Sponsors, Technical Buyers',
+    duration: '4–8 week POC',
+    desc: 'Objectives, bounded use cases, success criteria, technical scope and a week-by-week milestone plan.',
+    sections: [
+      {
+        title: 'Cover & Overview',
+        body: 'POC purpose, participating teams, and overall timeline.',
+        bullets: ['Talon.One CSA + prospect engineering lead', 'Start date & end date', 'Go/No-Go decision date'],
+      },
+      {
+        title: 'POC Objectives',
+        body: 'What this POC is designed to prove — written as testable hypotheses.',
+        bullets: ['Technical feasibility of integration', 'Rule engine can support use case X', 'Performance at expected load', 'Team can operate the system independently'],
+      },
+      {
+        title: 'Use Cases to Validate',
+        body: '2–4 bounded use cases that cover the most critical requirements.',
+        bullets: ['UC1: Tiered loyalty with Bronze/Silver/Gold based on spend', 'UC2: Cashback mechanic triggered at POS', 'UC3: Braze integration for tier upgrade email'],
+      },
+      {
+        title: 'Success Criteria',
+        body: 'Measurable pass/fail criteria per use case — agreed upfront by both parties.',
+        bullets: ['Definition of pass vs partial pass vs fail', 'Measurement method per criterion', 'Who signs off on each criterion'],
+      },
+      {
+        title: 'Technical Scope',
+        body: 'Environments, integrations in scope, data seeding plan and out-of-scope items.',
+        bullets: ['Sandbox environment only (no production data)', 'Integrations in scope: Braze, Segment', 'Out of scope: reporting, SSO, production load test'],
+      },
+      {
+        title: 'Implementation Approach',
+        body: 'Who does what — T1 CSA responsibilities vs prospect engineering responsibilities.',
+        bullets: ['T1 CSA: environment setup, rule writing, support', 'Prospect: API integration, test data, stakeholder sign-off'],
+      },
+      {
+        title: 'Timeline & Milestones',
+        body: 'Week-by-week plan from kick-off to Go/No-Go.',
+        bullets: ['Week 1: Kick-off, sandbox access, data model review', 'Week 2–3: API integration for UC1', 'Week 4–5: UC2 + UC3 build', 'Week 6: UAT, stakeholder demo, Go/No-Go'],
+      },
+      {
+        title: 'Resource Requirements',
+        body: 'Time commitment expected from each party.',
+        bullets: ['T1 CSA: ~8 hrs/week', 'Prospect engineer: ~12 hrs/week', 'Marketing stakeholder: 2 hrs/week for sign-off'],
+      },
+      {
+        title: 'Risks & Assumptions',
+        body: 'Known risks and mitigation, plus assumptions the plan depends on.',
+        bullets: ['Risk: data model mismatch — mitigated by schema review in Week 1', 'Assumption: sandbox credentials provisioned by Day 1'],
+      },
+      {
+        title: 'Next Steps',
+        body: 'Kick-off agenda, access provisioning checklist, and owner matrix.',
+        bullets: [],
+      },
+    ],
+  },
+  {
+    key: 'mmc-technical',
+    icon: '💪',
+    name: 'My Muscle Chef — Technical Presentation',
+    type: 'client',
+    typeLabel: 'Client',
+    audience: 'Engineering Teams, Solution Architects, Technical Stakeholders',
+    duration: '60–90 min technical deep-dive',
+    desc: 'Full technical integration proposal for My Muscle Chef — environments topology, Integration / Management / Rule Builder APIs, product catalog sync, Customer.io & segmentation integrations, security, hosting and project plan.',
+    link: 'talon-integration.html',
+    sections: [
+      {
+        title: 'Introduction',
+        body: 'Solution overview — Talon.One × My Muscle Chef context, key capabilities and integration principles.',
+        bullets: ['Promotions & Loyalty scope', 'API-first, composable commerce approach', 'Key stakeholders and session agenda'],
+      },
+      {
+        title: 'Environments',
+        body: 'Four-environment topology — Dev, QA, Staging, Production — with per-environment configuration.',
+        bullets: ['Dev: sandbox for engineers', 'QA: automated test target', 'Staging: pre-production sign-off', 'Prod: live environment'],
+      },
+      {
+        title: 'Integration API',
+        body: 'Session-based integration — how MMC systems call Talon.One to evaluate promotions and loyalty in real time.',
+        bullets: ['PUT /v2/customer_sessions/{id}', 'Effect types: discounts, loyalty points, free items', 'Real-time evaluation: <50ms p95'],
+      },
+      {
+        title: 'Management API',
+        body: 'Back-office operations — campaign management, coupon creation and customer profile reads.',
+        bullets: ['Campaign CRUD', 'Coupon batch generation', 'Customer profile lookup'],
+      },
+      {
+        title: 'Rule Builder API',
+        body: 'Programmatic rule management for automated campaign provisioning and QA.',
+        bullets: ['Create / update rules via API', 'Template-driven rule generation', 'Automated campaign QA checks'],
+      },
+      {
+        title: 'Product Catalog Sync',
+        body: "Keeping the Talon.One SKU catalog in sync with MMC's product feed for catalog-aware promotions.",
+        bullets: ['Incremental sync strategy', 'SKU attributes mapped to T1 catalog items', 'Catalog-based rule conditions'],
+      },
+      {
+        title: 'Third-Party Integrations',
+        body: 'Customer.io for triggered communications and segmentation for audience targeting.',
+        bullets: ['Customer.io: loyalty tier change events, reward notifications', 'Segmentation: audience sync for targeted campaigns', 'Webhook-driven event flow'],
+      },
+      {
+        title: 'Security',
+        body: 'Encryption, API key management, and compliance posture.',
+        bullets: ['TLS 1.2+ in transit', 'API key scopes and rotation', 'GDPR controls and data residency options'],
+      },
+      {
+        title: 'Hosting & Infrastructure',
+        body: 'Talon.One hosting model — cloud regions, SLA, uptime and failover.',
+        bullets: ['AWS multi-region deployment', '99.9% SLA', 'Automatic failover and daily backups'],
+      },
+      {
+        title: 'Project Plan',
+        body: 'Phased implementation from kick-off to go-live with owner matrix.',
+        bullets: ['Phase 1: Sandbox setup & API integration', 'Phase 2: Rule configuration & UAT', 'Phase 3: Go-live & hypercare'],
+      },
+    ],
+  },
+  {
+    key: 'partner-gtm',
+    icon: '🤝',
+    name: 'Partner GTM',
+    type: 'partner',
+    typeLabel: 'Partner',
+    audience: 'Alliance Managers, Partner Solutions Team, Channel Sales',
+    duration: 'Enablement & co-sell reference',
+    desc: 'Co-sell playbook, ICP definition, joint use cases and enablement plan — for system integrators, ISVs and technology partners.',
+    sections: [
+      {
+        title: 'Cover & Partnership Overview',
+        body: 'Partner profile, integration type, current status and partnership tier.',
+        bullets: ['Partner name, HQ, partner type (SI / ISV / Tech)', 'Integration status (certified / in progress)', 'Talon.One partnership tier'],
+      },
+      {
+        title: 'Joint Value Proposition',
+        body: 'The combined narrative — what customers get that neither company delivers alone.',
+        bullets: ['Partner capability + T1 capability = joint outcome', 'Target persona for the joint pitch', 'One-sentence co-sell pitch'],
+      },
+      {
+        title: 'Ideal Customer Profile',
+        body: 'Who benefits most from the joint solution — firmographic and technographic fit.',
+        bullets: ['Industry verticals', 'Revenue range / company size', 'Tech stack indicators', 'Buying team / champion profile'],
+      },
+      {
+        title: 'Joint Use Cases',
+        body: '3–5 use cases that are only possible (or significantly better) with the combined solution.',
+        bullets: ['UC1: Real-time personalisation — partner CDP + T1 rule engine', 'UC2: Loyalty + CRM triggered campaigns via partner CEP', 'UC3: Partner eCommerce connector + T1 promotions'],
+      },
+      {
+        title: 'Technical Integration Guide',
+        body: 'How the integration works — data flows, authentication, and required configuration.',
+        bullets: ['Integration architecture diagram', 'Event flow: partner → T1 → partner', 'Required T1 endpoints + partner endpoints'],
+      },
+      {
+        title: 'GTM Playbook',
+        body: 'Co-sell motion: how to identify joint opportunities, engage partner AEs, and progress deals.',
+        bullets: ['Deal registration process', 'Co-sell qualification questions', 'Escalation path for joint deals', 'Referral fee / incentive structure (if applicable)'],
+      },
+      {
+        title: 'Enablement Plan',
+        body: 'Training modules, certification, and battle card for partner sales and technical teams.',
+        bullets: ['Partner sales training (2-hour session)', 'Technical integration workshop', 'Battle card: T1 + partner vs alternatives', 'Certification criteria'],
+      },
+      {
+        title: 'Marketing Co-activities',
+        body: 'Planned content, events, and case studies to drive awareness of the joint solution.',
+        bullets: ['Joint blog post / solution brief', 'Webinar or partner event', 'Joint customer case study (pipeline)'],
+      },
+      {
+        title: 'Next Steps',
+        body: 'Partner enablement kick-off date, QBR cadence, and owner matrix.',
+        bullets: [],
+      },
+    ],
+  },
+];
+
+// ── Render grid ────────────────────────────────────────────
+function renderGrid(filter = 'all') {
+  const grid = document.getElementById('templatesGrid');
+  const filtered = filter === 'all' ? TEMPLATES : TEMPLATES.filter(t => t.type === filter);
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="empty-msg">No templates match this filter.</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(t => {
+    const preview = t.sections.slice(0, 4);
+    const more = t.sections.length - 4;
+    return `
+    <div class="tpl-card" data-key="${t.key}">
+      <div class="tpl-card-top">
+        <div class="tpl-icon-wrap ${t.type}">${t.icon}</div>
+        <span class="tpl-badge ${t.type}">${t.typeLabel}</span>
+      </div>
+      <div class="tpl-name">${t.name}</div>
+      <div class="tpl-desc">${t.desc}</div>
+      <div class="tpl-sections-preview">
+        ${preview.map(s => `<div class="tpl-section-tag">${s.title}</div>`).join('')}
+        ${more > 0 ? `<div class="tpl-section-more">+ ${more} more sections</div>` : ''}
+      </div>
+      <div class="tpl-footer">
+        <span class="tpl-count">${t.sections.length} sections</span>
+        <button class="btn-view" onclick="openPanel('${t.key}')">View structure</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Filter ─────────────────────────────────────────────────
+function filterCards(btn) {
+  document.querySelectorAll('#filterBar .pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid(btn.dataset.filter);
+}
+
+// ── Panel ──────────────────────────────────────────────────
+function openPanel(key) {
+  const t = TEMPLATES.find(x => x.key === key);
+  if (!t) return;
+
+  // Header
+  document.getElementById('panelHeader').innerHTML = `
+    <div class="panel-icon-wrap ${t.type}">${t.icon}</div>
+    <div class="panel-header-text">
+      <div class="panel-title">${t.name}</div>
+      <div class="panel-subtitle">${t.desc}</div>
+    </div>
+    <button class="panel-close" onclick="closePanel()" aria-label="Close">✕</button>
+  `;
+
+  // Body
+  const tocHtml = t.sections.map((s, i) => `
+    <div class="toc-item">
+      <div class="toc-gutter">
+        <div class="toc-num">${i + 1}</div>
+        <div class="toc-line"></div>
+      </div>
+      <div class="toc-content">
+        <div class="toc-title">${s.title}</div>
+        ${s.body ? `<div class="toc-body">${s.body}</div>` : ''}
+        ${s.bullets && s.bullets.length ? `<ul class="toc-bullets">${s.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : ''}
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('panelBody').innerHTML = `
+    <div class="panel-note">
+      <span class="panel-note-icon">💡</span>
+      <span>The agent uses this structure as a <strong>starting proposal</strong>. Before writing, it will suggest a tailored table of contents based on your inputs — you can validate, add, reorder or remove any sections before generation begins.</span>
+    </div>
+    <div class="panel-section-label">Table of Contents</div>
+    <div class="toc-list">${tocHtml}</div>
+    <div class="panel-meta-row">
+      <div class="panel-meta">
+        <div class="panel-meta-label">Category</div>
+        <div class="panel-meta-value">${t.typeLabel}</div>
+      </div>
+      <div class="panel-meta">
+        <div class="panel-meta-label">Audience</div>
+        <div class="panel-meta-value">${t.audience}</div>
+      </div>
+      <div class="panel-meta">
+        <div class="panel-meta-label">Typical Use</div>
+        <div class="panel-meta-value">${t.duration}</div>
+      </div>
+    </div>
+    ${t.link ? `<div style="margin-top:16px"><a href="${t.link}" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#0161ff;color:#fff;border-radius:9px;padding:9px 18px;font-size:13px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open full document</a></div>` : ''}
+  `;
+
+  document.getElementById('panelBackdrop').classList.add('open');
+  document.getElementById('detailPanel').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePanel() {
+  document.getElementById('panelBackdrop').classList.remove('open');
+  document.getElementById('detailPanel').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+// ── Init ───────────────────────────────────────────────────
+renderGrid();
+</script>
+</body>
+</html>

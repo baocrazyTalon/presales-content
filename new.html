@@ -1,0 +1,1841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Presentation — Talon.One Presales Hub</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue:  #0161ff;
+      --navy:  #02043b;
+      --dark:  #1a1f36;
+      --gray:  #555;
+      --mid:   #888;
+      --border:#e2e6f0;
+      --bg:    #f4f6fb;
+      --white: #fff;
+      --radius:10px;
+      --font:  -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    body { font-family: var(--font); background: var(--bg); color: var(--dark); min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      background: var(--navy); color: #fff;
+      display: flex; align-items: center; gap: 16px;
+      padding: 0 28px; height: 56px; flex-shrink: 0;
+      border-bottom: 2px solid var(--blue);
+    }
+    .topbar img { height: 20px; filter: brightness(0) invert(1); }
+    .topbar .sep { width: 1px; height: 22px; background: rgba(255,255,255,.2); }
+    .topbar span { font-size: 14px; font-weight: 600; flex: 1; }
+    .topbar a { color: rgba(255,255,255,.65); font-size: 13px; text-decoration: none; }
+    .topbar a:hover { color: #fff; }
+
+    /* ── LAYOUT ── */
+    .layout { display: flex; flex: 1; overflow: hidden; min-height: 0; }
+
+    /* ── LEFT PANEL — Document Brief ── */
+    .brief-panel {
+      width: 320px; min-width: 270px; flex-shrink: 0;
+      background: var(--white); border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .brief-header {
+      padding: 18px 20px 13px; border-bottom: 1px solid var(--border); background: #fafbfd;
+    }
+    .brief-header h2 { font-size: 10.5px; font-weight: 700; color: var(--mid); text-transform: uppercase; letter-spacing: .8px; }
+    .brief-header p  { font-size: 12px; color: var(--mid); margin-top: 3px; }
+    .brief-scroll { overflow-y: auto; flex: 1; padding: 16px 18px; display: flex; flex-direction: column; gap: 18px; }
+    .brief-sec-title { font-size: 10px; font-weight: 700; color: var(--mid); text-transform: uppercase; letter-spacing: .7px; margin-bottom: 8px; }
+
+    .brief-template {
+      border: 2px solid var(--border); border-radius: var(--radius);
+      padding: 14px; background: var(--white); transition: .2s;
+    }
+    .brief-template.active { border-color: var(--blue); background: #f8faff; }
+    .bt-top { display: flex; align-items: flex-start; gap: 9px; }
+    .bt-icon { font-size: 24px; flex-shrink: 0; }
+    .bt-name { font-size: 13px; font-weight: 700; color: var(--navy); }
+    .bt-desc { font-size: 11px; color: var(--mid); margin-top: 3px; line-height: 1.4; }
+    .bt-tag { font-size: 9.5px; font-weight: 700; padding: 2px 7px; border-radius: 99px; margin-left: auto; flex-shrink: 0; height: fit-content; }
+    .bt-tag.client     { background: #e8f0ff; color: var(--blue); }
+    .bt-tag.competition{ background: #f5f3ff; color: #5b21b6; }
+    .bt-tag.partner    { background: #f0fdf4; color: #15803d; }
+    .bt-sections { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; }
+    .bt-row { display: flex; align-items: center; gap: 7px; font-size: 11px; color: var(--gray); }
+    .bt-row::before { content: ''; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--border); flex-shrink: 0; transition: .2s; }
+    .brief-template.active .bt-row::before { background: var(--blue); }
+
+    .brief-signals { display: flex; flex-direction: column; gap: 5px; }
+    .brief-signal { display: flex; align-items: flex-start; gap: 7px; background: #f8faff; border: 1px solid var(--border); border-radius: 7px; padding: 7px 9px; }
+    .brief-signal.active { border-color: #c7d9ff; }
+    .sig-label { color: var(--mid); font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; min-width: 54px; flex-shrink: 0; margin-top: 2px; }
+    .sig-val { font-size: 11.5px; color: var(--mid); font-style: italic; line-height: 1.4; }
+    .brief-signal.active .sig-val { color: var(--dark); font-style: normal; }
+
+    .tip-box {
+      background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px;
+      padding: 10px 12px; font-size: 11px; color: #78350f; line-height: 1.55;
+    }
+    .tip-box strong { color: #92400e; }
+
+    /* ── RIGHT PANEL ── */
+    .form-panel { flex: 1; overflow-y: auto; display: flex; justify-content: center; padding: 36px 40px; }
+    .form-inner { width: 100%; max-width: 680px; display: flex; flex-direction: column; gap: 0; }
+
+    /* Progress + steps */
+    .progress-bar { height: 3px; background: var(--border); border-radius: 2px; margin-bottom: 28px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--blue); border-radius: 2px; transition: width .3s ease; }
+    .steps-bar { display: flex; align-items: center; margin-bottom: 36px; overflow-x: auto; }
+    .step-item { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+    .step-bubble {
+      width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: var(--mid); flex-shrink: 0; transition: .2s;
+    }
+    .step-bubble.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .step-bubble.done   { background: #e8f0ff; border-color: var(--blue); color: var(--blue); }
+    .step-label { font-size: 11.5px; color: var(--mid); white-space: nowrap; }
+    .step-label.active { color: var(--navy); font-weight: 600; }
+    .step-connector { flex: 1; height: 2px; background: var(--border); margin: 0 6px; min-width: 16px; }
+    .step-connector.done { background: var(--blue); }
+
+    /* Step panes */
+    .step-pane { display: none; flex-direction: column; gap: 24px; }
+    .step-pane.active { display: flex; }
+    .step-pane h3 { font-size: 22px; font-weight: 700; color: var(--navy); letter-spacing: -.4px; }
+    .step-pane .step-sub { font-size: 13px; color: var(--mid); margin-top: -16px; line-height: 1.6; }
+
+    /* Purpose (goal) cards — 2-col grid */
+    .purpose-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .purpose-card {
+      border: 2px solid var(--border); border-radius: var(--radius);
+      padding: 16px 14px; cursor: pointer;
+      transition: border-color .15s, box-shadow .15s, background .15s;
+      background: var(--white);
+    }
+    .purpose-card:hover { border-color: var(--blue); box-shadow: 0 2px 12px rgba(1,97,255,.1); }
+    .purpose-card.selected { border-color: var(--blue); background: #f0f5ff; }
+    .pc-icon { font-size: 24px; margin-bottom: 8px; display: block; }
+    .pc-title { font-size: 13.5px; font-weight: 700; color: var(--navy); }
+    .purpose-card.selected .pc-title { color: var(--blue); }
+    .pc-desc { font-size: 11.5px; color: var(--mid); margin-top: 4px; line-height: 1.45; }
+    .pc-audience { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+    .pc-badge { font-size: 10px; padding: 2px 7px; border-radius: 99px; border: 1px solid var(--border); background: #f4f6fb; color: var(--gray); }
+    .purpose-card.selected .pc-badge { background: #dce9ff; border-color: #afc6ff; color: var(--blue); }
+
+    /* Role chips */
+    .chips-wrap { display: flex; flex-wrap: wrap; gap: 9px; }
+    .role-chip {
+      display: flex; align-items: center; gap: 9px; padding: 10px 14px;
+      border: 2px solid var(--border); border-radius: 10px;
+      cursor: pointer; user-select: none; transition: .13s; background: var(--white);
+    }
+    .role-chip:hover { border-color: var(--blue); }
+    .role-chip.selected { border-color: var(--blue); background: #f0f5ff; }
+    .rc-icon { font-size: 18px; flex-shrink: 0; }
+    .rc-name { font-size: 12.5px; font-weight: 700; color: var(--navy); }
+    .rc-sub  { font-size: 10.5px; color: var(--mid); margin-top: 1px; }
+    .role-chip.selected .rc-name { color: var(--blue); }
+
+    /* Time chips */
+    .time-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .time-chip {
+      padding: 8px 18px; border: 2px solid var(--border); border-radius: 99px;
+      font-size: 13px; font-weight: 600; color: var(--gray);
+      cursor: pointer; background: var(--white); transition: .13s; user-select: none;
+    }
+    .time-chip:hover { border-color: var(--blue); color: var(--blue); }
+    .time-chip.selected { border-color: var(--blue); background: var(--blue); color: #fff; }
+
+    /* Topic chips */
+    .topic-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+    .topic-chip {
+      padding: 6px 13px; border: 1.5px solid var(--border); border-radius: 99px;
+      font-size: 12px; font-weight: 500; color: var(--gray);
+      cursor: pointer; background: var(--white); transition: .12s; user-select: none;
+    }
+    .topic-chip:hover { border-color: var(--blue); color: var(--blue); }
+    .topic-chip.selected { border-color: var(--blue); background: #f0f5ff; color: var(--blue); font-weight: 600; }
+    .topic-chip.selected::before { content: '✓ '; }
+
+    /* Form fields */
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label { font-size: 12.5px; font-weight: 600; color: var(--dark); }
+    .field label span { color: var(--blue); }
+    .field input, .field select, .field textarea {
+      border: 1.5px solid var(--border); border-radius: 8px;
+      padding: 10px 13px; font-size: 14px; font-family: var(--font);
+      color: var(--dark); background: var(--white); outline: none; transition: border-color .15s;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--blue); }
+    .field textarea { resize: vertical; min-height: 200px; }
+    .field .hint { font-size: 11px; color: var(--mid); }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* Notes sources */
+    .notes-sources { display: flex; flex-wrap: wrap; gap: 6px; }
+    .source-pill {
+      display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600;
+      padding: 5px 11px; border-radius: 99px; cursor: pointer;
+      border: 1.5px solid var(--border); background: var(--white);
+      color: var(--gray); transition: .12s; user-select: none;
+    }
+    .source-pill input { display: none; }
+    .source-pill:hover { border-color: var(--blue); color: var(--blue); }
+    .source-pill.active { border-color: var(--blue); background: #f0f5ff; color: var(--blue); }
+
+    /* Note examples */
+    .note-examples { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .note-eg {
+      font-size: 11px; color: var(--blue); cursor: pointer;
+      padding: 2px 9px; border-radius: 6px; background: #f0f5ff; border: 1px solid #c7d9ff;
+    }
+    .note-eg:hover { background: #dbe9ff; }
+
+    /* Coach tip */
+    .coach-tip {
+      display: flex; gap: 10px; align-items: flex-start;
+      background: #f0f7ff; border: 1px solid #c7d9ff; border-radius: 9px;
+      padding: 12px 14px; font-size: 12px; color: #1e40af; line-height: 1.55;
+    }
+    .coach-tip .tip-icon { font-size: 17px; flex-shrink: 0; margin-top: -1px; }
+
+    /* Section divider */
+    .section-divider {
+      display: flex; align-items: center; gap: 12px;
+      color: var(--mid); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+    }
+    .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* Agent log */
+    .agent-log-card {
+      background: var(--navy); border-radius: var(--radius);
+      padding: 20px 22px; color: #c8d4ea;
+      font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px;
+      line-height: 1.7; max-height: 260px; overflow-y: auto; display: none;
+    }
+    .agent-log-card.visible { display: block; }
+    .log-line.success { color: #4ade80; }
+    .log-line.error   { color: #f87171; }
+
+    /* Result card */
+    .result-card { border: 2px solid var(--border); border-radius: var(--radius); padding: 28px; text-align: center; display: none; }
+    .result-card.visible { display: block; }
+    .result-card .result-icon { font-size: 40px; margin-bottom: 12px; }
+    .result-card h3 { font-size: 18px; font-weight: 700; color: var(--navy); }
+    .result-card p  { font-size: 13px; color: var(--mid); margin-top: 6px; }
+    .result-card .result-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--blue); color: #fff; text-decoration: none;
+      border-radius: 8px; padding: 11px 22px; font-size: 14px; font-weight: 600;
+      margin-top: 18px; transition: opacity .15s;
+    }
+    .result-card .result-btn:hover { opacity: .88; }
+
+    /* ── Pipeline progress tracker ───────────────────────────── */
+    .pipeline-wrap {
+      background: #f8f9fc; border: 1.5px solid var(--border);
+      border-radius: var(--radius); padding: 28px 20px 20px;
+      margin-bottom: 20px;
+    }
+    .pipeline-track {
+      display: flex; align-items: flex-start; justify-content: center;
+    }
+    .pipeline-stage {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 7px; min-width: 72px;
+    }
+    .ps-bubble {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: #e5e7eb; display: flex; align-items: center;
+      justify-content: center; font-size: 20px; position: relative;
+      transition: background .35s, box-shadow .35s;
+    }
+    .pipeline-stage.active .ps-bubble {
+      background: var(--blue);
+      box-shadow: 0 0 0 5px rgba(1,97,255,.16);
+      animation: ps-pulse 1.6s ease-in-out infinite;
+    }
+    .pipeline-stage.done .ps-bubble {
+      background: #059669; font-size: 18px;
+    }
+    .pipeline-stage.done .ps-bubble::after {
+      content: '✓'; position: absolute; bottom: -2px; right: -3px;
+      background: #059669; color: #fff; font-size: 10px; font-weight: 700;
+      border-radius: 50%; width: 16px; height: 16px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1.5px solid #fff;
+    }
+    .ps-label {
+      font-size: 10.5px; color: var(--mid); text-align: center;
+      line-height: 1.35; font-weight: 500;
+    }
+    .pipeline-stage.active .ps-label { color: var(--blue); font-weight: 700; }
+    .pipeline-stage.done   .ps-label { color: #059669; }
+    .ps-connector {
+      flex: 1; height: 2px; background: #e5e7eb;
+      margin-top: 23px; transition: background .5s; min-width: 12px;
+    }
+    .ps-connector.done { background: #059669; }
+    @keyframes ps-pulse {
+      0%, 100% { box-shadow: 0 0 0 5px rgba(1,97,255,.16); }
+      50%       { box-shadow: 0 0 0 10px rgba(1,97,255,.05); }
+    }
+    .pipeline-status {
+      text-align: center; font-size: 12.5px; color: var(--mid);
+      margin-top: 16px; min-height: 18px; font-style: italic;
+    }
+
+    /* Footer */
+    .form-footer {
+      display: flex; justify-content: flex-end; align-items: center;
+      gap: 10px; padding-top: 24px; border-top: 1px solid var(--border); margin-top: 12px;
+    }
+    .btn { padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: opacity .15s; }
+    .btn-primary { background: var(--blue); color: #fff; }
+    .btn-primary:hover { opacity: .88; }
+    .btn-primary:disabled { opacity: .45; cursor: default; }
+    .btn-ghost { background: transparent; border: 1.5px solid var(--border); color: var(--dark); }
+    .btn-ghost:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* Status row */
+    .status-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--mid); }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; flex-shrink: 0; }
+    .dot.offline { background: #ef4444; }
+
+    /* ── BRAND IDENTITY STEP ──────────────────────────────── */
+    .brand-ai-banner {
+      display: flex; align-items: flex-start; gap: 11px;
+      background: linear-gradient(135deg, #f0f5ff 0%, #e8f0ff 100%);
+      border: 1px solid #c7d9ff; border-radius: var(--radius);
+      padding: 13px 16px; margin-bottom: 22px;
+    }
+    .bab-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .bab-text { font-size: 12.5px; color: var(--navy); line-height: 1.55; }
+    .bab-text strong { color: var(--blue); }
+    .brand-analyse-row { display: flex; gap: 8px; }
+    .brand-analyse-row input { flex: 1; }
+    .btn-analyse {
+      padding: 10px 16px; background: var(--blue); color: #fff;
+      border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600;
+      cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: opacity .15s;
+    }
+    .btn-analyse:hover { opacity: .88; }
+    .btn-analyse:disabled { opacity: .45; cursor: default; }
+    .brand-status { font-size: 11.5px; margin-top: 5px; min-height: 18px; }
+    .brand-colors-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .color-input-group { display: flex; align-items: center; gap: 8px; }
+    .color-input-group input[type="color"] {
+      width: 44px; height: 40px; border: 1.5px solid var(--border);
+      border-radius: 8px; cursor: pointer; padding: 3px; background: #fff; flex-shrink: 0;
+    }
+    .color-hex {
+      flex: 1; padding: 10px 12px; border: 1.5px solid var(--border);
+      border-radius: 8px; font-size: 13px; font-family: 'SF Mono', 'Fira Code', monospace;
+      color: var(--dark); outline: none; transition: border-color .15s;
+    }
+    .color-hex:focus { border-color: var(--blue); }
+    .logo-preview-card {
+      display: none; border: 1.5px solid #c7d9ff; border-radius: 9px;
+      background: #f7f9ff; padding: 14px 16px; margin-bottom: 8px;
+      align-items: center; gap: 14px;
+    }
+    .logo-preview-card.visible { display: flex; }
+    .logo-preview-card img { max-height: 56px; max-width: 160px; object-fit: contain; flex-shrink: 0; }
+    .lpc-meta { flex: 1; min-width: 0; }
+    .lpc-badge { font-size: 10px; font-weight: 700; color: var(--blue); background: #e8f0ff;
+      padding: 2px 8px; border-radius: 99px; display: inline-block; margin-bottom: 5px; }
+    .lpc-url { font-size: 10.5px; color: var(--mid); white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis; max-width: 240px; }
+    .lpc-err { font-size: 11.5px; color: #d97706; }
+    .lpc-clear { background: none; border: none; cursor: pointer; font-size: 16px;
+      color: var(--mid); padding: 4px; border-radius: 5px; flex-shrink: 0; }
+    .lpc-clear:hover { color: #c0392b; background: #fde8e8; }
+    .logo-upload-zone {
+      border: 2px dashed var(--border); border-radius: 8px;
+      padding: 14px; text-align: center; cursor: pointer;
+      transition: border-color .15s, background .15s;
+      min-height: 52px; display: flex; align-items: center; justify-content: center;
+    }
+    .logo-upload-zone:hover { border-color: var(--blue); background: #f7f9ff; }
+    .lz-hint { font-size: 12.5px; color: var(--mid); }
+
+    /* ── DEMO SEARCH ───────────────────────────────────── */
+    .demo-search-bar {
+      background: linear-gradient(135deg, #f0f5ff 0%, #e8f0ff 100%);
+      border: 1.5px solid #c7d9ff; border-radius: var(--radius);
+      padding: 13px 16px 14px; margin-bottom: 22px;
+    }
+    .dsb-heading {
+      font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .7px; color: var(--blue);
+      display: flex; align-items: center; gap: 6px; margin-bottom: 10px;
+    }
+    .dsb-row { position: relative; }
+    .dsb-input {
+      width: 100%; padding: 9px 36px 9px 36px;
+      border: 1.5px solid #c7d9ff; border-radius: 8px;
+      font-size: 13px; font-family: var(--font);
+      background: #fff; outline: none; color: var(--dark);
+      transition: border-color .15s;
+    }
+    .dsb-input:focus { border-color: var(--blue); }
+    .dsb-search-icon {
+      position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+      color: var(--mid); pointer-events: none; line-height: 1;
+    }
+    .dsb-x {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; color: var(--mid);
+      font-size: 15px; display: none; line-height: 1; padding: 2px;
+    }
+    .dsb-dropdown {
+      position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+      background: #fff; border: 1.5px solid #c7d9ff; border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(1,97,255,.12);
+      z-index: 999; max-height: 230px; overflow-y: auto; display: none;
+    }
+    .dsb-dropdown.open { display: block; }
+    .dsb-option {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; cursor: pointer; transition: background .1s;
+      border-bottom: 1px solid var(--border);
+    }
+    .dsb-option:last-child { border-bottom: none; }
+    .dsb-option:hover, .dsb-option:focus { background: #f0f5ff; outline: none; }
+    .dsb-logo {
+      width: 30px; height: 30px; border-radius: 6px; flex-shrink: 0;
+      object-fit: contain; background: #f4f6fb; border: 1px solid var(--border);
+    }
+    .dsb-logo-placeholder {
+      width: 30px; height: 30px; border-radius: 6px; flex-shrink: 0;
+      background: #e8f0ff; border: 1px solid #c7d9ff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+    }
+    .dsb-option-name { font-size: 13px; font-weight: 600; color: var(--navy); }
+    .dsb-option-sub  { font-size: 11px; color: var(--mid); margin-top: 1px; }
+    .dsb-empty { padding: 14px 12px; font-size: 12px; color: var(--mid); text-align: center; }
+    .dsb-selected {
+      display: none; align-items: center; gap: 8px; margin-top: 10px;
+      background: #fff; border: 1.5px solid #c7d9ff; border-radius: 8px;
+      padding: 8px 11px;
+    }
+    .dsb-selected.visible { display: flex; }
+    .dsb-sel-logo { width: 24px; height: 24px; border-radius: 5px; object-fit: contain; flex-shrink: 0; }
+    .dsb-sel-name { font-size: 13px; font-weight: 700; color: var(--navy); }
+    .dsb-sel-sub  { font-size: 11px; color: var(--mid); }
+    .dsb-sel-badge {
+      margin-left: auto; font-size: 10px; font-weight: 700; padding: 2px 8px;
+      background: #e0f7ea; color: #065f46; border-radius: 99px; white-space: nowrap; flex-shrink: 0;
+    }
+    .dsb-sel-clear {
+      background: none; border: none; cursor: pointer; color: var(--mid);
+      font-size: 15px; flex-shrink: 0; padding: 2px; line-height: 1;
+    }
+    .dsb-sel-clear:hover { color: #c0392b; }
+
+    @media (max-width: 900px) {
+      .brief-panel { display: none; }
+      .form-panel { padding: 24px 20px; }
+      .purpose-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) { .row-2 { grid-template-columns: 1fr; } .brand-colors-row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<!-- ── TOP BAR ── -->
+<div class="topbar">
+  <img src="https://a.storyblok.com/f/140059/118x24/886a9d9fc3/rebrand-talon-one-logo-navy.svg" alt="Talon.One" />
+  <div class="sep"></div>
+  <span>New Presentation</span>
+  <a href="index.html">← Back to Hub</a>
+</div>
+
+<div class="layout">
+
+  <!-- ── LEFT: Document Brief ── -->
+  <div class="brief-panel">
+    <div class="brief-header">
+      <h2>Document Brief</h2>
+      <p>Updates as you answer each question</p>
+    </div>
+    <div class="brief-scroll">
+
+      <div>
+        <div class="brief-sec-title">Recommended Template</div>
+        <div class="brief-template" id="briefTemplate">
+          <div class="bt-top">
+            <div class="bt-icon" id="bt-icon">💡</div>
+            <div>
+              <div class="bt-name" id="bt-name">Select a meeting goal →</div>
+              <div class="bt-desc" id="bt-desc">Your answer on the right determines the document structure and tone automatically.</div>
+            </div>
+            <div class="bt-tag client" id="bt-tag" style="display:none;"></div>
+          </div>
+          <div class="bt-sections" id="bt-sections"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="brief-sec-title">Captured Signals</div>
+        <div class="brief-signals">
+          <div class="brief-signal" id="sig-company"><span class="sig-label">Company</span><span class="sig-val">Not set yet</span></div>
+          <div class="brief-signal" id="sig-audience"><span class="sig-label">Audience</span><span class="sig-val">Not set yet</span></div>
+          <div class="brief-signal" id="sig-time"><span class="sig-label">Duration</span><span class="sig-val">Not set yet</span></div>
+          <div class="brief-signal" id="sig-stage"><span class="sig-label">Stage</span><span class="sig-val">Not set yet</span></div>
+          <div class="brief-signal" id="sig-competitor"><span class="sig-label">Competitor</span><span class="sig-val">None yet</span></div>
+          <div class="brief-signal" id="sig-topics"><span class="sig-label">Topics</span><span class="sig-val">Not set yet</span></div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>💡 Pro tip:</strong> The more specific you are, the more personalised the output. A 30-min C-Suite pitch looks very different from a 90-min technical session with engineers.
+      </div>
+
+    </div>
+  </div><!-- /brief-panel -->
+
+  <!-- ── (unused placeholder kept for structure) ── -->
+  <div style="display:none" id="templateList">
+
+      <div class="tmpl-card selected" data-id="sales-pitch" data-type="client" onclick="selectTemplate(this)">
+        <div class="tmpl-top">
+          <div class="tmpl-icon">🎯</div>
+          <div>
+            <div class="tmpl-hdr">Sales Pitch</div>
+            <div class="tmpl-desc">Executive-facing overview: challenge, solution, ROI preview, and why Talon.One wins. Best for first meetings with business stakeholders.</div>
+          </div>
+          <div class="tmpl-tag client">Client</div>
+        </div>
+        <div class="tmpl-sections">
+          <span class="tmpl-section-pill">Business Context</span>
+          <span class="tmpl-section-pill">Key Challenges</span>
+          <span class="tmpl-section-pill">Solution</span>
+          <span class="tmpl-section-pill">Why T1 Wins</span>
+          <span class="tmpl-section-pill">Proof</span>
+          <span class="tmpl-section-pill">ROI</span>
+          <span class="tmpl-section-pill">Next Steps</span>
+        </div>
+      </div>
+
+      <div class="tmpl-card" data-id="technical-integration" data-type="client" onclick="selectTemplate(this)">
+        <div class="tmpl-top">
+          <div class="tmpl-icon">⚙️</div>
+          <div>
+            <div class="tmpl-hdr">Technical Integration</div>
+            <div class="tmpl-desc">Deep dive for engineering teams: MACH architecture, API flows, environments, data models, and a phased implementation plan.</div>
+          </div>
+          <div class="tmpl-tag client">Client</div>
+        </div>
+        <div class="tmpl-sections">
+          <span class="tmpl-section-pill">Architecture</span>
+          <span class="tmpl-section-pill">API Flows</span>
+          <span class="tmpl-section-pill">Environments</span>
+          <span class="tmpl-section-pill">Key APIs</span>
+          <span class="tmpl-section-pill">Security</span>
+          <span class="tmpl-section-pill">Timeline</span>
+        </div>
+      </div>
+
+      <div class="tmpl-card" data-id="business-case" data-type="client" onclick="selectTemplate(this)">
+        <div class="tmpl-top">
+          <div class="tmpl-icon">📊</div>
+          <div>
+            <div class="tmpl-hdr">Business Case / ROI</div>
+            <div class="tmpl-desc">Procurement and finance-facing document: current state analysis, TCO comparison, ROI model, and risk mitigation. Best for late-stage deals.</div>
+          </div>
+          <div class="tmpl-tag client">Client</div>
+        </div>
+        <div class="tmpl-sections">
+          <span class="tmpl-section-pill">Exec Summary</span>
+          <span class="tmpl-section-pill">Current State</span>
+          <span class="tmpl-section-pill">ROI Model</span>
+          <span class="tmpl-section-pill">TCO</span>
+          <span class="tmpl-section-pill">Risk Plan</span>
+        </div>
+      </div>
+
+      <div class="tmpl-card" data-id="battle-card" data-type="competition" onclick="selectTemplate(this)">
+        <div class="tmpl-top">
+          <div class="tmpl-icon">⚔️</div>
+          <div>
+            <div class="tmpl-hdr">Competitive Battle Card</div>
+            <div class="tmpl-desc">Head-to-head comparison document: feature matrix, kill shots, and winning objection responses for when there's a named competitor to displace.</div>
+          </div>
+          <div class="tmpl-tag competition">Competition</div>
+        </div>
+        <div class="tmpl-sections">
+          <span class="tmpl-section-pill">Feature Matrix</span>
+          <span class="tmpl-section-pill">Kill Shots</span>
+          <span class="tmpl-section-pill">Tech Advantages</span>
+          <span class="tmpl-section-pill">Pricing</span>
+          <span class="tmpl-section-pill">References</span>
+        </div>
+      </div>
+
+      <div class="tmpl-card" data-id="poc-scope" data-type="client" onclick="selectTemplate(this)">
+        <div class="tmpl-top">
+          <div class="tmpl-icon">🔬</div>
+          <div>
+            <div class="tmpl-hdr">POC / Pilot Scope</div>
+            <div class="tmpl-desc">Technical scoping document for a proof-of-concept or pilot: use cases to validate, success criteria, integration scope, timeline, and kick-off checklist.</div>
+          </div>
+          <div class="tmpl-tag client">Client</div>
+        </div>
+        <div class="tmpl-sections">
+          <span class="tmpl-section-pill">Objectives</span>
+          <span class="tmpl-section-pill">Use Cases</span>
+          <span class="tmpl-section-pill">Success KPIs</span>
+          <span class="tmpl-section-pill">Tech Scope</span>
+          <span class="tmpl-section-pill">Kick-off</span>
+        </div>
+      </div>
+
+      <div class="tmpl-card" data-id="partner-gtm" data-type="partner" onclick="selectTemplate(this)">
+        <div class="tmpl-top">
+          <div class="tmpl-icon">🤝</div>
+          <div>
+            <div class="tmpl-hdr">Partner GTM</div>
+            <div class="tmpl-desc">Go-to-market document for technology or channel partners: joint value prop, ideal customer profile, co-sell playbook, and enablement resources.</div>
+          </div>
+          <div class="tmpl-tag partner">Partner</div>
+        </div>
+        <div class="tmpl-sections">
+          <span class="tmpl-section-pill">Joint Value Prop</span>
+          <span class="tmpl-section-pill">ICP</span>
+          <span class="tmpl-section-pill">Co-Sell Playbook</span>
+          <span class="tmpl-section-pill">Enablement</span>
+        </div>
+      </div>
+
+  </div><!-- /brief-panel (template-list hidden placeholder closed here) -->
+
+  <!-- ── RIGHT: Smart Wizard Form ── -->
+  <div class="form-panel">
+    <div class="form-inner">
+
+      <!-- ── DEMO ACCOUNT SEARCH ── -->
+      <div class="demo-search-bar" id="demoSearchBar">
+        <div class="dsb-heading">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Load Demo Account
+        </div>
+        <div class="dsb-row">
+          <span class="dsb-search-icon">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </span>
+          <input id="dsbInput" class="dsb-input" type="text"
+            placeholder="Type 1–2 letters to find a demo (e.g. \"st\" → Starbucks)…"
+            autocomplete="off"
+            oninput="dsbOnInput(this.value)"
+            onfocus="dsbOnFocus()"
+            onkeydown="dsbOnKeydown(event)" />
+          <button class="dsb-x" id="dsbX" onclick="dsbClearInput()" tabindex="-1">✕</button>
+          <div class="dsb-dropdown" id="dsbDropdown" role="listbox"></div>
+        </div>
+        <div class="dsb-selected" id="dsbSelected">
+          <img class="dsb-sel-logo" id="dsbSelLogo" src="" alt="" />
+          <div style="flex:1;min-width:0;">
+            <div class="dsb-sel-name" id="dsbSelName"></div>
+            <div class="dsb-sel-sub" id="dsbSelSub"></div>
+          </div>
+          <span class="dsb-sel-badge">✓ Loaded</span>
+          <button class="dsb-sel-clear" title="Clear demo" onclick="dsbClearSelection()">✕</button>
+        </div>
+      </div>
+
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:20%"></div></div>
+
+      <div class="steps-bar">
+        <div class="step-item"><div class="step-bubble active" id="b1">1</div><div class="step-label active" id="l1">Meeting Goal</div></div>
+        <div class="step-connector" id="c1"></div>
+        <div class="step-item"><div class="step-bubble" id="b2">2</div><div class="step-label" id="l2">Audience</div></div>
+        <div class="step-connector" id="c2"></div>
+        <div class="step-item"><div class="step-bubble" id="b3">3</div><div class="step-label" id="l3">Opportunity</div></div>
+        <div class="step-connector" id="c3"></div>
+        <div class="step-item"><div class="step-bubble" id="b4">4</div><div class="step-label" id="l4">Brand</div></div>
+        <div class="step-connector" id="c4"></div>
+        <div class="step-item"><div class="step-bubble" id="b5">5</div><div class="step-label" id="l5">Topics & Notes</div></div>
+        <div class="step-connector" id="c5"></div>
+        <div class="step-item"><div class="step-bubble" id="b6">6</div><div class="step-label" id="l6">Generate</div></div>
+      </div>
+
+      <!-- ── STEP 1: Meeting Goal ── -->
+      <div class="step-pane active" id="pane-1">
+        <h3>What kind of meeting is this?</h3>
+        <p class="step-sub">Your goal shapes the entire document — structure, depth, language, and call-to-action all change based on what you need to accomplish.</p>
+
+        <div class="purpose-grid">
+          <div class="purpose-card" data-purpose="first-pitch" onclick="selectPurpose(this)">
+            <span class="pc-icon">🎯</span>
+            <div class="pc-title">First Pitch / Discovery</div>
+            <div class="pc-desc">Introduce Talon.One, understand their pain points, and build a compelling value narrative for a new prospect.</div>
+            <div class="pc-audience">
+              <span class="pc-badge">CEO / CMO / CPO</span>
+              <span class="pc-badge">Head of Loyalty</span>
+              <span class="pc-badge">Marketing Lead</span>
+            </div>
+          </div>
+          <div class="purpose-card" data-purpose="technical" onclick="selectPurpose(this)">
+            <span class="pc-icon">⚙️</span>
+            <div class="pc-title">Technical Deep-Dive</div>
+            <div class="pc-desc">Walk through MACH architecture, API flows, data models, and integration patterns with an engineering audience.</div>
+            <div class="pc-audience">
+              <span class="pc-badge">CTO / VP Engineering</span>
+              <span class="pc-badge">Solution Architect</span>
+              <span class="pc-badge">Dev Team</span>
+            </div>
+          </div>
+          <div class="purpose-card" data-purpose="business-case" onclick="selectPurpose(this)">
+            <span class="pc-icon">📊</span>
+            <div class="pc-title">Business Case & ROI</div>
+            <div class="pc-desc">Justify the investment with a structured ROI model, current-state assessment, and clear financial impact for procurement sign-off.</div>
+            <div class="pc-audience">
+              <span class="pc-badge">CFO / Finance</span>
+              <span class="pc-badge">Procurement</span>
+              <span class="pc-badge">Executive Sponsor</span>
+            </div>
+          </div>
+          <div class="purpose-card" data-purpose="competitive" onclick="selectPurpose(this)">
+            <span class="pc-icon">⚔️</span>
+            <div class="pc-title">Competitive Evaluation</div>
+            <div class="pc-desc">Win a head-to-head against a named competitor with direct comparison, differentiators, kill shots, and proof points.</div>
+            <div class="pc-audience">
+              <span class="pc-badge">Evaluation Committee</span>
+              <span class="pc-badge">C-Suite</span>
+              <span class="pc-badge">Procurement</span>
+            </div>
+          </div>
+          <div class="purpose-card" data-purpose="poc" onclick="selectPurpose(this)">
+            <span class="pc-icon">🔬</span>
+            <div class="pc-title">POC / Pilot Scoping</div>
+            <div class="pc-desc">Align on proof-of-concept use cases, success criteria, integration scope, and a clear go/no-go timeline.</div>
+            <div class="pc-audience">
+              <span class="pc-badge">CTO / VP Engineering</span>
+              <span class="pc-badge">Dev Lead</span>
+              <span class="pc-badge">Project Manager</span>
+            </div>
+          </div>
+          <div class="purpose-card" data-purpose="partner" onclick="selectPurpose(this)">
+            <span class="pc-icon">🤝</span>
+            <div class="pc-title">Partner Alignment</div>
+            <div class="pc-desc">Co-sell planning, ICP alignment, joint use cases, and an enablement plan for a technology or implementation partner.</div>
+            <div class="pc-audience">
+              <span class="pc-badge">Partner Manager</span>
+              <span class="pc-badge">Alliance Lead</span>
+              <span class="pc-badge">Solutions Team</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="coach-tip">
+          <span class="tip-icon">💬</span>
+          <span>A CFO presentation emphasises ROI numbers and payback period. A CTO session goes deep on latency, API design, and data models. A battle card needs kill shots and objection handlers. Picking the right goal makes all the difference.</span>
+        </div>
+      </div>
+
+      <!-- ── STEP 2: Audience & Time ── -->
+      <div class="step-pane" id="pane-2">
+        <h3>Who's in the room, and how long do you have?</h3>
+        <p class="step-sub">The agent adapts tone, depth, and language based on the roles present. Mixed audiences get a document that opens with business outcomes and gradually deepens.</p>
+
+        <div class="field">
+          <label>Who will be in the meeting? <span>*</span></label>
+          <div style="font-size:11.5px;color:var(--mid);margin-bottom:6px;">Select all roles that apply — pick multiple if it's a mixed audience</div>
+          <div class="chips-wrap" id="roleChips">
+            <div class="role-chip" data-role="c-suite" onclick="toggleRole(this)">
+              <span class="rc-icon">👔</span>
+              <div><div class="rc-name">C-Suite</div><div class="rc-sub">CEO, CMO, CPO, CCO</div></div>
+            </div>
+            <div class="role-chip" data-role="marketing" onclick="toggleRole(this)">
+              <span class="rc-icon">🎯</span>
+              <div><div class="rc-name">Marketing / Loyalty</div><div class="rc-sub">Head of Loyalty, CRM, Growth</div></div>
+            </div>
+            <div class="role-chip" data-role="engineering" onclick="toggleRole(this)">
+              <span class="rc-icon">🔧</span>
+              <div><div class="rc-name">Engineering / CTO</div><div class="rc-sub">VP Eng, Architect, Dev Lead</div></div>
+            </div>
+            <div class="role-chip" data-role="finance" onclick="toggleRole(this)">
+              <span class="rc-icon">💰</span>
+              <div><div class="rc-name">Finance / Procurement</div><div class="rc-sub">CFO, Buyer, Vendor Manager</div></div>
+            </div>
+            <div class="role-chip" data-role="it-ops" onclick="toggleRole(this)">
+              <span class="rc-icon">🏗️</span>
+              <div><div class="rc-name">IT / Security</div><div class="rc-sub">InfoSec, Compliance, DevOps</div></div>
+            </div>
+            <div class="role-chip" data-role="partner" onclick="toggleRole(this)">
+              <span class="rc-icon">🤝</span>
+              <div><div class="rc-name">Partner / ISV Contact</div><div class="rc-sub">Alliance, SE, Solutions team</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>How long is the meeting?</label>
+          <div class="time-chips" id="timeChips">
+            <div class="time-chip" data-time="30" onclick="selectTime(this)">30 min</div>
+            <div class="time-chip" data-time="45" onclick="selectTime(this)">45 min</div>
+            <div class="time-chip selected" data-time="60" onclick="selectTime(this)">60 min</div>
+            <div class="time-chip" data-time="90" onclick="selectTime(this)">90 min</div>
+            <div class="time-chip" data-time="120+" onclick="selectTime(this)">2 h+</div>
+          </div>
+          <span class="hint">Shorter sessions → tighter executive-friendly document. Longer sessions → deeper technical coverage with appendices.</span>
+        </div>
+
+        <div class="coach-tip">
+          <span class="tip-icon">💬</span>
+          <span>For a 30-min C-Suite pitch: lead with the business problem, 1–2 slides on solution, ROI headline, and a clear ask. For a 90-min technical session: budget time for live demo and Q&amp;A — the document becomes a reference, not the presentation itself.</span>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: The Opportunity ── -->
+      <div class="step-pane" id="pane-3">
+        <h3>Tell me about the opportunity</h3>
+        <p class="step-sub">The more context you give, the more personalised the document. Company name, their goal, and any competitive context are the most impactful fields.</p>
+
+        <div class="field">
+          <label>Presentation name</label>
+          <input id="f-pres-name" type="text" placeholder="e.g. My Muscle Chef — Sales Pitch · July 2025" autocomplete="off" />
+          <span class="hint">Used as the document title and filename — leave blank to auto-generate from company name</span>
+        </div>
+
+        <div class="row-2">
+          <div class="field">
+            <label>Company name <span>*</span></label>
+            <input id="f-company" type="text" placeholder="e.g. Rustan Group" autocomplete="off"
+              oninput="setBrief('sig-company', this.value.trim())" />
+          </div>
+          <div class="field">
+            <label>Industry <span>*</span></label>
+            <select id="f-industry">
+              <option value="">Select industry…</option>
+              <option>Retail</option>
+              <option>QSR / Fast Casual</option>
+              <option>Meal Delivery</option>
+              <option>iGaming</option>
+              <option>Subscription / SaaS</option>
+              <option>Travel & Hospitality</option>
+              <option>Financial Services</option>
+              <option>eCommerce</option>
+              <option>Grocery</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>What is their main goal or pain point? <span>*</span></label>
+          <input id="f-usecase" type="text" placeholder="e.g. Replace Yotpo loyalty with a tiered programme, integrated with Braze, live by Q3" />
+          <span class="hint">Be specific — this becomes the core of the value narrative in the document</span>
+        </div>
+
+        <div class="row-2">
+          <div class="field">
+            <label>Deal / meeting stage</label>
+            <select id="f-stage" onchange="setBrief('sig-stage', this.value)">
+              <option value="">Select stage…</option>
+              <option>Initial Discovery</option>
+              <option>Technical Evaluation</option>
+              <option>POC / Pilot</option>
+              <option>Business Case / Negotiation</option>
+              <option>Closing</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Competitor to displace</label>
+            <input id="f-competitor" type="text" placeholder="e.g. Salesforce Loyalty, Yotpo…"
+              oninput="setBrief('sig-competitor', this.value.trim() || 'None')" />
+            <span class="hint">Leave blank if no incumbent — naming one unlocks kill shots</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Key integrations in their stack</label>
+          <input id="f-integrations" type="text" placeholder="e.g. Braze, Segment, Shopify, Salesforce" />
+          <span class="hint">Comma-separated — the agent highlights relevant Talon.One connectors for each</span>
+        </div>
+
+        <div class="coach-tip">
+          <span class="tip-icon">💬</span>
+          <span>Naming the competitor changes everything — it unlocks a direct comparison section, kill shots, and objection handlers. Even a rough guess ("something in Salesforce" or "their current custom-built system") gives the agent enough to work with.</span>
+        </div>
+      </div>
+
+      <!-- ── STEP 4: Brand Identity ── -->
+      <div class="step-pane" id="pane-4">
+        <h3>Brand identity</h3>
+        <p class="step-sub">Let AI extract the prospect's brand colours and logo from their website — the Document Engineer uses these to style the output in their visual identity. All fields are optional.</p>
+
+        <div class="brand-ai-banner">
+          <span class="bab-icon">🎨</span>
+          <div class="bab-text">
+            <strong>AI Brand Analyser</strong> — paste the prospect's website URL and click <strong>Analyse</strong>. The agent will detect primary colours and logo automatically. You can always adjust the results manually below.
+          </div>
+        </div>
+
+        <div class="row-2">
+          <div class="field">
+            <label>Brand name</label>
+            <input id="f-brand-name" type="text" placeholder="e.g. My Muscle Chef" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label>Country</label>
+            <select id="f-country"><option value="">Select country…</option></select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Website URL</label>
+          <div class="brand-analyse-row">
+            <input id="f-brand-url" type="url" placeholder="https://example.com" />
+            <button class="btn-analyse" id="btnAnalyse" onclick="analyseBrand()">🔍 Analyse</button>
+          </div>
+          <div class="brand-status" id="brandStatus"></div>
+        </div>
+
+        <div class="brand-colors-row">
+          <div class="field" style="margin-bottom:0">
+            <label>Primary colour</label>
+            <div class="color-input-group">
+              <input type="color" id="f-color1" value="#0161ff" oninput="syncColorPicker('1')" />
+              <input type="text" id="f-color1-hex" class="color-hex" value="#0161ff" maxlength="7" placeholder="#000000" oninput="syncColorHex('1')" />
+            </div>
+          </div>
+          <div class="field" style="margin-bottom:0">
+            <label>Secondary colour</label>
+            <div class="color-input-group">
+              <input type="color" id="f-color2" value="#02043b" oninput="syncColorPicker('2')" />
+              <input type="text" id="f-color2-hex" class="color-hex" value="#02043b" maxlength="7" placeholder="#000000" oninput="syncColorHex('2')" />
+            </div>
+          </div>
+        </div>
+
+        <div class="field" style="margin-top:18px">
+          <label>Logo</label>
+
+          <!-- AI-detected logo preview -->
+          <div class="logo-preview-card" id="logoPreviewCard">
+            <img id="logo-preview" src="" alt="Logo preview"
+              onerror="logoLoadError()" />
+            <div class="lpc-meta">
+              <div class="lpc-badge">🤖 AI detected</div>
+              <div class="lpc-url" id="lpc-url"></div>
+              <div class="lpc-err" id="lpc-err" style="display:none">⚠️ Couldn’t load — paste the URL below manually</div>
+            </div>
+            <button class="lpc-clear" title="Clear logo" onclick="clearLogo()">&#x2715;</button>
+          </div>
+
+          <input id="f-logo-url" type="url" placeholder="https://...logo.svg or .png" style="margin-bottom:8px" oninput="previewLogo()" />
+          <div class="logo-upload-zone" id="logoZone" onclick="document.getElementById('f-logo-file').click()">
+            <input type="file" id="f-logo-file" accept="image/*" style="display:none" onchange="handleLogoFile(event)" />
+            <span class="lz-hint" id="lz-hint">📎 Click to upload a logo image instead</span>
+          </div>
+          <input type="hidden" id="f-logo-b64" value="" />
+          <span class="hint">Optional — paste a URL, upload, or let AI detect it above.</span>
+        </div>
+      </div>
+
+      <!-- ── STEP 5: Topics & Notes ── -->
+      <div class="step-pane" id="pane-5">
+        <h3>Topics to cover &amp; meeting notes</h3>
+        <p class="step-sub">Flag topics that must be addressed, then paste any notes you have. The agent builds the document around these signals.</p>
+
+        <div class="field">
+          <label>Which topics must be addressed in this meeting?</label>
+          <div style="font-size:11.5px;color:var(--mid);margin-bottom:8px;">Click to add — choose everything relevant to this specific audience</div>
+          <div class="topic-chips" id="topicChips">
+            <div class="topic-chip" onclick="toggleTopic(this)">Loyalty tier mechanics</div>
+            <div class="topic-chip" onclick="toggleTopic(this)">Promos + loyalty in one system</div>
+            <div class="topic-chip" onclick="toggleTopic(this)">Real-time rule evaluation</div>
+            <div class="topic-chip" onclick="toggleTopic(this)">MACH / headless architecture</div>
+            <div class="topic-chip" onclick="toggleTopic(this)">API performance & rate limits</div>
+            <div class="topic-chip" onclick="toggleTopic(this)">Data residency & compliance</div>
+            <div class="topic-chip" onclick="toggleTopic(this)">Migration from current system</div>
+            <div class="topic-chip" onclick="toggleTopic(this)">POC success criteria</div>
+            <div class="topic-chip" onclick="toggleTopic(this)">Pricing & TCO comparison</div>
+            <div class="topic-chip" onclick="toggleTopic(this)">Customer success stories</div>
+            <div class="topic-chip" onclick="toggleTopic(this)">Implementation timeline</div>
+            <div class="topic-chip" onclick="toggleTopic(this)">Security & SSO</div>
+            <div class="topic-chip" onclick="toggleTopic(this)">Braze integration</div>
+            <div class="topic-chip" onclick="toggleTopic(this)">Segment / CDP integration</div>
+            <div class="topic-chip" onclick="toggleTopic(this)">Shopify / eCommerce platform</div>
+            <div class="topic-chip" onclick="toggleTopic(this)">Sandbox & testing environment</div>
+            <div class="topic-chip" onclick="toggleTopic(this)">Multi-currency / multi-region</div>
+            <div class="topic-chip" onclick="toggleTopic(this)">Gamification mechanics</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Any specific instruction for the document?</label>
+          <input id="f-extra-topics" type="text" placeholder="e.g. Avoid pricing slides, focus on the rule engine, include a QSR case study" />
+        </div>
+
+        <div class="section-divider">Meeting Notes</div>
+
+        <div class="field">
+          <label>Where are these notes from?</label>
+          <div class="notes-sources">
+            <label class="source-pill"><input type="checkbox" value="gong" onchange="toggleSource(this)" /> 🎙️ Gong recording</label>
+            <label class="source-pill"><input type="checkbox" value="notetaker" onchange="toggleSource(this)" /> 🤖 AI Notetaker</label>
+            <label class="source-pill"><input type="checkbox" value="gmail" onchange="toggleSource(this)" /> ✉️ Gmail thread</label>
+            <label class="source-pill"><input type="checkbox" value="personal" onchange="toggleSource(this)" /> 📝 Personal notes</label>
+            <label class="source-pill"><input type="checkbox" value="brief" onchange="toggleSource(this)" /> 📋 Account brief</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Paste your notes</label>
+          <textarea id="f-notes" style="min-height:320px;" placeholder="Paste anything — call transcripts, email threads, hand-written bullet points…
+
+The agent will extract:
+  • Pain points and challenges mentioned
+  • Current tech stack and integrations
+  • Decision timeline and key stakeholders
+  • Budget signals and constraints
+  • Success criteria they mentioned"></textarea>
+          <div class="note-examples">
+            <span class="note-eg" onclick="insertNoteExample('discovery')">💡 Discovery call example</span>
+            <span class="note-eg" onclick="insertNoteExample('technical')">⚙️ Technical discussion</span>
+            <span class="note-eg" onclick="insertNoteExample('competitor')">⚔️ Competitor comparison</span>
+          </div>
+          <span class="hint">Unstructured is fine. Even rough bullet points significantly improve document quality.</span>
+        </div>
+
+        <div class="field">
+          <label>URLs to analyse (optional)</label>
+          <textarea id="f-urls" placeholder="https://company.com&#10;https://techcrunch.com/funding-news&#10;https://competitor.com/pricing" style="min-height:140px;"></textarea>
+          <span class="hint">Prospect website, press releases, competitor pricing pages — the agent will scrape and ingest as context.</span>
+        </div>
+
+        <div class="status-row">
+          <div class="dot" id="new-agent-dot"></div>
+          <span id="new-agent-label">Checking agent…</span>
+        </div>
+      </div>
+
+      <!-- ── STEP 6: Generate ── -->
+      <div class="step-pane" id="pane-6">
+        <h3>Building your document</h3>
+        <p class="step-sub">The multi-agent pipeline is crafting a personalised document based on your answers. This takes 2–4 minutes.</p>
+
+        <!-- Pipeline progress tracker -->
+        <div class="pipeline-wrap" id="pipelineWrap" style="display:none;">
+          <div class="pipeline-track">
+            <div class="pipeline-stage" id="ps-0">
+              <div class="ps-bubble">📋</div>
+              <div class="ps-label">Analysing<br>Brief</div>
+            </div>
+            <div class="ps-connector" id="pc-0"></div>
+            <div class="pipeline-stage" id="ps-1">
+              <div class="ps-bubble">🔍</div>
+              <div class="ps-label">Researching<br>Prospect</div>
+            </div>
+            <div class="ps-connector" id="pc-1"></div>
+            <div class="pipeline-stage" id="ps-2">
+              <div class="ps-bubble">💡</div>
+              <div class="ps-label">Building<br>Story</div>
+            </div>
+            <div class="ps-connector" id="pc-2"></div>
+            <div class="pipeline-stage" id="ps-3">
+              <div class="ps-bubble">✍️</div>
+              <div class="ps-label">Creating<br>Document</div>
+            </div>
+            <div class="ps-connector" id="pc-3"></div>
+            <div class="pipeline-stage" id="ps-4">
+              <div class="ps-bubble">🔄</div>
+              <div class="ps-label">Validating</div>
+            </div>
+            <div class="ps-connector" id="pc-4"></div>
+            <div class="pipeline-stage" id="ps-5">
+              <div class="ps-bubble">🎉</div>
+              <div class="ps-label">Document<br>Ready</div>
+            </div>
+          </div>
+          <div class="pipeline-status" id="pipelineStatus">Starting agent pipeline…</div>
+        </div>
+
+        <div class="agent-log-card" id="agentLog"></div>
+        <div class="result-card" id="resultCard">
+          <div class="result-icon" id="resultIcon">✅</div>
+          <h3 id="resultTitle">Document Ready</h3>
+          <p id="resultDesc"></p>
+          <a class="result-btn" id="resultLink" href="#" target="_blank">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Open in Viewer
+          </a>
+        </div>
+      </div>
+
+      <!-- Footer nav -->
+      <div class="form-footer" id="formFooter">
+        <button class="btn btn-ghost" id="btnBack" onclick="goBack()" style="display:none;">← Back</button>
+        <div style="flex:1;"></div>
+        <button class="btn btn-primary" id="btnNext" onclick="goNext()">Continue →</button>
+      </div>
+
+    </div><!-- /form-inner -->
+  </div><!-- /form-panel -->
+</div><!-- /layout -->
+
+
+<script>
+  const API = 'http://localhost:8000';
+  let currentStep = 1;
+
+  // ── Demo Account Search ────────────────────────────────────
+  let _demoAccounts = [];
+  let _demoHighlight = -1;
+
+  async function dsbLoad() {
+    try {
+      const r = await fetch(`${API}/api/accounts`, { signal: AbortSignal.timeout(4000) });
+      if (r.ok) _demoAccounts = await r.json();
+    } catch (e) { /* silently ignore — feature degrades gracefully */ }
+  }
+
+  function dsbMatchAccounts(q) {
+    const lq = q.toLowerCase();
+    return _demoAccounts.filter(a => {
+      const name = (a.name || '').toLowerCase();
+      const prospect = (a.prospect_name || '').toLowerCase();
+      // match if any word in name starts with the query
+      return name.startsWith(lq) || prospect.startsWith(lq) ||
+        name.split(/[\s\-_]+/).some(w => w.startsWith(lq)) ||
+        prospect.split(/[\s\-_]+/).some(w => w.startsWith(lq));
+    }).slice(0, 8);
+  }
+
+  function dsbRenderDropdown(matches) {
+    const dd = document.getElementById('dsbDropdown');
+    _demoHighlight = -1;
+    if (!matches.length) {
+      dd.innerHTML = '<div class="dsb-empty">No demos match — try a different prefix</div>';
+    } else {
+      dd.innerHTML = matches.map((a, i) => {
+        const sub = [a.vertical, a.region].filter(Boolean).join(' · ') || a.stage || '';
+        const logoHtml = a.logo_url
+          ? `<img class="dsb-logo" src="${a.logo_url}" alt="" onerror="this.style.display='none'" />`
+          : `<div class="dsb-logo-placeholder">🏢</div>`;
+        return `<div class="dsb-option" role="option" data-idx="${i}" data-id="${a.id}" onclick="dsbSelect('${a.id}')">${logoHtml}<div><div class="dsb-option-name">${a.name}</div>${sub ? `<div class="dsb-option-sub">${sub}</div>` : ''}</div></div>`;
+      }).join('');
+    }
+    dd.classList.add('open');
+  }
+
+  function dsbOnInput(val) {
+    document.getElementById('dsbX').style.display = val ? 'block' : 'none';
+    const q = val.trim();
+    if (!q) { document.getElementById('dsbDropdown').classList.remove('open'); return; }
+    dsbRenderDropdown(dsbMatchAccounts(q));
+  }
+
+  function dsbOnFocus() {
+    const val = document.getElementById('dsbInput').value.trim();
+    if (val) dsbRenderDropdown(dsbMatchAccounts(val));
+  }
+
+  function dsbOnKeydown(e) {
+    const dd = document.getElementById('dsbDropdown');
+    const opts = dd.querySelectorAll('.dsb-option');
+    if (!dd.classList.contains('open') || !opts.length) return;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      _demoHighlight = Math.min(_demoHighlight + 1, opts.length - 1);
+      opts.forEach((o, i) => o.style.background = i === _demoHighlight ? '#f0f5ff' : '');
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      _demoHighlight = Math.max(_demoHighlight - 1, 0);
+      opts.forEach((o, i) => o.style.background = i === _demoHighlight ? '#f0f5ff' : '');
+    } else if (e.key === 'Enter' && _demoHighlight >= 0) {
+      e.preventDefault();
+      const id = opts[_demoHighlight].dataset.id;
+      if (id) dsbSelect(id);
+    } else if (e.key === 'Escape') {
+      dd.classList.remove('open');
+    }
+  }
+
+  function dsbSelect(id) {
+    const a = _demoAccounts.find(x => x.id === id);
+    if (!a) return;
+
+    // ── Populate Step 3: Opportunity ──
+    const companyEl = document.getElementById('f-company');
+    companyEl.value = a.prospect_name || a.name;
+    setBrief('sig-company', companyEl.value);
+
+    if (a.vertical) {
+      const sel = document.getElementById('f-industry');
+      for (const o of sel.options) {
+        if (o.text.toLowerCase().includes(a.vertical.toLowerCase())) { sel.value = o.value; break; }
+      }
+    }
+    if (a.stage) {
+      const sel = document.getElementById('f-stage');
+      const stageMap = {
+        discovery: 'Initial Discovery',
+        technical: 'Technical Evaluation',
+        poc: 'POC / Pilot',
+        negotiation: 'Business Case / Negotiation',
+        closing: 'Closing',
+      };
+      const mapped = stageMap[a.stage.toLowerCase()] || a.stage;
+      for (const o of sel.options) {
+        if (o.text.toLowerCase().includes(mapped.toLowerCase()) || o.text.toLowerCase().includes(a.stage.toLowerCase())) {
+          sel.value = o.value; break;
+        }
+      }
+      setBrief('sig-stage', a.stage);
+    }
+
+    // ── Populate Step 4: Brand Identity ──
+    document.getElementById('f-brand-name').value = a.name;
+
+    const bi = a.brand_identity || {};
+    if (bi.website || bi.url) {
+      document.getElementById('f-brand-url').value = bi.website || bi.url;
+    }
+    if (bi.primary_color) {
+      const hex = bi.primary_color.startsWith('#') ? bi.primary_color : '#' + bi.primary_color;
+      document.getElementById('f-color1-hex').value = hex;
+      document.getElementById('f-color1').value = hex;
+    }
+    if (bi.secondary_color) {
+      const hex = bi.secondary_color.startsWith('#') ? bi.secondary_color : '#' + bi.secondary_color;
+      document.getElementById('f-color2-hex').value = hex;
+      document.getElementById('f-color2').value = hex;
+    }
+    if (a.logo_url) {
+      document.getElementById('f-logo-url').value = a.logo_url;
+      previewLogo();
+    }
+    if (a.countries && a.countries.length) {
+      const sel = document.getElementById('f-country');
+      for (const o of sel.options) {
+        if (o.value === a.countries[0]) { sel.value = o.value; break; }
+      }
+    }
+
+    // ── Update the search UI ──
+    const dd = document.getElementById('dsbDropdown');
+    dd.classList.remove('open');
+    document.getElementById('dsbInput').value = a.name;
+    document.getElementById('dsbX').style.display = 'block';
+
+    const selEl = document.getElementById('dsbSelected');
+    const selLogo = document.getElementById('dsbSelLogo');
+    if (a.logo_url) { selLogo.src = a.logo_url; selLogo.style.display = 'inline'; }
+    else { selLogo.style.display = 'none'; }
+    document.getElementById('dsbSelName').textContent = a.name;
+    document.getElementById('dsbSelSub').textContent =
+      [a.vertical, a.region].filter(Boolean).join(' · ') || a.stage || '';
+    selEl.classList.add('visible');
+  }
+
+  function dsbClearInput() {
+    document.getElementById('dsbInput').value = '';
+    document.getElementById('dsbX').style.display = 'none';
+    document.getElementById('dsbDropdown').classList.remove('open');
+  }
+
+  function dsbClearSelection() {
+    dsbClearInput();
+    document.getElementById('dsbSelected').classList.remove('visible');
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', e => {
+    if (!document.getElementById('demoSearchBar').contains(e.target)) {
+      document.getElementById('dsbDropdown').classList.remove('open');
+    }
+  });
+
+  // Load accounts immediately
+  dsbLoad();
+  const TOTAL_STEPS = 6;
+
+  // ── Template definitions ───────────────────────────────────
+  const TEMPLATES = {
+    'first-pitch': {
+      id: 'sales-pitch', icon: '🎯', name: 'Sales Pitch', tag: 'Client', tagClass: 'client',
+      desc: 'Executive discovery → value narrative → ROI preview → clear next steps',
+      sections: ['Business Context', 'Key Challenges', 'The Talon.One Solution', 'Why T1 Wins', 'Customer Proof', 'ROI Preview', 'Next Steps'],
+      type: 'client',
+    },
+    'technical': {
+      id: 'technical-integration', icon: '⚙️', name: 'Technical Integration', tag: 'Client', tagClass: 'client',
+      desc: 'MACH architecture, API flows, data model, environments & implementation timeline',
+      sections: ['Architecture Overview', 'API Flows', 'Environments & Access', 'Data Model', 'Security & Compliance', 'Implementation Timeline', 'Next Steps'],
+      type: 'client',
+    },
+    'business-case': {
+      id: 'business-case', icon: '📊', name: 'Business Case / ROI', tag: 'Client', tagClass: 'client',
+      desc: 'Current-state cost → financial impact → ROI model → investment summary',
+      sections: ['Executive Summary', 'Current State Assessment', 'Proposed Solution', 'ROI Model', 'Risk Mitigation', 'Investment Summary', 'Next Steps'],
+      type: 'client',
+    },
+    'competitive': {
+      id: 'battle-card', icon: '⚔️', name: 'Competitive Battle Card', tag: 'Competition', tagClass: 'competition',
+      desc: 'Feature comparison, kill shots, proof points — built to win evaluations',
+      sections: ['Executive Summary', 'Head-to-Head Comparison', 'Talon.One Differentiators', 'Kill Shots', 'Technical Advantages', 'Pricing Comparison', 'References'],
+      type: 'competition',
+    },
+    'poc': {
+      id: 'poc-scope', icon: '🔬', name: 'POC / Pilot Scope', tag: 'Client', tagClass: 'client',
+      desc: 'Objectives, use cases, success criteria, technical scope & milestones',
+      sections: ['POC Objectives', 'Use Cases to Validate', 'Success Criteria', 'Technical Scope', 'Timeline & Milestones', 'Resource Requirements', 'Next Steps'],
+      type: 'client',
+    },
+    'partner': {
+      id: 'partner-gtm', icon: '🤝', name: 'Partner GTM', tag: 'Partner', tagClass: 'partner',
+      desc: 'Co-sell playbook, ICP definition, joint use cases & enablement plan',
+      sections: ['Partnership Overview', 'Value Proposition', 'Ideal Customer Profile', 'Joint Use Cases', 'GTM Playbook', 'Enablement Plan', 'Next Steps'],
+      type: 'partner',
+    },
+  };
+  let selectedPurpose = null;
+
+  // ── Purpose selection & brief panel update ─────────────────
+  function selectPurpose(card) {
+    document.querySelectorAll('.purpose-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedPurpose = card.dataset.purpose;
+    const t = TEMPLATES[selectedPurpose];
+    const bt = document.getElementById('briefTemplate');
+    bt.classList.add('active');
+    document.getElementById('bt-icon').textContent = t.icon;
+    document.getElementById('bt-name').textContent = t.name;
+    document.getElementById('bt-desc').textContent = t.desc;
+    const tagEl = document.getElementById('bt-tag');
+    tagEl.style.display = '';
+    tagEl.className = `bt-tag ${t.tagClass}`;
+    tagEl.textContent = t.tag;
+    document.getElementById('bt-sections').innerHTML =
+      t.sections.map(s => `<div class="bt-row">${s}</div>`).join('');
+  }
+
+  // ── Brief panel signal updater ─────────────────────────────
+  function setBrief(id, value) {
+    const sig = document.getElementById(id);
+    if (!sig) return;
+    const val = sig.querySelector('.sig-val');
+    if (value && value.trim()) {
+      sig.classList.add('active');
+      val.textContent = value;
+    } else {
+      sig.classList.remove('active');
+      val.textContent = id === 'sig-competitor' ? 'None' : 'Not set yet';
+    }
+  }
+
+  // ── Role chips ─────────────────────────────────────────────
+  function toggleRole(chip) {
+    chip.classList.toggle('selected');
+    const roles = [...document.querySelectorAll('#roleChips .role-chip.selected')]
+      .map(c => c.querySelector('.rc-name').textContent);
+    setBrief('sig-audience', roles.join(', '));
+  }
+
+  // ── Time chips ─────────────────────────────────────────────
+  function selectTime(chip) {
+    document.querySelectorAll('.time-chip').forEach(c => c.classList.remove('selected'));
+    chip.classList.add('selected');
+    setBrief('sig-time', chip.dataset.time + ' min');
+  }
+
+  // ── Topic chips ────────────────────────────────────────────
+  function toggleTopic(chip) {
+    chip.classList.toggle('selected');
+    const topics = [...document.querySelectorAll('#topicChips .topic-chip.selected')]
+      .map(c => c.textContent.replace(/^✓\s*/, '').trim());
+    const display = topics.length
+      ? topics.slice(0, 3).join(', ') + (topics.length > 3 ? ` +${topics.length - 3}` : '')
+      : null;
+    setBrief('sig-topics', display);
+  }
+
+  // ── Note source pills ──────────────────────────────────────
+  function toggleSource(cb) {
+    cb.closest('.source-pill').classList.toggle('active', cb.checked);
+  }
+
+  // ── Note examples ──────────────────────────────────────────
+  const NOTE_EXAMPLES = {
+    discovery: `Discovery call notes — ${new Date().toLocaleDateString('en-AU', {month:'long', year:'numeric'})}
+Attendees: Sarah (Head of Loyalty), Mark (CTO)
+
+Pain points mentioned:
+- Current Yotpo setup is too rigid, can't do tiered rewards by spend
+- Integration with Braze is manual and brittle
+- No real-time rule evaluation at POS
+
+What they want:
+- Tiered loyalty (Bronze/Silver/Gold) based on lifetime spend
+- Cashback mechanics with monthly payout
+- Braze integration for triggered emails on tier upgrade
+- Timeline: want to go live by Q3 2026
+
+Key questions they asked:
+- How fast can Talon.One evaluate rules? (Answer: sub-50ms)
+- Can we run promotions alongside loyalty in one system?
+- What's the data model for customer profiles?`,
+    technical: `Technical discussion notes
+Attendees: Dev team (3 engineers), Solution Architect
+
+Stack: React frontend, Node.js backend, GCP, PostgreSQL
+Current: Custom-built loyalty on top of Shopify
+Issues: Coupon stacking bugs, no real-time inventory sync
+
+Technical requirements:
+- Need Integration API v2 session endpoint
+- Plan to sync customer profiles via batch job daily
+- Want to use webhook for tier change events
+- Need sandbox environment for testing
+
+They asked about:
+- Rate limits on the API
+- Multi-region data residency (need AU + EU)
+- SSO for the Talon.One dashboard`,
+    competitor: `Competitor comparison notes
+Competing against: Salesforce Loyalty Management
+
+Their concerns about Salesforce:
+- Very expensive per-seat + per-campaign pricing
+- Requires full Marketing Cloud stack to work properly
+- Engineering team found the API documentation confusing
+- 3-6 month implementation timeline is too long
+
+Why they're looking at alternatives:
+- Budget constraint: want < $200k/year total cost
+- Need to go live in 4 months
+- Don't want to be locked into Salesforce CRM`,
+  };
+
+  function insertNoteExample(key) {
+    const ta = document.getElementById('f-notes');
+    ta.value = (ta.value ? ta.value + '\n\n---\n\n' : '') + NOTE_EXAMPLES[key];
+    ta.focus();
+  }
+
+  // ── Step navigation ────────────────────────────────────────
+  function updateUI() {
+    for (let i = 1; i <= TOTAL_STEPS; i++) {
+      const pane = document.getElementById(`pane-${i}`);
+      if (pane) pane.classList.toggle('active', i === currentStep);
+      const b = document.getElementById(`b${i}`);
+      const l = document.getElementById(`l${i}`);
+      if (!b || !l) continue;
+      b.className = 'step-bubble' + (i < currentStep ? ' done' : i === currentStep ? ' active' : '');
+      b.textContent = i < currentStep ? '✓' : i;
+      l.className = 'step-label' + (i === currentStep ? ' active' : '');
+      if (i < TOTAL_STEPS) {
+        const c = document.getElementById(`c${i}`);
+        if (c) c.classList.toggle('done', i < currentStep);
+      }
+    }
+    document.getElementById('progressFill').style.width = (currentStep / TOTAL_STEPS * 100) + '%';
+    const btnBack = document.getElementById('btnBack');
+    const btnNext = document.getElementById('btnNext');
+    const footer  = document.getElementById('formFooter');
+    if (btnBack) btnBack.style.display = currentStep > 1 && currentStep < TOTAL_STEPS ? '' : 'none';
+    if (footer)  footer.style.display  = currentStep === TOTAL_STEPS ? 'none' : '';
+    if (btnNext) {
+      if (currentStep === TOTAL_STEPS - 1)
+        btnNext.textContent = agentOnline ? '🚀 Generate Document' : '⚠️ Generate (agent offline)';
+      else
+        btnNext.textContent = 'Continue →';
+    }
+  }
+
+  function goBack() { if (currentStep > 1) { currentStep--; updateUI(); } }
+
+  function goNext() {
+    if (currentStep === 1 && !selectedPurpose) {
+      alert('Please select a meeting goal to continue.');
+      return;
+    }
+    if (currentStep === 2) {
+      const roles = document.querySelectorAll('#roleChips .role-chip.selected');
+      if (!roles.length) { alert('Please select at least one audience role.'); return; }
+    }
+    if (currentStep === 3) {
+      if (!document.getElementById('f-company').value.trim()) { alert('Please enter the company name.'); return; }
+      if (!document.getElementById('f-industry').value) { alert('Please select an industry.'); return; }
+      if (!document.getElementById('f-usecase').value.trim()) { alert('Please describe the main goal or pain point.'); return; }
+      // Prefill brand name from company name when advancing to Brand step
+      const brandEl = document.getElementById('f-brand-name');
+      if (brandEl && !brandEl.value) brandEl.value = document.getElementById('f-company').value.trim();
+    }
+    if (currentStep < TOTAL_STEPS - 1) { currentStep++; updateUI(); return; }
+    if (currentStep === TOTAL_STEPS - 1) { currentStep = TOTAL_STEPS; updateUI(); generate(); }
+  }
+
+  // ── Agent status ───────────────────────────────────────────
+  let agentOnline = false;
+  async function checkStatus() {
+    try {
+      const r = await fetch(`${API}/health`, { signal: AbortSignal.timeout(2000) });
+      agentOnline = r.ok;
+    } catch { agentOnline = false; }
+    const dot   = document.getElementById('new-agent-dot');
+    const label = document.getElementById('new-agent-label');
+    if (dot)   dot.className = 'dot' + (agentOnline ? '' : ' offline');
+    if (label) label.textContent = agentOnline ? 'Agent Online — ready to generate' : 'Agent Offline — start the server first';
+    updateUI();
+  }
+  checkStatus();
+  setInterval(checkStatus, 15000);
+
+  // ── Pipeline stage tracker ─────────────────────────────────
+  const PIPELINE_STAGE_TEXT = [
+    'Coordinator is parsing your brief…',
+    'Data Architect is researching the prospect and market…',
+    'Value Selling agent is building the narrative…',
+    'Document Engineer is writing and styling the document…',
+    'Coordinator is validating and polishing…',
+    'Document ready!',
+  ];
+  let _stageTimers = [];
+
+  function initPipeline() {
+    for (let i = 0; i < 6; i++) {
+      const el   = document.getElementById(`ps-${i}`);
+      const conn = document.getElementById(`pc-${i}`);
+      if (el)   { el.classList.remove('active', 'done'); }
+      if (conn) { conn.classList.remove('done'); }
+    }
+    const wrap = document.getElementById('pipelineWrap');
+    if (wrap) wrap.style.display = '';
+    const status = document.getElementById('pipelineStatus');
+    if (status) status.textContent = 'Starting agent pipeline…';
+  }
+
+  function activateStage(n) {
+    for (let i = 0; i < n; i++) {
+      const el   = document.getElementById(`ps-${i}`);
+      const conn = document.getElementById(`pc-${i}`);
+      if (el)   { el.classList.remove('active'); el.classList.add('done'); }
+      if (conn) conn.classList.add('done');
+    }
+    const cur = document.getElementById(`ps-${n}`);
+    if (cur) { cur.classList.remove('done'); cur.classList.add('active'); }
+    const status = document.getElementById('pipelineStatus');
+    if (status && PIPELINE_STAGE_TEXT[n]) status.textContent = PIPELINE_STAGE_TEXT[n];
+  }
+
+  function completePipeline() {
+    _stageTimers.forEach(clearTimeout);
+    for (let i = 0; i < 6; i++) {
+      const el   = document.getElementById(`ps-${i}`);
+      const conn = document.getElementById(`pc-${i}`);
+      if (el)   { el.classList.remove('active'); el.classList.add('done'); }
+      if (conn) conn.classList.add('done');
+    }
+    const status = document.getElementById('pipelineStatus');
+    if (status) status.textContent = 'All done — opening your document…';
+  }
+
+  // ── Log helper ─────────────────────────────────────────────
+  function log(msg, cls = '') {
+    const box = document.getElementById('agentLog');
+    box.classList.add('visible');
+    const p = document.createElement('div');
+    p.className = 'log-line' + (cls ? ` ${cls}` : '');
+    p.textContent = msg;
+    box.appendChild(p);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  // ── Generate ───────────────────────────────────────────────
+  async function generate() {
+    const template  = TEMPLATES[selectedPurpose];
+    const company   = document.getElementById('f-company').value.trim();
+    const industry  = document.getElementById('f-industry').value;
+    const usecase   = document.getElementById('f-usecase').value.trim();
+    const competitor= document.getElementById('f-competitor').value.trim();
+    const integrations = document.getElementById('f-integrations').value.split(',').map(s=>s.trim()).filter(Boolean);
+    const urlsRaw   = document.getElementById('f-urls').value;
+    const urls      = urlsRaw.split(/[\n,]+/).map(s=>s.trim()).filter(Boolean);
+    const notes     = document.getElementById('f-notes').value.trim();
+    const extraReqs = document.getElementById('f-extra-topics').value.trim();
+    const stage     = document.getElementById('f-stage').value;
+
+    // Presentation name (step 3 field — auto-generate if blank)
+    const presNameRaw = document.getElementById('f-pres-name')?.value.trim() || '';
+    const presName = presNameRaw || `${company} × Talon.One — ${template.name}`;
+
+    // Brand identity (step 4)
+    const brandName    = document.getElementById('f-brand-name')?.value.trim() || company;
+    const brandCountry = document.getElementById('f-country')?.value || '';
+    const brandWebsite = document.getElementById('f-brand-url')?.value.trim() || '';
+    const color1       = document.getElementById('f-color1-hex')?.value.trim() || '';
+    const color2       = document.getElementById('f-color2-hex')?.value.trim() || '';
+    const logoUrl      = document.getElementById('f-logo-url')?.value.trim() || '';
+    const logoB64      = document.getElementById('f-logo-b64')?.value.trim() || '';
+
+    const roles     = [...document.querySelectorAll('#roleChips .role-chip.selected')]
+      .map(c => `${c.querySelector('.rc-name').textContent} (${c.querySelector('.rc-sub').textContent})`);
+    const timeChip  = document.querySelector('.time-chip.selected');
+    const duration  = timeChip ? timeChip.dataset.time + ' minutes' : '60 minutes';
+    const topics    = [...document.querySelectorAll('#topicChips .topic-chip.selected')]
+      .map(c => c.textContent.replace(/^✓\s*/, '').trim());
+    const sources   = [...document.querySelectorAll('.source-pill input:checked')].map(i => i.value);
+
+    // Build structured meeting brief prepended to raw notes
+    const briefLines = [
+      `## Meeting Brief`,
+      `**Type**: ${template.name}`,
+      `**Audience**: ${roles.join(', ') || 'Not specified'}`,
+      `**Duration**: ${duration}`,
+      stage      ? `**Deal Stage**: ${stage}` : null,
+      topics.length ? `**Required Topics**: ${topics.join(', ')}` : null,
+      competitor ? `**Competitor**: ${competitor}` : null,
+      extraReqs  ? `**Special Instructions**: ${extraReqs}` : null,
+      sources.length ? `**Note Sources**: ${sources.join(', ')}` : null,
+    ].filter(Boolean).join('\n');
+
+    const fullNotes = [briefLines, notes].filter(Boolean).join('\n\n---\n\n');
+
+    log(`📋 Template: ${template.name}`);
+    log(`🏢 Company: ${company} (${industry})`);
+    if (color1) log(`🎨 Brand colours: ${color1} / ${color2 || 'auto'}`);
+    if (logoUrl) log(`🖼️ Logo: ${logoUrl.split('/').pop()}`);
+    log(`👥 Audience: ${roles.map(r => r.split(' (')[0]).join(', ') || 'General'}`);
+    log(`⏱️  Duration: ${duration}`);
+    if (topics.length) log(`📌 Topics: ${topics.slice(0, 4).join(', ')}${topics.length > 4 ? '…' : ''}`);
+    log(`⏳ Starting multi-agent pipeline…`);
+
+    // Start pipeline progress simulation (stages advance at realistic delays)
+    initPipeline();
+    activateStage(0);
+    _stageTimers.forEach(clearTimeout);
+    _stageTimers = [8000, 22000, 48000, 85000].map((delay, i) =>
+      setTimeout(() => activateStage(i + 1), delay)
+    );
+
+    try {
+      const resp = await fetch(`${API}/run`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          company_name: company,
+          industry,
+          use_case: usecase,
+          competitor: competitor || null,
+          integrations,
+          urls_to_scrape: urls,
+          raw_notes: fullNotes,
+          presentation_type: template.type,
+          presentation_category: '',
+          template_type: template.id,
+          presentation_name: presName,
+          brand: {
+            name: brandName,
+            country: brandCountry,
+            website: brandWebsite,
+            primary_color: color1 || null,
+            secondary_color: color2 || null,
+            logo_url: logoUrl || null,
+            logo_b64: logoB64 || null,
+          },
+        }),
+      });
+      log('🤖 Coordinator → Data Architect → Value Selling → Document Engineer…');
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}: ${await resp.text()}`);
+      const data = await resp.json();
+      completePipeline();
+      log('✅ Done!', 'success');
+
+      document.getElementById('resultCard').classList.add('visible');
+      if (data.local_path) {
+        const viewerUrl = `viewer.html?doc=${encodeURIComponent(data.local_path)}`;
+        document.getElementById('resultIcon').textContent = '✅';
+        document.getElementById('resultTitle').textContent = 'Document Ready — opening viewer…';
+        document.getElementById('resultDesc').textContent = data.local_path;
+        document.getElementById('resultLink').href = viewerUrl;
+        // Auto-open after a brief pause so user sees the success state
+        setTimeout(() => { window.location.href = viewerUrl; }, 1800);
+      } else if (data.vercel_url) {
+        document.getElementById('resultIcon').textContent = '🎉';
+        document.getElementById('resultTitle').textContent = 'Published to Vercel!';
+        document.getElementById('resultDesc').textContent = data.vercel_url;
+        document.getElementById('resultLink').href = data.vercel_url;
+        setTimeout(() => { window.open(data.vercel_url, '_blank'); }, 1800);
+      } else {
+        throw new Error(data.error || 'No output path returned');
+      }
+    } catch (err) {
+      _stageTimers.forEach(clearTimeout);
+      log(`❌ Error: ${err.message}`, 'error');
+      document.getElementById('resultCard').classList.add('visible');
+      document.getElementById('resultIcon').textContent = '❌';
+      document.getElementById('resultTitle').textContent = 'Generation Failed';
+      document.getElementById('resultDesc').textContent = err.message;
+      document.getElementById('resultLink').style.display = 'none';
+    }
+  }
+
+  // ── Brand Analysis ─────────────────────────────────────────
+  const COUNTRIES = [
+    'Afghanistan','Albania','Algeria','Andorra','Angola','Antigua and Barbuda',
+    'Argentina','Armenia','Australia','Austria','Azerbaijan','Bahamas','Bahrain',
+    'Bangladesh','Barbados','Belarus','Belgium','Belize','Benin','Bhutan',
+    'Bolivia','Bosnia and Herzegovina','Botswana','Brazil','Brunei','Bulgaria',
+    'Burkina Faso','Burundi','Cabo Verde','Cambodia','Cameroon','Canada',
+    'Central African Republic','Chad','Chile','China','Colombia','Comoros',
+    'Congo (Republic)','Congo (Dem. Rep.)','Costa Rica','Croatia','Cuba',
+    'Cyprus','Czech Republic','Denmark','Djibouti','Dominica',
+    'Dominican Republic','Ecuador','Egypt','El Salvador','Equatorial Guinea',
+    'Eritrea','Estonia','Eswatini','Ethiopia','Fiji','Finland','France',
+    'Gabon','Gambia','Georgia','Germany','Ghana','Greece','Grenada',
+    'Guatemala','Guinea','Guinea-Bissau','Guyana','Haiti','Honduras',
+    'Hungary','Iceland','India','Indonesia','Iran','Iraq','Ireland','Israel',
+    'Italy','Jamaica','Japan','Jordan','Kazakhstan','Kenya','Kiribati',
+    'Kuwait','Kyrgyzstan','Laos','Latvia','Lebanon','Lesotho','Liberia',
+    'Libya','Liechtenstein','Lithuania','Luxembourg','Madagascar','Malawi',
+    'Malaysia','Maldives','Mali','Malta','Marshall Islands','Mauritania',
+    'Mauritius','Mexico','Micronesia','Moldova','Monaco','Mongolia',
+    'Montenegro','Morocco','Mozambique','Myanmar','Namibia','Nauru','Nepal',
+    'Netherlands','New Zealand','Nicaragua','Niger','Nigeria','North Korea',
+    'North Macedonia','Norway','Oman','Pakistan','Palau','Palestine','Panama',
+    'Papua New Guinea','Paraguay','Peru','Philippines','Poland','Portugal',
+    'Qatar','Romania','Russia','Rwanda','Saint Kitts and Nevis','Saint Lucia',
+    'Saint Vincent and the Grenadines','Samoa','San Marino',
+    'São Tomé and Príncipe','Saudi Arabia','Senegal','Serbia','Seychelles',
+    'Sierra Leone','Singapore','Slovakia','Slovenia','Solomon Islands',
+    'Somalia','South Africa','South Korea','South Sudan','Spain','Sri Lanka',
+    'Sudan','Suriname','Sweden','Switzerland','Syria','Taiwan','Tajikistan',
+    'Tanzania','Thailand','Timor-Leste','Togo','Tonga','Trinidad and Tobago',
+    'Tunisia','Turkey','Turkmenistan','Tuvalu','Uganda','Ukraine',
+    'United Arab Emirates','United Kingdom','United States','Uruguay',
+    'Uzbekistan','Vanuatu','Vatican City','Venezuela','Vietnam',
+    'Yemen','Zambia','Zimbabwe',
+  ];
+
+  (function populateCountries() {
+    const sel = document.getElementById('f-country');
+    if (!sel) return;
+    COUNTRIES.forEach(c => {
+      const o = document.createElement('option');
+      o.value = c; o.textContent = c;
+      sel.appendChild(o);
+    });
+  })();
+
+  function syncColorPicker(n) {
+    document.getElementById(`f-color${n}-hex`).value = document.getElementById(`f-color${n}`).value;
+  }
+  function syncColorHex(n) {
+    const v = document.getElementById(`f-color${n}-hex`).value.trim();
+    if (/^#[0-9a-fA-F]{6}$/.test(v)) document.getElementById(`f-color${n}`).value = v;
+  }
+  function applyBrandColor(n, hex) {
+    document.getElementById(`f-color${n}`).value = hex;
+    document.getElementById(`f-color${n}-hex`).value = hex;
+  }
+
+  function showLogoPreview(url, isAI = false) {
+    const card = document.getElementById('logoPreviewCard');
+    const img  = document.getElementById('logo-preview');
+    const urlEl = document.getElementById('lpc-url');
+    const errEl = document.getElementById('lpc-err');
+    const badge = card.querySelector('.lpc-badge');
+    img.src = url;
+    urlEl.textContent = url.replace(/^https?:\/\//, '').slice(0, 60) + (url.length > 60 ? '…' : '');
+    errEl.style.display = 'none';
+    badge.textContent = isAI ? '🤖 AI detected' : '🔗 URL preview';
+    card.classList.add('visible');
+  }
+
+  function clearLogo() {
+    document.getElementById('logoPreviewCard').classList.remove('visible');
+    document.getElementById('logo-preview').src = '';
+    document.getElementById('f-logo-url').value = '';
+    document.getElementById('f-logo-b64').value = '';
+  }
+
+  function logoLoadError() {
+    document.getElementById('lpc-err').style.display = 'block';
+    document.getElementById('logo-preview').style.opacity = '0.3';
+  }
+
+  function previewLogo() {
+    const url = document.getElementById('f-logo-url').value.trim();
+    if (url) showLogoPreview(url, false);
+    else document.getElementById('logoPreviewCard').classList.remove('visible');
+  }
+
+  function handleLogoFile(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      document.getElementById('f-logo-b64').value = ev.target.result;
+      document.getElementById('f-logo-url').value = '';
+      showLogoPreview(ev.target.result, false);
+      document.getElementById('logoPreviewCard').querySelector('.lpc-badge').textContent = '📁 Uploaded file';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function analyseBrand() {
+    const url  = document.getElementById('f-brand-url').value.trim();
+    const name = document.getElementById('f-brand-name').value.trim();
+    const status = document.getElementById('brandStatus');
+    if (!url) {
+      status.style.color = '#d97706';
+      status.textContent = '⚠️ Enter a website URL first';
+      return;
+    }
+    const btn = document.getElementById('btnAnalyse');
+    btn.disabled = true; btn.textContent = '⏳ Analysing…';
+    status.style.color = 'var(--blue)';
+    status.textContent = 'Fetching brand assets from website…';
+    try {
+      const r = await fetch(`${API}/api/analyse-brand`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, brand_name: name }),
+        signal: AbortSignal.timeout(30000),
+      });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const data = await r.json();
+      if (data.colors?.[0]) applyBrandColor('1', data.colors[0]);
+      if (data.colors?.[1]) applyBrandColor('2', data.colors[1]);
+      if (data.logo_url) {
+        document.getElementById('f-logo-url').value = data.logo_url;
+        showLogoPreview(data.logo_url, true);
+      }
+      status.style.color = '#059669';
+      status.textContent = '✅ Brand analysed — review and adjust below if needed';
+    } catch {
+      status.style.color = '#d97706';
+      status.textContent = agentOnline
+        ? '⚠️ Could not auto-detect — please fill in colours and logo manually'
+        : '⚠️ Agent is offline — start the server (cd presales_agent && python main.py --serve), then retry';
+    } finally {
+      btn.disabled = false; btn.textContent = '🔍 Analyse';
+    }
+  }
+
+  // ── Init ───────────────────────────────────────────────────
+  updateUI();
+  // Default 60 min selected
+  setBrief('sig-time', '60 min');
+
+  // Pre-fill from URL params (e.g. ?company=Capillary from index.html "+ Add")
+  (function prefillFromURL() {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get('company')) {
+      const el = document.getElementById('f-company');
+      if (el) { el.value = p.get('company'); setBrief('sig-company', p.get('company')); }
+    }
+  })();
+</script>
+</body>
+</html>

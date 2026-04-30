@@ -1,0 +1,49 @@
+# ─────────────────────────────────────────────────────────────
+# Talon.One Presales Agent — Python Dependencies
+# ─────────────────────────────────────────────────────────────
+
+# Orchestration
+langgraph>=0.2.28
+langgraph-checkpoint-postgres>=2.0.4   # PostgreSQL-backed persistent memory
+langchain>=0.3.7
+langchain-core>=0.3.15
+
+# LLM provider
+langchain-google-genai>=2.0.5    # Gemini 1.5 Pro (sole provider)
+
+# Vector store / PostgreSQL
+langchain-postgres>=0.0.12
+psycopg[binary]>=3.2.1
+pgvector>=0.3.3
+
+# Notion integration
+notion-client>=2.2.1
+
+# Google Drive integration
+google-api-python-client>=2.150.0
+google-auth-httplib2>=0.2.0
+google-auth-oauthlib>=1.2.1
+
+# Document parsing (multimodal ingestion)
+PyPDF2>=3.0.1
+python-pptx>=1.0.0
+openpyxl>=3.1.5
+python-docx>=1.1.0               # DOCX parsing (used by /api/knowledge/upload)
+Pillow>=11.0.0                   # Image analysis pre-processing
+
+# GitHub + Vercel deployment
+PyGithub>=2.5.0
+httpx>=0.27.2
+
+# Web / API layer
+fastapi>=0.115.4
+uvicorn[standard]>=0.32.0
+
+# Web scraping
+beautifulsoup4>=4.12.3
+
+# Utilities
+python-dotenv>=1.0.1
+pydantic>=2.9.0
+tenacity>=9.0.0                  # Retry logic for API calls
+structlog>=24.4.0                # Structured logging

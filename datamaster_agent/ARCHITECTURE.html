@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Talon.One Presales Agent — Living Architecture Document</title>
+  <style>
+    :root {
+      --red: #ff2146;
+      --navy: #1a1f36;
+      --dark: #222;
+      --gray: #555;
+      --light-gray: #f5f5f7;
+      --white: #fff;
+      --border: #e0e0e0;
+      --green: #1a7f37;
+      --green-bg: #e6f9ed;
+      --blue: #1a56db;
+      --blue-bg: #e6f0ff;
+      --orange: #c05600;
+      --orange-bg: #fff4e6;
+      --purple: #6366f1;
+      --teal: #0891b2;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--white);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 40px; height: 64px;
+    }
+    nav .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    nav .brand-logo { width: 32px; height: 32px; background: var(--red); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 14px; }
+    nav .brand-text { font-weight: 700; font-size: 15px; color: var(--navy); }
+    nav .brand-sub { font-size: 11px; color: var(--gray); font-weight: 400; }
+    nav .nav-links { display: flex; gap: 4px; align-items: center; }
+    nav .nav-links a {
+      font-size: 12px; font-weight: 600; text-decoration: none; color: var(--gray);
+      padding: 5px 10px; border-radius: 6px; transition: .2s; white-space: nowrap;
+    }
+    nav .nav-links a:hover { background: var(--light-gray); color: var(--red); }
+    nav .version-badge {
+      background: var(--red); color: white; font-size: 11px; font-weight: 700;
+      padding: 3px 10px; border-radius: 20px; margin-left: 16px;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 52vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 100px 40px 60px;
+      background: linear-gradient(165deg, var(--white) 55%, #fff0f2 100%);
+    }
+    .hero .doc-type {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 3px;
+      color: var(--red); font-weight: 700; margin-bottom: 12px;
+    }
+    .hero h1 { font-size: 44px; font-weight: 800; color: var(--navy); max-width: 820px; line-height: 1.15; }
+    .hero h1 em { font-style: normal; color: var(--red); }
+    .hero p.sub { margin-top: 18px; font-size: 18px; color: var(--gray); max-width: 680px; }
+    .hero .meta { margin-top: 28px; display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+    .hero .meta-item {
+      background: var(--light-gray); padding: 6px 16px; border-radius: 20px;
+      font-size: 12px; color: var(--dark); font-weight: 600;
+    }
+    .hero .meta-item span { color: var(--red); }
+
+    /* SECTIONS */
+    section { padding: 72px 40px; }
+    section > .inner { max-width: 1100px; margin: 0 auto; }
+    section.bg-gray { background: var(--light-gray); }
+    .section-label {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 2px;
+      color: var(--red); font-weight: 700; margin-bottom: 8px;
+    }
+    section h2 { font-size: 30px; font-weight: 700; color: var(--navy); margin-bottom: 20px; }
+    section h3 { font-size: 18px; font-weight: 700; color: var(--dark); margin: 28px 0 10px; }
+    section h4 { font-size: 15px; font-weight: 700; color: var(--navy); margin: 16px 0 6px; }
+    section p { color: var(--gray); font-size: 15px; max-width: 860px; margin-bottom: 14px; }
+
+    /* BADGES */
+    .badge {
+      display: inline-block; padding: 3px 10px; border-radius: 6px;
+      font-size: 11px; font-weight: 700; margin-right: 4px; margin-bottom: 4px;
+    }
+    .badge-green { background: var(--green-bg); color: var(--green); }
+    .badge-blue  { background: var(--blue-bg);  color: var(--blue); }
+    .badge-orange{ background: var(--orange-bg);color: var(--orange); }
+    .badge-red   { background: #ffe6ea; color: #c41a3a; }
+    .badge-purple{ background: #ede9fe; color: #5b21b6; }
+    .badge-gray  { background: var(--light-gray); color: var(--gray); }
+
+    /* CARDS */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-top: 20px; }
+    .card {
+      background: var(--white); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px; transition: .25s;
+    }
+    .card:hover { border-color: var(--red); box-shadow: 0 4px 24px rgba(255,33,70,.07); transform: translateY(-2px); }
+    .card .card-icon { font-size: 26px; margin-bottom: 10px; }
+    .card h4 { font-size: 15px; font-weight: 700; color: var(--navy); margin: 0 0 6px; }
+    .card p { font-size: 13px; color: var(--gray); margin-bottom: 0; }
+
+    /* HIGHLIGHT BOX */
+    .highlight-box {
+      border-left: 4px solid var(--red); background: #fff5f7;
+      padding: 18px 22px; border-radius: 0 10px 10px 0; margin: 18px 0;
+    }
+    .highlight-box.blue { border-left-color: var(--blue); background: #f0f5ff; }
+    .highlight-box.green { border-left-color: var(--green); background: #f0faf4; }
+    .highlight-box.orange { border-left-color: var(--orange); background: #fff8f0; }
+    .highlight-box p { margin-bottom: 0; color: var(--dark); font-size: 14px; }
+
+    /* CODE BLOCKS */
+    .code-block {
+      background: #1e1e2e; border-radius: 10px; padding: 22px 26px;
+      margin: 14px 0; overflow-x: auto;
+    }
+    .code-block code {
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace; font-size: 12.5px;
+      line-height: 1.75; color: #cdd6f4; display: block; white-space: pre;
+    }
+    .code-block .kw  { color: #cba6f7; }
+    .code-block .str { color: #a6e3a1; }
+    .code-block .num { color: #fab387; }
+    .code-block .cm  { color: #6c7086; }
+    .code-block .fn  { color: #89b4fa; }
+    .code-block .key { color: #89dceb; }
+    .code-block .type{ color: #f38ba8; }
+
+    /* TABLES */
+    .table-wrap { overflow-x: auto; margin: 16px 0; border-radius: 10px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; min-width: 600px; }
+    th, td { text-align: left; padding: 11px 16px; border-bottom: 1px solid var(--border); font-size: 13px; }
+    th { background: var(--light-gray); font-weight: 700; color: var(--navy); font-size: 11px; text-transform: uppercase; letter-spacing: .5px; }
+    td { color: var(--gray); }
+    td:first-child { font-family: 'SF Mono', monospace; color: var(--navy); font-size: 12px; font-weight: 600; }
+    tr:last-child td { border-bottom: none; }
+    td code { background: #f0f0f0; padding: 1px 6px; border-radius: 4px; font-size: 12px; color: var(--red); }
+
+    /* ─── ARCHITECTURE DIAGRAM ─── */
+    .arch-diagram {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 20px 20px; overflow-x: auto; margin-top: 24px;
+    }
+    .arch-main { display: flex; align-items: stretch; gap: 10px; min-width: 940px; }
+
+    /* Boxes */
+    .arch-box {
+      border-radius: 12px; border: 1.5px solid var(--border);
+      padding: 14px; flex-shrink: 0;
+    }
+    .arch-box-hdr {
+      display: flex; align-items: center; gap: 8px;
+      font-weight: 700; font-size: 13px; color: var(--navy); margin-bottom: 10px;
+      padding-bottom: 8px; border-bottom: 1px solid var(--border);
+    }
+    .arch-box-hdr .dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+
+    /* Tiles inside boxes */
+    .arch-tile {
+      border-radius: 8px; padding: 9px 12px; margin-bottom: 6px;
+      font-size: 12px; font-weight: 600;
+    }
+    .arch-tile:last-child { margin-bottom: 0; }
+    .arch-tile small { display: block; font-weight: 400; font-size: 11px; opacity: .75; margin-top: 2px; }
+    .t-navy   { background: var(--navy);    color: #fff; }
+    .t-red    { background: #fff0f2;        color: var(--red); border: 1px solid #ffd5dc; }
+    .t-blue   { background: var(--blue-bg); color: var(--blue); }
+    .t-purple { background: #ede9fe;        color: #5b21b6; }
+    .t-teal   { background: #e0f7fa;        color: #0e6674; }
+    .t-green  { background: var(--green-bg);color: var(--green); }
+    .t-orange { background: var(--orange-bg);color: var(--orange); }
+    .t-gray   { background: var(--light-gray); color: var(--gray); }
+
+    /* Flow zone */
+    .arch-flow-zone {
+      display: flex; flex-direction: column; justify-content: center;
+      gap: 14px; flex: 1; min-width: 200px; padding: 0 8px;
+    }
+    .arch-flow-row { display: flex; align-items: center; gap: 8px; }
+    .arch-flow-label {
+      font-size: 11px; font-weight: 700; color: var(--teal);
+      text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; min-width: 72px;
+    }
+    .arch-flow-line {
+      flex: 1; height: 2px; background: var(--teal);
+      position: relative; display: flex; align-items: center;
+    }
+    .arch-flow-line.dashed { background: repeating-linear-gradient(90deg, var(--teal) 0 6px, transparent 6px 12px); }
+    .arch-flow-line::after {
+      content: '▶'; position: absolute; right: -2px; color: var(--teal); font-size: 12px;
+    }
+    .arch-flow-line.red { background: var(--red); }
+    .arch-flow-line.red::after { color: var(--red); }
+    .arch-flow-line.rev::before {
+      content: '◀'; position: absolute; left: -2px; color: var(--red); font-size: 12px;
+    }
+    .arch-flow-tag {
+      background: var(--teal); color: white; font-size: 10px; font-weight: 700;
+      padding: 2px 8px; border-radius: 10px; white-space: nowrap;
+    }
+    .arch-flow-tag.red { background: var(--red); }
+
+    /* Arrow between boxes */
+    .arch-arrow { display: flex; align-items: center; color: var(--navy); font-size: 20px; font-weight: 800; flex-shrink: 0; padding: 0 4px; }
+
+    /* ─── LANGGRAPH DIAGRAM ─── */
+    .lg-diagram { display: flex; flex-direction: column; align-items: flex-start; gap: 0; margin: 24px 0; }
+    .lg-row { display: flex; align-items: center; gap: 0; }
+    .lg-node {
+      border-radius: 10px; padding: 14px 20px; min-width: 150px; text-align: center;
+      font-weight: 700; font-size: 13px; border: 2px solid transparent;
+      position: relative;
+    }
+    .lg-node small { display: block; font-weight: 400; font-size: 11px; margin-top: 3px; opacity: .8; }
+    .lg-node.start  { background: var(--navy); color: white; border-color: var(--navy); border-radius: 24px; min-width: 80px; }
+    .lg-node.end    { background: #eee; color: var(--gray); border-color: #ccc; border-radius: 24px; min-width: 80px; }
+    .lg-node.coord  { background: #fff0f2; color: #c41a3a; border-color: var(--red); }
+    .lg-node.rag    { background: var(--blue-bg); color: var(--blue); border-color: var(--blue); }
+    .lg-node.doc    { background: #ede9fe; color: #5b21b6; border-color: var(--purple); }
+    .lg-node.deploy { background: var(--green-bg); color: var(--green); border-color: var(--green); }
+    .lg-edge {
+      display: flex; align-items: center; justify-content: center;
+      min-width: 48px; color: var(--gray); font-size: 18px; font-weight: 700;
+    }
+    .lg-edge-v {
+      display: flex; flex-direction: column; align-items: center;
+      color: var(--gray); font-size: 18px; height: 36px; justify-content: center;
+    }
+    .lg-label {
+      font-size: 10px; color: var(--gray); font-weight: 600; text-align: center;
+      white-space: nowrap; padding: 2px 6px; background: var(--light-gray); border-radius: 4px;
+    }
+
+    /* ─── RAG PIPELINE DIAGRAM ─── */
+    .rag-pipeline {
+      display: flex; align-items: stretch; gap: 0; margin: 24px 0;
+      overflow-x: auto; min-width: 700px;
+    }
+    .rag-stage {
+      flex: 1; border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 16px 14px; text-align: center; position: relative; background: var(--white);
+    }
+    .rag-stage + .rag-stage { margin-left: -1px; border-left: 2px dashed var(--border); border-radius: 0; }
+    .rag-stage:first-child { border-radius: 10px 0 0 10px; }
+    .rag-stage:last-child  { border-radius: 0 10px 10px 0; }
+    .rag-stage-num {
+      width: 24px; height: 24px; background: var(--red); color: white;
+      border-radius: 50%; font-size: 11px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 8px;
+    }
+    .rag-stage-title { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .rag-stage-desc  { font-size: 11px; color: var(--gray); line-height: 1.4; }
+    .rag-arrow { display: flex; align-items: center; color: var(--red); font-size: 20px; font-weight: 900; flex-shrink: 0; padding: 0 2px; }
+
+    /* ─── CHANGELOG ─── */
+    .changelog { list-style: none; padding: 0; margin-top: 16px; }
+    .changelog li {
+      display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border);
+      align-items: flex-start;
+    }
+    .changelog li:last-child { border-bottom: none; }
+    .cl-date { font-size: 12px; color: var(--gray); white-space: nowrap; min-width: 90px; font-family: monospace; }
+    .cl-ver  { min-width: 46px; }
+    .cl-body { font-size: 14px; color: var(--dark); }
+    .cl-body strong { color: var(--navy); }
+
+    /* DB SCHEMA */
+    .db-table-wrap { margin-bottom: 32px; }
+    .db-table-title {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+    }
+    .db-table-name {
+      font-size: 15px; font-weight: 800; color: var(--navy);
+      font-family: 'SF Mono', monospace;
+    }
+    .db-table-desc { font-size: 13px; color: var(--gray); }
+
+    /* FILE TREE */
+    .file-tree {
+      background: var(--navy); border-radius: 12px; padding: 24px 28px;
+      font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px;
+      line-height: 1.9; color: #c8d1e0; margin: 16px 0; overflow-x: auto;
+    }
+    .ft-dir   { color: #89b4fa; font-weight: 700; }
+    .ft-file  { color: #cdd6f4; }
+    .ft-desc  { color: #6c7086; }
+    .ft-new   { color: #a6e3a1; }
+    .ft-key   { color: #fab387; font-weight: 700; }
+
+    /* FOOTER */
+    footer {
+      text-align: center; padding: 40px; border-top: 1px solid var(--border);
+      color: var(--gray); font-size: 12px;
+    }
+    footer strong { color: var(--navy); }
+
+    @media (max-width: 768px) {
+      nav .nav-links { display: none; }
+      .hero h1 { font-size: 28px; }
+      section { padding: 48px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <a href="#" class="brand">
+    <div class="brand-logo">T1</div>
+    <div>
+      <div class="brand-text">Presales Agent</div>
+      <div class="brand-sub">Living Architecture Document</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#overview">Overview</a>
+    <a href="#rag">RAG Design</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#langgraph">LangGraph</a>
+    <a href="#agents">Agents</a>
+    <a href="#database">Database</a>
+    <a href="#files">File Tree</a>
+    <a href="#app-ui">App UI</a>
+    <a href="#changelog">Changelog</a>
+  </div>
+  <span class="version-badge">v0.8 — 2026-03-26</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="doc-type">Living Architecture Document — Updated with every change</div>
+  <h1>Talon.One <em>Presales Agent</em><br>— How it works</h1>
+  <p class="sub">A complete reference for the multi-agent AI system: RAG design, system topology, LangGraph state machine, PostgreSQL schema, and the presales web application.</p>
+  <div class="meta">
+    <div class="meta-item">Stack: <span>Python · LangGraph · pgvector · FastAPI</span></div>
+    <div class="meta-item">LLM: <span>Gemini 2.5 Pro</span></div>
+    <div class="meta-item">Embeddings: <span>gemini-embedding-001 (768d)</span></div>
+    <div class="meta-item">DB: <span>PostgreSQL 17 + pgvector 0.8.2</span></div>
+    <div class="meta-item">Deploy: <span>GitHub + Vercel</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     01 — PROJECT OVERVIEW
+═══════════════════════════════════════════ -->
+<section id="overview">
+  <div class="inner">
+    <div class="section-label">01 — Purpose</div>
+    <h2>What this system does</h2>
+    <p>The Talon.One Presales Agent automates the creation of Technical Presales presentations. A presales engineer describes a prospect (company, industry, use-case, competitor) and the system produces a publication-ready, web-hosted HTML document — in the same quality as the My Muscle Chef deep-dive deck — without writing a single line of HTML.</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">🧠</div>
+        <h4>AI Orchestration</h4>
+        <p>LangGraph stateful graph routes tasks across five specialist agents: Coordinator, User Preference, Value Selling Strategist, Data Architect, and Document Engineer.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🗄️</div>
+        <h4>Knowledge Memory</h4>
+        <p>pgvector stores embedded Talon.One docs, battle-cards, and prior presentations. The system remembers every client run.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📄</div>
+        <h4>HTML Generator</h4>
+        <p>Outputs responsive HTML/Tailwind with Mermaid.js integration diagrams — matching the mmcTalonone.html visual standard.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🚀</div>
+        <h4>Auto-Deploy</h4>
+        <p>Commits the HTML to GitHub and triggers a Vercel deployment. Every doc gets a public URL within seconds.</p>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top: 24px;">
+      <p><strong>Golden rule:</strong> This document is updated every time the codebase changes. If you open it and something looks different from what you set up, the document is the source of truth — raise it for review.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     02 — RAG DESIGN
+═══════════════════════════════════════════ -->
+<section id="rag" class="bg-gray">
+  <div class="inner">
+    <div class="section-label">02 — Knowledge Architecture</div>
+    <h2>RAG Design — Retrieval-Augmented Generation</h2>
+    <p>RAG is the technique that makes the agent <em>knowledgeable</em> rather than just articulate. Instead of relying on what Gemini already knows, we first retrieve the most relevant Talon.One documentation, battle-cards, and past presentations from a local vector database — then feed that grounded context to the LLM before asking it to write.</p>
+
+    <div class="highlight-box blue">
+      <p><strong>Why RAG?</strong> LLMs hallucinate product details. RAG grounds every claim in real Talon.One documentation — the same docs the sales team uses. No invented API endpoints, no wrong pricing.</p>
+    </div>
+
+    <h3>The 7-Stage RAG Pipeline</h3>
+
+    <!-- Pipeline diagram -->
+    <div style="overflow-x: auto; margin: 16px 0;">
+      <div class="rag-pipeline">
+        <div class="rag-stage">
+          <div class="rag-stage-num">1</div>
+          <div class="rag-stage-title">Ingest</div>
+          <div class="rag-stage-desc">PDF · PPTX · XLSX · Images · Web docs loaded into the system</div>
+        </div>
+        <div class="rag-arrow">›</div>
+        <div class="rag-stage">
+          <div class="rag-stage-num">2</div>
+          <div class="rag-stage-title">Chunk</div>
+          <div class="rag-stage-desc">Documents split into overlapping ~500-token passages</div>
+        </div>
+        <div class="rag-arrow">›</div>
+        <div class="rag-stage">
+          <div class="rag-stage-num">3</div>
+          <div class="rag-stage-title">Embed</div>
+          <div class="rag-stage-desc">Gemini <code>gemini-embedding-001</code> → 768-dim float vector</div>
+        </div>
+        <div class="rag-arrow">›</div>
+        <div class="rag-stage">
+          <div class="rag-stage-num">4</div>
+          <div class="rag-stage-title">Store</div>
+          <div class="rag-stage-desc">Vector + metadata written to <code>documents</code> table in pgvector</div>
+        </div>
+        <div class="rag-arrow">›</div>
+        <div class="rag-stage">
+          <div class="rag-stage-num">5</div>
+          <div class="rag-stage-title">Multi-Query</div>
+          <div class="rag-stage-desc">LLM generates 3–5 diverse query variants per task (technical, business, competitive angles)</div>
+        </div>
+        <div class="rag-arrow">›</div>
+        <div class="rag-stage">
+          <div class="rag-stage-num">6</div>
+          <div class="rag-stage-title">Retrieve</div>
+          <div class="rag-stage-desc">HNSW cosine ANN search per query variant → top-(k×2) candidates each</div>
+        </div>
+        <div class="rag-arrow">›</div>
+        <div class="rag-stage">
+          <div class="rag-stage-num">7</div>
+          <div class="rag-stage-title">RRF Rerank</div>
+          <div class="rag-stage-desc">Reciprocal Rank Fusion merges all result lists → top-k fused chunks</div>
+        </div>
+        <div class="rag-arrow">›</div>
+        <div class="rag-stage">
+          <div class="rag-stage-num">8</div>
+          <div class="rag-stage-title">Generate</div>
+          <div class="rag-stage-desc">Up to 100K chars of context injected into Gemini’s 1M-token window</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>RAG Evolution Roadmap</h3>
+    <p>The system is designed to evolve. Each version improves retrieval quality:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Version</th>
+            <th>RAG Strategy</th>
+            <th>What it solves</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>v0.1</td>
+            <td>Naive top-k cosine similarity — single query per task</td>
+            <td>Baseline retrieval: good for well-defined topics</td>
+            <td><span class="badge badge-green">✅ Implemented</span></td>
+          </tr>
+          <tr>
+            <td>v0.2</td>
+            <td><strong>Multi-query RAG</strong> — LLM generates 3–5 rephrased queries per task, results fused via RRF</td>
+            <td>Reduces vocabulary mismatch between user question and doc language</td>
+            <td><span class="badge badge-green">✅ Implemented (v0.7)</span></td>
+          </tr>
+          <tr>
+            <td>v0.3</td>
+            <td><strong>Reciprocal Rank Fusion (RRF)</strong> — rank-based score fusion across all query variants replaces naive dedup</td>
+            <td>Better recall than any single query; no cross-encoder model needed</td>
+            <td><span class="badge badge-green">✅ Implemented (v0.7)</span></td>
+          </tr>
+          <tr>
+            <td>v0.4</td>
+            <td><strong>Embedding cache</strong> — LRU-cached embeddings avoid duplicate Gemini API calls on retries</td>
+            <td>Faster iteration loops, lower API cost</td>
+            <td><span class="badge badge-green">✅ Implemented (v0.7)</span></td>
+          </tr>
+          <tr>
+            <td>v0.5</td>
+            <td><strong>Contextual compression</strong> — retrieved chunks are summarised per-query before injection, reducing prompt token usage</td>
+            <td>Fits more sources into the 128k context window</td>
+            <td><span class="badge badge-orange">Planned</span></td>
+          </tr>
+          <tr>
+            <td>v1.0</td>
+            <td><strong>Agentic RAG</strong> — the Data Architect decides autonomously when to run more queries, when to crawl Google Drive, and when it has "enough"</td>
+            <td>Self-directed research loop, no fixed iteration count</td>
+            <td><span class="badge badge-gray">Future</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Embedding Model Choice</h3>
+    <div class="highlight-box green">
+      <p><strong>gemini-embedding-001 (768 dims)</strong> — chosen to keep the entire stack on a single provider (Google). No OpenAI key required. Embeddings are stored as <code>vector(768)</code> in PostgreSQL with <code>output_dimensionality=768</code> (native output is 3072d but HNSW max index dimension is 2000). If you ever switch providers, the entire <code>documents</code> table must be re-embedded and the vector column dimension updated in the schema.</p>
+    </div>
+
+    <h3>Sources ingested into the knowledge base</h3>
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">📖</div>
+        <h4>Talon.One Docs</h4>
+        <p>Integration API (Session V2), Management API, campaign rules, loyalty concepts, webhooks — crawled via <code>ingest_from_url()</code>.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🗂️</div>
+        <h4>Google Drive Assets</h4>
+        <p>PPTX battle-cards, XLSX pricing sheets, PDF one-pagers — indexed from a shared Drive folder defined by <code>GOOGLE_DRIVE_ROOT_FOLDER_ID</code>.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📓</div>
+        <h4>Notion Workspace</h4>
+        <p>Internal Talon.One knowledge pages — product wikis, battle-cards, onboarding notes. Searched by topic via the Notion API, selectively ingested into pgvector. Controlled by <code>NOTION_API_KEY</code> and <code>NOTION_MAX_PAGES</code>. Chunked at 800 words with 80-word overlap for optimal retrieval granularity.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌐</div>
+        <h4>Web Scraping</h4>
+        <p>Competitor API docs, prospect loyalty/promotions pages, any public URL. Scraped via <code>tools/web_scraper.py</code> — respects <code>robots.txt</code>, rate-limited, chunked at 800 words. Modes: single page (<code>scrape_and_ingest</code>), sitemap parse (<code>scrape_sitemap</code>), or link-following crawl (<code>crawl_links</code>). Accessible via CLI + <code>POST /api/scrape</code> and <code>POST /api/crawl</code> API endpoints.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🖼️</div>
+        <h4>Architecture Images</h4>
+        <p>PNG/JPEG diagrams described by <strong>Gemini 2.5 Pro</strong> (native multimodal), then the description is embedded and stored — so visual content is searchable.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📝</div>
+        <h4>Past Presentations</h4>
+        <p>Every generated HTML doc is ingested back into the store. Future runs can retrieve successfully used sections and patterns.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     03 — SYSTEM ARCHITECTURE
+═══════════════════════════════════════════ -->
+<section id="architecture">
+  <div class="inner">
+    <div class="section-label">03 — System Architecture</div>
+    <h2>Full System Topology</h2>
+    <p>The system is composed of five layers: the <strong>Web App</strong> (browser UI), the <strong>FastAPI server</strong>, the <strong>LangGraph agent graph</strong>, the <strong>Tool layer</strong> (Drive, pgvector, GitHub/Vercel), and the <strong>Storage layer</strong>.</p>
+
+    <!-- Architecture diagram -->
+    <div class="arch-diagram">
+      <div class="arch-main">
+
+        <!-- Layer 1: User / Browser -->
+        <div class="arch-box" style="width: 140px; background: var(--light-gray);">
+          <div class="arch-box-hdr"><div class="dot" style="background:#888;"></div>Browser</div>
+          <div class="arch-tile t-gray">🌐 Homepage<small>Repository browser</small></div>
+          <div class="arch-tile t-gray">📄 Doc Viewer<small>Open / Update</small></div>
+          <div class="arch-tile t-gray">✏️ New Doc Wizard<small>Prospect intake form</small></div>
+        </div>
+
+        <div class="arch-arrow">⟶</div>
+
+        <!-- Layer 2: FastAPI -->
+        <div class="arch-box" style="width: 155px; background: #f0f5ff;">
+          <div class="arch-box-hdr"><div class="dot" style="background: var(--blue);"></div>FastAPI Server</div>
+          <div class="arch-tile t-blue">GET /api/library<small>Scan CLIENTS/ etc.</small></div>
+          <div class="arch-tile t-blue">POST /api/run<small>Trigger agent run</small></div>
+          <div class="arch-tile t-blue">GET /api/docs/{id}<small>Serve HTML content</small></div>
+          <div class="arch-tile t-blue">GET /health</div>
+        </div>
+
+        <div class="arch-arrow">⟶</div>
+
+        <!-- Layer 3: LangGraph -->
+        <div class="arch-box" style="width: 160px; background: #fff0f2;">
+          <div class="arch-box-hdr"><div class="dot" style="background: var(--red);"></div>LangGraph Graph</div>
+          <div class="arch-tile t-red">🎯 Coordinator<small>PM + Validator</small></div>
+          <div class="arch-tile t-blue" style="margin-top:4px;">🗄️ Data Architect<small>RAG retrieval</small></div>
+          <div class="arch-tile" style="margin-top:4px; background:#fff3e0; border-left:3px solid #e67e22;">💡 Value Selling<small>Strategy + agenda</small></div>
+          <div class="arch-tile t-purple" style="margin-top:4px;">✍️ Doc Engineer<small>HTML generator</small></div>
+          <div class="arch-tile t-green" style="margin-top:4px;">🚀 Deploy Node</div>
+        </div>
+
+        <div class="arch-arrow">⟶</div>
+
+        <!-- Layer 4: Tools -->
+        <div class="arch-box" style="width: 155px; background: #ede9fe;">
+          <div class="arch-box-hdr"><div class="dot" style="background:#7c3aed;"></div>Tool Layer</div>
+          <div class="arch-tile t-purple">🗃️ postgres_rag.py<small>similarity_search / ingest</small></div>
+          <div class="arch-tile t-purple" style="margin-top:4px;">📂 google_drive.py<small>Drive API + Vision LLM</small></div>
+          <div class="arch-tile t-purple" style="margin-top:4px;">☁️ deployment.py<small>PyGithub + Vercel API</small></div>
+        </div>
+
+        <div class="arch-arrow">⟶</div>
+
+        <!-- Layer 5: Storage -->
+        <div class="arch-box" style="width: 145px; background: var(--green-bg);">
+          <div class="arch-box-hdr"><div class="dot" style="background: var(--green);"></div>Storage</div>
+          <div class="arch-tile t-green">🐘 PostgreSQL<small>+ pgvector</small></div>
+          <div class="arch-tile t-green" style="margin-top:4px;">🐙 GitHub Repo<small>CLIENTS/GENERATED/</small></div>
+          <div class="arch-tile t-green" style="margin-top:4px;">▲ Vercel<small>Public URLs</small></div>
+          <div class="arch-tile t-green" style="margin-top:4px;">🗂️ Google Drive<small>Source assets</small></div>
+        </div>
+
+      </div>
+
+      <!-- Data flow legend -->
+      <div style="margin-top: 16px; display: flex; gap: 20px; flex-wrap: wrap; border-top: 1px solid var(--border); padding-top: 14px;">
+        <div style="font-size: 12px; color: var(--gray); display:flex; align-items:center; gap:6px;">
+          <span style="display:inline-block;width:30px;height:2px;background:var(--navy);"></span> HTTP REST
+        </div>
+        <div style="font-size: 12px; color: var(--gray); display:flex; align-items:center; gap:6px;">
+          <span style="display:inline-block;width:30px;height:2px;background:var(--red);"></span> Agent state mutation
+        </div>
+        <div style="font-size: 12px; color: var(--gray); display:flex; align-items:center; gap:6px;">
+          <span style="display:inline-block;width:30px;height:2px;background:var(--green); border-top: 2px dashed var(--green);"></span> Async / webhook
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     04 — LANGGRAPH STATE MACHINE
+═══════════════════════════════════════════ -->
+<section id="langgraph" class="bg-gray">
+  <div class="inner">
+    <div class="section-label">04 — Orchestration</div>
+    <h2>LangGraph State Machine + Persistent Memory</h2>
+    <p>LangGraph is used to define a <strong>stateful, cyclic graph</strong> where each node is an agent function that reads from and writes to a shared <code>AgentState</code> TypedDict. Edges can be conditional — the Coordinator validates the output and either approves it for deployment or loops back for another retrieval + generation cycle.</p>
+
+    <div class="highlight-box blue" style="margin-bottom:20px;">
+      <strong>Three memory layers — all backed by PostgreSQL:</strong>
+      <table style="margin-top:10px; width:100%; border-collapse:collapse;">
+        <thead><tr><th style="text-align:left; padding:6px 10px; border-bottom:1px solid #c9d8f0;">Layer</th><th style="text-align:left; padding:6px 10px; border-bottom:1px solid #c9d8f0;">Location</th><th style="text-align:left; padding:6px 10px; border-bottom:1px solid #c9d8f0;">What is stored</th><th style="text-align:left; padding:6px 10px; border-bottom:1px solid #c9d8f0;">Scope</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:6px 10px;"><strong>Short-term</strong></td><td style="padding:6px 10px;"><code>AgentState.messages</code></td><td style="padding:6px 10px;">Full conversation turns, auto-merged by <code>add_messages</code></td><td style="padding:6px 10px;">Single run</td></tr>
+          <tr><td style="padding:6px 10px;"><strong>Working</strong></td><td style="padding:6px 10px;"><code>langgraph_checkpoints</code> table</td><td style="padding:6px 10px;">Full <code>AgentState</code> snapshot after every node. Resume after crash with <code>--resume</code></td><td style="padding:6px 10px;">Per prospect thread</td></tr>
+          <tr><td style="padding:6px 10px;"><strong>Long-term / Semantic</strong></td><td style="padding:6px 10px;"><code>documents</code> table (pgvector) + <code>user_insights</code> table</td><td style="padding:6px 10px;">768-dim embeddings of document chunks; personal coaching insights are stored in sales_playbook namespace and used for dynamic context injection</td><td style="padding:6px 10px;">Global, permanent</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:10px; margin-bottom:0;"><strong>Thread model:</strong> each prospect gets a stable <code>thread_id</code> derived from their company slug (e.g. <code>"My Muscle Chef" → "my-muscle-chef"</code>). Revisiting the same prospect resumes from the last checkpoint via <code>python main.py --resume</code>. History is viewable via <code>python main.py --history &lt;company&gt;</code>.</p>
+    </div>
+
+    <!-- LangGraph flow -->
+    <div style="overflow-x: auto; margin: 24px 0;">
+      <div style="min-width: 680px;">
+
+        <div style="display:flex; align-items:center; gap:0; flex-wrap: nowrap;">
+          <div class="lg-node start">START</div>
+          <div class="lg-edge">→</div>
+          <div class="lg-node coord">🎯 Coordinator<small>Phase A:<br>Task decomposition</small></div>
+          <div class="lg-edge">→</div>
+          <div class="lg-node" style="background:#eef2ff; border:2px solid #4f46e5; border-radius:12px; padding:12px 16px; text-align:center; font-weight:600; font-size:13px; min-width:100px;">💾 User Preference<small style="display:block;font-weight:400;font-size:11px;color:#666;margin-top:4px;">Record feedback<br>sales_playbook</small></div>
+          <div class="lg-edge">→</div>
+          <div class="lg-node" style="background:#fff3e0; border:2px solid #e67e22; border-radius:12px; padding:12px 16px; text-align:center; font-weight:600; font-size:13px; min-width:110px;">💡 Value Selling<small style="display:block;font-weight:400;font-size:11px;color:#666;margin-top:4px;">Strategy + Agenda<br>+ Kill-shots</small></div>
+          <div class="lg-edge">→</div>
+          <div class="lg-node rag">🗄️ Data Architect<small>RAG retrieval<br>+ personal insights</small></div>
+          <div class="lg-edge">→</div>
+          <div class="lg-node doc">✍️ Doc Engineer<small>HTML + Mermaid<br>generation</small></div>
+        </div>
+
+        <!-- Loop back arrow (text description) -->
+        <div style="margin: 4px 0 4px 195px; display:flex; align-items:center; gap:0;">
+          <div style="width:2px; height:36px; background:#ccc; margin-left:73px;"></div>
+          <div style="width:2px; height:36px; background:#ccc; margin-left:150px;"></div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:0; flex-wrap: nowrap; margin-left: 0;">
+          <div style="width:80px;"></div><!-- spacer for START -->
+          <div class="lg-edge" style="transform:rotate(180deg);">→</div>
+          <div class="lg-node coord">🎯 Coordinator<small>Phase B:<br>Validation</small></div>
+          <div class="lg-edge" style="transform:rotate(180deg); opacity:.3;">→</div>
+          <div style="min-width:150px; padding:8px; text-align:center;">
+            <div class="lg-label">if validation fails →<br>loop back to Data Architect</div>
+          </div>
+        </div>
+
+        <div style="margin: 8px 0 8px 270px; text-align:left;">
+          <div class="lg-label" style="display:inline-block;">if validation passes ↓</div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:0; flex-wrap: nowrap; padding-left: 262px;">
+          <div class="lg-node deploy">🚀 Deploy<small>GitHub commit<br>+ Vercel trigger</small></div>
+          <div class="lg-edge">→</div>
+          <div class="lg-node end">END</div>
+        </div>
+
+      </div>
+    </div>
+
+    <h3>AgentState Fields</h3>
+    <p>This is the complete TypedDict that flows through every node. Every field is documented below:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Field</th><th>Type</th><th>Owner</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>messages</td><td><code>list[BaseMessage]</code></td><td>All nodes</td><td>Full conversation history, auto-merged via <code>add_messages</code> reducer</td></tr>
+          <tr><td>prospect</td><td><code>ProspectContext</code></td><td>Input</td><td>Company name, industry, use-case, competitor, integrations, URLs to scrape, raw notes</td></tr>
+          <tr><td>tasks</td><td><code>list[str]</code></td><td>Coordinator</td><td>Ordered sub-tasks decomposed from the user brief</td></tr>
+          <tr><td>completed_tasks</td><td><code>list[str]</code></td><td>Coordinator</td><td>Tasks marked done (for progress tracking)</td></tr>
+          <tr><td>rag_queries</td><td><code>list[str]</code></td><td>Data Architect</td><td>Semantic queries sent to the vector store</td></tr>
+          <tr><td>retrieved_chunks</td><td><code>list[RAGChunk]</code></td><td>Data Architect</td><td>All retrieved document chunks with source + cosine score</td></tr>
+          <tr><td>selling_agenda</td><td><code>list[dict]</code></td><td>Value Selling</td><td>Ordered sections — each has title, purpose, talking_points, storytelling_note</td></tr>
+          <tr><td>narrative_arc</td><td><code>str | None</code></td><td>Value Selling</td><td>3-5 sentence storytelling flow (Problem → Insight → Solution → Proof → CTA)</td></tr>
+          <tr><td>key_talking_points</td><td><code>list[dict]</code></td><td>Value Selling</td><td>Must-mention items: category (integration / competitive_advantage / customer_proof / technical_differentiator / business_value), point, priority</td></tr>
+          <tr><td>competitor_kill_shots</td><td><code>list[dict]</code></td><td>Value Selling</td><td>Specific factual differentiators where Talon.One wins: {claim, evidence}</td></tr>
+          <tr><td>html_output</td><td><code>str | None</code></td><td>Doc Engineer</td><td>The generated full HTML string</td></tr>
+          <tr><td>diagram_definitions</td><td><code>list[str]</code></td><td>Doc Engineer</td><td>Raw Mermaid.js blocks extracted from the HTML</td></tr>
+          <tr><td>validation</td><td><code>ValidationResult | None</code></td><td>Coordinator</td><td>7-point checklist result: passed bool + per-item notes</td></tr>
+          <tr><td>output_filename</td><td><code>str | None</code></td><td>Doc Engineer</td><td>e.g. <code>dali-presales.html</code></td></tr>
+          <tr><td>github_pr_url</td><td><code>str | None</code></td><td>Deploy</td><td>GitHub blob URL of the committed file</td></tr>
+          <tr><td>vercel_url</td><td><code>str | None</code></td><td>Deploy</td><td>Public Vercel deployment URL</td></tr>
+          <tr><td>current_agent</td><td><code>str</code></td><td>All nodes</td><td>Name of the node currently executing (for UI progress display)</td></tr>
+          <tr><td>iteration_count</td><td><code>int</code></td><td>All nodes</td><td>Loop guard — aborts if it exceeds <code>MAX_ITERATIONS</code> env var</td></tr>
+          <tr><td>error</td><td><code>str | None</code></td><td>Any node</td><td>Fatal error message; causes graph to route to END</td></tr>
+          <tr><td>thread_id</td><td><code>str | None</code></td><td>Input</td><td>Company slug — mirrors the LangGraph config thread for logging; drives checkpoint resume</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Coordinator — Best Practices Checklist</h3>
+    <p>Before approving a document for deployment, the Coordinator runs a regex-based validation against these criteria. The checklist is <strong>prospect-aware</strong> — competitor and integration checks are conditional:</p>
+    <div class=\"table-wrap\">
+      <table>
+        <thead><tr><th>Check</th><th>Pattern (regex)</th><th>Why it matters</th><th>Conditional?</th></tr></thead>
+        <tbody>
+          <tr><td>mac_architecture</td><td><code>Talon\\.?One.*MAC|MAC.*architecture|multi.application</code></td><td>Core selling point — context-aware match</td><td>Always</td></tr>
+          <tr><td>session_v2</td><td><code>Session\\s*V2</code></td><td>Correct API version (not deprecated)</td><td>Always</td></tr>
+          <tr><td>latency_claim</td><td><code>sub.?50\\s*m?s|&lt;\\s*50\\s*m?s|under\\s+50</code></td><td>Key competitive claim — flexible format</td><td>Always</td></tr>
+          <tr><td>unified_rule_engine</td><td><code>unified\\s+rule\\s+engine|single\\s+rule\\s+engine</code></td><td>Kill-switch vs. competitor silos</td><td>Always</td></tr>
+          <tr><td>mermaid_diagram</td><td><code>class=\"mermaid\"|mermaid\\.init|```mermaid</code></td><td>Visual integration flow required</td><td>Always</td></tr>
+          <tr><td>cdp_cep_ecosystem</td><td><code>Segment|mParticle|Braze|Iterable|Bloomreach|Tealium</code></td><td>Ecosystem breadth</td><td>Always</td></tr>
+          <tr><td>tailwind</td><td><code>tailwindcss|cdn\\.tailwindcss</code></td><td>Responsive design standard</td><td>Always</td></tr>
+          <tr><td>competitor_comparison</td><td><code>vs|versus|compared to|advantage.*{competitor}</code></td><td>Must address named competitor</td><td>Only if competitor specified</td></tr>
+          <tr><td>integrations</td><td>Exact matches for each named integration</td><td>Prospect's tech stack acknowledged</td><td>Only if integrations specified (non-blocking)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="highlight-box orange" style="margin-top:12px;">
+      <p><strong>Loop guard:</strong> If validation fails 3+ times, the graph force-deploys the best-effort document rather than burning tokens indefinitely. This balances quality with cost control.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     05 — AGENTS
+═══════════════════════════════════════════ -->
+<section id="agents">
+  <div class="inner">
+    <div class="section-label">05 — Agent Definitions</div>
+    <h2>Five Specialist Agents</h2>
+
+    <h3>🎯 Coordinator — <span style="color:var(--gray); font-weight:400; font-size:14px;">agents/coordinator.py</span></h3>
+    <div class="highlight-box">
+      <p><strong>Role:</strong> Project Manager. Decomposes the user brief into an ordered task list. After the document is generated, validates it against the 7-point best-practices checklist and routes the graph accordingly.</p>
+    </div>
+    <p><strong>Phase A</strong> (first call): sends a task decomposition prompt to <strong>Gemini 2.5 Pro</strong> → returns JSON <code>{"tasks": [...]}</code>.<br>
+    <strong>Phase B</strong> (after HTML exists): runs <code>_validate_html()</code> → sets <code>validation.passed</code>.<br>
+    <strong>Temperature:</strong> 0.2 (low — structured output needed).</p>
+
+    <h3>🗄️ Data Architect — <span style="color:var(--gray); font-weight:400; font-size:14px;">agents/data_architect.py</span></h3>
+
+    <h3>🧠 User Preference — <span style="color:var(--gray); font-weight:400; font-size:14px;">agents/user_preference.py</span></h3>
+    <div class="highlight-box" style="border-left-color:#0ea5e9;background:#eff8ff;">
+      <p><strong>Role:</strong> Active learning handoff. Listens for explicit user feedback via <code>state.user_feedback</code> and persists it to the <code>sales_playbook</code> namespace (Postgres <code>user_insights</code> table). Ensures the agent learns from coaching signals across independent sessions and thread IDs.</p>
+    </div>
+    <p><strong>Function:</strong>
+      - Captures statements like "Focus more on the Loyalty API for Tier 1 clients"
+      - Calls <code>record_user_preference()</code> in <code>core/store.py</code>
+      - Clears <code>state.user_feedback</code> after persistence
+      - Sends control back to Value Selling node for strategic re-analysis
+    </p>
+    <div class="highlight-box blue">
+      <p><strong>Role:</strong> Knowledge Base. Converts the task list into semantic queries, runs them against pgvector, pulls assets from Google Drive, fetches relevant Notion pages, scrapes web URLs provided in the prospect intake (competitor docs, prospect loyalty pages), and uses <strong>Gemini 2.5 Pro</strong> (natively multimodal) to describe images — no separate Vision API call needed. Returns a deduplicated list of <code>RAGChunk</code> objects.</p>
+    </div>
+    <p><strong>Dedup strategy:</strong> chunks are keyed by <code>source_id + content[:60]</code> — no identical passage appears twice even across multiple queries.<br>
+    <strong>Cap:</strong> max 5 Google Drive files · max <code>NOTION_MAX_PAGES</code> (default 5) Notion pages · max <code>WEB_SCRAPER_MAX_PAGES</code> (default 20) web pages per run (configurable).<br>
+    <strong>Notion flow:</strong> search → extract full page text → surface first 2 000 chars as an in-session chunk → background-persist all chunks to pgvector for future runs.<br>
+    <strong>Web scraping flow:</strong> for each URL in <code>prospect.urls_to_scrape</code>: fetch page → BeautifulSoup extraction → 2 000-char preview as in-session chunk → full content chunked &amp; persisted to pgvector. Respects <code>robots.txt</code>, 1s delay between requests.<br>
+    <strong>Temperature:</strong> 0.0 (deterministic retrieval decisions).</p>
+
+    <h3>✍️ Document Engineer — <span style="color:var(--gray); font-weight:400; font-size:14px;">agents/document_engineer.py</span></h3>
+    <div class="highlight-box" style="border-left-color: var(--purple); background: #f8f5ff;">
+      <p><strong>Role:</strong> Full-Stack Developer. Receives the retrieved chunks and generates a self-contained HTML/Tailwind/Mermaid document. If called on a retry (validation failed), previous failure notes are injected into the prompt for self-correction. Uses <strong>Gemini 2.5 Pro</strong>'s large 1M-token context window — the entire knowledge base can be passed in a single call if needed.</p>
+    </div>
+    <p><strong>Context window budget:</strong> max 12,000 characters of RAG context injected per run (well within Gemini's 1M limit — can be expanded).<br>
+    <strong>Agenda-driven:</strong> If the Value Selling agent produced an agenda, the Doc Engineer follows that exact structure — sections, talking points, and narrative arc are injected into the prompt.<br>
+    <strong>Brand colours:</strong> Talon.One defaults (<code>#FF6900, #1A1A2E, #00C2CB</code>) unless prospect assets override.<br>
+    <strong>Temperature:</strong> 0.4 (some creativity for narrative sections).</p>
+
+    <h3>💡 Value Selling Proposition — <span style="color:var(--gray); font-weight:400; font-size:14px;">agents/value_selling.py</span></h3>
+    <div class="highlight-box" style="border-left-color: #e67e22; background: #fff8f0;">
+      <p><strong>Role:</strong> Strategic Storyteller. Analyses the prospect context and retrieved knowledge to craft a persuasive sales narrative. Produces a recommended document agenda (table of contents), must-have talking points, a narrative arc, and competitor kill-shots. Sits between Data Architect and Document Engineer in the graph — it tells the Doc Engineer <em>what</em> to write and <em>how</em> to frame it.</p>
+    </div>
+    <p><strong>Narrative framework:</strong> Problem → Insight → Solution → Proof → Call-to-Action.<br>
+    <strong>Outputs:</strong> <code>selling_agenda</code> (ordered sections with talking points), <code>narrative_arc</code>, <code>key_talking_points</code> (categorised by integration / competitive_advantage / customer_proof / technical_differentiator / business_value), <code>competitor_kill_shots</code>.<br>
+    <strong>Industry awareness:</strong> Adapts angles for Retail, QSR, iGaming, Subscription, Travel verticals.<br>
+    <strong>Max sections:</strong> 8 — quality over quantity.<br>
+    <strong>Temperature:</strong> 0.3 (creative but still structured).</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     06 — DATABASE SCHEMA
+═══════════════════════════════════════════ -->
+<section id="database" class="bg-gray">
+  <div class="inner">
+    <div class="section-label">06 — Data Layer</div>
+    <h2>PostgreSQL 17 + pgvector 0.8.2 Schema</h2>
+    <p>Three tables. Spun up automatically via <code>init.sql</code> when Docker Compose starts. Managed locally — no cloud database required to get started.</p>
+
+    <h3>PostgreSQL usage overview</h3>
+    <p>This system uses PostgreSQL for:
+      <ul>
+        <li><strong>pgvector document semantics:</strong> all ingested knowledge chunks in <code>documents</code> (RAG queries)</li>
+        <li><strong>presentation audit logs:</strong> <code>presentations</code> stores generated slides / HTML outputs</li>
+        <li><strong>graph checkpointing:</strong> LangGraph runs persisted in <code>langgraph_checkpoints</code>, <code>langgraph_blobs</code>, <code>langgraph_writes</code> by PostgresSaver</li>
+        <li><strong>user preference memory:</strong> <code>user_insights</code> (new sales_playbook namespace, active learning)</li>
+      </ul>
+    </p>
+
+    <div class="highlight-box orange">
+      <p><strong>Connection string:</strong> <code>postgresql+psycopg://presales:presales_secret@localhost:5432/presales_db</code> — override via <code>DATABASE_URL</code> in <code>.env</code>. The <code>+psycopg</code> suffix is required by LangChain-Postgres; the raw psycopg3 connections in <code>tools/postgres_rag.py</code> use <code>postgresql://</code> (no suffix).</p>
+    </div>
+
+    <!-- TABLE: documents -->
+    <div class="db-table-wrap">
+      <div class="db-table-title">
+        <div class="db-table-name">documents</div>
+        <span class="badge badge-purple">pgvector — HNSW</span>
+        <div class="db-table-desc">— Core knowledge base / long-term semantic memory. Every ingested chunk lives here.</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Column</th><th>Type</th><th>Nullable</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>id</td><td><code>BIGSERIAL</code></td><td>NOT NULL</td><td>Primary key — auto-increment</td></tr>
+            <tr><td>source</td><td><code>TEXT</code></td><td>NOT NULL</td><td>Origin: <code>talon_docs</code> · <code>google_drive</code> · <code>notion</code> · <code>local</code></td></tr>
+            <tr><td>source_id</td><td><code>TEXT</code></td><td>nullable</td><td>Drive file ID, doc URL slug, Notion page ID, or local path</td></tr>
+            <tr><td>title</td><td><code>TEXT</code></td><td>nullable</td><td>Human-readable document title</td></tr>
+            <tr><td>content</td><td><code>TEXT</code></td><td>NOT NULL</td><td>The raw chunk text (max ~8 000 chars)</td></tr>
+            <tr><td>metadata</td><td><code>JSONB</code></td><td>default <code>{}</code></td><td>Arbitrary key-value pairs (page number, slide index, etc.)</td></tr>
+            <tr><td>embedding</td><td><code>vector(768)</code></td><td>nullable</td><td>gemini-embedding-001 float32 vector (output_dimensionality=768)</td></tr>
+            <tr><td>created_at</td><td><code>TIMESTAMPTZ</code></td><td>default NOW()</td><td>Ingestion timestamp</td></tr>
+            <tr><td>updated_at</td><td><code>TIMESTAMPTZ</code></td><td>default NOW()</td><td>Last update timestamp</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="code-block" style="margin-top:10px;">
+        <code><span class="cm">-- HNSW index for cosine ANN (pgvector 0.7+) — no training step, sub-ms recall</span>
+<span class="kw">CREATE INDEX</span> idx_documents_embedding <span class="kw">ON</span> documents
+  <span class="kw">USING</span> hnsw (embedding vector_cosine_ops)
+  <span class="kw">WITH</span> (m = <span class="num">16</span>, ef_construction = <span class="num">64</span>);
+<span class="cm">-- m=16: graph connectivity (higher = better recall, more RAM)</span>
+<span class="cm">-- ef_construction=64: build-time beam-width (higher = better recall, slower build)</span>
+
+<span class="kw">CREATE INDEX</span> idx_documents_source <span class="kw">ON</span> documents (source);
+<span class="cm">-- ^ Speeds up filtering by source type (e.g. only talon_docs or notion)</span>
+
+<span class="cm">-- LangGraph auto-creates these on checkpointer.setup():</span>
+<span class="cm">-- langgraph_checkpoints, langgraph_blobs, langgraph_writes</span></code>
+      </div>
+    </div>
+
+    <!-- TABLE: presentations -->
+    <div class="db-table-wrap">
+      <div class="db-table-title">
+        <div class="db-table-name">presentations</div>
+        <span class="badge badge-blue">Output tracking</span>
+        <div class="db-table-desc">— One row per generated presales document.</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Column</th><th>Type</th><th>Nullable</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>id</td><td><code>BIGSERIAL</code></td><td>NOT NULL</td><td>Primary key</td></tr>
+            <tr><td>company_name</td><td><code>TEXT</code></td><td>NOT NULL</td><td>Prospect company name (e.g. "Dali")</td></tr>
+            <tr><td>industry</td><td><code>TEXT</code></td><td>nullable</td><td>Vertical (e.g. "Retail")</td></tr>
+            <tr><td>use_case</td><td><code>TEXT</code></td><td>nullable</td><td>What Talon.One solves for them</td></tr>
+            <tr><td>html_content</td><td><code>TEXT</code></td><td>nullable</td><td>The full generated HTML (stored for re-serving without GitHub round-trip)</td></tr>
+            <tr><td>github_pr_url</td><td><code>TEXT</code></td><td>nullable</td><td>GitHub blob URL of the committed file</td></tr>
+            <tr><td>vercel_url</td><td><code>TEXT</code></td><td>nullable</td><td>Public Vercel URL</td></tr>
+            <tr><td>status</td><td><code>TEXT</code></td><td>default <code>'draft'</code></td><td><code>draft</code> · <code>deployed</code> · <code>archived</code></td></tr>
+            <tr><td>created_at</td><td><code>TIMESTAMPTZ</code></td><td>default NOW()</td><td>First generation time</td></tr>
+            <tr><td>updated_at</td><td><code>TIMESTAMPTZ</code></td><td>default NOW()</td><td>Last update (e.g. re-generation)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TABLE: agent_runs -->
+    <div class="db-table-wrap">
+      <div class="db-table-title">
+        <div class="db-table-name">agent_runs</div>
+        <span class="badge badge-green">Observability</span>
+        <div class="db-table-desc">— Traces every node execution for debugging and cost tracking.</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Column</th><th>Type</th><th>Nullable</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>id</td><td><code>BIGSERIAL</code></td><td>NOT NULL</td><td>Primary key</td></tr>
+            <tr><td>presentation_id</td><td><code>BIGINT</code></td><td>nullable</td><td>FK → <code>presentations.id</code></td></tr>
+            <tr><td>agent_name</td><td><code>TEXT</code></td><td>NOT NULL</td><td>Which node ran: <code>coordinator</code> · <code>data_architect</code> · <code>value_selling</code> · <code>document_engineer</code> · <code>deploy</code></td></tr>
+            <tr><td>input_summary</td><td><code>TEXT</code></td><td>nullable</td><td>Short summary of what the node received</td></tr>
+            <tr><td>output_summary</td><td><code>TEXT</code></td><td>nullable</td><td>Short summary of what the node produced</td></tr>
+            <tr><td>tokens_used</td><td><code>INT</code></td><td>nullable</td><td>LLM token count for cost tracking</td></tr>
+            <tr><td>duration_ms</td><td><code>INT</code></td><td>nullable</td><td>Wall-clock time for the node execution</td></tr>
+            <tr><td>error</td><td><code>TEXT</code></td><td>nullable</td><td>Error message if node failed</td></tr>
+            <tr><td>created_at</td><td><code>TIMESTAMPTZ</code></td><td>default NOW()</td><td>Execution timestamp</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     07 — FILE STRUCTURE
+═══════════════════════════════════════════ -->
+<section id="files">
+  <div class="inner">
+    <div class="section-label">07 — Codebase</div>
+    <h2>File Tree</h2>
+    <p>All agent code lives inside <code>presales_agent/</code> alongside the existing HTML presentations. This keeps the Python project isolated from the static content that Vercel serves.</p>
+
+    <div class="file-tree">
+<span class="ft-dir">presales_agent/</span>
+├── <span class="ft-key">ARCHITECTURE.html</span>   <span class="ft-desc">← this file — updated with every change</span>
+│
+├── <span class="ft-key">main.py</span>              <span class="ft-desc">← entry point: CLI + FastAPI server (--serve)</span>
+├── requirements.txt         <span class="ft-desc">← all Python deps (pinned versions)</span>
+├── .env.example             <span class="ft-desc">← template for API keys (never commit .env)</span>
+├── docker-compose.yml       <span class="ft-desc">← PostgreSQL 17 + pgvector 0.8.2 container (port 5433)</span>
+├── init.sql                 <span class="ft-desc">← DB schema: 3 tables, ivfflat index</span>
+├── .gitignore
+│
+├── <span class="ft-dir">core/</span>                <span class="ft-desc">← LangGraph plumbing</span>
+│   ├── state.py             <span class="ft-desc">← AgentState TypedDict + sub-schemas (incl. thread_id)</span>
+│   ├── graph.py             <span class="ft-desc">← StateGraph wiring + conditional routing (lazy-compiled)</span>
+│   ├── <span class="ft-new">memory.py</span>           <span class="ft-desc">← PostgresSaver checkpointer + make_thread_id + get_thread_history</span>
+│   └── prompts.py           <span class="ft-desc">← system prompts for all 4 agents</span>
+│
+├── <span class="ft-dir">agents/</span>              <span class="ft-desc">← one file per agent node</span>
+│   ├── coordinator.py       <span class="ft-desc">← task decomposition + validation</span>
+│   ├── data_architect.py    <span class="ft-desc">← RAG retrieval + Drive + Vision LLM</span>
+│   ├── <span class="ft-new">value_selling.py</span>    <span class="ft-desc">← strategic agenda, talking points, narrative arc, kill-shots</span>
+│   └── document_engineer.py <span class="ft-desc">← HTML/Tailwind/Mermaid generator (agenda-driven)</span>
+│
+├── <span class="ft-dir">tools/</span>               <span class="ft-desc">← external service integrations</span>
+│   ├── postgres_rag.py      <span class="ft-desc">← ingest_document, similarity_search, ingest_from_url</span>
+│   ├── google_drive.py      <span class="ft-desc">← OAuth2 Drive client, PDF/PPTX/XLSX/image parsers</span>
+│   ├── <span class="ft-new">notion.py</span>           <span class="ft-desc">← search_notion, extract_page_text, ingest_notion_page, ingest_notion_search</span>
+│   ├── <span class="ft-new">web_scraper.py</span>      <span class="ft-desc">← scrape_url, scrape_and_ingest, scrape_sitemap, crawl_links</span>
+│   └── deployment.py        <span class="ft-desc">← GitHub commit + Vercel API trigger + deploy_node</span>
+│
+└── <span class="ft-dir">credentials/</span>         <span class="ft-desc">← gitignored — put google_credentials.json here</span>
+    └── google_credentials.json
+
+<span class="ft-dir">CLIENTS/</span>             <span class="ft-desc">← existing presales HTML docs</span>
+├── MY MUSCLE CHEF/mmcTalonone.html   <span class="ft-desc">← design reference</span>
+├── DALI/
+└── <span class="ft-new">GENERATED/</span>           <span class="ft-desc">← agent outputs land here (auto-created)</span>
+
+<span class="ft-dir">COMPETITION/</span>         <span class="ft-desc">← competitor battle-cards</span>
+<span class="ft-dir">PARTNERS/</span>            <span class="ft-desc">← CDP / CEP / ecommerce partner docs</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     08 — WEB APP UI PLAN
+═══════════════════════════════════════════ -->
+<section id="app-ui" class="bg-gray">
+  <div class="inner">
+    <div class="section-label">08 — Web Application</div>
+    <h2>Presales App — Homepage &amp; Wizard</h2>
+    <p>The presales homepage (<code>index.html</code>) is fully built and served statically via Vercel. Engineers use it as their single hub: browse existing documents, search by keyword, and trigger new agent runs — all from the browser.</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">🏠</div>
+        <h4>Homepage — Repository Browser</h4>
+        <p>Three columns: <strong>Clients</strong>, <strong>Competition</strong>, <strong>Partners</strong>. Collapsible folder trees, global ⌘K search, filter pills, hero stats. All documents show <em>Created</em> and <em>Updated</em> timestamps.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">✨</div>
+        <h4>New Presentation Wizard</h4>
+        <p>4-step modal: Prospect basics → Competitive context → Sources/URLs → Live agent run with log stream. Submits to <code>POST http://localhost:8000/run</code>.</p>
+        <p style="margin-top:8px;"><span class="badge badge-red">POST /api/run</span></p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎨</div>
+        <h4>Brand Identity</h4>
+        <p>Talon.One color palette: white background, <code>#0161ff</code> (blue), <code>#02043b</code> (navy). Logo served from Storyblok CDN. Consistent across all documents.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🤖</div>
+        <h4>Agent Status Indicator</h4>
+        <p>Live dot in the nav polls <code>GET /health</code> every 15 seconds — green when the FastAPI server is reachable, grey when offline.</p>
+      </div>
+    </div>
+
+    <div class="highlight-box green" style="margin-top:24px;">
+      <p><strong>Status:</strong> Homepage fully deployed at <code>/index.html</code>. Agent wizard calls <code>POST http://localhost:8000/run</code> — start the FastAPI server with <code>uvicorn main:app --reload</code> before using the wizard.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     09 — SETUP: STEP 1
+═══════════════════════════════════════════ -->
+<section id="setup">
+  <div class="inner">
+    <div class="section-label">09 — Getting Started</div>
+    <h2>Step 1 — Local Environment Setup</h2>
+    <p>Before running any agent, you need Python 3.11+, Docker, and your API keys. Follow these steps in order:</p>
+
+    <h3>1a — Create your <code>.env</code> file</h3>
+    <div class="code-block">
+      <code><span class="cm"># In presales_agent/</span>
+cp .env.example .env
+<span class="cm"># Then open .env and fill in:</span>
+GOOGLE_API_KEY=AIza...         <span class="cm"># Gemini API key from Google AI Studio</span>
+LLM_MODEL=gemini-2.5-pro
+EMBEDDING_MODEL=gemini-embedding-001
+GITHUB_TOKEN=ghp_...
+GITHUB_REPO=your-org/presales-content
+VERCEL_TOKEN=...
+VERCEL_PROJECT_ID=...</code>
+    </div>
+
+    <h3>1b — Start the database</h3>
+    <div class="code-block">
+      <code><span class="cm"># From presales_agent/ directory:</span>
+docker compose up -d
+<span class="cm"># Verify it's healthy:</span>
+docker compose ps</code>
+    </div>
+
+    <h3>1c — Install Python dependencies</h3>
+    <div class="code-block">
+      <code>python -m venv .venv
+source .venv/bin/activate   <span class="cm"># Windows: .venv\Scripts\activate</span>
+pip install -r requirements.txt</code>
+    </div>
+
+    <h3>1d — Ingest your first documents</h3>
+    <div class="code-block">
+      <code><span class="cm"># Quick-start: index the key Talon.One doc pages</span>
+python - &lt;&lt;'EOF'
+<span class="kw">from</span> tools.postgres_rag <span class="kw">import</span> ingest_from_url
+pages = [
+    <span class="str">"https://docs.talon.one/docs/dev/integration-api/session-v2"</span>,
+    <span class="str">"https://docs.talon.one/docs/product/account/managing-applications"</span>,
+    <span class="str">"https://docs.talon.one/docs/dev/integration-api/overview"</span>,
+]
+<span class="kw">for</span> url <span class="kw">in</span> pages:
+    ingest_from_url(url)
+    <span class="fn">print</span>(<span class="str">f"✅ Ingested: {url}"</span>)
+EOF</code>
+    </div>
+
+    <h3>1e — Run your first agent job</h3>
+    <div class="code-block">
+      <code>python main.py
+<span class="cm"># Interactive prompts will ask for company name, industry, etc.</span>
+<span class="cm"># Or pass a JSON file:</span>
+python main.py --prospect examples/dali.json</code>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     10 — CHANGELOG
+═══════════════════════════════════════════ -->
+<section id="changelog" class="bg-gray">
+  <div class="inner">
+    <div class="section-label">10 — Evolution Log</div>
+    <h2>Changelog — Updated with every change</h2>
+    <p>Every modification to the codebase is recorded here with the rationale. This is the audit trail for the system.</p>
+
+    <ul class="changelog">
+      <li>
+        <div class="cl-date">2026-03-26</div>
+        <div class="cl-ver"><span class="badge badge-green">v0.1</span></div>
+        <div class="cl-body">
+          <strong>Initial scaffold.</strong> Created full Python project structure inside <code>presales_agent/</code>:
+          Docker Compose + pgvector schema (<code>init.sql</code>), <code>requirements.txt</code>,
+          <code>.env.example</code>, <code>core/</code> (state, graph, prompts), three agent nodes
+          (coordinator, data_architect, document_engineer), three tool modules
+          (postgres_rag, google_drive, deployment), and <code>main.py</code> with CLI + FastAPI server.
+          RAG strategy: naive top-k cosine similarity. LangGraph graph wired with
+          conditional routing and iteration guard. Architecture document created.
+        </div>
+      </li>
+      <li>
+        <div class="cl-date">2026-03-26</div>
+        <div class="cl-ver"><span class="badge badge-blue">v0.2</span></div>
+        <div class="cl-body">
+          <strong>Switched LLM stack to Gemini.</strong> Replaced OpenAI GPT-4o with <strong>Gemini 1.5 Pro</strong> as the sole LLM provider. 
+          Replaced <code>text-embedding-3-small</code> (1536 dims) with <strong>Gemini <code>text-embedding-004</code> (768 dims)</strong> — 
+          no OpenAI API key required anywhere in the system. Updated <code>init.sql</code> vector column from 
+          <code>vector(1536)</code> → <code>vector(768)</code>. Updated <code>tools/postgres_rag.py</code> 
+          <code>_embed()</code> function to use <code>GoogleGenerativeAIEmbeddings</code>. Updated <code>.env.example</code> 
+          defaults. Architecture document updated to reflect full Gemini stack.
+        </div>
+      </li>
+      <li>
+        <div class="cl-date">2026-03-26</div>
+        <div class="cl-ver"><span class="badge" style="background:var(--purple);color:#fff;">v0.4</span></div>
+        <div class="cl-body">
+          <strong>Persistent memory + HNSW vector index.</strong>
+          Created <code>core/memory.py</code> implementing three-layer memory via PostgreSQL:
+          (1) <em>Short-term</em> — <code>AgentState.messages</code> accumulated by the <code>add_messages</code> reducer within a run;
+          (2) <em>Working / cross-run</em> — <code>PostgresSaver</code> from <code>langgraph-checkpoint-postgres</code> serialises the full <code>AgentState</code> after every node transition into <code>langgraph_checkpoints</code> (auto-created); each prospect is identified by a stable <code>thread_id</code> slug; runs resume with <code>python main.py --resume</code>; history is viewable with <code>python main.py --history &lt;company&gt;</code>;
+          (3) <em>Long-term / semantic</em> — pgvector <code>documents</code> table (unchanged).
+          Updated <code>core/graph.py</code>: replaced eagerly-compiled <code>compiled_graph</code> with lazy <code>get_compiled_graph()</code> that attaches the checkpointer; gracefully degrades to in-memory if the DB is unreachable.
+          Updated <code>core/state.py</code>: added <code>thread_id</code> field.
+          Updated <code>main.py</code>: <code>run_agent()</code> accepts <code>resume</code> flag, passes <code>config={&quot;configurable&quot;:{&quot;thread_id&quot;:...}}</code> to every graph invocation; added <code>--resume</code> and <code>--history</code> CLI args.
+          Upgraded <code>init.sql</code> vector index from <strong>IVFFlat</strong> → <strong>HNSW</strong> (<code>m=16, ef_construction=64</code>): no training step, better recall, sub-ms query latency at this scale.
+          Added <code>langgraph-checkpoint-postgres&gt;=2.0.4</code> to <code>requirements.txt</code>.
+          Architecture document confirms PostgreSQL is the correct and sufficient vector database for this project — no second data store needed.
+        </div>
+      </li>
+      <li>
+        <div class="cl-date">2026-03-26</div>
+        <div class="cl-ver"><span class="badge" style="background:#e67e22;color:#fff;">v0.5</span></div>
+        <div class="cl-body">
+          <strong>Web scraping as a knowledge source.</strong>
+          Created <code>tools/web_scraper.py</code> with four public functions:
+          <code>scrape_url(url)</code> — fetch + BeautifulSoup extraction (clean nav/footer/script stripping);
+          <code>scrape_and_ingest(url, source)</code> — scrape + chunk (800w / 80w overlap) + embed + store in pgvector;
+          <code>scrape_sitemap(sitemap_url, url_filter)</code> — parse sitemap.xml, filter by regex, ingest matching pages;
+          <code>crawl_links(start_url, depth, url_filter)</code> — BFS link-following crawl with dedup, capped by <code>WEB_SCRAPER_MAX_PAGES</code>.
+          Anti-abuse built in: <code>robots.txt</code> check (via <code>urllib.robotparser</code>), configurable delay (<code>WEB_SCRAPER_DELAY</code>, default 1s), max pages cap (default 20), identifying <code>User-Agent</code>.
+          Added <code>urls_to_scrape</code> field to <code>ProspectContext</code> in <code>core/state.py</code> — presales can paste competitor / prospect URLs in the intake form.
+          Wired as Step 5 in <code>agents/data_architect.py</code>: each URL is scraped, 2 000-char preview surfaced as in-session chunk, full content chunked &amp; persisted to pgvector.
+          Added <code>POST /api/scrape</code> and <code>POST /api/crawl</code> endpoints to <code>main.py</code> FastAPI server for on-demand web ingestion.
+          Updated CLI <code>_prompt_prospect()</code> to collect URLs.
+          Added <code>beautifulsoup4&gt;=4.12.3</code> to <code>requirements.txt</code>.
+        </div>
+      </li>
+      <li>
+        <div class="cl-date">2026-03-26</div>
+        <div class="cl-ver"><span class="badge" style="background:#e67e22;color:#fff;">v0.6</span></div>
+        <div class="cl-body">
+          <strong>Value Selling Proposition Agent — the Strategic Storyteller.</strong>
+          Created <code>agents/value_selling.py</code> — a 4th specialist agent node that sits between Data Architect and Document Engineer in the graph.
+          <br><br>
+          <strong>What it does:</strong> Analyses prospect context + retrieved RAG chunks and outputs:
+          (1) <em>selling_agenda</em> — ordered table of contents where every section addresses a buying signal;
+          (2) <em>narrative_arc</em> — Problem → Insight → Solution → Proof → Call-to-Action storytelling framework;
+          (3) <em>key_talking_points</em> — categorised must-mention items (integration, competitive_advantage, customer_proof, technical_differentiator, business_value);
+          (4) <em>competitor_kill_shots</em> — specific factual differentiators where Talon.One wins.
+          <br><br>
+          <strong>Graph topology updated:</strong> <code>coordinator → data_architect → <strong>value_selling</strong> → document_engineer → coordinator (validate) → deploy</code>.
+          <br><br>
+          <strong>Files changed:</strong>
+          <code>agents/value_selling.py</code> (new) — 180-line agent with LLM call + JSON parsing + fallback structure;
+          <code>core/prompts.py</code> — added <code>VALUE_SELLING_SYSTEM</code> prompt with Talon.One differentiators, industry-specific angles, and output schema;
+          <code>core/state.py</code> — added 4 new fields: <code>selling_agenda</code>, <code>narrative_arc</code>, <code>key_talking_points</code>, <code>competitor_kill_shots</code>;
+          <code>core/graph.py</code> — rewired: <code>data_architect → value_selling → document_engineer</code> (was <code>data_architect → document_engineer</code>);
+          <code>agents/document_engineer.py</code> — now consumes the VSP agenda: injects section structure, talking points, narrative arc, and kill-shots into the generation prompt.
+        </div>
+      </li>
+      <li>
+        <div class="cl-date">2026-03-26</div>
+        <div class="cl-ver"><span class="badge" style="background:#c0392b;color:#fff;">v0.7</span></div>
+        <div class="cl-body">
+          <strong>Best-of-breed RAG optimisation + critical bug fixes.</strong>
+          Full codebase audit identified 24 issues (3 critical, 7 major). All critical and most major issues resolved:
+          <br><br>
+          <strong>RAG Pipeline Upgrade:</strong>
+          <ul style="margin:8px 0;">
+            <li><strong>Multi-query search</strong> — Data Architect now prompts the LLM to generate 3–5 diverse query variants per task (technical, business, competitive angles) instead of a single query.</li>
+            <li><strong>Reciprocal Rank Fusion (RRF)</strong> — new <code>multi_query_search()</code> in <code>postgres_rag.py</code> fuses results from all query variants. Score = Σ 1/(k + rank). Eliminates reliance on any single query's vocabulary match.</li>
+            <li><strong>Embedding LRU cache</strong> — <code>@lru_cache(maxsize=2048)</code> on <code>_embed()</code> avoids duplicate Gemini API calls on validation retries. ~50% faster on iteration 2+.</li>
+            <li><strong>Normalised chunking</strong> — new centralised <code>chunk_text()</code> in <code>postgres_rag.py</code> (word-based, configurable via <code>RAG_CHUNK_SIZE_WORDS</code> / <code>RAG_CHUNK_OVERLAP_WORDS</code> env vars). <code>ingest_from_url()</code> now properly chunks instead of truncating at 8K chars.</li>
+            <li><strong>Context window 12K → 100K</strong> — <code>MAX_CONTEXT_CHARS</code> raised to leverage Gemini's 1M-token window. Configurable via env var.</li>
+            <li><strong>URL dedup</strong> — new <code>is_url_ingested()</code> prevents re-scraping URLs on validation retry loops; already-ingested content served from pgvector cache.</li>
+          </ul>
+          <strong>Critical Bug Fixes:</strong>
+          <ul style="margin:8px 0;">
+            <li><code>main.py</code> — fixed <code>run_agent()</code> signature (<code>resume</code> parameter was called but missing from definition); now passes <code>config={"configurable": {"thread_id": ...}}</code> to every <code>graph.invoke()</code> so PostgreSQL checkpointing actually works.</li>
+            <li><code>tools/deployment.py</code> — replaced <code>os.environ[]</code> with <code>os.getenv()</code> + validation (prevents cryptic KeyError). Vercel fallback no longer misleadingly sets <code>vercel_url</code> to the GitHub URL.</li>
+          </ul>
+          <strong>Validation Hardening:</strong>
+          <ul style="margin:8px 0;">
+            <li>Checklist patterns upgraded to proper regex (flexible spacing/format matching, context-aware <code>Talon.One + MAC</code> check).</li>
+            <li>Prospect-aware validation: competitor comparison check only fires when a competitor is specified; integration mentions checked conditionally.</li>
+            <li>Loop guard: after 3 failed validations, graph force-deploys best-effort document instead of burning tokens.</li>
+          </ul>
+          <strong>Code Quality:</strong>
+          <ul style="margin:8px 0;">
+            <li>Removed unused <code>langchain-openai</code> from <code>requirements.txt</code>.</li>
+            <li>Added typed sub-schemas: <code>SellingAgendaSection</code>, <code>TalkingPoint</code>, <code>CompetitorKillShot</code> in <code>state.py</code>.</li>
+            <li><code>build_initial_state()</code> now initialises all VSP fields.</li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+
+      <li>
+        <div class="cl-date">2026-03-26</div>
+        <div class="cl-ver"><span class="badge" style="background:#0161ff;color:#fff;">v0.8</span></div>
+        <div class="cl-body">
+          <strong>Production environment bringup + Homepage + Brand rebrand + JSON parse fix.</strong>
+          <br><br>
+          <strong>Model upgrades (retired endpoints replaced):</strong>
+          <ul style="margin:8px 0;">
+            <li><code>gemini-1.5-pro</code> → <strong><code>gemini-2.5-pro</code></strong> (1.5-pro returned 404 NOT_FOUND in March 2026).</li>
+            <li><code>text-embedding-004</code> → <strong><code>gemini-embedding-001</code></strong> (text-embedding-004 retired). Native output is 3072d; <code>output_dimensionality=768</code> parameter used to stay within HNSW 2000-dim limit.</li>
+          </ul>
+          <strong>Docker / Database:</strong>
+          <ul style="margin:8px 0;">
+            <li>Upgraded to <code>pgvector/pgvector:pg17</code> image (PostgreSQL 17 + pgvector 0.8.2).</li>
+            <li>Port mapped to <code>5433</code> (host port 5432 occupied by local PG installation). Updated <code>docker-compose.yml</code> and <code>.env</code>.</li>
+            <li>DB schema recreated: <code>vector(768)</code> + HNSW index (<code>m=16, ef_construction=64</code>).</li>
+          </ul>
+          <strong>First real agent run (My Muscle Chef):</strong>
+          <ul style="margin:8px 0;">
+            <li>All 5 agents ran end-to-end: Coordinator → Data Architect → Value Selling → Document Engineer → Validation.</li>
+            <li>Generated <code>my-muscle-chef-presales.html</code> with 7-section agenda, 6 talking points, 3 kill-shots.</li>
+            <li>Validation failed 3× (regex gaps on session_v2/mac_architecture) → force-deployed best-effort document.</li>
+          </ul>
+          <strong>Homepage built (<code>index.html</code>):</strong>
+          <ul style="margin:8px 0;">
+            <li>Fixed nav + ⌘K search, hero stats, 3-column repository browser (Clients / Competition / Partners), collapsible folder trees, Recent Docs grid with Created/Updated timestamps.</li>
+            <li>4-step New Presentation Wizard modal: prospect → competitive context → sources → live agent log.</li>
+            <li>Agent status dot polling <code>GET /health</code> every 15 seconds.</li>
+          </ul>
+          <strong>Brand identity applied:</strong>
+          <ul style="margin:8px 0;">
+            <li>All colors updated to Talon.One palette: white background, <code>#0161ff</code> (blue), <code>#02043b</code> (navy).</li>
+            <li>Logo updated to official Storyblok CDN URL: <code>rebrand-talon-one-logo-navy.svg</code>.</li>
+            <li>Logo URL persisted to <code>/memories/talon-one-assets.md</code> for use in all future documents.</li>
+          </ul>
+          <strong>JSON parse fix (Gemini 2.5 Pro compatibility):</strong>
+          <ul style="margin:8px 0;">
+            <li>Gemini 2.5 Pro wraps JSON responses in <code>```json ... ```</code> markdown fences. Added <code>_strip_md_json()</code> helper to <code>agents/coordinator.py</code> and <code>agents/data_architect.py</code> to strip fences before <code>json.loads()</code>. Eliminates the fallback-on-every-run warnings seen in the first agent run.</li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+
+    <div class="highlight-box green" style="margin-top: 16px;">
+      <p><strong>Note for AI assistant:</strong> Every time you make a change to any file in this project, append a new entry to the changelog above with today's date, a version bump, and a clear description of what changed and why.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <strong>Talon.One Presales Agent</strong> — Living Architecture Document<br>
+  Last updated: <strong>2026-03-26</strong> · Version <strong>0.8</strong><br>
+  <span style="margin-top:8px; display:block;">
+    Every modification to the codebase must be reflected in this document before the change is considered complete.
+  </span>
+</footer>
+
+</body>
+</html>

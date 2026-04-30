@@ -1,0 +1,11 @@
+{
+  "company_name": "My Muscle Chef",
+  "industry": "QSR / Meal Delivery",
+  "use_case": "Launch a tiered loyalty program with personalised promotions across web and app channels",
+  "competitor": "Yotpo",
+  "integrations": ["Braze", "Segment", "Shopify"],
+  "urls_to_scrape": [
+    "https://www.mymusclechef.com"
+  ],
+  "raw_notes": "My Muscle Chef is an Australian meal delivery company. They want to replace Yotpo with Talon.One for loyalty and promotions. Key requirements: tiered loyalty, referral program, cart-level promotions, and A/B testing of offers."
+}

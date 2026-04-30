@@ -1,0 +1,29 @@
+# Python byte-compiled / optimisation
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Environment variables — never commit secrets
+.env
+
+# Google OAuth token cache
+credentials/token.json
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Build / dist
+dist/
+build/
+*.egg-info/
+
+# Logs
+*.log

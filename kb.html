@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Knowledge Base — Talon.One Presales</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue:       #0161ff;
+      --navy:       #02043b;
+      --dark:       #222;
+      --gray:       #555;
+      --mid:        #888;
+      --light-gray: #f0f4ff;
+      --white:      #fff;
+      --border:     #e4e4e7;
+      --bg:         #f8f9fc;
+      --font:       -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --radius:     10px;
+    }
+    body { font-family: var(--font); background: var(--bg); color: var(--dark); min-height: 100vh; padding-top: 60px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(255,255,255,.95); backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px;
+      padding: 0 clamp(16px,2.5vw,32px); height: 60px; overflow: hidden;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .nav-logo-t1 { height: 22px; }
+    .nav-logo-divider { width: 1px; height: 20px; background: var(--border); }
+    .nav-logo-label { font-size: 13px; font-weight: 700; color: var(--navy); letter-spacing: -.2px; }
+    .nav-spacer { flex: 1; }
+    .nav-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .btn-new { display: flex; align-items: center; gap: 6px; background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 7px 16px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background .15s; text-decoration: none; }
+    .btn-new:hover { background: #004fd6; }
+    .btn-agent { display: flex; align-items: center; gap: 6px; background: var(--light-gray); color: var(--dark); border: 1px solid var(--border); border-radius: 8px; padding: 7px 14px; font-size: 13px; font-weight: 500; cursor: pointer; transition: background .15s; text-decoration: none; }
+    .btn-agent:hover { background: var(--border); }
+    .btn-agent.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+    @media (max-width: 860px) { .nav-btn-label { display: none; } .btn-agent, .btn-new { padding: 7px 10px; } }
+
+    /* ── HERO ── */
+    .kb-hero { padding: clamp(26px,4vw,40px) clamp(24px,4vw,48px) 20px; background: linear-gradient(160deg,#fff 55%,#f0f6ff 100%); border-bottom: 1px solid var(--border); }
+    .kb-hero-inner { max-width: 1400px; margin: 0 auto; }
+    .crumb { font-size: 12px; color: var(--mid); margin-bottom: 10px; }
+    .crumb a { color: var(--mid); text-decoration: none; }
+    .crumb a:hover { color: var(--blue); }
+    .kb-hero h1 { font-size: clamp(26px,3.5vw,40px); font-weight: 800; color: var(--navy); letter-spacing: -.5px; }
+    .kb-hero h1 em { font-style: normal; color: var(--blue); }
+    .kb-hero p { margin-top: 8px; font-size: 14px; color: var(--gray); max-width: 580px; line-height: 1.65; }
+    .hero-stats { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 22px; }
+    .hero-stat-val { font-size: 26px; font-weight: 800; color: var(--navy); letter-spacing: -.5px; }
+    .hero-stat-label { font-size: 11px; color: var(--mid); font-weight: 500; text-transform: uppercase; letter-spacing: .5px; margin-top: 2px; }
+
+    /* ── TOPICS ── */
+    .topics-section { background: var(--white); border-bottom: 1px solid var(--border); padding: 14px clamp(24px,4vw,48px); margin-bottom: 8px; }
+    .kb-main { max-width: 1400px; margin: 8px auto 80px; padding: 0 clamp(24px,4vw,48px); display: grid; gap: 16px; align-items: start; }
+    .topics-inner { max-width: 1400px; margin: 0 auto; }
+    .topics-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .section-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--mid); }
+    .clear-topic-btn { background: none; border: 1px solid var(--border); border-radius: 99px; padding: 3px 10px; font-size: 11px; color: var(--mid); cursor: pointer; display: none; }
+    .clear-topic-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .topics-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px,1fr)); gap: 10px; }
+    .topic-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 10px; padding: 12px 14px; cursor: pointer; transition: all .15s; position: relative; overflow: hidden; }
+    .topic-card:hover { border-color: var(--blue); box-shadow: 0 2px 10px rgba(1,97,255,.1); }
+    .topic-card.active { border-color: var(--blue); background: var(--light-gray); }
+    .topic-icon { font-size: 22px; margin-bottom: 6px; }
+    .topic-name { font-size: 12px; font-weight: 700; color: var(--navy); }
+    .topic-count { font-size: 11px; color: var(--mid); margin-top: 3px; }
+    .topic-bar { position: absolute; bottom: 0; left: 0; height: 3px; background: var(--blue); opacity: .5; transition: width .4s; }
+
+    /* ── MAIN GRID ── */
+    .kb-main { max-width: 1400px; margin: 28px auto 80px; padding: 0 clamp(24px,4vw,48px); display: grid; gap: 24px; align-items: start; }
+    .kb-main > div:first-child { display: none; }
+
+    /* ── PANEL ── */
+    .panel { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .panel-header { padding: 13px 18px; border-bottom: 1px solid var(--border); background: #fafbfd; display: flex; align-items: center; gap: 8px; }
+    .panel-header h2 { font-size: 13px; font-weight: 700; color: var(--navy); flex: 1; display: flex; align-items: center; gap: 7px; }
+    .badge { font-size: 10px; background: var(--light-gray); color: var(--mid); padding: 2px 8px; border-radius: 99px; }
+    .panel-body { padding: 16px; }
+
+    /* ── SOURCE TYPE TABS ── */
+    .src-type-tabs { display: grid; grid-template-columns: repeat(4,1fr); gap: 7px; margin-bottom: 18px; }
+    .src-tab { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 9px 6px; border: 1.5px solid var(--border); border-radius: 9px; background: none; cursor: pointer; font-size: 11px; font-weight: 600; color: var(--gray); transition: .15s; line-height: 1.2; }
+    .src-tab:hover { border-color: var(--blue); color: var(--blue); }
+    .src-tab.active { border-color: var(--blue); background: var(--light-gray); color: var(--blue); }
+    .src-pane { display: none; }
+    .src-pane.active { display: block; }
+
+    /* ── FORM ── */
+    .form-section { margin-bottom: 14px; }
+    .form-section label { display: block; font-size: 11.5px; font-weight: 600; color: var(--navy); margin-bottom: 5px; }
+    .form-section label .opt { font-weight: 400; color: var(--mid); }
+    .form-section input, .form-section select, .form-section textarea {
+      width: 100%; border: 1.5px solid var(--border); border-radius: 7px;
+      padding: 8px 11px; font-size: 13px; font-family: var(--font);
+      color: var(--dark); outline: none; transition: border-color .15s; background: var(--white);
+    }
+    .form-section input:focus, .form-section select:focus, .form-section textarea:focus { border-color: var(--blue); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .field-hint { font-size: 11px; color: var(--mid); margin-top: 5px; line-height: 1.45; }
+    .toggle-row { display: flex; align-items: center; gap: 8px; margin: 5px 0; }
+    .toggle-row input[type=checkbox] { width: 15px; height: 15px; accent-color: var(--blue); flex-shrink: 0; }
+    .toggle-row span { font-size: 12px; color: var(--dark); }
+    .crawl-options { display: none; padding-top: 10px; }
+    .crawl-options.open { display: block; }
+    .common-fields { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 2px; }
+
+    /* ── UPLOAD DROP ── */
+    .upload-drop { border: 2px dashed var(--border); border-radius: 10px; padding: 26px 20px; text-align: center; cursor: pointer; transition: .15s; background: #fafbfd; }
+    .upload-drop:hover, .upload-drop.drag { border-color: var(--blue); background: var(--light-gray); }
+    .upload-drop svg { color: var(--mid); margin-bottom: 8px; }
+    .upload-drop p { font-size: 13px; color: var(--gray); margin-bottom: 3px; }
+    .upload-types { font-size: 11px; color: var(--mid) !important; }
+    .upload-link { color: var(--blue); cursor: pointer; font-weight: 600; text-decoration: underline; }
+    .upload-preview { display: flex; align-items: center; gap: 10px; background: var(--light-gray); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-top: 10px; }
+    .upload-file-icon { font-size: 22px; flex-shrink: 0; }
+    .upload-file-info { flex: 1; min-width: 0; }
+    .upload-file-name { font-size: 12.5px; font-weight: 600; color: var(--dark); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .upload-file-size { font-size: 11px; color: var(--mid); margin-top: 2px; }
+    .upload-clear { background: none; border: none; cursor: pointer; color: var(--mid); font-size: 16px; padding: 2px 5px; border-radius: 5px; }
+    .upload-clear:hover { background: var(--border); color: var(--dark); }
+
+    /* ── BUTTONS ── */
+    .btn { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 16px; border-radius: 7px; border: none; cursor: pointer; transition: opacity .15s; }
+    .btn:disabled { opacity: .4; cursor: default; }
+    .btn-primary { background: var(--blue); color: #fff; }
+    .btn-primary:hover:not(:disabled) { opacity: .88; }
+    .btn-outline { background: none; border: 1.5px solid var(--border); color: var(--dark); }
+    .btn-outline:hover:not(:disabled) { border-color: var(--blue); color: var(--blue); }
+    .btn-outline { background: none; border: 1.5px solid var(--border); color: var(--dark); border-radius: 7px; padding: 6px 12px; font-size: 12px; }
+    .btn-outline:hover:not(:disabled) { border-color: var(--blue); color: var(--blue); }
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .ingest-actions { margin-top: 16px; display: flex; gap: 10px; align-items: center; }
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.38); display: none; align-items: center; justify-content: center; z-index: 999; }
+    .modal-backdrop.open { display: flex; }
+    .modal { width: min(820px, 95vw); background: #fff; border-radius: 14px; box-shadow: 0 22px 50px rgba(0,0,0,.18); overflow: hidden; }
+    .modal-header { display: flex; justify-content: space-between; gap: 12px; padding: 16px; border-bottom: 1px solid var(--border); }
+    .modal-title { font-size: 16px; font-weight: 800; color: var(--navy); }
+    .modal-subtitle { font-size: 12px; color: var(--mid); margin-top: 3px; }
+    .modal-steps { display: flex; align-items: center; gap: 6px; padding: 0 16px 12px; border-bottom: 1px solid var(--border); }
+    .modal-step-item { display: flex; align-items: center; gap: 8px; }
+    .step-bubble { width: 24px; height: 24px; border-radius: 50%; background: var(--border); color: var(--mid); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
+    .step-bubble.active, .step-bubble.done { background: var(--blue); color: #fff; }
+    .step-label { font-size: 12px; color: var(--mid); }
+    .step-label.active { color: var(--blue); font-weight: 700; }
+    .step-line { flex: 1; height: 1px; background: var(--border); }
+    .modal-body { padding: 16px; }
+    .modal-step { display: none; }
+    .modal-step.active { display: block; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 10px; padding: 12px 16px 16px; border-top: 1px solid var(--border); }
+    .btn-back, .btn-next { border:none; border-radius:7px; padding:8px 14px; cursor:pointer; font-size:13px; font-weight:600; }
+    .btn-back { background: var(--light-gray); color: var(--dark); }
+    .btn-next { background: var(--blue); color:#fff; }
+    .spinner-wrap { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--mid); }
+    .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── LOG BOX ── */
+    .log-box { background: var(--navy); border-radius: 8px; padding: 12px 14px; font-family: monospace; font-size: 12px; color: #a8c1ff; min-height: 50px; max-height: 140px; overflow-y: auto; white-space: pre-wrap; margin-top: 12px; }
+    .log-ok  { color: #6ee7b7; }
+    .log-err { color: #fca5a5; }
+    .log-info{ color: #93c5fd; }
+
+    /* ── AI ANALYSIS PANEL ── */
+    .ai-panel { animation: fadeUp .25s ease; margin-top: 16px; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+    .ai-badge { font-size: 10px; font-weight: 700; background: linear-gradient(90deg,#4f46e5,#0161ff); color: #fff; padding: 2px 8px; border-radius: 99px; }
+    .ai-sec { margin-bottom: 14px; }
+    .ai-sec-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--mid); margin-bottom: 7px; }
+    .ai-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+    .ai-tag { font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 99px; background: var(--light-gray); border: 1px solid var(--border); color: var(--navy); }
+    .ai-card { border-radius: 8px; padding: 9px 12px; font-size: 13px; line-height: 1.55; margin-bottom: 7px; }
+    .ai-insight { background: #f0f4ff; border: 1px solid #d0deff; color: var(--dark); }
+    .ai-insight strong { color: var(--navy); }
+    .ai-vsp  { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; display: flex; gap: 8px; }
+    .ai-comp { background: #fff7f0; border: 1px solid #ffd6b0; color: #9a3412; display: flex; gap: 8px; }
+    .ai-diag { background: #f5f3ff; border: 1px solid #ddd6fe; color: #6d28d9; }
+    .ai-diag-type { font-size: 10px; font-weight: 700; text-transform: uppercase; opacity: .7; margin-bottom: 3px; }
+    .ai-loading { text-align: center; padding: 32px; color: var(--mid); font-size: 13px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .ai-refine { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 6px; }
+    .ai-topic-badge { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; padding: 3px 10px; border-radius: 99px; background: var(--navy); color: #fff; margin-right: 6px; }
+    .ai-confidence { display: inline-block; font-size: 11px; color: var(--mid); }
+
+    /* ── SOURCE LIST ── */
+    .source-list { display: flex; flex-direction: column; }
+    .source-row { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background .1s; }
+    .source-row:last-child { border-bottom: none; }
+    .source-row:hover { background: var(--bg); }
+    .source-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .source-info { flex: 1; min-width: 0; }
+    .source-name { font-size: 12.5px; font-weight: 600; color: var(--dark); }
+    .source-meta { font-size: 11px; color: var(--mid); margin-top: 1px; }
+    .source-chunks { font-size: 11px; font-weight: 700; color: var(--blue); flex-shrink: 0; }
+    .source-del { background: none; border: none; cursor: pointer; color: #c0392b; padding: 3px 6px; border-radius: 5px; font-size: 13px; display: none; }
+    .source-row:hover .source-del { display: block; }
+    .source-del:hover { background: #fde8e8; }
+
+    /* ── TABS ── */
+    .tabs { display: flex; border-bottom: 1px solid var(--border); margin: 0 -16px 14px; padding: 0 16px; }
+    .tab { font-size: 12.5px; font-weight: 600; padding: 10px 14px; cursor: pointer; border-bottom: 2px solid transparent; color: var(--mid); transition: .15s; }
+    .tab.active { color: var(--blue); border-color: var(--blue); }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* ── ENTRIES TABLE ── */
+    .entries-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .entries-table th { text-align: left; padding: 7px 10px; background: var(--bg); font-size: 10.5px; text-transform: uppercase; letter-spacing: .5px; color: var(--mid); border-bottom: 1px solid var(--border); }
+    .entries-table td { padding: 9px 10px; border-bottom: 1px solid var(--border); color: var(--dark); vertical-align: top; }
+    .entries-table tr:last-child td { border-bottom: none; }
+    .url-cell { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .del-entry { background: none; border: none; color: #c0392b; cursor: pointer; padding: 2px 5px; border-radius: 4px; font-size: 12px; }
+    .del-entry:hover { background: #fde8e8; }
+    .score-bar { display: inline-block; height: 6px; background: var(--blue); border-radius: 3px; opacity: .7; min-width: 4px; vertical-align: middle; }
+
+    /* ── SEARCH ── */
+    .search-result { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 11px 13px; margin-bottom: 8px; }
+    .sr-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+    .sr-score { font-size: 11px; color: var(--mid); margin-left: auto; display: flex; align-items: center; gap: 5px; }
+    .sr-id { font-size: 10.5px; color: var(--mid); font-family: monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 150px; }
+    .sr-excerpt { font-size: 12px; color: var(--dark); line-height: 1.55; }
+
+    /* ── SOURCE TAG COLOURS ── */
+    .src-tag { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 99px; }
+    .c-talon_docs    { background: #dbeafe; color: #1d4ed8; }
+    .c-talon_product { background: #ede9fe; color: #6d28d9; }
+    .c-talon_pricing { background: #fef9c3; color: #92400e; }
+    .c-competitor    { background: #fee2e2; color: #b91c1c; }
+    .c-partner       { background: #dcfce7; color: #166534; }
+    .c-case_study    { background: #fce7f3; color: #9d174d; }
+    .c-battle_card   { background: #ffedd5; color: #c2410c; }
+    .c-product_docs  { background: #e0f2fe; color: #075985; }
+    .c-notion        { background: #f5f5f5; color: #374151; }
+    .c-google_drive  { background: #faf0e6; color: #92400e; }
+    .c-web           { background: #f3f4f6; color: #374151; }
+    .c-value_selling { background: #eff6ff; color: #0161ff; }
+
+    /* ── MISC ── */
+    .empty { text-align: center; padding: 28px; color: var(--mid); font-size: 13px; }
+    #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--navy); color: #fff; padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity .3s; z-index: 9999; }
+    #toast.show { opacity: 1; }
+
+    /* ── NOTION BROWSER ── */
+    .notion-search-row { display: flex; gap: 6px; }
+    .notion-search-row input { flex: 1; }
+    .notion-pages-wrap { border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; margin-top: 4px; background: var(--white); }
+    .notion-pages-list { max-height: 200px; overflow-y: auto; }
+    .notion-page-item { display: flex; align-items: flex-start; gap: 9px; padding: 9px 12px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background .1s; }
+    .notion-page-item:last-child { border-bottom: none; }
+    .notion-page-item:hover { background: var(--light-gray); }
+    .notion-page-item.selected { background: #f0f4ff; border-left: 3px solid var(--blue); padding-left: 9px; }
+    .notion-page-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+    .notion-page-title { font-size: 12.5px; font-weight: 600; color: var(--dark); }
+    .notion-page-meta { font-size: 11px; color: var(--mid); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .notion-pages-empty { padding: 18px; text-align: center; font-size: 12px; color: var(--mid); }
+    .notion-selected { display: flex; align-items: center; gap: 10px; background: #f0f4ff; border: 1.5px solid var(--blue); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; }
+    .notion-sel-icon { font-size: 18px; flex-shrink: 0; }
+    .notion-sel-info { flex: 1; min-width: 0; }
+    .notion-sel-title { font-size: 12.5px; font-weight: 700; color: var(--navy); }
+    .notion-sel-url { font-size: 10.5px; color: var(--mid); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+    .notion-url-details { margin-top: 10px; }
+    .notion-url-details summary { font-size: 11.5px; color: var(--mid); cursor: pointer; user-select: none; padding: 2px 0; }
+    .notion-url-details summary:hover { color: var(--blue); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img class="nav-logo-t1" src="https://a.storyblok.com/f/140059/118x24/886a9d9fc3/rebrand-talon-one-logo-navy.svg" alt="Talon.One" />
+    <div class="nav-logo-divider"></div>
+    <span class="nav-logo-label">Presales Hub</span>
+  </a>
+  <div class="nav-spacer"></div>
+  <div class="nav-actions">
+    <button class="btn-new" title="New KB Entry" onclick="openEntryWizard()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span class="nav-btn-label">New Entry</span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="kb-hero">
+  <div class="kb-hero-inner">
+    <div class="crumb"><a href="index.html">Hub</a> / Knowledge Base</div>
+    <h1>Knowledge <em>Base</em></h1>
+    <p>Curate, organise, and analyse your presales knowledge. Add content from any source — the AI analyses every piece, extracts value propositions, competitive advantages, and diagram ideas, then trains the agents to use it better with every iteration.</p>
+    <div class="hero-stats" id="hero-stats">
+      <div><div class="hero-stat-val" id="stat-chunks">—</div><div class="hero-stat-label">Chunks stored</div></div>
+      <div><div class="hero-stat-val" id="stat-sources">—</div><div class="hero-stat-label">Sources</div></div>
+      <div><div class="hero-stat-val" id="stat-topics">—</div><div class="hero-stat-label">Topics covered</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TOPICS GRID -->
+<section class="topics-section">
+  <div class="topics-inner">
+    <div class="topics-row">
+      <span class="section-label">Browse by topic</span>
+      <!-- clear filter button removed per request -->
+    </div>
+    <div class="topics-grid" id="topics-grid">
+      <!-- rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<div class="kb-main">
+
+  <!-- Sources -->            </div>
+            <button class="upload-clear" onclick="clearUpload()" title="Remove file">✕</button>
+          </div>
+        </div>
+
+        <!-- Common metadata removed per new spec -->
+
+        <!-- Ingest button removed to keep wizard-only ingestion -->
+        <div class="log-box" id="ingest-log" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- AI Analysis Panel (revealed after ingestion) -->
+    <div class="panel ai-panel" id="ai-panel" style="display:none">
+      <div class="panel-header">
+        <h2>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
+          AI Analysis
+        </h2>
+        <span class="ai-badge">✦ Gemini</span>
+        <button class="btn btn-outline" style="padding:4px 10px;font-size:11px;margin-left:auto" id="reanalyse-btn" onclick="triggerReanalyse()">Re-analyse</button>
+      </div>
+      <div class="panel-body" id="ai-panel-body">
+        <div class="ai-loading"><div class="spinner"></div>Analysing content…</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: Sources + Browse -->
+  <div style="display:flex;flex-direction:column;gap:16px">
+
+    <!-- Search + entries (move above sources) -->
+    <div class="panel">
+      <div class="panel-header"><h2>Search</h2></div>
+      <div class="panel-body">
+        <div style="display:flex;gap:8px;margin-bottom:12px;align-items:center;flex-wrap:wrap">
+          <select id="filter-source" style="font-size:12px;padding:6px 10px;border:1.5px solid var(--border);border-radius:7px;min-width:180px" onchange="loadEntries()">
+            <option value="">All sources</option>
+          </select>
+          <select id="filter-topic" style="font-size:12px;padding:6px 10px;border:1.5px solid var(--border);border-radius:7px;min-width:180px" onchange="loadEntries()">
+            <option value="">All topics</option>
+            <option value="technical">Technical Docs</option>
+            <option value="product">Product Features</option>
+            <option value="pricing">Pricing</option>
+            <option value="competitive">Competitive Intel</option>
+            <option value="partner">Partner Ecosystem</option>
+            <option value="case_study">Customer Stories</option>
+            <option value="value_selling">Value Selling</option>
+            <option value="playbook">Internal Playbooks</option>
+          </select>
+          <input id="entries-search" type="text" placeholder="Search entries..." style="flex:1;min-width:220px;padding:6px 10px;border:1.5px solid var(--border);border-radius:7px" onkeydown="if(event.key==='Enter')searchEntries()" />
+          <button class="btn btn-outline" style="padding:6px 12px;font-size:12px" onclick="searchEntries()">Search</button>
+          <button class="btn btn-outline" style="padding:6px 12px;font-size:12px" onclick="loadEntries()">Load</button>
+        </div>
+        <div id="entries-wrap"><div class="empty">Select source/topic and click Load, or enter search terms and click Search.</div></div>
+      </div>
+    </div>
+
+    <!-- Sources -->
+    <div class="panel">
+      <div class="panel-header">
+        <h2>Sources</h2>
+        <span class="badge" id="source-total">—</span>
+        <button class="btn btn-outline" style="padding:4px 10px;font-size:11px" onclick="loadSources()">↻</button>
+      </div>
+      <div id="source-list-wrap"><div class="empty">Loading…</div></div>
+    </div>
+  </div>
+
+</div><!-- /.kb-main -->
+
+<!-- NEW ENTRY WIZARD MODAL -->
+<div class="modal-backdrop" id="entry-wizard-backdrop" onclick="entryBackdropClose(event)">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="entry-modal-title">New Knowledge Base Entry</div>
+        <div class="modal-subtitle" id="entry-modal-subtitle">Step 1 of 4 — Add source</div>
+      </div>
+      <button class="modal-close" onclick="closeEntryWizard()" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-steps">
+      <div class="modal-step-item"><div class="step-bubble active" id="entry-bubble-1">1</div><span class="step-label active" id="entry-label-1">Source</span></div>
+      <div class="step-line"></div>
+      <div class="modal-step-item"><div class="step-bubble" id="entry-bubble-2">2</div><span class="step-label" id="entry-label-2">Analysis</span></div>
+      <div class="step-line"></div>
+      <div class="modal-step-item"><div class="step-bubble" id="entry-bubble-3">3</div><span class="step-label" id="entry-label-3">Refine</span></div>
+      <div class="step-line"></div>
+      <div class="modal-step-item"><div class="step-bubble" id="entry-bubble-4">4</div><span class="step-label" id="entry-label-4">Activate</span></div>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-step active" id="entry-step-1">
+        <div class="form-row">
+          <label>Source type</label>
+          <select id="wizard-source-type" onchange="wizardSourceTypeChange()">
+            <option value="website">Website</option>
+            <option value="gdrive">Google Drive</option>
+            <option value="notion">Notion</option>
+            <option value="upload">Upload</option>
+          </select>
+        </div>
+        <div class="form-row" id="wizard-source-row">
+          <label>Source URL / file</label>
+          <input id="wizard-source-input" type="text" placeholder="https://..." />
+        </div>
+        <div class="form-row">
+          <label>Topic</label>
+          <select id="wizard-topic">
+            <option value="technical">Technical Docs</option>
+            <option value="product">Product Features</option>
+            <option value="pricing">Pricing</option>
+            <option value="competitive">Competitive Intel</option>
+            <option value="partner">Partner Ecosystem</option>
+            <option value="case_study">Customer Stories</option>
+            <option value="value_selling">Value Selling</option>
+            <option value="playbook">Internal Playbooks</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Entry title</label>
+          <input id="wizard-title" type="text" placeholder="Optional title" />
+        </div>
+        <button class="btn btn-outline" onclick="saveWizardProgress()">Save step</button>
+      </div>
+
+      <div class="modal-step" id="entry-step-2">
+        <div class="form-row">
+          <label>Analysis output</label>
+          <div id="wizard-analysis-output" class="ai-card ai-insight" style="min-height:120px">No analysis yet. Click continue to run LLM analysis.</div>
+        </div>
+        <button class="btn btn-outline" onclick="saveWizardProgress()">Save step</button>
+      </div>
+
+      <div class="modal-step" id="entry-step-3">
+        <div class="form-row">
+          <label>Refine usage/value proposition</label>
+          <textarea id="wizard-refine" rows="4" placeholder="E.g. emphasize integration simplicity for e-commerce teams"></textarea>
+        </div>
+        <div class="form-row">
+          <button class="btn btn-primary" onclick="applyRefinePrompt()">Re-run analysis with refinements</button>
+        </div>
+        <button class="btn btn-outline" onclick="saveWizardProgress()">Save step</button>
+      </div>
+
+      <div class="modal-step" id="entry-step-4">
+        <div class="form-row">
+          <label>Final validation</label>
+          <p style="color:var(--mid);">Confirm entry, then click Activate to persist insight.</p>
+        </div>
+        <button class="btn btn-primary" onclick="activateEntry()">Activate</button>
+      </div>
+    </div>
+
+    <div class="modal-footer" id="entry-modal-footer">
+      <button class="btn-back" id="entry-btn-back" onclick="entryPrevStep()">← Back</button>
+      <button class="btn-next" id="entry-btn-next" onclick="entryNextStep()">Continue →</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const API = 'http://localhost:8000';
+
+/* ── Topic definitions ─────────────────────────────────────── */
+const TOPICS = [
+  { id:'technical',     label:'Technical Docs',    icon:'🔧', sources:['talon_docs','product_docs'],            color:'#1d4ed8' },
+  { id:'product',       label:'Product Features',  icon:'✨', sources:['talon_product'],                        color:'#6d28d9' },
+  { id:'pricing',       label:'Pricing',           icon:'💎', sources:['talon_pricing'],                        color:'#d97706' },
+  { id:'competitive',   label:'Competitive Intel', icon:'⚔️', sources:['competitor','battle_card'],             color:'#b91c1c' },
+  { id:'partner',       label:'Partners',          icon:'🤝', sources:['partner'],                              color:'#166534' },
+  { id:'case_study',    label:'Customer Stories',  icon:'📖', sources:['case_study'],                           color:'#9d174d' },
+  { id:'value_selling', label:'Value Selling',     icon:'💡', sources:['value_selling'],                        color:'#0161ff' },
+  { id:'playbook',      label:'Playbooks',         icon:'📋', sources:['notion','google_drive'],                color:'#374151' },
+];
+
+const TOPIC_SUGGEST = {
+  technical:'talon_docs', product:'talon_product', pricing:'talon_pricing',
+  competitive:'competitor', partner:'partner', case_study:'case_study',
+  value_selling:'web', playbook:'notion',
+};
+
+const SRC_COLORS = {
+  talon_docs:'c-talon_docs', talon_product:'c-talon_product', talon_pricing:'c-talon_pricing',
+  competitor:'c-competitor', partner:'c-partner', case_study:'c-case_study',
+  battle_card:'c-battle_card', product_docs:'c-product_docs',
+  notion:'c-notion', google_drive:'c-google_drive', web:'c-web', value_selling:'c-value_selling',
+};
+const DOT_COLORS = {
+  talon_docs:'#1d4ed8', talon_product:'#6d28d9', talon_pricing:'#d97706',
+  competitor:'#b91c1c', partner:'#166534', case_study:'#9d174d',
+  battle_card:'#c2410c', product_docs:'#075985', notion:'#374151',
+  google_drive:'#92400e', web:'#6b7280', value_selling:'#0161ff',
+};
+function srcClass(s) { return SRC_COLORS[s] || 'c-web'; }
+function dotColor(s) { return DOT_COLORS[s] || '#888'; }
+function srcForTopic(t) {
+  const m = { technical:'talon_docs', product:'talon_product', pricing:'talon_pricing',
+    competitive:'competitor', partner:'partner', case_study:'case_study',
+    value_selling:'web', playbook:'notion' };
+  return m[t] || '';
+}
+
+/* ── State ─────────────────────────────────────────────────── */
+let _sources = [];
+let _activeTopic = null;
+let _currentSrcType = 'website';
+let _lastIngestMeta = null; // { source, source_id }
+let _notionSelectedPage = null; // { id, title, url } from workspace browser
+let _notionSearchTimer = null;
+
+/* ── Sources ───────────────────────────────────────────────── */
+async function loadSources() {
+  try {
+    const r = await fetch(`${API}/api/knowledge/sources`, { signal: AbortSignal.timeout(5000) });
+    if (!r.ok) { showOffline(); return; }
+    const { sources } = await r.json();
+    _sources = sources;
+    renderSources(sources);
+    renderTopics(sources);
+    updateHeroStats(sources);
+    populateSourceSelects(sources);
+  } catch { showOffline(); }
+}
+
+function showOffline() {
+  document.getElementById('source-list-wrap').innerHTML =
+    `<div class="empty" style="color:#c0392b">⚠ Agent offline — run <code>python main.py --serve</code></div>`;
+}
+
+function updateHeroStats(sources) {
+  const totalChunks = sources.reduce((s, r) => s + r.chunks, 0);
+  const topicSet = new Set();
+  sources.forEach(s => {
+    TOPICS.forEach(t => { if (t.sources.includes(s.source)) topicSet.add(t.id); });
+  });
+  document.getElementById('stat-chunks').textContent = totalChunks.toLocaleString();
+  document.getElementById('stat-sources').textContent = sources.length;
+  document.getElementById('stat-topics').textContent = topicSet.size;
+}
+
+function renderTopics(sources) {
+  const chunksByTopic = {};
+  TOPICS.forEach(t => { chunksByTopic[t.id] = 0; });
+  sources.forEach(s => {
+    TOPICS.forEach(t => {
+      if (t.sources.includes(s.source)) chunksByTopic[t.id] += s.chunks;
+    });
+  });
+  const maxChunks = Math.max(...Object.values(chunksByTopic), 1);
+
+  document.getElementById('topics-grid').innerHTML = TOPICS.map(t => `
+    <div class="topic-card ${_activeTopic===t.id?'active':''}" onclick="setTopicFilter('${t.id}')">
+      <div class="topic-icon">${t.icon}</div>
+      <div class="topic-name">${t.label}</div>
+      <div class="topic-count">${chunksByTopic[t.id].toLocaleString()} chunks</div>
+      <div class="topic-bar" style="width:${Math.round(chunksByTopic[t.id]/maxChunks*100)}%"></div>
+    </div>`).join('');
+}
+
+function setTopicFilter(topicId) {
+  _activeTopic = _activeTopic === topicId ? null : topicId;
+  document.getElementById('clear-topic-btn').style.display = _activeTopic ? 'inline-block' : 'none';
+  renderTopics(_sources);
+  // filter source list
+  if (_activeTopic) {
+    const t = TOPICS.find(t => t.id === _activeTopic);
+    const filtered = _sources.filter(s => t.sources.includes(s.source));
+    renderSources(filtered);
+    // also filter entries table
+    const firstSrc = filtered[0];
+    if (firstSrc) {
+      document.getElementById('filter-source').value = firstSrc.source;
+      loadEntries();
+    }
+  } else {
+    renderSources(_sources);
+  }
+}
+
+function clearTopicFilter() { setTopicFilter(_activeTopic); }
+
+function renderSources(sources) {
+  const wrap = document.getElementById('source-list-wrap');
+  document.getElementById('source-total').textContent = `${sources.length}`;
+  if (!sources.length) { wrap.innerHTML = '<div class="empty">No sources match this filter.</div>'; return; }
+  wrap.innerHTML = `<div class="source-list">` + sources.map(s => `
+    <div class="source-row" onclick="filterBySource('${s.source}')">
+      <div class="source-dot" style="background:${dotColor(s.source)}"></div>
+      <div class="source-info">
+        <div class="source-name"><span class="src-tag ${srcClass(s.source)}" style="font-size:10px;padding:1px 6px">${s.source}</span></div>
+        <div class="source-meta">${s.pages} pages · ${s.last_ingested ? new Date(s.last_ingested).toLocaleDateString() : '—'}</div>
+      </div>
+      <span class="source-chunks">${s.chunks}</span>
+      <button class="source-del" title="Delete source" onclick="deleteSource('${s.source}',event)">🗑</button>
+    </div>`).join('') + `</div>`;
+}
+
+function populateSourceSelects(sources) {
+  ['filter-source','search-source'].forEach(id => {
+    const el = document.getElementById(id);
+    const cur = el.value;
+    el.innerHTML = '<option value="">All sources</option>' +
+      sources.map(s => `<option value="${s.source}">${s.source}</option>`).join('');
+    if (cur) el.value = cur;
+  });
+}
+
+function filterBySource(src) {
+  document.getElementById('filter-source').value = src;
+  loadEntries();
+}
+
+/* ── Delete ─────────────────────────────────────────────────── */
+async function deleteSource(source, e) {
+  e.stopPropagation();
+  if (!confirm(`Delete ALL "${source}" chunks?\nThis removes the agent's knowledge of this source.`)) return;
+  const r = await fetch(`${API}/api/knowledge/source`, {
+    method:'DELETE', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ source }),
+  });
+  if (r.ok) { showToast(`Deleted ${source}`); loadSources(); }
+  else showToast('Delete failed');
+}
+
+async function deleteEntry(source, sourceId) {
+  if (!confirm(`Delete entry "${sourceId}"?`)) return;
+  const r = await fetch(`${API}/api/knowledge/source`, {
+    method:'DELETE', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ source, source_id: sourceId }),
+  });
+  if (r.ok) { showToast('Entry deleted'); loadEntries(); loadSources(); }
+  else showToast('Delete failed');
+}
+
+async function reanalyseEntry(source, sourceId) {
+  showToast(`Re-analysing ${sourceId}...`);
+  try {
+    await runAIAnalysis(source, sourceId);
+    showToast('💡 Entry re-analysed (AI insights refreshed)');
+  } catch (err) {
+    showToast('Reanalyse failed');
+  }
+}
+
+/* ── Source type switcher ───────────────────────────────────── */
+function selectSrcTab(type) {
+  const buttons = document.querySelectorAll('.src-tab');
+  const lookup = { website:0, gdrive:1, notion:2, upload:3 };
+  const idx = lookup[type] ?? 0;
+  if (buttons[idx]) switchSrcType(type, buttons[idx]);
+}
+
+function switchSrcType(type, btn) {
+  _currentSrcType = type;
+  document.querySelectorAll('.src-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.src-pane').forEach(p => p.classList.remove('active'));
+  document.getElementById(`pane-${type}`).classList.add('active');
+  // auto-set source label for notion/gdrive
+  if (type === 'notion') document.getElementById('f-source').value = 'notion';
+  if (type === 'gdrive') document.getElementById('f-source').value = 'google_drive';
+  toggleCustomSource(document.getElementById('f-source'));
+}
+
+function autoSuggestSource() {
+  const topic = document.getElementById('f-topic').value;
+  const suggested = srcForTopic(topic);
+  if (suggested) document.getElementById('f-source').value = suggested;
+  toggleCustomSource(document.getElementById('f-source'));
+}
+
+function toggleCustomSource(sel) {
+  document.getElementById('custom-src-wrap').style.display = sel.value === 'custom' ? 'block' : 'none';
+}
+
+function getSource() {
+  const sel = document.getElementById('f-source');
+  return sel.value === 'custom' ? document.getElementById('f-source-custom').value.trim() : sel.value;
+}
+
+/* ── File upload helpers ────────────────────────────────────── */
+const FILE_ICONS = { pdf:'📕', docx:'📘', pptx:'📙', xlsx:'📗', txt:'📄', csv:'📊' };
+
+function previewUpload() {
+  const file = document.getElementById('f-file').files[0];
+  if (!file) return;
+  const ext = file.name.split('.').pop().toLowerCase();
+  document.getElementById('upload-icon').textContent = FILE_ICONS[ext] || '📄';
+  document.getElementById('upload-name').textContent = file.name;
+  document.getElementById('upload-size').textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+  document.getElementById('upload-preview').style.display = 'flex';
+  document.getElementById('upload-drop').style.display = 'none';
+  if (!document.getElementById('f-title').value) document.getElementById('f-title').value = file.name;
+}
+
+function clearUpload() {
+  document.getElementById('f-file').value = '';
+  document.getElementById('upload-preview').style.display = 'none';
+  document.getElementById('upload-drop').style.display = 'block';
+}
+
+function handleFileDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-drop').classList.remove('drag');
+  const dt = e.dataTransfer;
+  if (dt.files.length) {
+    document.getElementById('f-file').files = dt.files;
+    previewUpload();
+  }
+}
+
+/* ── Log helpers ────────────────────────────────────────────── */
+function addLog(msg, type = 'info') {
+  const box = document.getElementById('ingest-log');
+  box.style.display = 'block';
+  box.innerHTML += `<div class="log-${type}">${new Date().toLocaleTimeString()} — ${msg}</div>`;
+  box.scrollTop = box.scrollHeight;
+}
+
+/* ── Main ingest dispatcher ────────────────────────────────── */
+async function doIngest() {
+  const source = getSource();
+  const topic  = document.getElementById('f-topic').value;
+  const title  = document.getElementById('f-title').value.trim();
+
+  if (!source) { showToast('Choose a source label'); return; }
+
+  const btn = document.getElementById('ingest-btn');
+  const spinner = document.getElementById('ingest-spinner');
+  btn.disabled = true;
+  spinner.style.display = 'flex';
+  document.getElementById('ingest-log').innerHTML = '';
+  document.getElementById('ai-panel').style.display = 'none';
+
+  try {
+    let result;
+    if (_currentSrcType === 'website') {
+      result = await ingestWebsite(source, topic, title);
+    } else if (_currentSrcType === 'gdrive') {
+      result = await ingestGDrive(source, topic, title);
+    } else if (_currentSrcType === 'notion') {
+      result = await ingestNotion(source, topic, title);
+    } else if (_currentSrcType === 'upload') {
+      result = await ingestUpload(source, topic, title);
+    }
+    if (result && result.source_id) {
+      _lastIngestMeta = { source: result.source, source_id: result.source_id };
+      showToast(`✓ ${result.chunks_ingested} chunks ingested`);
+      loadSources();
+      setTimeout(() => runAIAnalysis(result.source, result.source_id), 400);
+    }
+  } catch (err) {
+    addLog(`✗ ${err.message}`, 'err');
+  } finally {
+    btn.disabled = false;
+    spinner.style.display = 'none';
+  }
+}
+
+async function ingestWebsite(source, topic, title) {
+  const url    = document.getElementById('f-url').value.trim();
+  const crawl  = document.getElementById('f-crawl').checked;
+  const depth  = parseInt(document.getElementById('f-depth').value) || 2;
+  const maxPg  = parseInt(document.getElementById('f-max').value) || 30;
+  const filter = document.getElementById('f-filter').value.trim();
+  if (!url) { showToast('Enter a URL'); throw new Error('No URL'); }
+  addLog(`Ingesting: ${url}`, 'info');
+  const r = await fetch(`${API}/api/knowledge/ingest`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ url, source, label:title, topic, crawl, crawl_depth:depth, crawl_max_pages:maxPg, url_filter:filter }),
+  });
+  const data = await r.json();
+  if (!r.ok) { addLog(`✗ ${data.detail||JSON.stringify(data)}`, 'err'); throw new Error(data.detail); }
+  addLog(`✓ ${crawl ? data.pages_crawled+' pages, ' : ''}${data.chunks_ingested} chunks`, 'ok');
+  return { source, source_id: url, chunks_ingested: data.chunks_ingested };
+}
+
+async function ingestGDrive(source, topic, title) {
+  const url      = document.getElementById('f-gdrive-url').value.trim();
+  const fileType = document.getElementById('f-gdrive-type').value;
+  if (!url) { showToast('Enter a Google Drive URL'); throw new Error('No URL'); }
+  addLog(`Fetching from Google Drive…`, 'info');
+  document.getElementById('ingest-status-text').textContent = 'Fetching Drive file…';
+  const r = await fetch(`${API}/api/knowledge/gdrive`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ url, source, title, topic, file_type:fileType }),
+  });
+  const data = await r.json();
+  if (!r.ok) { addLog(`✗ ${data.detail||JSON.stringify(data)}`, 'err'); throw new Error(data.detail); }
+  addLog(`✓ ${data.chunks_ingested} chunks ingested from Drive`, 'ok');
+  return { source, source_id: data.source_id, chunks_ingested: data.chunks_ingested };
+}
+
+/* ── Notion page browser ───────────────────────────────────── */
+function debounceNotionSearch() {
+  clearTimeout(_notionSearchTimer);
+  _notionSearchTimer = setTimeout(searchNotionPages, 420);
+}
+
+async function searchNotionPages() {
+  const q = document.getElementById('f-notion-search').value.trim();
+  const btn = document.getElementById('notion-search-btn');
+  const wrap = document.getElementById('notion-pages-wrap');
+  const list = document.getElementById('notion-pages-list');
+  btn.disabled = true;
+  btn.textContent = '…';
+  wrap.style.display = 'none';
+  try {
+    const r = await fetch(`${API}/api/knowledge/notion-pages?q=${encodeURIComponent(q)}&limit=30`);
+    const data = await r.json();
+    if (!r.ok) { showToast(data.detail || 'Notion search failed'); return; }
+    const pages = data.pages || [];
+    if (!pages.length) {
+      list.innerHTML = `<div class="notion-pages-empty">No pages found${q ? ` for "${q}"` : ''}.<br><small>Make sure pages are shared with your integration.</small></div>`;
+    } else {
+      list.innerHTML = pages.map(p => {
+        const edited = p.last_edited_time ? new Date(p.last_edited_time).toLocaleDateString() : '';
+        const sel = _notionSelectedPage && _notionSelectedPage.id === p.id ? 'selected' : '';
+        return `<div class="notion-page-item ${sel}" onclick="selectNotionPage(${JSON.stringify(p).replace(/"/g,'&quot;')})">
+          <div class="notion-page-icon">📄</div>
+          <div style="min-width:0">
+            <div class="notion-page-title">${p.title || '(Untitled)'}</div>
+            <div class="notion-page-meta">${edited ? 'Edited ' + edited + ' · ' : ''}${p.url}</div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+    wrap.style.display = 'block';
+  } catch(e) {
+    showToast('Could not reach Notion — is the server running?');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Browse';
+  }
+}
+
+function selectNotionPage(page) {
+  _notionSelectedPage = page;
+  // Update selected display
+  document.getElementById('notion-sel-title').textContent = page.title || '(Untitled)';
+  document.getElementById('notion-sel-url').textContent = page.url;
+  document.getElementById('notion-selected').style.display = 'flex';
+  // Highlight in list
+  document.querySelectorAll('.notion-page-item').forEach(el => {
+    el.classList.toggle('selected', el.querySelector('.notion-page-title')?.textContent === (page.title || '(Untitled)'));
+  });
+  // Auto-fill title if empty
+  const titleField = document.getElementById('f-title');
+  if (!titleField.value) titleField.value = page.title || '';
+}
+
+function clearNotionSelection() {
+  _notionSelectedPage = null;
+  document.getElementById('notion-selected').style.display = 'none';
+  document.querySelectorAll('.notion-page-item').forEach(el => el.classList.remove('selected'));
+}
+
+async function ingestNotion(source, topic, title) {
+  const token = document.getElementById('f-notion-token').value.trim();
+  // Determine what to ingest: selected page from browser OR direct URL
+  let url = '';
+  if (_notionSelectedPage) {
+    url = _notionSelectedPage.url;
+    addLog(`Fetching Notion page: "${_notionSelectedPage.title}"…`, 'info');
+  } else {
+    url = document.getElementById('f-notion-url').value.trim();
+    if (!url) { showToast('Select a page from the browser or paste a URL'); throw new Error('No page selected'); }
+    addLog(`Fetching Notion page…`, 'info');
+  }
+  document.getElementById('ingest-status-text').textContent = 'Fetching Notion…';
+  const r = await fetch(`${API}/api/knowledge/notion-ingest`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ url, source, title, topic, notion_token:token }),
+  });
+  const data = await r.json();
+  if (!r.ok) { addLog(`✗ ${data.detail||JSON.stringify(data)}`, 'err'); throw new Error(data.detail); }
+  addLog(`✓ ${data.chunks_ingested} chunks ingested from Notion`, 'ok');
+  return { source, source_id: data.source_id, chunks_ingested: data.chunks_ingested };
+}
+
+async function ingestUpload(source, topic, title) {
+  const file = document.getElementById('f-file').files[0];
+  if (!file) { showToast('Choose a file to upload'); throw new Error('No file'); }
+  if (file.size > 50*1024*1024) { showToast('File too large (max 50 MB)'); throw new Error('File too large'); }
+  addLog(`Uploading ${file.name}…`, 'info');
+  document.getElementById('ingest-status-text').textContent = 'Uploading…';
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('source', source);
+  fd.append('title', title || file.name);
+  fd.append('topic', topic);
+  const r = await fetch(`${API}/api/knowledge/upload`, { method:'POST', body:fd });
+  const data = await r.json();
+  if (!r.ok) { addLog(`✗ ${data.detail||JSON.stringify(data)}`, 'err'); throw new Error(data.detail); }
+  addLog(`✓ ${data.chunks_ingested} chunks ingested from "${file.name}"`, 'ok');
+  return { source, source_id: data.source_id, chunks_ingested: data.chunks_ingested };
+}
+
+/* ── AI Analysis ───────────────────────────────────────────── */
+async function runAIAnalysis(source, sourceId, refinePrompt = '') {
+  const panel = document.getElementById('ai-panel');
+  const body  = document.getElementById('ai-panel-body');
+  panel.style.display = 'block';
+  body.innerHTML = '<div class="ai-loading"><div class="spinner"></div>Analysing content with Gemini…</div>';
+  panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+
+  try {
+    const r = await fetch(`${API}/api/knowledge/analyse`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ source, source_id: sourceId, refine_prompt: refinePrompt }),
+    });
+    const data = await r.json();
+    if (!r.ok) {
+      body.innerHTML = `<div class="empty" style="color:#c0392b">Analysis failed: ${data.detail||'Unknown error'}</div>`;
+      return;
+    }
+    renderAnalysis(data, source, sourceId);
+  } catch (err) {
+    body.innerHTML = `<div class="empty" style="color:#c0392b">Analysis error: ${err.message}</div>`;
+  }
+}
+
+function renderAnalysis(d, source, sourceId) {
+  const conf = d.confidence ? Math.round(d.confidence * 100) : null;
+  const topicLabel = TOPICS.find(t => t.id === d.topic)?.label || d.topic || '—';
+
+  let html = '';
+
+  // Topic + confidence
+  html += `<div class="ai-sec">
+    <div class="ai-sec-label">Detected Topic</div>
+    <span class="ai-topic-badge">${topicLabel}</span>
+    ${conf ? `<span class="ai-confidence">${conf}% confidence</span>` : ''}
+  </div>`;
+
+  // Subjects
+  if (d.subjects?.length) {
+    html += `<div class="ai-sec">
+      <div class="ai-sec-label">Key Subjects</div>
+      <div class="ai-tags">${d.subjects.map(s=>`<span class="ai-tag">${s}</span>`).join('')}</div>
+    </div>`;
+  }
+
+  // Key insights
+  if (d.key_insights?.length) {
+    html += `<div class="ai-sec">
+      <div class="ai-sec-label">Key Insights for Presales</div>
+      ${d.key_insights.map(i => `<div class="ai-card ai-insight"><strong>${i.heading}</strong><br>${i.body}</div>`).join('')}
+    </div>`;
+  }
+
+  // Value propositions
+  if (d.value_propositions?.length) {
+    html += `<div class="ai-sec">
+      <div class="ai-sec-label">Value Selling Propositions</div>
+      ${d.value_propositions.map(v => `<div class="ai-card ai-vsp">✅ ${v}</div>`).join('')}
+    </div>`;
+  }
+
+  // Competitive advantages
+  if (d.competitive_advantages?.length) {
+    html += `<div class="ai-sec">
+      <div class="ai-sec-label">Competitive Advantages</div>
+      ${d.competitive_advantages.map(c => `<div class="ai-card ai-comp">⚔️ ${c}</div>`).join('')}
+    </div>`;
+  }
+
+  // Diagram suggestions
+  if (d.diagram_suggestions?.length) {
+    html += `<div class="ai-sec">
+      <div class="ai-sec-label">Suggested Diagrams</div>
+      ${d.diagram_suggestions.map(g => `<div class="ai-card ai-diag"><div class="ai-diag-type">${g.type}</div>${g.description}</div>`).join('')}
+    </div>`;
+  }
+
+  // Missing data flags
+  if (d.missing_data?.length) {
+    html += `<div class="ai-sec">
+      <div class="ai-sec-label">Gaps Identified</div>
+      <div class="ai-tags">${d.missing_data.map(m=>`<span class="ai-tag" style="background:#fff0f0;border-color:#fca5a5;color:#b91c1c">⚠ ${m}</span>`).join('')}</div>
+    </div>`;
+  }
+
+  // Refine + Save
+  html += `<div class="ai-refine">
+    <div class="form-section">
+      <label>Refine the analysis <span class="opt">(optional — instruct AI to focus on specific aspects)</span></label>
+      <textarea id="ai-refine-prompt" rows="2" placeholder="e.g. 'Focus on the competitive pricing claims' or 'Extract integration patterns for Braze'…"></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveInsight('${source}','${sourceId.replace(/'/g,"\\'")}')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save Insight
+      </button>
+    </div>
+  </div>`;
+
+  document.getElementById('ai-panel-body').innerHTML = html;
+  // store for re-analyse
+  document.getElementById('ai-panel').dataset.source = source;
+  document.getElementById('ai-panel').dataset.sourceId = sourceId;
+}
+
+function triggerReanalyse() {
+  const panel = document.getElementById('ai-panel');
+  const source   = panel.dataset.source;
+  const sourceId = panel.dataset.sourceId;
+  const refine   = document.getElementById('ai-refine-prompt')?.value?.trim() || '';
+  if (source) runAIAnalysis(source, sourceId, refine);
+}
+
+async function saveInsight(source, sourceId) {
+  const body = document.getElementById('ai-panel-body');
+  const notes = document.getElementById('ai-refine-prompt')?.value?.trim() || '';
+  try {
+    const r = await fetch(`${API}/api/knowledge/save-insight`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ source, source_id: sourceId, presales_notes: notes }),
+    });
+    if (r.ok) showToast('✓ Insight saved to Knowledge Base');
+    else showToast('Could not save insight');
+  } catch { showToast('Could not save insight'); }
+}
+
+/* ── Browse entries ─────────────────────────────────────────── */
+async function loadEntries() {
+  const source = document.getElementById('filter-source').value;
+  const topic = document.getElementById('filter-topic').value;
+  const wrap   = document.getElementById('entries-wrap');
+  wrap.innerHTML = '<div class="empty">Loading…</div>';
+  try {
+    const params = new URLSearchParams({ limit:'100' });
+    if (source) params.set('source', source);
+    if (topic) params.set('topic', topic);
+
+    const r = await fetch(`${API}/api/knowledge/entries?${params.toString()}`);
+    const { entries } = await r.json();
+    document.getElementById('entry-count').textContent = entries.length;
+    if (!entries.length) { wrap.innerHTML = '<div class="empty">No entries found.</div>'; return; }
+
+    wrap.innerHTML = `<div style="overflow-x:auto"><table class="entries-table">
+      <thead><tr><th>Source</th><th>Title / ID</th><th>Topic</th><th>Chunks</th><th>Created</th><th>Updated</th><th>Actions</th></tr></thead>
+      <tbody>${entries.map(e => `<tr>
+        <td><span class="src-tag ${srcClass(e.source)}" style="font-size:10px;padding:1px 7px">${e.source}</span></td>
+        <td class="url-cell" title="${e.title||e.source_id}">${e.title||e.source_id}</td>
+        <td>${e.topic || '—'}</td>
+        <td>${e.chunks}</td>
+        <td>${e.created_at ? new Date(e.created_at).toLocaleDateString() : '—'}</td>
+        <td>${e.updated_at ? new Date(e.updated_at).toLocaleDateString() : '—'}</td>
+        <td><div style="display:flex;gap:4px">
+            <button class="btn btn-outline" style="font-size:11px;padding:4px 6px" onclick="reanalyseEntry('${e.source}','${(e.source_id||'').replace(/'/g,"\\'")}')">Update</button>
+            <button class="del-entry" onclick="deleteEntry('${e.source}','${(e.source_id||'').replace(/'/g,"\\'")}')" title="Delete">🗑</button>
+        </div></td>
+      </tr>`).join('')}</tbody></table></div>`;
+  } catch(err) {
+    wrap.innerHTML = `<div class="empty" style="color:#c0392b">Error: ${err.message}</div>`;
+  }
+}
+
+/* ── Semantic search ────────────────────────────────────────── */
+async function doSearch() {
+  const query  = document.getElementById('search-query').value.trim();
+  const source = document.getElementById('search-source').value;
+  const wrap   = document.getElementById('search-results-wrap');
+  if (!query) return;
+  wrap.innerHTML = '<div class="empty">Searching…</div>';
+  try {
+    const r = await fetch(`${API}/api/knowledge/search`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ query, source, top_k:8 }),
+    });
+    const { results } = await r.json();
+    if (!results.length) { wrap.innerHTML = '<div class="empty">No results found.</div>'; return; }
+    wrap.innerHTML = results.map(res => `
+      <div class="search-result">
+        <div class="sr-meta">
+          <span class="src-tag ${srcClass(res.source)}">${res.source}</span>
+          <span class="sr-id">${(res.source_id||'').slice(0,60)}</span>
+          <span class="sr-score">
+            <div class="score-bar" style="width:${Math.round(res.score*60)}px"></div>
+            ${(res.score*100).toFixed(0)}%
+          </span>
+        </div>
+        <div class="sr-excerpt">${res.excerpt}</div>
+      </div>`).join('');
+  } catch(err) {
+    wrap.innerHTML = `<div class="empty" style="color:#c0392b">Error: ${err.message}</div>`;
+  }
+}
+
+async function searchEntries() {
+  const query = document.getElementById('entries-search').value.trim();
+  const source = document.getElementById('filter-source').value;
+  if (!query) { loadEntries(); return; }
+
+  const wrap = document.getElementById('entries-wrap');
+  wrap.innerHTML = '<div class="empty">Searching entries…</div>';
+
+  try {
+    const r = await fetch(`${API}/api/knowledge/search`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ query, source, top_k:100 }),
+    });
+    const { results } = await r.json();
+    if (!results?.length) { wrap.innerHTML = '<div class="empty">No matching entry chunks.</div>'; return; }
+
+    const grouped = {};
+    results.forEach(item => {
+      const key = `${item.source}|${item.source_id}`;
+      if (!grouped[key]) grouped[key] = { source:item.source, source_id:item.source_id, snippets: [] };
+      grouped[key].snippets.push(item.excerpt);
+    });
+
+    const rows = Object.values(grouped).map(item => `
+      <tr>
+        <td><span class="src-tag ${srcClass(item.source)}" style="font-size:10px;padding:1px 7px">${item.source}</span></td>
+        <td class="url-cell" title="${item.source_id}">${item.source_id}</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td><button class="btn btn-outline" style="font-size:11px;padding:4px 6px" onclick="reanalyseEntry('${item.source}','${(item.source_id||'').replace(/'/g,"\\'")}')">Update</button></td>
+      </tr>`).join('');
+
+    wrap.innerHTML = `<div style="overflow-x:auto"><table class="entries-table"><thead><tr><th>Source</th><th>Title / ID</th><th>Topic</th><th>Chunks</th><th>Created</th><th>Updated</th><th>Actions</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  } catch (err) {
+    wrap.innerHTML = `<div class="empty" style="color:#c0392b">Error: ${err.message}</div>`;
+  }
+}
+
+/* ── NEW ENTRY WIZARD ───────────────────────────────────────── */
+let entryWizardStep = 1;
+const ENTRY_WIZARD_STEPS = 4;
+let entryWizardState = {
+  source_type:'website', source_url:'', topic:'technical', title:'', analysis:null, refine:''
+};
+
+function openEntryWizard() {
+  loadEntryWizardState();
+  entryWizardStep = 1;
+  setEntryStepUI();
+  document.getElementById('entry-wizard-backdrop').classList.add('open');
+}
+
+function closeEntryWizard() {
+  document.getElementById('entry-wizard-backdrop').classList.remove('open');
+}
+
+function entryBackdropClose(e) {
+  if (e.target === document.getElementById('entry-wizard-backdrop')) closeEntryWizard();
+}
+
+function setEntryStepUI() {
+  for (let i=1;i<=ENTRY_WIZARD_STEPS;i++) {
+    document.getElementById(`entry-step-${i}`).classList.toggle('active', i===entryWizardStep);
+    const bubble = document.getElementById(`entry-bubble-${i}`);
+    const label = document.getElementById(`entry-label-${i}`);
+    bubble.classList.remove('active','done');
+    label.classList.remove('active');
+    if (i < entryWizardStep) bubble.classList.add('done');
+    if (i===entryWizardStep) { bubble.classList.add('active'); label.classList.add('active'); }
+  }
+  document.getElementById('entry-modal-subtitle').textContent = `Step ${entryWizardStep} of ${ENTRY_WIZARD_STEPS} — ${['Add source','Analysis','Refine','Activate'][entryWizardStep-1]}`;
+  document.getElementById('entry-btn-back').classList.toggle('hidden', entryWizardStep===1);
+  document.getElementById('entry-btn-next').textContent = entryWizardStep === ENTRY_WIZARD_STEPS ? 'Done' : 'Continue →';
+}
+
+function entryNextStep() {
+  if (entryWizardStep===1) {
+    const srcInput = document.getElementById('wizard-source-input').value.trim();
+    const topic = document.getElementById('wizard-topic').value;
+    const title = document.getElementById('wizard-title').value.trim();
+    const sourceType = document.getElementById('wizard-source-type').value;
+    if (!srcInput) { showToast('Enter a source URL or file input first'); return; }
+    entryWizardState.source_url = srcInput;
+    entryWizardState.topic = topic;
+    entryWizardState.title = title;
+    entryWizardState.source_type = sourceType;
+    saveWizardProgress();
+
+    selectSrcTab(sourceType);
+    if (sourceType === 'website') {
+      document.getElementById('f-url').value = srcInput;
+    } else if (sourceType === 'gdrive') {
+      document.getElementById('f-gdrive-url').value = srcInput;
+    } else if (sourceType === 'notion') {
+      document.getElementById('f-notion-url').value = srcInput;
+    }
+    document.getElementById('f-topic').value = topic;
+    document.getElementById('f-title').value = title;
+    if (sourceType !== 'upload') {
+      doIngest().then(() => { if (_lastIngestMeta) runAIAnalysis(_lastIngestMeta.source, _lastIngestMeta.source_id); });
+    } else {
+      showToast('Upload flow: please use the source panel upload input first.');
+    }
+  }
+  if (entryWizardStep < ENTRY_WIZARD_STEPS) entryWizardStep += 1;
+  setEntryStepUI();
+}
+
+function entryPrevStep() {
+  if (entryWizardStep > 1) entryWizardStep -= 1;
+  setEntryStepUI();
+}
+
+function saveWizardProgress() {
+  entryWizardState.source_type = document.getElementById('wizard-source-type').value;
+  entryWizardState.source_url = document.getElementById('wizard-source-input').value;
+  entryWizardState.topic = document.getElementById('wizard-topic').value;
+  entryWizardState.title = document.getElementById('wizard-title').value;
+  entryWizardState.refine = document.getElementById('wizard-refine').value;
+  localStorage.setItem('kb_entry_wizard', JSON.stringify(entryWizardState));
+  showToast('Progress saved');
+}
+
+function loadEntryWizardState() {
+  const raw = localStorage.getItem('kb_entry_wizard');
+  if (!raw) return;
+  try {
+    entryWizardState = JSON.parse(raw);
+    document.getElementById('wizard-source-type').value = entryWizardState.source_type;
+    document.getElementById('wizard-source-input').value = entryWizardState.source_url;
+    document.getElementById('wizard-topic').value = entryWizardState.topic;
+    document.getElementById('wizard-title').value = entryWizardState.title;
+    document.getElementById('wizard-refine').value = entryWizardState.refine;
+  } catch (e) { console.warn('Could not load wizard state', e); }
+}
+
+function wizardSourceTypeChange() {
+  const type = document.getElementById('wizard-source-type').value;
+  const input = document.getElementById('wizard-source-input');
+  if (type === 'upload') {
+    input.type='file';
+    input.placeholder='Upload file not yet supported in this wizard';
+  } else {
+    input.type='text';
+    input.placeholder='Source URL';
+  }
+}
+
+function applyRefinePrompt() {
+  const refine = document.getElementById('wizard-refine').value.trim();
+  if (!(_lastIngestMeta && _lastIngestMeta.source_id)) { showToast('Ingest content first'); return; }
+  runAIAnalysis(_lastIngestMeta.source, _lastIngestMeta.source_id, refine);
+  saveWizardProgress();
+}
+
+function activateEntry() {
+  if (!(_lastIngestMeta && _lastIngestMeta.source_id)) { showToast('Nothing to activate yet'); return; }
+  const payload = {
+    source:_lastIngestMeta.source,
+    source_id:_lastIngestMeta.source_id,
+    topic:document.getElementById('wizard-topic').value,
+    key_insights: [],
+    value_propositions: [],
+    competitive_advantages: [],
+    diagram_suggestions: [],
+    presales_notes: document.getElementById('wizard-refine').value || ''
+  };
+  fetch(`${API}/api/knowledge/save-insight`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  }).then(r => r.ok ? showToast('Entry activated in KB insights') : showToast('Activate failed')).catch(() => showToast('Activate failed'));
+  closeEntryWizard();
+}
+
+/* ── Tabs ────────────────────────────────────────────────────── */
+function switchTab(name, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.getElementById(`tab-${name}`).classList.add('active');
+  const idx = ['entries','search'].indexOf(name);
+  const tabs = [...document.querySelectorAll('.tab')];
+  if (tabs[idx]) tabs[idx].classList.add('active');
+}
+
+/* ── Toast ───────────────────────────────────────────────────── */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+/* ── Init ────────────────────────────────────────────────────── */
+loadSources();
+</script>
+</body>
+</html>

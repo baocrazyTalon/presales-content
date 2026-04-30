@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior:smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Talon.One Technical Integration Deep Dive for Fairprice</title>
+  <style>
+    :root {
+      --blue: #0161ff;
+      --navy: #02043b;
+      --dark: #1a1f36;
+      --gray: #555;
+      --light-gray: #f5f5f7;
+      --white: #fff;
+      --border: #e0e0e0;
+      --success: #00b386;
+      --warning: #ffc400;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      background-color: var(--light-gray);
+      color: var(--dark);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding-top: 62px;
+    }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(255,255,255,.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 36px; height: 62px; gap: 16px;
+    }
+    nav .nav-logo {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none; flex-shrink: 0; cursor: pointer;
+    }
+    nav .nav-logo img { height: 22px; }
+    nav .nav-logo .sep { width:1px; height:22px; background:rgba(0,0,0,.18); }
+    nav .nav-logo .co-name { font-size:13px; font-weight:700; color:var(--navy); }
+    nav .nav-links {
+      display: flex; flex: 1; gap: 0;
+      justify-content: center; align-items: center; flex-wrap: nowrap;
+    }
+    nav .nav-links a {
+      font-size: 11.5px; font-weight: 600; text-decoration: none;
+      color: var(--gray); padding: 4px 9px; border-radius: 6px;
+      transition: background .15s, color .15s; white-space: nowrap;
+    }
+    nav .nav-links a:hover { background: var(--light-gray); color: var(--blue); }
+    nav .nav-tag {
+      font-size: 11px; font-weight: 700; color: rgba(1,97,255,.7);
+      white-space: nowrap; flex-shrink: 0; letter-spacing: .04em;
+    }
+    @media (max-width: 768px) {
+      nav .nav-links { display: none; }
+      nav .nav-tag { display: none; }
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+    section {
+      padding: 60px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    section:last-of-type { border-bottom: none; }
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+    h1, h2, h3 {
+      color: var(--navy);
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    h1 { font-size: 48px; line-height: 1.1; }
+    h2 { font-size: 32px; line-height: 1.2; }
+    h3 { font-size: 20px; line-height: 1.3; }
+    p { color: var(--gray); margin-bottom: 16px; font-size: 16px; }
+    .hero {
+      min-height: calc(80vh - 62px);
+      display: flex;
+      align-items: center;
+      background: linear-gradient(160deg, #f0f5ff 0%, #ffffff 100%);
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    .hero h1 { font-size: 52px; }
+    .hero .tags {
+      display: flex; gap: 8px; margin-top: 24px;
+    }
+    .hero .tag {
+      display: inline-block;
+      padding: 6px 14px;
+      background: rgba(1, 97, 255, 0.08);
+      color: var(--blue);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: all 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(2, 4, 59, 0.08);
+      border-color: var(--blue);
+    }
+    .card h3 {
+      margin-bottom: 8px;
+    }
+    .card p { font-size: 14px; }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+    .toc-card {
+      display: flex; align-items: center; gap: 16px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .toc-card:hover { 
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(2, 4, 59, 0.06);
+      border-color: var(--blue);
+    }
+    .toc-card .num {
+      font-size: 16px; font-weight: 700; color: var(--blue);
+      background: rgba(1, 97, 255, 0.1);
+      border-radius: 50%;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .toc-card .text { font-size: 14px; font-weight: 600; color: var(--navy); }
+    .diagram-container {
+      background: var(--dark);
+      border-radius: 12px;
+      padding: 32px;
+      margin-top: 32px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .mermaid {
+      background: var(--dark);
+      color: white;
+    }
+    pre {
+      background-color: #f5f5f7;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      overflow-x: auto;
+      color: #333;
+    }
+    code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      background: rgba(0,0,0,0.05);
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 24px;
+    }
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    thead {
+      background-color: var(--light-gray);
+    }
+    th {
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: var(--gray);
+    }
+    .comparison-table .icon { font-size: 18px; }
+    .comparison-table .talon { color: var(--success); }
+    .comparison-table .competitor { color: #f44336; }
+    .gantt-container {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid var(--border);
+    }
+    .checklist {
+      list-style: none; padding: 0; margin-top: 24px;
+    }
+    .checklist li {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+      font-size: 16px; font-weight: 500;
+    }
+    .checklist li::before {
+      content: '✓';
+      color: var(--success);
+      font-weight: 700;
+      font-size: 20px;
+    }
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 36px; }
+      h2 { font-size: 28px; }
+    }
+  </style>
+</head>
+
+<style>
+#draft-badge {
+  position: fixed; top: 12px; right: 12px; z-index: 9999;
+  background: #ff9800; color: #fff; font-family: sans-serif;
+  font-size: 12px; font-weight: 700; padding: 4px 12px;
+  border-radius: 4px; letter-spacing: .05em; pointer-events: none;
+}
+</style>
+<div id="draft-badge">DRAFT</div>
+<body>
+
+  <nav>
+    <a href="#" class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+      <img src="https://a.storyblok.com/f/140059/118x24/886a9d9fc3/rebrand-talon-one-logo-navy.svg" alt="Talon.One" />
+      <div class="sep"></div>
+      <span class="co-name">Fairprice</span>
+    </a>
+    <div class="nav-links">
+      <a href="#architecture">Architecture</a>
+      <a href="#api-flows">API Flows</a>
+      <a href="#environments">Environments</a>
+      <a href="#apis">Key APIs</a>
+      <a href="#data-model">Data Model</a>
+      <a href="#security">Security</a>
+      <a href="#timeline">Timeline</a>
+      <a href="#summary">Summary</a>
+    </div>
+    <div class="nav-tag">TALON.ONE × FAIRPRICE</div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <p class="section-label">Technical Integration Deep Dive</p>
+      <h1>Unlocking Your Growth Stack</h1>
+      <p>A technical overview of Talon.One's API-first architecture, designed to seamlessly integrate with your Segment and Braze ecosystem and displace legacy limitations.</p>
+      <div class="tags">
+        <span class="tag">API-First Architecture</span>
+        <span class="tag">Composable & Headless</span>
+        <span class="tag">High-Performance</span>
+        <span class="tag">Segment & Braze Integration</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="toc">
+      <p class="section-label">Contents</p>
+      <h2>Integration Overview</h2>
+      <div class="toc-grid">
+        <a href="#architecture" class="toc-card"><span class="num">01</span><span class="text">Architecture</span></a>
+        <a href="#api-flows" class="toc-card"><span class="num">02</span><span class="text">API Integration Flows</span></a>
+        <a href="#environments" class="toc-card"><span class="num">03</span><span class="text">Environments</span></a>
+        <a href="#apis" class="toc-card"><span class="num">04</span><span class="text">Key APIs</span></a>
+        <a href="#data-model" class="toc-card"><span class="num">05</span><span class="text">Data Model</span></a>
+        <a href="#security" class="toc-card"><span class="num">06</span><span class="text">Security</span></a>
+        <a href="#timeline" class="toc-card"><span class="num">07</span><span class="text">Implementation Timeline</span></a>
+        <a href="#summary" class="toc-card"><span class="num">08</span><span class="text">Summary & Checklist</span></a>
+      </div>
+    </section>
+
+    <section id="architecture">
+      <p class="section-label">01 Architecture</p>
+      <h2>A Composable Component for Your Modern Stack</h2>
+      <p>Fairprice has invested in a best-of-breed, composable stack with Segment and Braze. The promotions engine is the critical third pillar that executes business logic. However, legacy platforms like Comarch and Capillary introduce architectural flaws that create bottlenecks and complexity.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>The Legacy Flaw: Logic Silos</h3>
+          <p>Competitors like Comarch and Capillary use monolithic architectures with separate, bolted-on modules for promotions, loyalty, and referrals. This creates 'logic silos' where rules can conflict, data is inconsistent, and omnichannel campaigns require complex orchestration. Their high-latency, legacy APIs are not designed for real-time data streams from modern CDPs like Segment, creating a performance bottleneck.</p>
+        </div>
+        <div class="card">
+          <h3>The Talon.One Advantage: Unified Engine</h3>
+          <p>Talon.One is built on a MACH (Microservices-based, API-first, Cloud-native, Headless) architecture. Our Unified Rule Engine provides a single, consistent interface to build any rule, from a simple coupon to a complex loyalty program. A single rule can award loyalty points, apply a cart discount, and trigger a webhook to Braze simultaneously, eliminating the complexity and data sync issues of siloed systems.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="api-flows">
+      <p class="section-label">02 API Integration Flows</p>
+      <h2>Seamless Integration with Segment & Braze</h2>
+      <p>Our architecture is designed for seamless data flow within your existing ecosystem, minimizing the level of effort for your team. Segment sends customer data and events to Talon.One; our rule engine evaluates this data in real-time; and we forward the outcomes ('effects') to Braze for personalized communication. This entire flow is orchestrated via our high-performance Integration API.</p>
+      <div class="diagram-container">
+        <div class="mermaid" id="diagram1">
+          sequenceDiagram
+              participant Segment as Segment (CDP)
+              participant Fairprice as Fairprice Backend
+              participant T1 as Talon.One API
+              participant Braze as Braze (CEP)
+
+              Segment->>Fairprice: User Event (e.g., Page View, Add to Cart)
+              Fairprice->>T1: UpdateCustomerSession(session, cartItems)
+              Note over Fairprice, T1: Real-time rule evaluation (<50ms)
+              T1-->>Fairprice: API Response (Effects: setDiscount, acceptCoupon, etc.)
+              Fairprice->>Fairprice: Apply effects to user session (e.g., update UI)
+
+              alt Rule triggers a webhook
+                  T1->>Braze: Webhook: Send Personalized Coupon
+                  Braze->>Segment: Update User Attribute (e.g., has_new_coupon)
+              end
+
+              alt Segment Audience Sync
+                  Segment->>T1: Sync Audience (e.g., 'High-Value Customers')
+                  T1->>T1: Update Customer Profiles with new attribute
+                  Note over T1: Profiles now targetable in campaigns
+              end
+        </div>
+      </div>
+    </section>
+
+    <section id="environments">
+      <p class="section-label">03 Environments</p>
+      <h2>Structured Deployment from Dev to Production</h2>
+      <p>Talon.One provides a structured environment setup to support your full development lifecycle. Each environment is isolated, ensuring that testing and development do not impact your live production campaigns. We call these environments "Applications" within the Talon.One Campaign Manager.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Development & QA</h3>
+          <p>Isolated sandboxes for developers to integrate with our APIs and for QA teams to test campaign logic without using real data. Each Application has its own API keys.</p>
+        </div>
+        <div class="card">
+          <h3>Staging (UAT)</h3>
+          <p>A pre-production environment that mirrors your production setup. Used for User Acceptance Testing (UAT) and final validation of campaigns and integration logic before go-live.</p>
+        </div>
+        <div class="card">
+          <h3>Production</h3>
+          <p>The live environment handling all real customer traffic. We recommend separate Applications for different regions or business units to manage currencies, timezones, and data independently.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="apis">
+      <p class="section-label">04 Key APIs</p>
+      <h2>Engineered for Enterprise Performance & Scale</h2>
+      <p>Talon.One offers two primary APIs, each designed for a specific purpose. All communication should happen from your backend to ours to avoid exposing sensitive credentials.</p>
+      <h3>Integration API (Session V2)</h3>
+      <p>This is the high-throughput, low-latency API for all real-time interactions. It's used to send customer session data and receive effects from the Rule Engine. We guarantee sub-50ms rule evaluation, critical for checkout and POS use cases.</p>
+      <pre><code>curl --request PUT 'https://your_deployment.talon.one/v2/customer_sessions/cart-uuid-123' \
+--header 'Authorization: ApiKey-v1 YOUR_API_KEY' \
+--header 'Content-Type: application/json' \
+--data-raw '{ 
+  "customerSession": { 
+    "profileId": "user-id-456",
+    "cartItems": [ 
+      { "name": "Product A", "sku": "SKU001", "quantity": 1, "price": 99.99 }
+    ],
+    "couponCodes": ["WELCOME10"]
+  },
+  "responseContent": ["customerSession", "effects"]
+}'</code></pre>
+      <h3>Management API</h3>
+      <p>This is a RESTful API for back-office operations. It allows you to programmatically do most of what the Campaign Manager UI allows, such as creating campaigns, generating coupons, or managing attributes. It is not designed for the high-load traffic of the Integration API.</p>
+    </section>
+
+    <section id="data-model">
+      <p class="section-label">05 Data Model</p>
+      <h2>Flexible & Extensible Data Structures</h2>
+      <p>Talon.One's data model is designed to be flexible, allowing you to map any business data point as an attribute for rule building.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Customer Profile</h3>
+          <p>Represents your customer. It has a unique <code>profileId</code> (which should match your internal customer ID) and can hold any number of custom attributes (e.g., <code>tier: 'Gold'</code>, <code>lifetimeValue: 5000</code>). Profiles are updated via the Integration API or synced from Segment.</p>
+        </div>
+        <div class="card">
+          <h3>Customer Session</h3>
+          <p>A container for customer activity, typically mapping to a shopping cart or order. It contains cart items, applied coupons, and other session-specific data. The session is the primary object evaluated by the Rule Engine.</p>
+        </div>
+        <div class="card">
+          <h3>Catalog Data</h3>
+          <p>While Talon.One can work with product data sent in the session, you can also sync your product catalog. This allows for more powerful rules based on product attributes (e.g., `brand: 'Nike'`, `margin > 40%`) without sending this data in every API call.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="security">
+      <p class="section-label">06 Security & Compliance</p>
+      <h2>Enterprise-Grade Security by Design</h2>
+      <p>Security is paramount. Our platform is designed with enterprise-grade features to protect your data and ensure reliable service.</p>
+      <table>
+        <thead>
+          <tr><th>Feature</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Authentication</strong></td>
+            <td>All API requests are authenticated via scoped API keys. Keys should be stored securely on your backend and never exposed client-side.</td>
+          </tr>
+          <tr>
+            <td><strong>Rate Limiting</strong></td>
+            <td>Our Third-party APIs (for Segment/Braze) have default rate limits of 60-90 req/sec, which can be increased. The core Integration API is built for high throughput to handle enterprise scale.</td>
+          </tr>
+          <tr>
+            <td><strong>PII Handling</strong></td>
+            <td>Talon.One is designed to work without PII. We recommend using non-personally identifiable IDs for customer profiles. We are GDPR compliant and SOC 2 Type II certified.</td>
+          </tr>
+          <tr>
+            <td><strong>Infrastructure</strong></td>
+            <td>We offer multi-region hosting options (AWS) to meet data residency requirements and ensure low latency.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="timeline">
+      <p class="section-label">07 Implementation Timeline</p>
+      <h2>De-risking Migration & Estimating Effort</h2>
+      <p>We provide a clear, phased approach to ensure a smooth migration from legacy systems like Comarch or Capillary. A typical integration project follows a 4-6 week timeline, supported by our Solution Engineering team.</p>
+      <div class="gantt-container">
+        <div class="mermaid" id="diagram2">
+          gantt
+              title Talon.One Integration Timeline
+              dateFormat  YYYY-MM-DD
+              section Planning & Discovery (Week 1)
+              Solution Workshop & Scoping :done, des1, 2024-07-01, 2d
+              Data Mapping & Attribute Def. :done, des2, 2024-07-03, 3d
+
+              section Backend Integration (Weeks 2-3)
+              SDK Installation & Setup :active, 2024-07-08, 2d
+              Customer Profile Sync Logic :active, 2024-07-10, 4d
+              Session Update Logic :2024-07-16, 4d
+
+              section Frontend & Testing (Weeks 4-5)
+              Handling API Effects in UI :2024-07-22, 5d
+              End-to-End Testing (UAT) :2024-07-29, 5d
+
+              section Go-Live (Week 6)
+              Production Deployment :2024-08-05, 2d
+              Monitoring & Handover :2024-08-07, 3d
+        </div>
+      </div>
+    </section>
+
+    <section id="summary">
+      <p class="section-label">08 Summary & Checklist</p>
+      <h2>Why Talon.One is the Right Choice</h2>
+      <p>Talon.One provides a fundamentally superior architecture that eliminates the technical debt and limitations of legacy platforms. We are a composable component designed to enhance your stack, not lock you into a monolithic suite.</p>
+      
+      <div class="grid">
+          <div class="card">
+              <h3>Architectural Comparison</h3>
+              <table class="comparison-table">
+                  <thead>
+                      <tr><th>Capability</th><th>Talon.One</th><th>Comarch / Capillary</th></tr>
+                  </thead>
+                  <tbody>
+                      <tr><td><strong>Core Architecture</strong></td><td class="talon">Unified Rule Engine</td><td class="competitor">Siloed Modules</td></tr>
+                      <tr><td><strong>API Design</strong></td><td class="talon">API-First, <50ms</td><td class="competitor">Legacy, High Latency</td></tr>
+                      <tr><td><strong>Ecosystem Fit</strong></td><td class="talon">Composable Component</td><td class="competitor">Monolithic Suite</td></tr>
+                      <tr><td><strong>Data Flow</strong></td><td class="talon">Real-time Streams</td><td class="competitor">Batch / Brittle Sync</td></tr>
+                  </tbody>
+              </table>
+          </div>
+          <div class="card">
+              <h3>Integration Checklist</h3>
+              <ul class="checklist">
+                  <li>Unified Rule Engine avoids rule conflicts.</li>
+                  <li>Pre-built connectors for Segment & Braze reduce effort.</li>
+                  <li>Sub-50ms latency ensures a real-time experience.</li>
+                  <li>Modern Integration API provides superior flexibility.</li>
+                  <li>Phased migration plan de-risks the project.</li>
+              </ul>
+          </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({startOnLoad:true, theme:'base', themeVariables: { 
+        'background': '#1a1f36',
+        'primaryColor': '#2e3454',
+        'primaryTextColor': '#ffffff',
+        'lineColor': '#a9b1d6',
+        'textColor': '#c0caf5',
+        'actorBorder': '#0161ff',
+        'actorBkg': '#02043b',
+        'actorTextColor': '#ffffff',
+        'noteBkgColor': '#2e3454',
+        'noteTextColor': '#c0caf5',
+        'sequenceNumberColor': '#ffffff'
+    }});
+  </script>
+</body>
+</html>
