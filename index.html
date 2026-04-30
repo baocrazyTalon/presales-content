@@ -488,6 +488,33 @@
       </div>
     </div>
 
+    <div class="folder" data-folder="GCASH" data-folder-path="CLIENTS/GCASH">
+      <div class="folder-header" onclick="toggleFolder(this)">
+        <svg class="folder-chevron open" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        <span class="folder-name">GCASH</span>
+        <span class="folder-badge">1 doc</span>
+        <button class="folder-delete-btn" title="Delete folder" onclick="deleteFolderItem('CLIENTS/GCASH', event)">🗑</button>
+      </div>
+      <div class="folder-body">
+        <div class="doc-item" draggable="true"
+           data-doc-path="CLIENTS/GCASH/talon.one gcash.html"
+           data-category="client" data-keywords="gcash loyalty cashback b2c payment philippines talon">
+          <span class="doc-icon">📄</span>
+          <div class="doc-info">
+            <div class="doc-title">Talon.One × GCash Integration</div>
+            <div class="doc-sub">B2C · Cashback Program · Clevertap</div>
+            <div class="doc-timestamps">Created Apr 30, 2026 · Updated Apr 30, 2026</div>
+          </div>
+          <span class="status-pill published">Published</span>
+          <div class="doc-actions">
+            <button class="doc-action-btn modify" onclick="openModify(this)">Modify</button>
+            <button class="doc-action-btn read" onclick="openRead(this)">Read</button>
+            <button class="doc-action-btn delete" onclick="deleteDocItem(this.closest('[data-doc-path]').dataset.docPath, event)">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="folder" data-folder="DALI" data-folder-path="CLIENTS/OPPORTUNITIES/DALI">
       <div class="folder-header" onclick="toggleFolder(this)">
         <svg class="folder-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
