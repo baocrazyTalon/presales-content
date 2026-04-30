@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<!-- saved from url=(0067)file:///Users/scereze/Downloads/Talon_One_GCash_Integration_10.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Talon.One — GCash Integration</title>
+  <style>
+    :root {
+      --red: #ffd700;
+      --navy: #ffffff;
+      --dark: #ffffff;
+      --gray: #e0e0e0;
+      --light-gray: #2d5fb8;
+      --white: #3e83fa;
+      --border: #5a9eff;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--white);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 40px; height: 64px;
+    }
+    nav .logos { display: flex; align-items: center; gap: 18px; text-decoration: none; cursor: pointer; flex-shrink: 0; }
+    nav .logos img { height: 24px; }
+    nav .logos span { color: var(--primary); font-weight: 700; font-size: 14px; }
+    nav .nav-links { display: flex; flex: 1; gap: 0; flex-wrap: nowrap; justify-content: space-evenly; align-items: center; margin-left: 24px; }
+    nav .nav-links a, nav .nav-links .nav-item > span {
+      font-size: 11.5px; font-weight: 600; text-decoration: none; color: #222;
+      padding: 4px 6px; border-radius: 6px; transition: .2s;
+      text-align: center; line-height: 1.25; cursor: pointer;
+    }
+    nav .nav-links a:hover, nav .nav-links .nav-item:hover > span { background: #f5f5f5; color: var(--primary); }
+
+    /* NEW: Dropdown Menu Styles */
+    .nav-item { position: relative; display: flex; align-items: center; }
+    .nav-item > span::after { content: ' ▼'; font-size: 8px; position: relative; top: -2px; left: 2px; }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-top: 10px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+      padding: 8px 0;
+      min-width: 160px;
+      z-index: 101;
+    }
+    .nav-item:hover .dropdown-menu { display: block; }
+    .dropdown-menu a {
+      display: block;
+      text-align: left;
+      padding: 8px 16px;
+      width: 100%;
+      border-radius: 0;
+      color: #222;
+    }
+    .dropdown-menu a:hover {
+      background: #f5f5f5;
+      color: var(--primary);
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 100px 40px 60px;
+      background: #3e83fa;
+    }
+    .hero .logos-hero { display: flex; align-items: center; gap: 28px; margin-bottom: 48px; }
+    .hero .logos-hero img:first-child { height: 36px; }
+    .hero .logos-hero img:last-child { height: 48px; }
+    .hero .logos-hero .sep { width: 2px; height: 40px; background: var(--border); }
+    .hero h1 { font-size: 48px; font-weight: 800; color: var(--navy); max-width: 800px; line-height: 1.15; }
+    .hero h1 em { font-style: normal; color: var(--red); }
+    .hero p.sub { margin-top: 20px; font-size: 20px; color: var(--gray); max-width: 640px; }
+    .hero .tags { margin-top: 32px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .hero .tags span {
+      background: var(--light-gray); padding: 6px 16px; border-radius: 20px;
+      font-size: 13px; color: var(--dark); font-weight: 500;
+    }
+
+    /* SECTIONS */
+    section { padding: 80px 40px; max-width: 100%; margin: 0 auto; }
+    section > .inner { max-width: 1100px; margin: 0 auto; }
+    section.bg-gray { background: var(--light-gray); }
+    .section-label {
+      font-size: 12px; text-transform: uppercase; letter-spacing: 2px;
+      color: var(--red); font-weight: 700; margin-bottom: 8px;
+    }
+    section h2 { font-size: 32px; font-weight: 700; color: var(--navy); margin-bottom: 24px; }
+    section h3 { font-size: 20px; font-weight: 600; color: var(--dark); margin: 24px 0 12px; }
+    section p { color: var(--gray); font-size: 16px; max-width: 800px; margin-bottom: 16px; }
+
+    /* CARDS GRID */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 24px; }
+    .card {
+      background: var(--white); border: 1px solid var(--border); border-radius: 12px;
+      padding: 28px; transition: .25s;
+    }
+    .card:hover { border-color: var(--red); box-shadow: 0 4px 24px rgba(255,33,70,.08); transform: translateY(-2px); }
+    .card .card-icon { font-size: 28px; margin-bottom: 12px; }
+    .card h4 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .card p { font-size: 14px; color: var(--gray); margin-bottom: 0; }
+    .card code {
+      display: inline-block; background: #f0f0f0; padding: 1px 6px;
+      border-radius: 4px; font-size: 13px; color: var(--red);
+    }
+
+    /* STATUS BADGES */
+    .badge {
+      display: inline-block; padding: 3px 10px; border-radius: 6px;
+      font-size: 12px; font-weight: 600; margin-right: 4px;
+    }
+    .badge-green { background: #e6f9ed; color: #1a7f37; }
+    .badge-blue { background: #e6f0ff; color: #1a56db; }
+    .badge-orange { background: #fff4e6; color: #c05600; }
+    .badge-red { background: #ffe6ea; color: #c41a3a; }
+
+    /* DIAGRAM BOX */
+    .diagram {
+      background: var(--navy); border-radius: 12px; padding: 36px;
+      color: var(--white); margin: 24px 0; overflow-x: auto;
+    }
+    .diagram pre {
+      font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px;
+      line-height: 1.7; white-space: pre; color: #c8d1e0;
+    }
+    .diagram .hl { color: var(--red); font-weight: 700; }
+    .diagram .hl2 { color: #6dd5ed; font-weight: 600; }
+    .diagram .hl3 { color: #ffd166; }
+
+    /* CODE BLOCK */
+    .code-block {
+      background: #1e1e2e; border-radius: 10px; padding: 24px 28px;
+      margin: 16px 0; overflow-x: auto;
+    }
+    .code-block code {
+      font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px;
+      line-height: 1.7; color: #cdd6f4; display: block; white-space: pre;
+    }
+    .code-block .kw { color: #cba6f7; }
+    .code-block .str { color: #a6e3a1; }
+    .code-block .num { color: #fab387; }
+    .code-block .cm { color: #6c7086; }
+    .code-block .fn { color: #89b4fa; }
+    .code-block .key { color: #89dceb; }
+
+    /* FLOW  */
+    .flow { display: flex; align-items: center; gap: 12px; margin: 24px 0; flex-wrap: nowrap; background: linear-gradient(90deg, #f0f0f0 0%, #f8f8f8 100%); border-radius: 8px; padding: 0; border: 1px solid var(--border); }
+    .flow-step {
+      background: transparent; border: none; border-right: 2px solid var(--border);
+      padding: 16px 24px; text-align: center; flex: 1; position: relative;
+    }
+    .flow-step:last-child { border-right: none; }
+    .flow-step strong { display: block; font-size: 14px; color: var(--navy); }
+    .flow-step span { font-size: 12px; color: var(--gray); }
+    .flow-arrow { display: none; }
+
+    /* TABLE */
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 14px; }
+    th { background: var(--light-gray); font-weight: 600; color: var(--navy); font-size: 13px; text-transform: uppercase; letter-spacing: .5px; }
+    td { color: var(--gray); }
+    td code {
+      background: #f0f0f0; padding: 1px 6px; border-radius: 4px; font-size: 13px; color: var(--red);
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center; padding: 48px 40px; border-top: 1px solid var(--border);
+      color: var(--gray); font-size: 13px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 10px 16px; }
+      nav .nav-links { display: none; }
+      .hero h1 { font-size: 32px; }
+      section { padding: 48px 20px; }
+      .flow { flex-direction: row; align-items: stretch; overflow-x: auto; }
+      .flow-arrow { display: none; }
+    }
+
+    /* SLIDE COUNTER & PRINT */
+    @media print {
+      nav { display: none; }
+      section { break-inside: avoid; }
+    }
+
+    .env-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 16px; }
+    .env-box {
+      border-radius: 10px; padding: 20px; text-align: center;
+      font-weight: 600; font-size: 14px; color: #111; background: #ffffff; border: 1px solid var(--border);
+    }
+    .env-box span { display: block; font-weight: 400; font-size: 12px; opacity: .7; margin-top: 4px; color: #444; }
+    .env-dev { border-top: 4px solid #6366f1; }
+    .env-qa { border-top: 4px solid #f59e0b; }
+    .env-staging { border-top: 4px solid #22c55e; }
+    .env-prod { border-top: 4px solid #e11d48; }
+
+    .highlight-box {
+      border-left: 4px solid var(--red); background: #fff5f7;
+      padding: 20px 24px; border-radius: 0 10px 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="file:///Users/scereze/Downloads/Talon_One_GCash_Integration_10.html#introduction" class="logos">
+      <img src="./Talon.One — GCash Integration_files/6474928322d48888f6c8cfe5_biz-gcash-logo.svg" style="height:22px; width:auto;" alt="GCash">
+      <span>+</span>
+      <img src="./Talon.One — GCash Integration_files/rebrand-talon-one-logo-navy.svg" style="height:22px; width:auto;" alt="Talon.One">
+    </a>
+    <div class="nav-links">
+      <a href="file:///Users/scereze/Downloads/Talon_One_GCash_Integration_10.html#introduction">Introduction</a>
+      <a href="file:///Users/scereze/Downloads/Talon_One_GCash_Integration_10.html#mach-architecture">Architecture</a>
+      <a href="file:///Users/scereze/Downloads/Talon_One_GCash_Integration_10.html#environments">Environments &amp; Applications</a>
+      <a href="file:///Users/scereze/Downloads/Talon_One_GCash_Integration_10.html#loyalty-programs">Cashback Program</a>
+      <a href="file:///Users/scereze/Downloads/Talon_One_GCash_Integration_10.html#integration-id">Identifiers</a>
+
+      <div class="nav-item">
+        <span onclick="window.location=&#39;#integration-api&#39;" style="cursor:pointer;">Customers Experience and API</span>
+        <div class="dropdown-menu">
+          <a href="file:///Users/scereze/Downloads/Talon_One_GCash_Integration_10.html#customer-registration">Customer Registration</a>
+          <a href="file:///Users/scereze/Downloads/Talon_One_GCash_Integration_10.html#transaction-funnel">Transaction</a>
+          <a href="file:///Users/scereze/Downloads/Talon_One_GCash_Integration_10.html#customer-wallet">Customer Wallet</a>
+          <a href="file:///Users/scereze/Downloads/Talon_One_GCash_Integration_10.html#achievements">Achievements</a>
+        </div>
+      </div>
+
+      <div class="nav-item">
+        <span onclick="window.location=&#39;#third-parties&#39;" style="cursor:pointer;">Third Parties</span>
+        <div class="dropdown-menu">
+          <a href="file:///Users/scereze/Downloads/Talon_One_GCash_Integration_10.html#third-parties">Clevertap</a>
+        </div>
+      </div>
+
+      <a href="file:///Users/scereze/Downloads/Talon_One_GCash_Integration_10.html#security">Security</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="hero" id="introduction">
+      <div class="logos-hero">
+        <img src="./Talon.One — GCash Integration_files/6474928322d48888f6c8cfe5_biz-gcash-logo.svg" style="height:40px; width:auto; filter:brightness(0) invert(1);" alt="GCash">
+        <div class="sep"></div>
+        <img src="./Talon.One — GCash Integration_files/rebrand-talon-one-logo-navy.svg" style="height:40px; width:auto; filter:brightness(0) invert(1);" alt="Talon.One">
+      </div>
+      <h1>Talon.One <em>Integration</em> with Gcash for a cashback / offer program launch in 2026</h1>
+      <p class="sub">This document outlines the proposed technical architecture, integration points, and project plan for implementing Talon.One for a launch of Gcash Loyalty Program in 2026.</p>
+      <div class="tags">
+        <span>Promotions &amp; Loyalty</span>
+        <span>API-First</span>
+        <span>Scalable Infrastructure</span>
+        <span>Composable</span>
+      </div>
+    </div>
+
+    <!-- MACH ARCHITECTURE -->
+    <section id="mach-architecture">
+      <div class="inner">
+        <p class="section-label">01 — Architecture</p>
+        <h2>MACH Architecture &amp; API-First Approach</h2>
+        <p>Talon.One is built as a <strong>MACH-compliant</strong> promotion engine — Microservices, API-first, Cloud-native, and Headless. It will power both the <strong>loyalty program</strong> (points, tiers) and <strong>all discounts &amp; promotions</strong>, consolidating into a single, unified engine for GCash's B2B platform. Talon.One connects seamlessly to GCash's existing systems via API.</p>
+
+        <div class="cards">
+          <div class="card">
+            <div class="card-icon">🔲</div>
+            <h4>Microservices</h4>
+            <p>Independent, loosely-coupled services that scale individually. Each domain (rules, sessions, profiles, loyalty) operates autonomously.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">⚡</div>
+            <h4>API-First</h4>
+            <p>Every feature is exposed via a REST API. No UI dependency — your backend calls Talon.One directly. Full control, full flexibility.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">☁️</div>
+            <h4>Cloud-Native</h4>
+            <p>SaaS platform deployed on <strong>Google Cloud Platform (GCP)</strong>. Auto-scaling, high availability, managed infrastructure. APAC region for low latency across GCash's markets.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔗</div>
+            <h4>Headless</h4>
+            <p>No frontend imposed. Talon.One is a pure backend engine — your B2B portal, mobile app, or ERP calls the API and renders the experience your way.</p>
+          </div>
+        </div>
+
+        <div class="highlight-box" style="margin-top: 32px; background: #ffffff; border-left: 4px solid var(--red);">
+          <p style="color: #111;"><strong>Why this matters for GCash:</strong> Your team manages a complex B2C offer/loyalty program. Talon.One slots in as a backend API service — no iframes, no widgets, no frontend lock-in. Your developers call the Integration API from your existing services and control every aspect of the user experience.</p>
+        </div>
+
+        <!-- FULL SOLUTION HEADER -->
+        <h3 style="font-size: 24px; font-weight: 700; color: var(--navy); margin-top: 48px; margin-bottom: 12px;">Full Solution to support GCash project</h3>
+        <p>Talon.One is proposing a <strong>complete, end-to-end solution</strong> — not just a promotion engine. It combines the Talon.One SaaS platform with a purpose-built <strong>middleware layer</strong> that handles all data flows between GCash's systems, its merchant ecosystem, and the Talon.One rule engine. GCash gets a fully integrated stack: campaign management, loyalty ledgers, and real-time decisioning on one side — seamless connectivity to customer profiles, order management, and merchant data on the other. No integration gaps, no undifferentiated heavy lifting.</p>
+
+        <!-- ARCHITECTURE TABS -->
+        <div class="arch-tabs-wrapper" style="margin-top: 32px;">
+          <div class="arch-tab-btns">
+            <button class="arch-tab-btn arch-tab-active" onclick="switchArchTab(this,&#39;tab-arch-1&#39;)">Middleware in GCash AWS</button>
+            <button class="arch-tab-btn" onclick="switchArchTab(this,&#39;tab-arch-2&#39;)">Separate AWS for Middleware</button>
+          </div>
+
+          <!-- TAB 1: Middleware in GCash AWS -->
+          <div id="tab-arch-1" class="arch-tab-panel">
+            <div class="arch-diagram">
+              <div class="arch-main">
+
+                <!-- Left col: users mirroring GCash AWS tile rows exactly -->
+                <div style="display:flex; flex-direction:column; flex-shrink:0; align-self:stretch;">
+                  <!-- spacer = cloud padding-top (16px) + header ~40px + label ~18px -->
+                  <div style="height:74px; flex-shrink:0;"></div>
+                  <!-- 3 rows matching Backend / Customer Profiles / OMS tiles, same gap:6px -->
+                  <div style="flex:1; display:flex; flex-direction:column; gap:6px;">
+                    <div style="flex:1; display:flex; align-items:center; gap:8px;">
+                      <div class="arch-customer">
+                        <div class="arch-customer-icon">📱</div>
+                        <div class="arch-customer-label">GCash User</div>
+                      </div>
+                      <svg width="32" height="24"><line x1="0" y1="12" x2="24" y2="12" stroke="#fff" stroke-width="2"></line><polygon points="24,6 32,12 24,18" fill="#fff"></polygon></svg>
+                    </div>
+                    <div style="flex:1;"></div>
+                    <div style="flex:1; display:flex; align-items:center; gap:8px;">
+                      <div class="arch-customer">
+                        <div class="arch-customer-icon">🏪</div>
+                        <div class="arch-customer-label">Merchant</div>
+                      </div>
+                      <svg width="32" height="24"><line x1="0" y1="12" x2="24" y2="12" stroke="#fff" stroke-width="2"></line><polygon points="24,6 32,12 24,18" fill="#fff"></polygon></svg>
+                    </div>
+                  </div>
+                  <!-- cloud bottom padding spacer -->
+                  <div style="height:16px; flex-shrink:0;"></div>
+                </div>
+
+                <!-- GCash AWS box -->
+                <div class="arch-cloud arch-mmc-box" style="align-self:stretch;">
+                  <div class="arch-cloud-hdr" style="justify-content:center;">
+                    <span style="color:#111; font-weight:700; font-size:14px;">GCash AWS</span>
+                  </div>
+                  <div style="display:flex; gap:10px; height:calc(100% - 40px);">
+                    <!-- Backend column -->
+                    <div style="flex:1; display:flex; flex-direction:column; gap:6px;">
+                      <div style="font-size:10px; font-weight:700; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:.5px; margin-bottom:2px;">GCash Backend</div>
+                      <div class="arch-tile" style="background:#3e83fa; color:#fff; font-weight:600;">⚙️ GCash Backend</div>
+                      <div class="arch-tile" style="background:#3e83fa; color:#fff; font-weight:600;">👤 Customer Profiles</div>
+                      <div class="arch-tile" style="background:#3e83fa; color:#fff; font-weight:600;">🗂️ OMS</div>
+                    </div>
+                    <div style="width:1px; background:rgba(255,255,255,0.3); flex-shrink:0; margin:4px 0;"></div>
+                    <!-- Middleware column -->
+                    <div style="flex:1; display:flex; flex-direction:column; gap:6px;">
+                      <div style="border:2px solid #f59e0b; border-radius:10px; padding:8px; display:flex; flex-direction:column; gap:6px; height:100%;">
+                        <div style="font-size:10px; font-weight:700; color:#f59e0b; text-transform:uppercase; letter-spacing:.5px; text-align:center; margin-bottom:2px;">Middleware</div>
+                        <div class="arch-tile" style="background:#e8f0fe; border:1px solid #4285F4; color:#1a3a8f;">🔗 API Gateway</div>
+                        <div class="arch-tile" style="background:#e8f0fe; border:1px solid #4285F4; color:#1a3a8f;">⚙️ Event Processor</div>
+                        <div class="arch-tile" style="background:#e8f0fe; border:1px solid #4285F4; color:#1a3a8f;">🔄 Session Orchestrator</div>
+                        <div class="arch-tile" style="background:#e8f0fe; border:1px solid #4285F4; color:#1a3a8f;">📤 Webhook Listener</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- API Flows -->
+                <div class="arch-center-flows">
+                  <div class="arch-flow-group">
+                    <div class="arch-flow-group-title">Real-time</div>
+                    <div class="arch-flow-pair">
+                      <div class="arch-flow-fwd">
+                        <div class="arch-flow-fwd-tags">
+                          <span class="arch-tag arch-tag-green">🛒 Sessions</span>
+                          <span class="arch-tag arch-tag-green">⚡ Events</span>
+                        </div>
+                        <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="arch-flow-svg"><line x1="0" y1="11" x2="188" y2="11" stroke="#fff" stroke-width="2.5"></line><polygon points="188,5 200,11 188,17" fill="#fff"></polygon></svg>
+                        <div class="arch-flow-method">REST API</div>
+                      </div>
+                      <div class="arch-flow-ret">
+                        <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="arch-flow-svg"><line x1="12" y1="11" x2="200" y2="11" stroke="#ff8fa3" stroke-width="2.5"></line><polygon points="12,5 0,11 12,17" fill="#ff8fa3"></polygon></svg>
+                        <div class="arch-flow-ret-label">Incentives (Effects)</div>
+                        <div class="arch-effect-tags">
+                          <span>💰 Cashback</span><span>🎟️ Coupons</span><span>🎖️ Tier</span><span>🎁 Rewards</span>
+                        </div>
+                        <div class="arch-effect-tags" style="margin-top:3px;">
+                          <span>🏷️ Discount</span><span>🎮 Games</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="arch-flow-group arch-flow-async">
+                    <div class="arch-flow-group-title">Asynchronous</div>
+                    <div class="arch-flow-fwd">
+                      <div class="arch-flow-fwd-tags">
+                        <span class="arch-tag arch-tag-cyan">📋 Campaign Templates</span>
+                        <span class="arch-tag arch-tag-cyan">🏪 Merchants</span>
+                      </div>
+                      <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="arch-flow-svg"><line x1="0" y1="11" x2="188" y2="11" stroke="#67e8f9" stroke-width="2" stroke-dasharray="6,4"></line><polygon points="188,5 200,11 188,17" fill="#67e8f9"></polygon></svg>
+                      <div class="arch-flow-method">REST API · Batch sync</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Talon.One GCP -->
+                <div class="arch-cloud arch-gcp-box" style="align-self:stretch;">
+                  <div class="arch-cloud-hdr" style="justify-content:center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="#4285F4" opacity="0.15"></path><path d="M15.5 9.88l1.85-1.85.12-.76A8.99 8.99 0 0 0 3.28 9.9l.65-.05 3.7-.6s.19-.32.29-.3a5.29 5.29 0 0 1 7.58.93z" fill="#EA4335"></path><path d="M19.27 9.9a9.05 9.05 0 0 0-2.73-4.37l-2.54 2.54a5.26 5.26 0 0 1 1.93 4.18v.53a2.64 2.64 0 0 1 0 5.27h-3.7l-.52.54v3.16l.52.53h3.7a6.34 6.34 0 0 0 3.34-11.38z" fill="#4285F4"></path><path d="M8.23 22.28h3.7v-4.23h-3.7a2.62 2.62 0 0 1-1.1-.24l-.74.23-2.13 2.13-.19.73a6.3 6.3 0 0 0 4.16 1.38z" fill="#34A853"></path><path d="M8.23 9.6a6.34 6.34 0 0 0-4.16 11.17l3.06-3.06a2.64 2.64 0 1 1 3.5-3.5l3.06-3.06A6.32 6.32 0 0 0 8.23 9.6z" fill="#FBBC05"></path></svg>
+                    <span style="color:#111; font-weight:700; font-size:14px;">Talon.One GCP Singapore</span>
+                  </div>
+                  <div class="arch-t1-content">
+                    <div class="arch-tile arch-tile-t1" style="margin-bottom:6px;">⚙️ Rule Engine<small>Campaigns · Effects · Budgets</small></div>
+                    <div class="arch-tile arch-tile-t1" style="margin-bottom:6px;">👤 Profiles &amp; Sessions</div>
+                    <div class="arch-tile arch-tile-t1" style="margin-bottom:6px;">🏆 Loyalty Ledgers</div>
+                    <div class="arch-tile arch-tile-t1">🎮 Games &amp; Challenges</div>
+                  </div>
+                </div>
+
+              </div><!-- end arch-main -->
+              <div style="margin-top:20px; padding:14px 18px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); border-radius:10px; font-size:13px; color:#fff;">
+                <strong>Key characteristic:</strong> The middleware lives inside GCash's own AWS account alongside the core backend services. All internal calls stay within the same VPC — but the middleware shares the same security and ops boundary as GCash's core systems.
+              </div>
+            </div><!-- end arch-diagram -->
+          </div><!-- end tab-arch-1 -->
+          <div id="tab-arch-2" class="arch-tab-panel" style="display:none;">
+            <div class="arch-diagram">
+              <div class="arch-main">
+
+                <!-- Left col: users mirroring GCash AWS tile rows exactly -->
+                <div style="display:flex; flex-direction:column; flex-shrink:0; align-self:stretch;">
+                  <!-- spacer = cloud padding-top (16px) + header ~40px + margin-top 8px = 64px -->
+                  <div style="height:64px; flex-shrink:0;"></div>
+                  <!-- 3 rows matching Backend / Customer Profiles / OMS tiles, same gap:6px -->
+                  <div style="flex:1; display:flex; flex-direction:column; gap:6px;">
+                    <div style="flex:1; display:flex; align-items:center; gap:8px;">
+                      <div class="arch-customer">
+                        <div class="arch-customer-icon">📱</div>
+                        <div class="arch-customer-label">GCash User</div>
+                      </div>
+                      <svg width="32" height="24"><line x1="0" y1="12" x2="24" y2="12" stroke="#fff" stroke-width="2"></line><polygon points="24,6 32,12 24,18" fill="#fff"></polygon></svg>
+                    </div>
+                    <div style="flex:1;"></div>
+                    <div style="flex:1; display:flex; align-items:center; gap:8px;">
+                      <div class="arch-customer">
+                        <div class="arch-customer-icon">🏪</div>
+                        <div class="arch-customer-label">Merchant</div>
+                      </div>
+                      <svg width="32" height="24"><line x1="0" y1="12" x2="24" y2="12" stroke="#fff" stroke-width="2"></line><polygon points="24,6 32,12 24,18" fill="#fff"></polygon></svg>
+                    </div>
+                  </div>
+                  <!-- cloud bottom padding spacer -->
+                  <div style="height:16px; flex-shrink:0;"></div>
+                </div>
+
+                <!-- GCash AWS Box -->
+                <div class="arch-cloud arch-mmc-box" style="align-self:stretch;">
+                  <div class="arch-cloud-hdr" style="justify-content:center;">
+                    <span style="color:#111; font-weight:700; font-size:14px;">GCash AWS</span>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:6px; margin-top:8px; flex:1; height:calc(100% - 40px);">
+                    <div class="arch-tile" style="background:#3e83fa; color:#fff; font-weight:600; flex:1; display:flex; align-items:center;">⚙️ GCash Backend</div>
+                    <div class="arch-tile" style="background:#3e83fa; color:#fff; font-weight:600; flex:1; display:flex; align-items:center;">👤 Customer Profiles</div>
+                    <div class="arch-tile" style="background:#3e83fa; color:#fff; font-weight:600; flex:1; display:flex; align-items:center;">🗂️ OMS</div>
+                  </div>
+                </div>
+                <!-- Separate Middleware AWS Box -->
+                <div class="arch-cloud" style="background:rgba(255,251,235,0.15); border:2px solid #f59e0b; border-radius:14px; padding:16px; flex:1; flex-shrink:0; align-self:stretch;">
+                  <div class="arch-cloud-hdr" style="justify-content:center; flex-direction:column; align-items:center; gap:4px; margin-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.2);">
+                    <span style="font-weight:700; color:#fff; font-size:13px;">Middleware <span style="font-size:11px; font-weight:500; background:#f59e0b; color:#fff; border-radius:4px; padding:1px 6px; margin-left:2px;">AWS</span></span>
+                    <span style="font-size:10px; color:rgba(255,255,255,0.7); font-weight:500;">Isolated account</span>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <div class="arch-tile" style="background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.4); color:#fff;">🔗 API Gateway</div>
+                    <div class="arch-tile" style="background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.4); color:#fff;">⚙️ Event Processor</div>
+                    <div class="arch-tile" style="background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.4); color:#fff;">🔄 Session Orchestrator</div>
+                    <div class="arch-tile" style="background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.4); color:#fff;">📤 Webhook Listener</div>
+                  </div>
+                </div>
+
+                <!-- API Flows -->
+                <div class="arch-center-flows">
+                  <div class="arch-flow-group">
+                    <div class="arch-flow-group-title">Real-time</div>
+                    <div class="arch-flow-pair">
+                      <div class="arch-flow-fwd">
+                        <div class="arch-flow-fwd-tags">
+                          <span class="arch-tag arch-tag-green">🛒 Sessions</span>
+                          <span class="arch-tag arch-tag-green">⚡ Events</span>
+                        </div>
+                        <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="arch-flow-svg"><line x1="0" y1="11" x2="188" y2="11" stroke="#fff" stroke-width="2.5"></line><polygon points="188,5 200,11 188,17" fill="#fff"></polygon></svg>
+                        <div class="arch-flow-method">REST API</div>
+                      </div>
+                      <div class="arch-flow-ret">
+                        <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="arch-flow-svg"><line x1="12" y1="11" x2="200" y2="11" stroke="#ff8fa3" stroke-width="2.5"></line><polygon points="12,5 0,11 12,17" fill="#ff8fa3"></polygon></svg>
+                        <div class="arch-flow-ret-label">Incentives (Effects)</div>
+                        <div class="arch-effect-tags">
+                          <span>💰 Cashback</span><span>🎟️ Coupons</span><span>🎖️ Tier</span><span>🎁 Rewards</span>
+                        </div>
+                        <div class="arch-effect-tags" style="margin-top:3px;">
+                          <span>🏷️ Discount</span><span>🎮 Games</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="arch-flow-group arch-flow-async">
+                    <div class="arch-flow-group-title">Asynchronous</div>
+                    <div class="arch-flow-fwd">
+                      <div class="arch-flow-fwd-tags">
+                        <span class="arch-tag arch-tag-cyan">📋 Campaign Templates</span>
+                        <span class="arch-tag arch-tag-cyan">🏪 Merchants</span>
+                      </div>
+                      <svg viewBox="0 0 200 22" preserveAspectRatio="none" class="arch-flow-svg"><line x1="0" y1="11" x2="188" y2="11" stroke="#67e8f9" stroke-width="2" stroke-dasharray="6,4"></line><polygon points="188,5 200,11 188,17" fill="#67e8f9"></polygon></svg>
+                      <div class="arch-flow-method">REST API · Batch sync</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Talon.One GCP -->
+                <div class="arch-cloud arch-gcp-box" style="align-self:stretch;">
+                  <div class="arch-cloud-hdr" style="justify-content:center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="#4285F4" opacity="0.15"></path><path d="M15.5 9.88l1.85-1.85.12-.76A8.99 8.99 0 0 0 3.28 9.9l.65-.05 3.7-.6s.19-.32.29-.3a5.29 5.29 0 0 1 7.58.93z" fill="#EA4335"></path><path d="M19.27 9.9a9.05 9.05 0 0 0-2.73-4.37l-2.54 2.54a5.26 5.26 0 0 1 1.93 4.18v.53a2.64 2.64 0 0 1 0 5.27h-3.7l-.52.54v3.16l.52.53h3.7a6.34 6.34 0 0 0 3.34-11.38z" fill="#4285F4"></path><path d="M8.23 22.28h3.7v-4.23h-3.7a2.62 2.62 0 0 1-1.1-.24l-.74.23-2.13 2.13-.19.73a6.3 6.3 0 0 0 4.16 1.38z" fill="#34A853"></path><path d="M8.23 9.6a6.34 6.34 0 0 0-4.16 11.17l3.06-3.06a2.64 2.64 0 1 1 3.5-3.5l3.06-3.06A6.32 6.32 0 0 0 8.23 9.6z" fill="#FBBC05"></path></svg>
+                    <span style="color:#111; font-weight:700; font-size:14px;">Talon.One GCP Singapore</span>
+                  </div>
+                  <div class="arch-t1-content">
+                    <div class="arch-tile arch-tile-t1" style="margin-bottom:6px;">⚙️ Rule Engine<small>Campaigns · Effects · Budgets</small></div>
+                    <div class="arch-tile arch-tile-t1" style="margin-bottom:6px;">👤 Profiles &amp; Sessions</div>
+                    <div class="arch-tile arch-tile-t1" style="margin-bottom:6px;">🏆 Loyalty Ledgers</div>
+                    <div class="arch-tile arch-tile-t1">🎮 Games &amp; Challenges</div>
+                  </div>
+                </div>
+              </div><!-- end arch-main -->
+
+              <div style="margin-top:20px; padding:14px 18px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); border-radius:10px; font-size:13px; color:#fff;">
+                <strong>Key difference:</strong> The middleware lives in a completely separate AWS account from GCash's core infrastructure. A misconfiguration or incident in the middleware cannot directly affect GCash's backend, auth, or core banking services. Cross-account IAM roles and VPC peering control all data flow between accounts.
+              </div>
+            </div><!-- end arch-diagram -->
+          </div><!-- end tab-arch-2 -->
+
+        </div><!-- end arch-tabs-wrapper -->
+
+        <style>
+          .arch-diagram { background: #3e83fa; border-radius: 16px; padding: 28px 20px 20px; overflow-x: visible; width: 100%; box-sizing: border-box; }
+          .arch-tabs-wrapper { }
+          .arch-tab-btns { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 0; }
+          .arch-tab-btn { padding: 10px 24px; font-size: 14px; font-weight: 600; background: #f5f5f5; border: 1px solid var(--border); border-bottom: none; cursor: pointer; color: #555; border-radius: 8px 8px 0 0; margin-right: 4px; transition: all .15s; }
+          .arch-tab-btn:hover { background: #eee; color: #222; }
+          .arch-tab-btn.arch-tab-active { background: #fff; color: #111; border-color: var(--border); border-bottom: 2px solid #fff; margin-bottom: -2px; }
+          .arch-tab-panel { padding-top: 16px; }
+          .arch-tab-panel .arch-diagram { border-radius: 8px; }
+          .arch-main { display: flex; align-items: stretch; gap: 20px; width: 100%; }
+          .arch-customer { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 60px; flex-shrink: 0; }
+          .arch-customer-icon { font-size: 36px; }
+          .arch-customer-label { font-size: 11px; font-weight: 600; color: #fff; margin-top: 4px; }
+          .arch-arrow-col { display: flex; align-items: center; flex-shrink: 0; }
+          .arch-cloud { border-radius: 14px; padding: 16px; position: relative; flex-shrink: 0; }
+          .arch-mmc-box { background: #fff; border: 2px solid #4285F4; flex: 1; }
+          .arch-gcp-box { background: #fff; border: 2px solid #0891b2; flex: 1; }
+          .arch-cloud-hdr { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+          .arch-cloud-hdr span { font-weight: 700; font-size: 13px; color: var(--navy); }
+          .arch-mmc-inner { display: flex; gap: 8px; }
+          .arch-mmc-left { flex: 1; display: flex; flex-direction: column; }
+          .arch-mmc-channels { display: flex; gap: 6px; }
+          .arch-mmc-data-row { display: flex; gap: 6px; margin-top: 8px; }
+          .arch-mmc-mw { display: flex; }
+          .arch-mw-bar { background: #204d4c; color: var(--white); border-radius: 10px; padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 60px; text-align: center; }
+          .arch-mw-title { font-size: 10px; font-weight: 700; }
+          .arch-mw-desc { font-size: 8px; opacity: .7; margin-top: 4px; line-height: 1.3; }
+          .arch-tile { padding: 7px 9px; border-radius: 8px; font-size: 11px; font-weight: 600; color: #fff; flex: 1; }
+          .arch-tile small { display: block; font-weight: 400; font-size: 10px; opacity: .8; margin-top: 2px; }
+          .arch-tile-navy { background: #204d4c; }
+          .arch-tile-dark { background: #2d6b6a; color: #fff; }
+          .arch-tile-outline { background: rgba(255,255,255,0.18); color: #fff; border: 1.5px solid rgba(255,255,255,0.5); font-size: 11px; text-align: center; padding: 7px 9px; }
+          .arch-tile-t1 { background: #3e83fa; color: #fff; }
+          .arch-t1-content { display: flex; flex-direction: column; gap: 6px; }
+          .arch-center-flows { display: flex; flex-direction: column; gap: 14px; justify-content: center; flex: 1; }
+          .arch-flow-group { background: rgba(255,255,255,0.18); border-radius: 10px; padding: 10px 14px; border: 1px solid rgba(255,255,255,0.3); }
+          .arch-flow-async { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); }
+          .arch-flow-group-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #fff; margin-bottom: 6px; text-align: center; }
+          .arch-flow-pair { display: flex; flex-direction: column; gap: 6px; }
+          .arch-flow-fwd, .arch-flow-ret { text-align: center; }
+          .arch-flow-fwd-tags { display: flex; gap: 4px; justify-content: center; margin-bottom: 4px; }
+          .arch-flow-method { font-size: 11px; font-weight: 700; color: #fff; margin-top: 2px; }
+          .arch-flow-ret-label { font-size: 10px; font-weight: 700; color: #ff8fa3; margin-top: 2px; }
+          .arch-flow-svg { display: block; width: 100%; height: 22px; }
+          .arch-effect-tags { display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; margin-top: 3px; }
+          .arch-effect-tags span { background: rgba(255,255,255,0.25); color: #fff; padding: 2px 5px; border-radius: 4px; font-size: 8px; font-weight: 600; }
+          .arch-tag { display: inline-block; padding: 3px 7px; border-radius: 6px; font-size: 10px; font-weight: 600; }
+          .arch-tag-green { background: #d1fae5; color: #065f46; }
+          .arch-tag-cyan { background: #cffafe; color: #0e7490; }
+          .arch-cio-row { display: flex; align-items: center; gap: 16px; margin-top: 24px; padding-top: 20px; border-top: 1px dashed var(--border); justify-content: center; }
+          .arch-cio-spacer { display: none; }
+          .arch-cio-box { background: #204d4c; color: var(--white); border-radius: 12px; padding: 14px 22px; text-align: center; flex-shrink: 0; }
+          .arch-cio-header { font-size: 15px; font-weight: 700; }
+          .arch-cio-desc { font-size: 11px; opacity: .8; margin-top: 4px; }
+          .arch-cio-side { text-align: center; flex-shrink: 0; }
+          .arch-cio-side-label { font-size: 11px; font-weight: 700; color: var(--navy); }
+          .arch-cio-side-sub { font-size: 9px; color: var(--gray); margin-bottom: 4px; }
+        </style>
+      </div>
+    </section>
+
+    <!-- ENVIRONMENTS -->
+    <section id="environments" class="bg-gray">
+      <div class="inner">
+        <p class="section-label">02 — Environments &amp; Applications</p>
+        <h2>Environments</h2>
+        <p>Talon.One provides isolated applications to support GCash's full software development lifecycle — from early integration work through to production launch.</p>
+        <div class="env-grid">
+          <div class="env-box env-dev">Development<span>Integration build &amp; sandbox testing</span></div>
+          <div class="env-box env-qa">QA / Testing<span>Automated &amp; manual test suites</span></div>
+          <div class="env-box env-staging">Staging<span>Pre-production sign-off</span></div>
+          <div class="env-box env-prod">Production</div>
+        </div>
+        <h3>Application Isolation</h3>
+        <p>Each application has its own Application ID, API keys, campaigns, and customer profiles. Data never bleeds between applications. Promotion rules and loyalty configurations can be promoted from one environment to the next via the Management API or the Talon.One UI.</p>
+        <div class="cards">
+          <div class="card" style="background:#fff;">
+            <div class="card-icon">🔑</div>
+            <h4 style="color:#111;">Separate API Keys</h4>
+            <p style="color:#444;">Each environment issues distinct <code style="color:#111;">Integration-Key</code> and <code style="color:#111;">Management-Key</code> credentials to prevent accidental cross-environment calls.</p>
+          </div>
+          <div class="card" style="background:#fff;">
+            <div class="card-icon">📦</div>
+            <h4 style="color:#111;">Campaign Cloning</h4>
+            <p style="color:#444;">Promotion campaigns built in Dev/QA can be exported and imported into Production without manual re-configuration, reducing go-live risk.</p>
+          </div>
+          <div class="card" style="background:#fff;">
+            <div class="card-icon">📊</div>
+            <h4 style="color:#111;">Independent Analytics</h4>
+            <p style="color:#444;">Reporting dashboards and coupon budgets are scoped per application, keeping test traffic out of production metrics and financial reporting.</p>
+          </div>
+        </div>
+
+        <h3 style="margin-top:36px;">SLA &amp; Availability</h3>
+        <table>
+          <thead><tr><th>Metric</th><th>Commitment</th></tr></thead>
+          <tbody>
+            <tr><td>API Uptime</td><td><span class="badge badge-green">99.9% SLA</span></td></tr>
+            <tr><td>Integration API p99 latency</td><td>&lt; 50ms</td></tr>
+            <tr><td>Planned maintenance windows</td><td>Off-peak, communicated 48h in advance; version upgrades can be deferred upon customer request</td></tr>
+            <tr><td>Disaster recovery RTO</td><td>&lt; 1 hour</td></tr>
+            <tr><td>Data backups</td><td>Daily, retained 30 days</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- LOYALTY PROGRAMS -->
+    <section id="loyalty-programs">
+      <div class="inner">
+        <p class="section-label">03 — Cashback Program</p>
+        <h2>Cashback Program</h2>
+        <p>Talon.One supports GCash's B2C Cashback Program through flexible, configurable loyalty ledgers that can track cashback, tiers, and rewards.</p>
+        <div class="cards">
+          <div class="card">
+            <div class="card-icon">🏆</div>
+            <h4>Cashback Ledger</h4>
+            <p>Each customer profile maintains a real-time cashback balance. Cashback can be awarded on payment, or expired based on configurable rules — all without custom code.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🎖️</div>
+            <h4>Tier Management</h4>
+            <p>Define Bronze, Silver, and Gold tiers with automatic promotion and demotion logic based on rolling spend windows or point thresholds. Tier status unlocks exclusive campaigns and multipliers.</p>
+          </div>
+        </div>
+
+        <h3 style="margin-top:40px;">Merchant-Funded Offers</h3>
+        <p>Beyond cashback, GCash's program includes a merchant-funded offer model — the most common pattern in payment app ecosystems. Merchants fund campaigns that reward GCash users with cashback or discounts when they pay with the GCash app at participating merchants. Talon.One manages the full offer lifecycle: eligibility, redemption, and budget control, all configurable without engineering work.</p>
+
+        <div class="cards" style="margin-top:16px;">
+          <div class="card">
+            <div class="card-icon">🏪</div>
+            <h4>Merchant-Funded Campaigns</h4>
+            <p>Each participating merchant funds their own promotion budget within Talon.One. Cashback rates, discount amounts, and spending caps are configured per merchant — ensuring GCash never subsidises merchant offers and each campaign is financially ring-fenced.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🎟️</div>
+            <h4>Offer Codes &amp; Vouchers</h4>
+            <p>Merchants can run targeted campaigns using unique or batch-generated offer codes distributed via GCash's app, push notifications, or partner channels. Codes can be single-use, limited-redemption per user, or time-gated — all enforced automatically at the point of payment.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">💸</div>
+            <h4>Cashback &amp; Discount at Payment</h4>
+            <p>When a customer pays with GCash at a participating merchant, Talon.One evaluates eligibility in real time and returns the applicable cashback amount or discount. Rules can target by merchant category, transaction amount, time of day, user segment, or payment method.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">📊</div>
+            <h4>Budget &amp; Spend Controls</h4>
+            <p>Each merchant campaign has its own coupon budget and spend limit. Talon.One tracks redemptions in real time and automatically stops issuing rewards once the merchant's funding cap is reached — protecting both GCash and merchant from overspend.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- INTEGRATION ID -->
+    <section id="integration-id" class="bg-gray">
+      <div class="inner">
+        <p class="section-label" style="color:#111;">04 — Identifiers</p>
+        <h2>Identifiers — Your System of Record</h2>
+        <p>Customer profiles and sessions are identified by an <code>IntegrationID</code> — a unique string <strong>provided by GCash</strong>, not generated by Talon.One.</p>
+
+        <div class="cards">
+          <div class="card">
+            <div class="card-icon">👤</div>
+            <h4>Customer Profile Identifier</h4>
+            <p>Use your existing customer ID from GCash. Example: <code style="color:#111;">GC-USER-98421</code></p>
+            <p>This becomes the key to link cashback, tiers, and rewards to the right individual customer in Talon.One.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🛒</div>
+            <h4>Session Identifier</h4>
+            <p>Use your payment or transaction ID from GCash. Example: <code style="color:#111;">PAYMENT-2026-06-8842</code></p>
+            <p>Ensures idempotency — the same session ID always returns the same promotion result, preventing double cashback or discount payouts.</p>
+          </div>
+        </div>
+
+
+
+
+
+
+
+        <div class="highlight-box" style="margin-top:24px; background:#ffffff; border-left-color:#204d4c;">
+          <p style="color:#111;"><strong>Why this matters:</strong> GCash retains full ownership of identifiers. No vendor lock-in on IDs. Your customer ID in your CRM or ERP is the same ID used in Talon.One — making reconciliation, debugging, and data exports straightforward.</p>
+          <p style="color:#111; margin-top:10px;"><strong>Data security:</strong> Using an opaque, anonymous identifier also adds a layer of data security: Talon.One never stores personally identifiable information (PII) or payment card data (PCI) — keeping sensitive customer data exclusively within GCash's own systems.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTEGRATION API -->
+    <section id="integration-api">
+      <div class="inner">
+        <p class="section-label">05 — Customers Experience and API</p>
+        <h2>Customers Experience and API</h2>
+      </div>
+    </section>
+
+    <!-- CUSTOMER REGISTRATION -->
+    <section id="customer-registration" class="bg-gray">
+      <div class="inner">
+        <p class="section-label">05a — Customer Registration</p>
+        <h2>Customer Registration and Update</h2>
+        <p>Update customer attributes in Talon.One to power <strong>segmentation and targeting</strong> within campaign rules. Profiles can be updated via the Session API (automatically) or the dedicated Profile endpoint.</p>
+        <p>You can also sync <strong>audience memberships</strong> in real-time — push your segment/audience IDs alongside profile attributes so Talon.One campaign rules can target customers based on your own segmentation logic (e.g. from your CDP, CRM, or Clevertap).</p>
+
+        <h3>Endpoint</h3>
+        <div class="code-block">
+          <code><span class="kw">PUT</span> /v2/customer_profiles/{<span class="key">integrationId</span>}</code>
+        </div>
+
+        <h3>Example — Updating Customer Attributes</h3>
+        <div style="margin-bottom: 12px;">
+          <button class="version-toggle active" onclick="toggleProfileVersion(&#39;standard&#39;, event)">Standard</button>
+          <button class="version-toggle" onclick="toggleProfileVersion(&#39;audience&#39;, event)">With Audience Sync</button>
+        </div>
+
+        <div id="profile-standard" class="profile-version">
+          <div class="code-block">
+            <code><span class="cm">// PUT /v2/customer_profiles/GC-USER-98421</span>
+{
+  <span class="key">"attributes"</span>: {
+    <span class="key">"account_status"</span>: <span class="str">"verified"</span>,
+    <span class="key">"kyc_level"</span>: <span class="str">"fully_verified"</span>,
+    <span class="key">"wallet_tier"</span>: <span class="str">"Silver"</span>,
+    <span class="key">"preferred_merchant_categories"</span>: [<span class="str">"food_and_beverage"</span>, <span class="str">"grocery"</span>],
+    <span class="key">"lifetime_spend"</span>: <span class="num">25400</span>,
+    <span class="key">"last_transaction_date"</span>: <span class="str">"2026-04-28T14:22:00Z"</span>,
+    <span class="key">"payment_frequency"</span>: <span class="str">"high"</span>
+  }
+}</code>
+          </div>
+        </div>
+
+        <div id="profile-audience" class="profile-version" style="display:none;">
+          <div class="highlight-box" style="margin-bottom: 12px; background: #f0fafb; border-color: #0891b2;">
+            <p><strong>With Audience Sync:</strong> Include the <code>audiencesChanges</code> object to add or remove audience memberships in real-time. Talon.One will evaluate campaign rules based on these audience IDs — enabling targeted promotions for specific customer segments from your CDP, CRM, or Clevertap.</p>
+          </div>
+          <div class="code-block">
+            <code><span class="cm">// PUT /v2/customer_profiles/GC-USER-98421</span>
+{
+  <span class="key">"attributes"</span>: {
+    <span class="key">"account_status"</span>: <span class="str">"verified"</span>,
+    <span class="key">"kyc_level"</span>: <span class="str">"fully_verified"</span>,
+    <span class="key">"wallet_tier"</span>: <span class="str">"Silver"</span>,
+    <span class="key">"preferred_merchant_categories"</span>: [<span class="str">"food_and_beverage"</span>, <span class="str">"grocery"</span>],
+    <span class="key">"lifetime_spend"</span>: <span class="num">25400</span>,
+    <span class="key">"last_transaction_date"</span>: <span class="str">"2026-04-28T14:22:00Z"</span>
+  },
+  <span class="key">"audiencesChanges"</span>: {
+    <span class="key">"adds"</span>: [
+      <span class="num">14</span>        <span class="cm">// Add to audience ID 14 (e.g. "Silver Wallet Users")</span>
+    ],
+    <span class="key">"deletes"</span>: [
+      <span class="num">8</span>         <span class="cm">// Remove from audience ID 8 (e.g. "New Users")</span>
+    ]
+  }
+}</code>
+          </div>
+        </div>
+
+        <script>
+        function toggleProfileVersion(version, event) {
+          document.getElementById('profile-standard').style.display = version === 'standard' ? 'block' : 'none';
+          document.getElementById('profile-audience').style.display = version === 'audience' ? 'block' : 'none';
+          var btns = event.target.parentElement.querySelectorAll('.version-toggle');
+          btns.forEach(function(btn) { btn.classList.remove('active'); });
+          event.target.classList.add('active');
+        }
+        </script>
+
+        <h3>Attributes Power Campaign Rules</h3>
+        <p>Once attributes are synced, the marketing team can create rules such as:</p>
+        <ul style="margin-left:20px; color:var(--gray); font-size:15px; line-height:2;">
+          <li><strong>"If wallet_tier = Gold"</strong> → 2× cashback rate at participating merchants</li>
+          <li><strong>"If kyc_level = fully_verified"</strong> → Access to exclusive verified-user offers</li>
+          <li><strong>"If lifetime_spend &gt; 50000"</strong> → VIP cashback tier with higher earn rates</li>
+          <li><strong>"If preferred_merchant_categories includes grocery"</strong> → Targeted grocery merchant offers</li>
+        </ul>
+
+        <h3>Bulk Update — Multiple Customer Profiles</h3>
+        <p>Update (or create) up to <strong>1,000 customer profiles in a single request</strong> using the batch endpoint. Ideal for initial data migration, nightly syncs from your CRM or ERP, or bulk attribute updates.</p>
+        <p>The <code>integrationId</code> must be a stable identifier. Do not use an ID the customer can update themselves — use a database or ERP ID.</p>
+        <div class="code-block">
+          <code><span class="kw">PUT</span> /v2/customer_profiles</code>
+        </div>
+        <div class="code-block">
+          <code><span class="cm">// Batch update up to 1,000 profiles</span>
+{
+  <span class="key">"customerProfiles"</span>: [
+    {
+      <span class="key">"integrationId"</span>: <span class="str">"GC-USER-98421"</span>,
+      <span class="key">"attributes"</span>: {
+        <span class="key">"wallet_tier"</span>: <span class="str">"Silver"</span>,
+        <span class="key">"kyc_level"</span>: <span class="str">"fully_verified"</span>
+      }
+    },
+    {
+      <span class="key">"integrationId"</span>: <span class="str">"GC-USER-10234"</span>,
+      <span class="key">"attributes"</span>: {
+        <span class="key">"wallet_tier"</span>: <span class="str">"Gold"</span>,
+        <span class="key">"kyc_level"</span>: <span class="str">"fully_verified"</span>
+      }
+    }
+    <span class="cm">// ... up to 1,000 profiles per request</span>
+  ]
+}</code>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRANSACTION -->
+    <section id="transaction-funnel">
+      <div class="inner">
+        <p class="section-label">05b — Transaction</p>
+        <h2>Transaction</h2>
+        <p>The Session API is the heart of Talon.One integration. It represents a <strong>purchase transaction / payment</strong> on EZRx and evaluates all active campaign rules in real-time.</p>
+
+        <h3>Endpoint</h3>
+        <div class="code-block">
+          <code><span class="kw">PUT</span> /v2/customer_sessions/<span class="str" style="color:#ff2146;font-weight:700;">{customerSessionId}</span></code>
+        </div>
+
+        <h3>Session States</h3>
+        <div class="flow">
+          <div class="flow-step" style="border-color: #3b82f6; background:#ffffff; color:#111;">
+            <strong style="color:#111;">🔵 Closed</strong>
+            <span style="color:#111;">Payment confirmed &amp; settled</span>
+          </div>
+          <div class="flow-arrow" style="margin-left: 20px;">or →</div>
+          <div class="flow-step" style="border-color: var(--red); background:#ffffff; color:#111;">
+            <strong style="color:#111;">🔴 Cancelled</strong>
+            <span style="color:#111;">Payment cancelled / refunded</span>
+          </div>
+        </div>
+
+        <table style="margin-top: 24px; background:#ffffff; color:#111;">
+          <thead style="background:#f5f5f5; color:#111;">
+            <tr><th style="color:#111;">State</th><th style="color:#111;">When to use</th><th style="color:#111;">What happens in Talon.One</th><th style="color:#111;">Cashback Impact</th></tr>
+          </thead>
+          <tbody>
+            <tr style="color:#111;">
+              <td><span class="badge badge-blue">closed</span></td>
+              <td style="color:#111;">Payment confirmed &amp; settled</td>
+              <td style="color:#111;">Session locked, effects finalized, cashback balance updated</td>
+              <td style="color:#111;">Cashback is <strong>credited</strong> to customer's wallet. Spend counted toward tier progression.</td>
+            </tr>
+            <tr style="color:#111;">
+              <td><span class="badge badge-red">cancelled</span></td>
+              <td style="color:#111;">Payment failed, reversed, or refunded</td>
+              <td style="color:#111;">All effects rolled back automatically</td>
+              <td style="color:#111;">Cashback is <strong>reversed</strong>. Spend removed from tier calculation.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Example — Payment Session</h3>
+        <div style="margin-bottom: 12px;">
+          <button class="version-toggle active" onclick="toggleSessionVersion('card', event)">Card Transaction</button>
+          <button class="version-toggle" onclick="toggleSessionVersion('pos', event)">POS Transaction</button>
+        </div>
+
+        <div id="session-card" class="session-version">
+          <div class="highlight-box" style="margin-bottom: 12px; background: #ffffff; border-color: #0891b2; color: #111;">
+            <p style="color:#111;"><strong>Card Transaction:</strong> The customer pays with their GCash card at a merchant. GCash sends the merchant details and transaction amount. No cart items are available in this flow — eligibility rules are evaluated on merchant identity, merchant category, and transaction amount alone.</p>
+          </div>
+          <div class="code-block">
+            <code><span class="cm">// PUT /v2/customer_sessions/<span style="color:#ff2146;font-weight:700;">PAYMENT-2026-06-8842</span></span>
+{
+  <span class="key">"customerSession"</span>: {
+    <span class="key">"profileId"</span>: <span class="str">"GC-USER-98421"</span>,
+    <span class="key">"state"</span>: <span class="str">"closed"</span>,
+    <span class="key">"attributes"</span>: {
+      <span class="key">"merchant_id"</span>: <span class="str">"MRC-00412"</span>,
+      <span class="key">"merchant_name"</span>: <span class="str">"Jollibee BGC"</span>,
+      <span class="key">"merchant_category"</span>: <span class="str">"food_and_beverage"</span>,
+      <span class="key">"payment_method"</span>: <span class="str">"gcash_card"</span>,
+      <span class="key">"channel"</span>: <span class="str">"in_store"</span>
+    },
+    <span class="key">"total"</span>: <span class="num">350.00</span>
+  }
+}</code>
+          </div>
+        </div>
+
+        <div id="session-pos" class="session-version" style="display:none;">
+          <div class="highlight-box" style="margin-bottom: 12px; background: #ffffff; border-color: #0891b2; color: #111;">
+            <p style="color:#111;"><strong>POS Transaction:</strong> GCash is connected to the merchant's POS system. In addition to merchant details, individual cart items are passed — enabling item-level campaign rules such as cashback on specific product categories or SKUs.</p>
+          </div>
+          <div class="code-block">
+            <code><span class="cm">// PUT /v2/customer_sessions/<span style="color:#ff2146;font-weight:700;">PAYMENT-2026-06-8843</span></span>
+{
+  <span class="key">"customerSession"</span>: {
+    <span class="key">"profileId"</span>: <span class="str">"GC-USER-98421"</span>,
+    <span class="key">"state"</span>: <span class="str">"closed"</span>,
+    <span class="key">"attributes"</span>: {
+      <span class="key">"merchant_id"</span>: <span class="str">"MRC-00412"</span>,
+      <span class="key">"merchant_name"</span>: <span class="str">"Jollibee BGC"</span>,
+      <span class="key">"merchant_category"</span>: <span class="str">"food_and_beverage"</span>,
+      <span class="key">"payment_method"</span>: <span class="str">"gcash_qr"</span>,
+      <span class="key">"channel"</span>: <span class="str">"in_store"</span>
+    },
+    <span class="key">"cartItems"</span>: [
+      {
+        <span class="key">"name"</span>: <span class="str">"Chicken Joy Meal"</span>,
+        <span class="key">"sku"</span>: <span class="str">"JB-CJ-MEAL-1"</span>,
+        <span class="key">"quantity"</span>: <span class="num">2</span>,
+        <span class="key">"price"</span>: <span class="num">139.00</span>,
+        <span class="key">"position"</span>: <span class="num">0</span>,
+        <span class="key">"category"</span>: <span class="str">"food_and_beverage"</span>
+      },
+      {
+        <span class="key">"name"</span>: <span class="str">"Peach Mango Pie"</span>,
+        <span class="key">"sku"</span>: <span class="str">"JB-PMP-1"</span>,
+        <span class="key">"quantity"</span>: <span class="num">1</span>,
+        <span class="key">"price"</span>: <span class="num">45.00</span>,
+        <span class="key">"position"</span>: <span class="num">1</span>,
+        <span class="key">"category"</span>: <span class="str">"food_and_beverage"</span>
+      }
+    ],
+    <span class="key">"couponCodes"</span>: [<span class="str">"GCASH10OFF"</span>],
+    <span class="key">"total"</span>: <span class="num">323.00</span>
+  }
+}</code>
+          </div>
+        </div>
+
+        <h3>Response — Effects for GCash to Render</h3>
+        <div class="code-block">
+          <code><span class="cm">// Talon.One returns effects to apply</span>
+{
+  <span class="key">"effects"</span>: [
+    {
+      <span class="key">"effectType"</span>: <span class="str">"setDiscount"</span>,
+      <span class="key">"props"</span>: {
+        <span class="key">"name"</span>: <span class="str">"Coupon Discount"</span>,
+        <span class="key">"value"</span>: <span class="num">15.95</span>,
+        <span class="key">"position"</span>: <span class="num">0</span>
+      }
+    },
+    {
+      <span class="key">"effectType"</span>: <span class="str">"addLoyaltyPoints"</span>,
+      <span class="key">"props"</span>: {
+        <span class="key">"name"</span>: <span class="str">"Points Earned"</span>,
+        <span class="key">"programId"</span>: <span class="num">12</span>,
+        <span class="key">"value"</span>: <span class="num">320</span>,
+        <span class="key">"subLedgerId"</span>: <span class="str">"PH"</span>
+      }
+    }
+  ]
+}</code>
+        </div>
+
+        <script>
+        function toggleSessionVersion(version, event) {
+          document.getElementById('session-card').style.display = version === 'card' ? 'block' : 'none';
+          document.getElementById('session-pos').style.display = version === 'pos' ? 'block' : 'none';
+          document.querySelectorAll('.version-toggle').forEach(function(btn) { btn.classList.remove('active'); });
+          event.target.classList.add('active');
+        }
+        </script>
+
+        <div class="highlight-box" style="background:#ffffff; border-left-color:#204d4c; color:#111;">
+          <p style="color:#111;"><strong>Loyalty Flow:</strong> When a session is <strong>closed</strong>, Talon.One returns a cashback balance (e.g., "PHP3 earned on this payment"). If the session is <strong>cancelled</strong>, points are automatically reversed.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CUSTOMER WALLET -->
+    <section id="customer-wallet" class="bg-gray">
+      <div class="inner">
+        <p class="section-label">05c — Customer Wallet</p>
+        <h2>Customer Wallet</h2>
+        <p>Retrieve the <strong>latest customer loyalty data</strong> from Talon.One — including points balance, active coupons, tier status, and achievements. Use this to render the loyalty wallet in EZRx.</p>
+
+        <h3>Endpoint</h3>
+        <div class="code-block">
+          <code><span class="kw">GET</span> /v1/customer_profiles/{<span class="key">integrationId</span>}/inventory?<span class="str">profile=true</span>&amp;<span class="str">referrals=true</span>&amp;<span class="str">coupons=true</span>&amp;<span class="str">loyalty=true</span>&amp;<span class="str">giveaways=false</span>&amp;<span class="str">achievements=true</span></code>
+        </div>
+
+        <h3>What You Get Back</h3>
+        <div class="cards">
+          <div class="card">
+            <div class="card-icon">👤</div>
+            <h4>Customer Profile</h4>
+            <p>Full profile attributes, audience memberships, and account metadata for the HCP or B2B account.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🏆</div>
+            <h4>Cashback Balance</h4>
+            <p>Current cashback balance, tier name, tier expiry, and cashback history.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🎟️</div>
+            <h4>Active Coupons</h4>
+            <p>All personal coupons allocated to this customer — including status, expiry, and usage count.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔗</div>
+            <h4>Referral Code</h4>
+            <p>The customer's personal referral code, usage count, and referral campaign details.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🎮</div>
+            <h4>Achievements &amp; Challenges</h4>
+            <p>Unlocked achievements and progress toward challenge goals (e.g. "10 Payments Milestone", "First Repeat Payment").</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🥇</div>
+            <h4>Tier Information</h4>
+            <p>Current tier, tier progress, spend needed for next tier, tier upgrade/downgrade dates.</p>
+          </div>
+        </div>
+
+        <h3>Example Response (Simplified)</h3>
+        <div class="code-block">
+          <code>{
+  <span class="key">"profile"</span>: {
+    <span class="key">"integrationId"</span>: <span class="str">"GC-USER-98421"</span>,
+    <span class="key">"attributes"</span>: {
+      <span class="key">"wallet_tier"</span>: <span class="str">"Silver"</span>,
+      <span class="key">"kyc_level"</span>: <span class="str">"fully_verified"</span>,
+      <span class="key">"lifetime_spend"</span>: <span class="num">25400</span>
+    }
+  },
+  <span class="key">"loyalty"</span>: {
+    <span class="key">"programId"</span>: <span class="num">12</span>,
+    <span class="key">"programName"</span>: <span class="str">"GCash Cashback Programme"</span>,
+    <span class="key">"currentTier"</span>: <span class="str">"Silver"</span>,
+    <span class="key">"ledger"</span>: {
+      <span class="key">"currentBalance"</span>: <span class="num">4250</span>,     <span class="cm">// Available cashback (PHP)</span>
+      <span class="key">"totalEarned"</span>: <span class="num">12800</span>,      <span class="cm">// Lifetime cashback earned</span>
+      <span class="key">"totalSpent"</span>: <span class="num">8550</span>         <span class="cm">// Cashback redeemed</span>
+    }
+  },
+  <span class="key">"coupons"</span>: [
+    { <span class="key">"code"</span>: <span class="str">"SILVER-Q2-2026"</span>, <span class="key">"expiryDate"</span>: <span class="str">"2026-09-30"</span> }
+  ],
+  <span class="key">"achievements"</span>: [
+    {
+      <span class="key">"name"</span>: <span class="str">"10 Payments Milestone"</span>,
+      <span class="key">"status"</span>: <span class="str">"completed"</span>,
+      <span class="key">"completionDate"</span>: <span class="str">"2026-03-10T08:15:00Z"</span>
+    },
+    {
+      <span class="key">"name"</span>: <span class="str">"First Repeat Payment"</span>,
+      <span class="key">"status"</span>: <span class="str">"in_progress"</span>,
+      <span class="key">"progress"</span>: <span class="num">0</span>,
+      <span class="key">"target"</span>: <span class="num">1</span>
+    }
+  ]
+}</code>
+        </div>
+
+        <div class="highlight-box" style="background:#ffffff; border-left-color:#204d4c; color:#111;">
+          <p style="color:#111;"><strong>Rendering the loyalty wallet:</strong> Gcash application calls the inventory endpoint on page load to display the customer's points balance, current tier, active coupons, and achievement progress. This is fully real-time.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACHIEVEMENTS -->
+    <section id="achievements">
+      <div class="inner">
+        <p class="section-label">05d — Achievements</p>
+        <h2>Achievements</h2>
+        <p>Talon.One's Achievements API lets GCash surface gamification progress to customers in real-time on EZRx — showing how close they are to unlocking a reward, completing a challenge, or reaching a milestone.</p>
+
+        <h3>List All Customer Achievements</h3>
+        <p>Retrieve all achievements and their progress for a given customer. Use this to render achievement cards, progress bars, and unlock notifications in the EZRx wallet or loyalty dashboard.</p>
+        <div class="code-block">
+          <code><span class="kw">GET</span> /v2/customer_profiles/{<span class="key">integrationId</span>}/achievements</code>
+        </div>
+
+        <h3>Example Response</h3>
+        <div class="code-block">
+          <code>{
+  <span class="key">"data"</span>: [
+    {
+      <span class="key">"achievementId"</span>: <span class="num">1</span>,
+      <span class="key">"name"</span>: <span class="str">"First Payment"</span>,
+      <span class="key">"description"</span>: <span class="str">"Make your first payment on GCash"</span>,
+      <span class="key">"status"</span>: <span class="str">"completed"</span>,
+      <span class="key">"completionDate"</span>: <span class="str">"2026-03-01T09:00:00Z"</span>,
+      <span class="key">"progress"</span>: <span class="num">1</span>,
+      <span class="key">"target"</span>: <span class="num">1</span>
+    },
+    {
+      <span class="key">"achievementId"</span>: <span class="num">2</span>,
+      <span class="key">"name"</span>: <span class="str">"10 Payments Milestone"</span>,
+      <span class="key">"description"</span>: <span class="str">"Complete 10 payments to unlock Silver tier bonus"</span>,
+      <span class="key">"status"</span>: <span class="str">"in_progress"</span>,
+      <span class="key">"completionDate"</span>: <span class="cm">null</span>,
+      <span class="key">"progress"</span>: <span class="num">7</span>,
+      <span class="key">"target"</span>: <span class="num">10</span>
+    },
+    {
+      <span class="key">"achievementId"</span>: <span class="num">3</span>,
+      <span class="key">"name"</span>: <span class="str">"OTC Champion"</span>,
+      <span class="key">"description"</span>: <span class="str">"Pay across 5 different merchant categories"</span>,
+      <span class="key">"status"</span>: <span class="str">"in_progress"</span>,
+      <span class="key">"completionDate"</span>: <span class="cm">null</span>,
+      <span class="key">"progress"</span>: <span class="num">3</span>,
+      <span class="key">"target"</span>: <span class="num">5</span>
+    }
+  ],
+  <span class="key">"totalResultSize"</span>: <span class="num">3</span>
+}</code>
+        </div>
+
+        <h3>Achievement Statuses</h3>
+        <table>
+          <thead><tr><th>Status</th><th>Meaning</th><th>UI Recommendation</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="badge badge-green">completed</span></td>
+              <td>Customer has met the achievement target</td>
+              <td>Show reward unlocked banner, award points or coupon</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-blue">in_progress</span></td>
+              <td>Customer has started but not yet completed</td>
+              <td>Show progress bar with current vs target count</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-orange">not_started</span></td>
+              <td>Customer has not triggered the achievement yet</td>
+              <td>Show as locked / greyed out with description</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Use Cases for GCash</h3>
+        <div class="cards">
+          <div class="card">
+            <div class="card-icon">🎯</div>
+            <h4>Payment Milestones</h4>
+            <p>Reward customers for reaching 5, 10, or 25 payments. Each milestone can trigger automatic cashback bonuses or coupon issuance via Talon.One campaign rules.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🧪</div>
+            <h4>Category Exploration</h4>
+            <p>Encourage customers to pay across multiple merchant categories. Completing the challenge unlocks an exclusive cashback reward.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">📅</div>
+            <h4>Monthly Challenges</h4>
+            <p>Time-limited achievements (e.g. "Pay 3× in April") drive repeat payment behaviour and can be configured with different targets and rewards.</p>
+          </div>
+        </div>
+
+
+        <div class="highlight-box" style="margin-top:24px; background:#ffffff; border-left-color:#204d4c; color:#111;">
+          <p style="color:#111;"><strong>Full API reference:</strong> See the complete Achievements endpoint documentation at <a href="https://docs.talon.one/integration-api#tag/Achievements/operation/getCustomerAchievements" target="_blank" style="color:#204d4c;font-weight:600;">docs.talon.one/integration-api → Achievements</a>.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- THIRD PARTIES -->
+    <section id="third-parties">
+      <div class="inner">
+        <p class="section-label">06 — Third Parties</p>
+        <h2>Third-Party Integrations</h2>
+
+        <h3>Clevertap — Triggered Messaging</h3>
+        <p>Talon.One can push promotion events (coupon issued, points awarded, tier upgraded) to Clevertap via webhooks, enabling GCash to trigger personalised email and SMS communications in real time.</p>
+        <div class="cards">
+          <div class="card">
+            <div class="card-icon">📧</div>
+            <h4>Coupon Delivery</h4>
+            <p>When Talon.One issues a unique coupon code, a webhook fires to Clevertap which immediately dispatches a personalised email with the code embedded.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">⭐</div>
+            <h4>Loyalty Milestones</h4>
+            <p>Points balance updates and tier upgrades trigger Clevertap campaigns — congratulating customers and surfacing relevant next-step offers to drive re-engagement.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">⏰</div>
+            <h4>Expiry Reminders</h4>
+            <p>Talon.One's scheduled webhooks can notify Clevertap when coupons or cashback are about to expire, reducing churn and driving timely conversions.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECURITY -->
+    <section id="security" class="bg-gray">
+      <div class="inner">
+        <p class="section-label">07 — Security</p>
+        <h2>Security</h2>
+        <p>Talon.One is built to meet the security requirements of regulated industries including healthcare distribution. Key controls relevant to GCash's compliance posture are outlined below.</p>
+        <div class="cards">
+          <div class="card">
+            <div class="card-icon">🔒</div>
+            <h4>TLS 1.2+ Everywhere</h4>
+            <p>All API traffic is encrypted in transit using TLS 1.2 or higher. Talon.One does not support unencrypted HTTP connections to any endpoint.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🗝️</div>
+            <h4>API Key Rotation</h4>
+            <p>Integration and Management keys can be rotated at any time without downtime. Gcash's secrets manager should hold keys and rotate them on a 90-day cycle.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">👤</div>
+            <h4>Role-Based Access</h4>
+            <p>Talon.One's UI supports granular RBAC — marketing users can manage campaigns without accessing API credentials or financial reporting.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">📋</div>
+            <h4>Audit Logs</h4>
+            <p>All Management API calls and UI actions are logged with user identity and timestamp, supporting SOC 2 and internal audit requirements.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🛡️</div>
+            <h4>Data Residency</h4>
+            <p>Talon.One offers regional deployments (EU, US, APAC). For GCash, the APAC region ensures customer data remains within the Asia-Pacific boundary.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">✅</div>
+            <h4>SOC 2 Type II</h4>
+            <p>Talon.One holds SOC 2 Type II certification. The latest report is available under NDA for GCash's security review process.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+  </main>
+
+  <footer>
+    Talon.One × GCash — Confidential
+  </footer>
+
+
+<script>
+  function switchArchTab(btn, tabId) {
+    document.querySelectorAll('.arch-tab-btn').forEach(b => b.classList.remove('arch-tab-active'));
+    document.querySelectorAll('.arch-tab-panel').forEach(p => p.style.display = 'none');
+    btn.classList.add('arch-tab-active');
+    document.getElementById(tabId).style.display = 'block';
+  }
+</script>
+</body></html>
